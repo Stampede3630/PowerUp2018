@@ -23,7 +23,7 @@ public class Robot extends IterativeRobot {
 	}
 	public void teleopPeriodic() {
 		double rotate=xBox.getX(GenericHID.Hand.kRight);
-		double speed=xBox.getY(GenericHID.Hand.kLeft);
+		double speed=xBox.getY(GenericHID.Hand.kLeft)*-1;
 		diffDrive.arcadeDrive(speed, rotate);
 	}
 	
