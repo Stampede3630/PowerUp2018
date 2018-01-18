@@ -7,11 +7,13 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class DriveTrain {
 	private XboxController _xBox;
+	// add coment about from what perspective of robot 
 	private WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
 	private SpeedControllerGroup rightSpeedController, leftSpeedController;
 	private DifferentialDrive driveTrain;
 	
 	public DriveTrain() {
+		// conts classss !!!!!!
 		_xBox = new XboxController(0);
 		frontLeft = new WPI_TalonSRX(1);
 		backLeft = new WPI_TalonSRX(3);
