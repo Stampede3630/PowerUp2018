@@ -4,11 +4,23 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import com.kauailabs.navx.frc.AHRS;
 
 public class DriveTrain {
 	private XboxController _xBox;
+	AHRS ahrs;
+	
 	// add coment about from what perspective of robot 
 	
+	static final double kP = 0.03;
+    static final double kI = 0.00;
+    static final double kD = 0.00;
+    static final double kF = 0.00;
+	
+    static final double kToleranceDegrees = 0;
+    static final double kTargetAngleDegrees = 0;
+    PIDController angleController;
+    
 	private WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
 	private SpeedControllerGroup rightSpeedController, leftSpeedController;
 	private DifferentialDrive driveTrain;
@@ -23,6 +35,14 @@ public class DriveTrain {
 		leftSpeedController = new SpeedControllerGroup (frontLeft, new SpeedController[] {backLeft});
 		rightSpeedController = new SpeedControllerGroup (frontRight, new SpeedController[] {backRight});
 		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
+		ahrs = new AHRS(SPI.Port.kMXP);
+		angleController = new PIDController();
+		angleController.setInputRange(-180, 180);
+		angleController.setOutputRange(-1, 1);
+		angleController.setAbsoluteTolerance(kToleranceDegrees);
+		angleController.setContinuous(true);
+		angleController.disable();
+		
 	}
 		public void driveTrainPeriodic() {
 			double speed = _xBox.getY(GenericHID.Hand.kLeft);
@@ -30,6 +50,8 @@ public class DriveTrain {
 			driveTrain.arcadeDrive(speed, heading);
 			
 		}
-		
+		  public void pidWrite(double output) {
+		        rotateToAngleRate = output;
+		    }	
 		
 }
