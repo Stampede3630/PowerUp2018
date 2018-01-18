@@ -25,7 +25,7 @@ public class DriveTrain {
 		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
 	}
 		public void driveTrainPeriodic() {
-			double speed = _xBox.getY(GenericHID.Hand.kLeft);
+			double speed = _xBox.getY(GenericHID.Hand.kLeft)*-1;
 			double heading = _xBox.getX(GenericHID.Hand.kRight);
 			driveTrain.arcadeDrive(speed, heading);
 			
