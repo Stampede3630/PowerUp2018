@@ -1,7 +1,6 @@
 package org.usfirst.frc.team3630.robot;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -11,21 +10,14 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	XboxController xBox;
-	Talon leftTalon, rightTalon;
-	DifferentialDrive diffDrive;
-	@Override
+	DriveTrain _driveTrain;
 	public void robotInit() {
-		xBox = new XboxController(0);
-		leftTalon = new Talon(1);
-		rightTalon = new Talon(0);
-		diffDrive = new DifferentialDrive(leftTalon, rightTalon);
+		_driveTrain = new DriveTrain();
+		
 	}
 	public void teleopPeriodic() {
-		double rotate=xBox.getX(GenericHID.Hand.kRight);
-		double speed=xBox.getY(GenericHID.Hand.kLeft)*-1;
-		diffDrive.arcadeDrive(speed, rotate);
+		_driveTrain.driveTrainPeriodic();
+		
 	}
-	
 }
 
