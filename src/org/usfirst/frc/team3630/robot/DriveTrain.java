@@ -11,12 +11,12 @@ public class DriveTrain {
 	AHRS ahrs;
 	
 	// add coment about from what perspective of robot 
-	
+	// need to test
 	static final double kP = 0.03;
     static final double kI = 0.00;
     static final double kD = 0.00;
     static final double kF = 0.00;
-	
+	// need to test later 
     static final double kToleranceDegrees = 0;
     static final double kTargetAngleDegrees = 0;
     PIDController angleController;
@@ -26,7 +26,7 @@ public class DriveTrain {
 	private DifferentialDrive driveTrain;
 	
 	public DriveTrain() {
-		// conts classss !!!!!!
+		//
 		_xBox = new XboxController(Consts.xBoxComPort);
 		frontLeft = new WPI_TalonSRX(Consts.frontLeftTalon);
 		backLeft = new WPI_TalonSRX(Consts.backLeftTalon);
@@ -36,7 +36,7 @@ public class DriveTrain {
 		rightSpeedController = new SpeedControllerGroup (frontRight, new SpeedController[] {backRight});
 		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
 		ahrs = new AHRS(SPI.Port.kMXP);
-		angleController = new PIDController();
+		angleController = new PIDController(kP, kI, kD, kF, ahrs, this );
 		angleController.setInputRange(-180, 180);
 		angleController.setOutputRange(-1, 1);
 		angleController.setAbsoluteTolerance(kToleranceDegrees);
@@ -44,6 +44,9 @@ public class DriveTrain {
 		angleController.disable();
 		
 	}
+	
+	
+	// add auto drive straight peridodic 
 		public void driveTrainPeriodic() {
 			double speed = _xBox.getY(GenericHID.Hand.kLeft);
 			double heading = _xBox.getX(GenericHID.Hand.kRight);
