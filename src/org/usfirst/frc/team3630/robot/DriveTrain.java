@@ -20,13 +20,14 @@ public class DriveTrain {
     static final double kToleranceDegrees = 0;
     static final double kTargetAngleDegrees = 0;
     PIDController angleController;
-    double angle = ;
+    double angleRotate;
 	private WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
 	private SpeedControllerGroup rightSpeedController, leftSpeedController;
 	private DifferentialDrive driveTrain;
 	
+	
 	public DriveTrain() {
-		//
+		//calibrate navx !!!!!
 		_xBox = new XboxController(Consts.xBoxComPort);
 		frontLeft = new WPI_TalonSRX(Consts.frontLeftTalon);
 		backLeft = new WPI_TalonSRX(Consts.backLeftTalon);
@@ -42,7 +43,10 @@ public class DriveTrain {
 		angleController.setAbsoluteTolerance(kToleranceDegrees);
 		angleController.setContinuous(true);
 		// returns curent output of pid controllor 
-		
+	    /* Add the PID Controller to the Test-mode dashboard, allowing manual  */
+        /* tuning of the Turn Controller's P, I and D coefficients.            */
+        /* Typically, only the P value needs to be modified.                   */
+        LiveWindow.addActuator("DriveSystem", "RotateController", angleController);    
 		
 	}
 	
