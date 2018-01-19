@@ -19,5 +19,8 @@ public class Robot extends IterativeRobot {
 		_driveTrain.driveTrainPeriodic();
 		
 	}
+	public void testPeriodic() {
+		_driveTrain.testPeriodic();
+	}
 }
 

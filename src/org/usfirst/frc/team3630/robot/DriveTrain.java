@@ -1,9 +1,11 @@
 package org.usfirst.frc.team3630.robot;
 
+import com.ctre.phoenix.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain {
 	private XboxController _xBox;
@@ -23,6 +25,16 @@ public class DriveTrain {
 		leftSpeedController = new SpeedControllerGroup (frontLeft, new SpeedController[] {backLeft});
 		rightSpeedController = new SpeedControllerGroup (frontRight, new SpeedController[] {backRight});
 		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
+		
+		frontLeft.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
+		frontLeft.setSensorPhase(false);
+		backLeft.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
+		backLeft.setSensorPhase(false);
+		frontRight.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
+		frontRight.setSensorPhase(false);
+		backRight.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
+		backRight.setSensorPhase(false);
+		
 	}
 		public void driveTrainPeriodic() {
 			double speed = _xBox.getY(GenericHID.Hand.kLeft)*-1;
@@ -31,5 +43,8 @@ public class DriveTrain {
 			
 		}
 		
+		public void testPeriodic() {
+			SmartDashboard.putNumber("Front Right Position", frontRight.getSelectedSensorPosition(0));
+		}
 		
 }
