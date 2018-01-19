@@ -64,7 +64,7 @@ public class DriveTrain {
 		driveTrain.arcadeDrive(.5, angleRotate);
 	}
 
-	/// acradeDrive (.5, theta from pid controllor) 
+
 	
 	
 	
@@ -75,7 +75,7 @@ public class DriveTrain {
 			
 		}
 		  public void pidWrite(double output) {
-		        rotateToAngleRate = output;
+			  angleRotate = output;
 		    }	
 		
 }
