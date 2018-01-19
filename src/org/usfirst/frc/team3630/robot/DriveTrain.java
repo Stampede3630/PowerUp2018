@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3630.robot;
 
 import com.ctre.phoenix.*;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.*;
@@ -32,6 +33,7 @@ public class DriveTrain {
 		backLeft.setSensorPhase(false);
 		frontRight.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
 		frontRight.setSensorPhase(false);
+		frontRight.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 1, 10);
 		backRight.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
 		backRight.setSensorPhase(false);
 		
@@ -44,7 +46,20 @@ public class DriveTrain {
 		}
 		
 		public void testPeriodic() {
-			SmartDashboard.putNumber("Front Right Position", frontRight.getSelectedSensorPosition(0));
+			SmartDashboard.putNumber("Front Right Position", getRotations(frontRight));
+			SmartDashboard.putNumber("Front Right Velocity", getVelocity(frontRight));
 		}
 		
+		public double getRotations(TalonSRX _talon) {
+			double distance_ticks = _talon.getSelectedSensorPosition(0);
+			double distance_rotations = distance_ticks/Consts.ticksPerRotation;
+			return distance_rotations;
+			
+		}
+		public double getVelocity(TalonSRX _talon) {
+			double velocity_milliseconds = (double) _talon.getSelectedSensorVelocity(0)/Consts.ticksPerRotation;
+			System.out.println(velocity_milliseconds);
+			double velocity_seconds = velocity_milliseconds*Consts.millisecondsPerSecond;
+			return velocity_seconds;
+		}
 }

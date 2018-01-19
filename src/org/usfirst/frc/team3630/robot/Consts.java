@@ -17,8 +17,9 @@ public class Consts {
 	
 	// Manipulators 
 	
-	
-	
+	//Wheel Measurements
+	public static final int ticksPerRotation = 1000;
+	public static final int millisecondsPerSecond = 1000;
 	
 	
 	
