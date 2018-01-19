@@ -3,7 +3,9 @@ package org.usfirst.frc.team3630.robot;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.kauailabs.navx.frc.AHRS;
 
 public class DriveTrain {
@@ -37,7 +39,7 @@ public class DriveTrain {
 		rightSpeedController = new SpeedControllerGroup (frontRight, new SpeedController[] {backRight});
 		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
 		ahrs = new AHRS(SPI.Port.kMXP);
-		angleController = new PIDController(kP, kI, kD, kF, ahrs, angle = angleController.get()  );
+		angleController = new PIDController(kP, kI, kD, kF, ahrs, angleRotate = angleController.get()  );
 		angleController.setInputRange(-180, 180);
 		angleController.setOutputRange(-1, 1);
 		angleController.setAbsoluteTolerance(kToleranceDegrees);
@@ -54,7 +56,12 @@ public class DriveTrain {
 	
 	// add auto drive straight peridodic 
 	public void autoStraight() {
-		driveTrain.arcadeDrive(, );
+		// put navx heading 
+		angleController.setSetpoint(kTargetAngleDegrees);
+		
+		SmartDashboard.putData("NavX heading", ahrs.getYaw());
+		angleController.enable();
+		driveTrain.arcadeDrive(.5, angleRotate);
 	}
 
 	/// acradeDrive (.5, theta from pid controllor) 
