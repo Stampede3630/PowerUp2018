@@ -42,6 +42,7 @@ public class DriveTrain {
 		angleController.setOutputRange(-1, 1);
 		angleController.setAbsoluteTolerance(kToleranceDegrees);
 		angleController.setContinuous(true);
+		angleController.disable();
 		// returns curent output of pid controllor 
 	    /* Add the PID Controller to the Test-mode dashboard, allowing manual  */
         /* tuning of the Turn Controller's P, I and D coefficients.            */
@@ -52,6 +53,9 @@ public class DriveTrain {
 	
 	
 	// add auto drive straight peridodic 
+	public void autoStraight() {
+		driveTrain.arcadeDrive(, );
+	}
 
 	/// acradeDrive (.5, theta from pid controllor) 
 	
