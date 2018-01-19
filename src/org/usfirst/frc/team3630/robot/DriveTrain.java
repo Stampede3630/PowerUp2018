@@ -20,7 +20,7 @@ public class DriveTrain {
     static final double kToleranceDegrees = 0;
     static final double kTargetAngleDegrees = 0;
     PIDController angleController;
-    
+    double angle = ;
 	private WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
 	private SpeedControllerGroup rightSpeedController, leftSpeedController;
 	private DifferentialDrive driveTrain;
@@ -36,17 +36,23 @@ public class DriveTrain {
 		rightSpeedController = new SpeedControllerGroup (frontRight, new SpeedController[] {backRight});
 		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
 		ahrs = new AHRS(SPI.Port.kMXP);
-		angleController = new PIDController(kP, kI, kD, kF, ahrs, this );
+		angleController = new PIDController(kP, kI, kD, kF, ahrs, angle = angleController.get()  );
 		angleController.setInputRange(-180, 180);
 		angleController.setOutputRange(-1, 1);
 		angleController.setAbsoluteTolerance(kToleranceDegrees);
 		angleController.setContinuous(true);
-		angleController.disable();
+		// returns curent output of pid controllor 
+		
 		
 	}
 	
 	
 	// add auto drive straight peridodic 
+
+	/// acradeDrive (.5, theta from pid controllor) 
+	
+	
+	
 		public void driveTrainPeriodic() {
 			double speed = _xBox.getY(GenericHID.Hand.kLeft);
 			double heading = _xBox.getX(GenericHID.Hand.kRight);
