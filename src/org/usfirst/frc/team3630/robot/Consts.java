@@ -20,6 +20,7 @@ public class Consts {
 	//Wheel Measurements
 	public static final int ticksPerRotation = 1000;
 	public static final int millisecondsPerSecond = 1000;
+	public static final int timeOutMs = 10;
 	
 	
 	

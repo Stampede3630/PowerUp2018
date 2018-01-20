@@ -22,5 +22,9 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 		_driveTrain.testPeriodic();
 	}
+	
+	public void testInit() {
+		_driveTrain.testInit();
+	}
 }
 

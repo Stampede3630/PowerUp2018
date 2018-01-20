@@ -26,9 +26,23 @@ public class DriveTrain {
 		leftSpeedController = new SpeedControllerGroup (frontLeft, new SpeedController[] {backLeft});
 		rightSpeedController = new SpeedControllerGroup (frontRight, new SpeedController[] {backRight});
 		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
+	
 		
 		frontLeft.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
-		frontLeft.setSensorPhase(false);
+		frontLeft.setSensorPhase(true);
+		frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, 0);
+		frontLeft.configNominalOutputForward(0, Consts.timeOutMs);
+		frontLeft.configNominalOutputReverse(0, Consts.timeOutMs);
+		frontLeft.configPeakOutputForward(1, Consts.timeOutMs);
+		frontLeft.configPeakOutputReverse(-1, Consts.timeOutMs);
+		frontLeft.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
+		frontLeft.config_kP(0, 1.7, Consts.timeOutMs);
+		frontLeft.config_kI(0, 0.0, Consts.timeOutMs);
+		frontLeft.config_kD(0, 0.0, Consts.timeOutMs);
+		SmartDashboard.putNumber("Front Left Setpoint", 1000);
+		
+		
+		
 		backLeft.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
 		backLeft.setSensorPhase(false);
 		frontRight.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
@@ -53,6 +67,13 @@ public class DriveTrain {
 			SmartDashboard.putNumber("Back Right Velocity", getVelocity(backRight));
 			SmartDashboard.putNumber("Back Left Position", getRotations(backLeft));
 			SmartDashboard.putNumber("Back Left Velocity", getVelocity(backLeft));
+			SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
+			//SmartDashboard.putString("control mode",frontLeft.getControlMode() );
+			frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Front Left Setpoint", 1000));
+			SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
+		}
+		public void testInit() {
+			frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		}
 		
 		public double getRotations(TalonSRX _talon) {
