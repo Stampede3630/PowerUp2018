@@ -13,15 +13,19 @@ public class Robot extends IterativeRobot {
 	DriveTrain _driveTrain;
 	public void robotInit() {
 		_driveTrain = new DriveTrain();
-		
+	
 	}
 	public void teleopPeriodic() {
 		//_driveTrain.driveTrainPeriodic();
 		
 	}
-	
+	@Override
+	public void testInit() {
+		_driveTrain.autoInit();
+	}
+	@Override
 	public void testPeriodic() {
-	//	_driveTrain.autoStraight();
+	_driveTrain.driveStraight();
 	}
 }
 

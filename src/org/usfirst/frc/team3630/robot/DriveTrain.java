@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.kauailabs.navx.frc.AHRS;
 
 public class DriveTrain  {
+	
+	
 	private XboxController _xBox;
 	AHRS ahrs;
 	
@@ -21,7 +23,8 @@ public class DriveTrain  {
     static final double kI = 0.00;
     static final double kD = 0.00;
     static final double kF = 1;
-    
+    //MyPidOutput PIDOut;
+
     static final double kToleranceDegrees = .5f;    
     // target anfle degrees for straight on
     static final double kTargetAngleDegrees = 0f;
@@ -33,8 +36,9 @@ public class DriveTrain  {
 
 	public DriveTrain()  {
 		//calibrate navx !!!!!
+	    
 		 ahrs = new AHRS(SPI.Port.kMXP); 
-
+		 ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 		_xBox = new XboxController(Consts.xBoxComPort);
 		// srx defin
 		frontLeft = new WPI_TalonSRX(Consts.frontLeftTalon);
@@ -48,6 +52,7 @@ public class DriveTrain  {
 ////////////
 		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
 // init pid controlor
+		
 		   turnController = new PIDController(kP, kI, kD, kF, ahrs, new MyPidOutput());
 	       // setting range and disable it 
 		   turnController.setInputRange(-180.0f,  180.0f);
@@ -55,20 +60,26 @@ public class DriveTrain  {
 	        turnController.setAbsoluteTolerance(kToleranceDegrees);
 	        turnController.setContinuous(true);
 	        turnController.disable();
-
+	      
 	}
 	
-	
+	public void autoInit() {
+		ahrs.reset();
+	}
 	// init method for navx calibaration setting 
 	
 	
 	   /* This function is invoked periodically by the PID Controller, */
 
 	public void driveStraight() {
-		SmartDashboard.putData("ahrs headng", ahrs);
-
+		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());
+		
+		
 		turnController.enable();
 		turnController.setSetpoint(kTargetAngleDegrees);
+		
+	
+	//	driveTrain.arcadeDrive(.5, angle );
 		
 	}
 	
@@ -84,13 +95,15 @@ public class DriveTrain  {
 			
 		}
 	
-
-	private class MyPidOutput implements PIDOutput {
-		@Override
+public  class MyPidOutput implements PIDOutput {
+		
+		double outAngle;
 		public void pidWrite(double output) {
-			driveTrain.arcadeDrive(.5, output);
-		}
+			outAngle=output;
+			driveTrain.arcadeDrive(.2, outAngle );;
 
+		}
+		
 	}
 }
 	
