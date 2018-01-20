@@ -33,7 +33,6 @@ public class DriveTrain {
 		backLeft.setSensorPhase(false);
 		frontRight.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
 		frontRight.setSensorPhase(false);
-		frontRight.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 1, 10);
 		backRight.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
 		backRight.setSensorPhase(false);
 		
@@ -48,6 +47,12 @@ public class DriveTrain {
 		public void testPeriodic() {
 			SmartDashboard.putNumber("Front Right Position", getRotations(frontRight));
 			SmartDashboard.putNumber("Front Right Velocity", getVelocity(frontRight));
+			SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
+			SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
+			SmartDashboard.putNumber("Back Right Position", getRotations(backRight));
+			SmartDashboard.putNumber("Back Right Velocity", getVelocity(backRight));
+			SmartDashboard.putNumber("Back Left Position", getRotations(backLeft));
+			SmartDashboard.putNumber("Back Left Velocity", getVelocity(backLeft));
 		}
 		
 		public double getRotations(TalonSRX _talon) {
