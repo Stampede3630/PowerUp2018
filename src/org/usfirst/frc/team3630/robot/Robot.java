@@ -16,12 +16,12 @@ public class Robot extends IterativeRobot {
 		
 	}
 	public void teleopPeriodic() {
-		_driveTrain.driveTrainPeriodic();
+		//_driveTrain.driveTrainPeriodic();
 		
 	}
 	
 	public void testPeriodic() {
-		_driveTrain.autoStraight();
+	//	_driveTrain.autoStraight();
 	}
 }
 
