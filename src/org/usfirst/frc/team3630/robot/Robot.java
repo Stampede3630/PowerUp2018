@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3630.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -11,9 +12,10 @@ import edu.wpi.first.wpilibj.*;
  */
 public class Robot extends IterativeRobot {
 	DriveTrain _driveTrain;
+	Timer  autoTime; 
 	public void robotInit() {
-		_driveTrain = new DriveTrain();
-	
+	_driveTrain = new DriveTrain();
+	autoTime = new Timer();
 	}
 	public void teleopPeriodic() {
 		//_driveTrain.driveTrainPeriodic();
@@ -21,11 +23,35 @@ public class Robot extends IterativeRobot {
 	}
 	@Override
 	public void testInit() {
+		autoTime.reset();
+		autoTime.start();
 		_driveTrain.autoInit();
+		_driveTrain.driveStraight();
 	}
 	@Override
 	public void testPeriodic() {
-	_driveTrain.driveStraight();
+		SmartDashboard.putNumber("timer", autoTime.get());
+		_driveTrain.putData();
+		if (	autoTime.get()< 6) {
+		
+			_driveTrain.testDriveTrainPeriodic();
 	}
+		else if (autoTime.get()<15 ) {
+			_driveTrain.turnDegree(90f);
+			
+			_driveTrain.testDriveTrainPeriodic();
+			
+		}
+		
+	
+		
+		else {
+			_driveTrain.stop();
+			
+		}
+			
+		
+	}
+	
 }
 
