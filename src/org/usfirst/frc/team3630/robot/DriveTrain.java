@@ -3,15 +3,19 @@ package org.usfirst.frc.team3630.robot;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDSourceType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.DriverStation;
-import com.edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.PIDSource;
+
+
+
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
+
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.XboxController;
-public class DriveTrain  {
+
+public class DriveTrain  implements PIDOutput{
 	private XboxController _xBox;
 	AHRS ahrs;
 	
@@ -23,19 +27,20 @@ public class DriveTrain  {
     static final double kP = 0.03;
     static final double kI = 0.00;
     static final double kD = 0.00;
-    static final double kF = 0.00;
+    static final double kF = 1;
     
     static final double kToleranceDegrees = 2.0f;    
     
-    static final double kTargetAngleDegrees = 90.0f;
+    static final double kTargetAngleDegrees = 0f;
     
 	private  WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
-	private SpeedControllerGroup rightSpeedController, leftSpeedController;
+	private SpeedControllerGroup  leftSpeedController,rightSpeedController;
 	 PIDSource pidSource ;
+	 DifferentialDrive driveTrain ;
 	public DriveTrain()  {
 		//calibrate navx !!!!!
 		 ahrs = new AHRS(SPI.Port.kMXP); 
-		  pidSource = ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
+		 // pidSource = ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 		_xBox = new XboxController(Consts.xBoxComPort);
 		
 		frontLeft = new WPI_TalonSRX(Consts.frontLeftTalon);
@@ -54,10 +59,19 @@ public class DriveTrain  {
 	        turnController.setAbsoluteTolerance(kToleranceDegrees);
 	        turnController.setContinuous(true);
 	        turnController.disable();
-	        
-     //   turnController.setSetpoint(desiredHeading);
-      
+
 	}
+	
+	public void driveStraight() {
+		rotateToAngleRate= 0;
+		turnController.enable();
+		turnController.setSetpoint(kTargetAngleDegrees);
+
+		
+	}
+	
+	
+	
 
 	public void driveTrainPeriodic() {
 		double speed = _xBox.getY(GenericHID.Hand.kLeft);
@@ -66,4 +80,10 @@ public class DriveTrain  {
 			
 		}
 		
+
+    /* This function is invoked periodically by the PID Controller, */
+    /* based upon navX MXP yaw angle input and PID Coefficients.    */
+    public void pidWrite(double output) {
+        rotateToAngleRate = output;
+    }
 }
