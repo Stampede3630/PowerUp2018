@@ -28,29 +28,35 @@ public class DriveTrain {
 		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
 	
 		
-		frontLeft.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
+		configureTalon(frontLeft);
+		configureTalon(frontRight);
+		configureTalon(backLeft);
+		configureTalon(backRight);
 		frontLeft.setSensorPhase(true);
-		frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, 0);
-		frontLeft.configNominalOutputForward(0, Consts.timeOutMs);
-		frontLeft.configNominalOutputReverse(0, Consts.timeOutMs);
-		frontLeft.configPeakOutputForward(1, Consts.timeOutMs);
-		frontLeft.configPeakOutputReverse(-1, Consts.timeOutMs);
-		frontLeft.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
-		frontLeft.config_kP(0, 1.7, Consts.timeOutMs);
-		frontLeft.config_kI(0, 0.0, Consts.timeOutMs);
-		frontLeft.config_kD(0, 0.0, Consts.timeOutMs);
-		SmartDashboard.putNumber("Front Left Setpoint", 1000);
+		frontRight.setSensorPhase(true);
+		backLeft.setSensorPhase(true);
+		backRight.setSensorPhase(true);
+		frontRight.setInverted(true);
+		backRight.setInverted(true);
+
 		
-		
-		
-		backLeft.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
-		backLeft.setSensorPhase(false);
-		frontRight.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
-		frontRight.setSensorPhase(false);
-		backRight.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
-		backRight.setSensorPhase(false);
+		SmartDashboard.putNumber("Setpoint", 1000);
 		
 	}
+	private void configureTalon(TalonSRX _talon) {
+		_talon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
+		
+		_talon.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, 0);
+		_talon.configNominalOutputForward(0, Consts.timeOutMs);
+		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
+		_talon.configPeakOutputForward(1, Consts.timeOutMs);
+		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
+		_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
+		_talon.config_kP(0, 1.7, Consts.timeOutMs);
+		_talon.config_kI(0, 0.0, Consts.timeOutMs);
+		_talon.config_kD(0, 0.0, Consts.timeOutMs);
+	}
+
 		public void driveTrainPeriodic() {
 			double speed = _xBox.getY(GenericHID.Hand.kLeft)*-1;
 			double heading = _xBox.getX(GenericHID.Hand.kRight);
@@ -67,9 +73,12 @@ public class DriveTrain {
 			SmartDashboard.putNumber("Back Right Velocity", getVelocity(backRight));
 			SmartDashboard.putNumber("Back Left Position", getRotations(backLeft));
 			SmartDashboard.putNumber("Back Left Velocity", getVelocity(backLeft));
-			SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
+			//SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
 			//SmartDashboard.putString("control mode",frontLeft.getControlMode() );
-			frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Front Left Setpoint", 1000));
+			frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+			frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+			backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+			backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
 			SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
 		}
 		public void testInit() {
