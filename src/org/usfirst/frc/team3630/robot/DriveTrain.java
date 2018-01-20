@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -15,14 +16,14 @@ public class DriveTrain  {
 	// need to test
 	 PIDController turnController;
 	 double rotateToAngleRate;
-	    
+	// pid conts need to test     
     static final double kP = 0.03;
     static final double kI = 0.00;
     static final double kD = 0.00;
     static final double kF = 1;
     
     static final double kToleranceDegrees = .5f;    
-    
+    // target anfle degrees for straight on
     static final double kTargetAngleDegrees = 0f;
     
 	private  WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
@@ -46,9 +47,9 @@ public class DriveTrain  {
 	rightSpeedController = new SpeedControllerGroup (frontRight, new SpeedController[] {backRight});
 ////////////
 		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
-		
+// init pid controlor
 		   turnController = new PIDController(kP, kI, kD, kF, ahrs, new MyPidOutput());
-	       
+	       // setting range and disable it 
 		   turnController.setInputRange(-180.0f,  180.0f);
 	        turnController.setOutputRange(-1.0, 1.0);
 	        turnController.setAbsoluteTolerance(kToleranceDegrees);
@@ -62,12 +63,9 @@ public class DriveTrain  {
 	
 	
 	   /* This function is invoked periodically by the PID Controller, */
-    /* based upon navX MXP yaw angle input and PID Coefficients.    */
-    public void pidWrite(double output) {
-        rotateToAngleRate = output;
-    }
 
 	public void driveStraight() {
+		SmartDashboard.putData("ahrs headng", ahrs);
 
 		turnController.enable();
 		turnController.setSetpoint(kTargetAngleDegrees);
