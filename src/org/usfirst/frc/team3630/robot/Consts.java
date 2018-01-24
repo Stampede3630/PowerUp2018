@@ -17,6 +17,16 @@ public class Consts {
 	
 	// Manipulators 
 	
+	
+	public static final double  kPA = 0.1;
+
+	public static final double  kIA = 0;
+	
+	public static final double  kID = 0;
+	
+
+    public static final double kToleranceDegrees = .5f;    
+	
 	//Wheel Measurements
 	public static final int ticksPerRotation = 1000;
 	public static final int millisecondsPerSecond = 1000;
@@ -26,7 +36,7 @@ public class Consts {
 	public static final int kPencoder = 1.7;
 	public static final int kIencoder = 0.0;
 	public static final int kDencoder = 0.0;
-	
+
 	
 	
 	
