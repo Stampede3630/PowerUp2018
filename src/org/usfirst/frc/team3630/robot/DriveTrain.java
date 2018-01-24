@@ -12,20 +12,20 @@ public class DriveTrain  {
 	
 	private XboxController _xBox;
 	AHRS ahrs;
+	// corection angle for PID Source 
 	public double correctionAngle = 0;
 	
 	// add coment about from what perspective of robot 
 	// need to test
 	 PIDController turnController;
 	 double rotateToAngleRate;
-	// pid conts need to test     
-    static final double kP = 0.1 ;
+	    static final double kP = 0.1 ;
     static final double kI = 0.00;
     static final double kD = 0.00;
     static final double kF = 1;
-    //MyPidOutput PIDOut;
 
-    // target anfle degrees for straight on
+
+    // target angle degrees for straight on should not be a constant !
      double kTargetAngleDegrees = 0f;
     
 	private  WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
@@ -50,7 +50,7 @@ public class DriveTrain  {
 	rightSpeedController = new SpeedControllerGroup (frontRight, new SpeedController[] {backRight});
 ////////////
 		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
-// init pid controlor
+
 		
 		   turnController = new PIDController(Consts.kPA, Consts.kIA, Consts.kID,  ahrs, new MyPidOutput());
 	       // setting range and disable it 
@@ -120,6 +120,8 @@ public double ahrsYaw() {
 	
 	
 public  class MyPidOutput implements PIDOutput {
+	
+// implements pid output
 		
 	
 		public void pidWrite(double output) {
