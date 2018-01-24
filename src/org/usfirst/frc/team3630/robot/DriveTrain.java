@@ -32,10 +32,6 @@ public class DriveTrain {
 		configureTalon(frontRight);
 		configureTalon(backLeft);
 		configureTalon(backRight);
-		frontLeft.setSensorPhase(true);
-		frontRight.setSensorPhase(true);
-		backLeft.setSensorPhase(true);
-		backRight.setSensorPhase(true);
 		frontRight.setInverted(true);
 		backRight.setInverted(true);
 
@@ -51,10 +47,11 @@ public class DriveTrain {
 		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
 		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
+		_talon.setSensorPhase(true);
 		_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
-		_talon.config_kP(0, 1.7, Consts.timeOutMs);
-		_talon.config_kI(0, 0.0, Consts.timeOutMs);
-		_talon.config_kD(0, 0.0, Consts.timeOutMs);
+		_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
+		_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
+		_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
 	}
 
 		public void driveTrainPeriodic() {
