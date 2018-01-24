@@ -25,9 +25,18 @@ public class Consts {
 	public static final double  kID = 0;
 	
 
-    static final double kToleranceDegrees = .5f;    
+    public static final double kToleranceDegrees = .5f;    
 	
+	//Wheel Measurements
+	public static final int ticksPerRotation = 1000;
+	public static final int millisecondsPerSecond = 1000;
+	public static final int timeOutMs = 10;
 	
+	//PID encoders drive number of rotations
+	public static final int kPencoder = 1.7;
+	public static final int kIencoder = 0.0;
+	public static final int kDencoder = 0.0;
+
 	
 	
 	

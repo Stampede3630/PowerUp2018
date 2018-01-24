@@ -27,9 +27,10 @@ public class Robot extends IterativeRobot {
 		autoTime.start();
 		_driveTrain.autoInit();
 		_driveTrain.driveStraight();
+		_driveTrain.testInit();
 	}
-	@Override
-	public void testPeriodic() {
+	
+	public void DriveAngle() {
 		
 		// rest navx
 		_driveTrain.autoInit();
@@ -43,6 +44,7 @@ public class Robot extends IterativeRobot {
 			// go straight
 			_driveTrain.testDriveTrainPeriodic();
 	}
+
 		else if (autoTime.get()<15 ) {
 			// turn 90 degrees 
 			_driveTrain.turnDegree(90f);
@@ -62,7 +64,14 @@ public class Robot extends IterativeRobot {
 			
 		}
 		
+
+	
+
+	public void testPeriodic() {
+		_driveTrain.testPeriodic();
 	}
 	
+
+}
 
 
