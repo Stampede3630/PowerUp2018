@@ -1,4 +1,4 @@
-package org.usfirst.frc.team3630.robot;
+package src.org.usfirst.frc.team3630.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -25,7 +25,6 @@ public class DriveTrain  {
     static final double kF = 1;
     //MyPidOutput PIDOut;
 
-    static final double kToleranceDegrees = .5f;    
     // target anfle degrees for straight on
      double kTargetAngleDegrees = 0f;
     
@@ -53,11 +52,11 @@ public class DriveTrain  {
 		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
 // init pid controlor
 		
-		   turnController = new PIDController(kP, kI, kD,  ahrs, new MyPidOutput());
+		   turnController = new PIDController(Consts.kPA, Consts.kIA, Consts.kID,  ahrs, new MyPidOutput());
 	       // setting range and disable it 
 		   turnController.setInputRange(-180.0f,  180.0f);
 	        turnController.setOutputRange(-1.0, 1.0);
-	        turnController.setAbsoluteTolerance(kToleranceDegrees);
+	        turnController.setAbsoluteTolerance(Consts.kToleranceDegrees);
 	        turnController.setContinuous(true);
 	        turnController.disable();
 	        
@@ -93,7 +92,10 @@ public class DriveTrain  {
 	
 	
 	
-
+public double ahrsYaw() {
+	double yaw = ahrs.getYaw();
+	return yaw;
+}
 
 	public void driveTrainPeriodic() {
 		double speed = _xBox.getY(GenericHID.Hand.kLeft);

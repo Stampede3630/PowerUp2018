@@ -1,4 +1,4 @@
-package org.usfirst.frc.team3630.robot;
+package src.org.usfirst.frc.team3630.robot;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,13 +30,21 @@ public class Robot extends IterativeRobot {
 	}
 	@Override
 	public void testPeriodic() {
+		
+		// rest navx
+		_driveTrain.autoInit();
+		
 		SmartDashboard.putNumber("timer", autoTime.get());
 		_driveTrain.putData();
-		if (	autoTime.get()< 6) {
+	
 		
+		if (	autoTime.get()< 6) {
+			
+			// go straight
 			_driveTrain.testDriveTrainPeriodic();
 	}
 		else if (autoTime.get()<15 ) {
+			// turn 90 degrees 
 			_driveTrain.turnDegree(90f);
 			
 			_driveTrain.testDriveTrainPeriodic();
@@ -46,12 +54,15 @@ public class Robot extends IterativeRobot {
 	
 		
 		else {
+			
+			// stop 
 			_driveTrain.stop();
 			
 		}
 			
+		}
 		
 	}
 	
-}
+
 

@@ -18,7 +18,14 @@ public class Consts {
 	// Manipulators 
 	
 	
+	public static final double  kPA = 0.1;
+
+	public static final double  kIA = 0;
 	
+	public static final double  kID = 0;
+	
+
+    static final double kToleranceDegrees = .5f;    
 	
 	
 	
