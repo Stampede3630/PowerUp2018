@@ -25,15 +25,14 @@ public class Robot extends IterativeRobot {
 	public void testInit() {
 		autoTime.reset();
 		autoTime.start();
-		_driveTrain.autoInit();
-		_driveTrain.driveStraight();
 		_driveTrain.testInit();
+		_driveTrain.driveStraight();
 	}
 	
 	public void DriveAngle() {
 		
 		// rest navx
-		_driveTrain.autoInit();
+		_driveTrain.testInit();
 		
 		SmartDashboard.putNumber("timer", autoTime.get());
 		_driveTrain.putData();
@@ -68,7 +67,7 @@ public class Robot extends IterativeRobot {
 	
 
 	public void testPeriodic() {
-		_driveTrain.testPeriodic();
+		_driveTrain.testDriveTrainPeriodic();
 	}
 	
 

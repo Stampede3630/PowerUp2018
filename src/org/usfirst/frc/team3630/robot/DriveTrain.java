@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3630.robot;
 
 import com.ctre.phoenix.*;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -27,7 +28,7 @@ public class DriveTrain {
 
 	// target angle degrees for straight on should not be a constant !
 	double kTargetAngleDegrees = 0f;
-	double kTargetDistanceInches = 24;
+	double kTargetDistanceInches = 1000;
 
 	private WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
 	private SpeedControllerGroup leftSpeedController, rightSpeedController;
@@ -52,8 +53,9 @@ public class DriveTrain {
 		configureTalon(frontRight);
 		configureTalon(backLeft);
 		configureTalon(backRight);
-		frontRight.setInverted(true);
-		backRight.setInverted(true);
+		/*frontRight.setInverted(true);
+		backRight.setInverted(true); 
+		*/
 
 		SmartDashboard.putNumber("Setpoint", 1000);
 
@@ -78,11 +80,6 @@ public class DriveTrain {
 		posController.setAbsoluteTolerance(Consts.kToleranceDistance);
 		posController.disable();
 
-	}
-
-	public void autoInit() {
-		ahrs.reset();
-		frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 	}
 	// init method for navx calibaration setting
 
@@ -133,8 +130,14 @@ public class DriveTrain {
 	}
 
 	public void testDriveTrainPeriodic() {
-
-		driveTrain.arcadeDrive(posOutput, turnOutput);
+		SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
+		driveTrain.arcadeDrive(posOutput, 0);
+		SmartDashboard.putNumber("Position Setpoint", posController.getSetpoint());
+		SmartDashboard.putNumber("Position Error", posController.getError());
+		SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
+		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
+		SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
+		SmartDashboard.putNumber("posController kP", posController.getP());
 	}
 
 	public void putData() {
@@ -166,6 +169,7 @@ public class DriveTrain {
 	}
 
 	public void testInit() {
+		ahrs.reset();
 		frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 	}
 
@@ -178,7 +182,7 @@ public class DriveTrain {
 
 	public double getVelocity(TalonSRX _talon) {
 		double velocity_milliseconds = (double) _talon.getSelectedSensorVelocity(0) / Consts.ticksPerRotation;
-		System.out.println(velocity_milliseconds);
+		//System.out.println(velocity_milliseconds);
 		double velocity_seconds = velocity_milliseconds * Consts.millisecondsPerSecond;
 		return velocity_seconds;
 	}
