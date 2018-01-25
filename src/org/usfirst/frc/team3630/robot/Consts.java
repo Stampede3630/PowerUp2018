@@ -18,24 +18,26 @@ public class Consts {
 	// Manipulators 
 	
 	
-	public static final double  kPA = 0.1;
+	public static final double  kPRotAng = 0.1;
 
-	public static final double  kIA = 0;
+	public static final double  kIRotAng = 0;
 	
-	public static final double  kID = 0;
+	public static final double  kDRotAng = 0;
 	
 
-    public static final double kToleranceDegrees = .5f;    
+    public static final double kToleranceDegrees = .5f;
+    public static final double kToleranceDistance = 1;
 	
 	//Wheel Measurements
 	public static final int ticksPerRotation = 1000;
 	public static final int millisecondsPerSecond = 1000;
 	public static final int timeOutMs = 10;
+	public static final double wheelRadius = 3;
 	
 	//PID encoders drive number of rotations
-	public static final int kPencoder = 1.7;
-	public static final int kIencoder = 0.0;
-	public static final int kDencoder = 0.0;
+	public static final double kPencoder = 1.7;
+	public static final double kIencoder = 0.0;
+	public static final double kDencoder = 0.0;
 
 	
 	
