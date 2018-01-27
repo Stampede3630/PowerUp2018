@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.livewindow.*;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -57,18 +58,20 @@ public class DriveTrain {
 		backRight.setInverted(true); 
 		*/
 
-		SmartDashboard.putNumber("Setpoint", 1000);
+		//SmartDashboard.putNumber("Setpoint", 1000);
+		SmartDashboard.putNumber("pos Setpoint", 24);
+		SmartDashboard.putNumber("posController kP", 0.01);
 
 		leftSpeedController = new SpeedControllerGroup(frontLeft, new SpeedController[] { backLeft });
 		rightSpeedController = new SpeedControllerGroup(frontRight, new SpeedController[] { backRight });
 		////////////
 		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
-
+		driveTrain.setDeadband(0);
 		turnController = new PIDController(Consts.kPRotAng, Consts.kIRotAng, Consts.kDRotAng, ahrs,new MyRotationPidOutput());
 
 		// setting range and disable it
 		turnController.setInputRange(-180.0f, 180.0f);
-		turnController.setOutputRange(-1.0, 1.0);
+		turnController.setOutputRange(-.5, .5);
 		turnController.setAbsoluteTolerance(Consts.kToleranceDegrees);
 		turnController.setContinuous(true);
 		turnController.disable();
@@ -76,7 +79,7 @@ public class DriveTrain {
 		positionEncoderSource = new EncoderPIDSource(frontLeft);
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
-		posController.setOutputRange(-1.0, 1.0);
+		posController.setOutputRange(-0.5, 0.5);
 		posController.setAbsoluteTolerance(Consts.kToleranceDistance);
 		posController.disable();
 
@@ -140,6 +143,7 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
 		SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
 		posController.setP(SmartDashboard.getNumber("posController kP", 0.01));
+		posController.setSetpoint(SmartDashboard.getNumber("pos Setpoint", 48));
 	}
 
 	public void putData() {
@@ -173,6 +177,7 @@ public class DriveTrain {
 	public void testInit() {
 		ahrs.reset();
 		frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		LiveWindow.disableAllTelemetry();
 	}
 
 	public double getRotations(TalonSRX _talon) {
@@ -223,7 +228,7 @@ public class DriveTrain {
 
 		public double pidGet() {
 			int position_raw = _talon.getSelectedSensorPosition(0);
-			double position_inches = position_raw / Consts.ticksPerRotation * 2 * Math.PI * Consts.wheelRadius;
+			double position_inches = position_raw * (2 * Math.PI * Consts.wheelRadius) / Consts.ticksPerRotation ;
 			return position_inches;
 		}
 

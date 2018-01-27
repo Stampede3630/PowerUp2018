@@ -24,14 +24,16 @@ public class Robot extends IterativeRobot {
 		
 	}
 	@Override
-	
 	public void testInit() {
 		//autoTime.reset();
 		//autoTime.start();
 		_driveTrain.testInit();
 		_driveTrain.driveStraight();
 	}
-	
+	@Override
+	public void disabledPeriodic() {
+		_driveTrain.putData();
+	}
 	/*public void DriveAngle() {
 		
 		// rest navx
@@ -66,6 +68,7 @@ public class Robot extends IterativeRobot {
 			
 		}
 		*/
+	@Override
 	public void testPeriodic() {
 		_driveTrain.testDriveTrainPeriodic();
 	}
