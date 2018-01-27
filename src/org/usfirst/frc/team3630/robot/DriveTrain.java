@@ -190,8 +190,8 @@ public double ahrsYaw() {
 			
 				
 					public void pidWrite(double output) {
-						 */
-							double targetVelocity_UnitsPer100ms = output * 500.0 * 4096 / 600;
+						 
+						///	double targetVelocity_UnitsPer100ms = output * 500.0 * 4096 / 600;
 							
 						 /* 500 RPM in either direction */
 			
