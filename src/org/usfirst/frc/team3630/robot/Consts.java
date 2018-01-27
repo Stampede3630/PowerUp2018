@@ -35,10 +35,13 @@ public class Consts {
 	public static final double wheelRadius = 3;
 	
 	//PID encoders drive number of rotations
-	public static final double kPencoder = 0.00;
-	public static final double kIencoder = 0.000000001;
+	public static final double kPencoder = 0.2;
+	public static final double kIencoder = 0.000000000;
 	public static final double kDencoder = 0.0;
 
+	public static final double kPPos = 0.1;
+	public static final double kIPos = 0;
+	public static final double kDPos = 0;
 	
 	
 	

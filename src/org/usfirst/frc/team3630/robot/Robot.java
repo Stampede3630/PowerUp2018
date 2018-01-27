@@ -12,24 +12,27 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 	DriveTrain _driveTrain;
-	Timer  autoTime; 
+	//Timer  autoTime; 
+	
 	public void robotInit() {
 	_driveTrain = new DriveTrain();
-	autoTime = new Timer();
+	//autoTime = new Timer();
 	}
+	
 	public void teleopPeriodic() {
 		//_driveTrain.driveTrainPeriodic();
 		
 	}
 	@Override
+	
 	public void testInit() {
-		autoTime.reset();
-		autoTime.start();
+		//autoTime.reset();
+		//autoTime.start();
 		_driveTrain.testInit();
 		_driveTrain.driveStraight();
 	}
 	
-	public void DriveAngle() {
+	/*public void DriveAngle() {
 		
 		// rest navx
 		_driveTrain.testInit();
@@ -62,10 +65,7 @@ public class Robot extends IterativeRobot {
 		}
 			
 		}
-		
-
-	
-
+		*/
 	public void testPeriodic() {
 		_driveTrain.testDriveTrainPeriodic();
 	}

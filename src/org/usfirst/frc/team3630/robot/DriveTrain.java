@@ -74,7 +74,7 @@ public class DriveTrain {
 		turnController.disable();
 
 		positionEncoderSource = new EncoderPIDSource(frontLeft);
-		posController = new PIDController(Consts.kPRotAng, Consts.kIRotAng, Consts.kDRotAng,
+		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
 		posController.setOutputRange(-1.0, 1.0);
 		posController.setAbsoluteTolerance(Consts.kToleranceDistance);
@@ -139,7 +139,7 @@ public class DriveTrain {
 		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
 		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
 		SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
-		SmartDashboard.putNumber("posController kP", posController.getP());
+		posController.setP(SmartDashboard.getNumber("posController kP", 0.01));
 	}
 
 	public void putData() {
@@ -163,10 +163,10 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Back Left Velocity", getVelocity(backLeft));
 		// SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
 		// SmartDashboard.putString("control mode",frontLeft.getControlMode() );
-		frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-		frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-		backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-		backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+//		frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+//		frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+//		backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+//		backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
 		SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
 	}
 
