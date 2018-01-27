@@ -7,10 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-<<<<<<< HEAD
 import com.kauailabs.navx.frc.AHRS;
-=======
->>>>>>> master
 
 public class DriveTrain  {
 	
@@ -28,7 +25,6 @@ public class DriveTrain  {
     static final double kI = 0.00;
     static final double kD = 0.00;
     static final double kF = 1;
-
 
     // target angle degrees for straight on should not be a constant !
      double kTargetAngleDegrees = 0f;

@@ -1,4 +1,4 @@
-package org.usfirst.frc.team3630.robot;
+package src.org.usfirst.frc.team3630.robot;
 
 public class Consts {
 	
@@ -33,9 +33,9 @@ public class Consts {
 	public static final int timeOutMs = 10;
 	
 	//PID encoders drive number of rotations
-	public static final int kPencoder = 1.7;
-	public static final int kIencoder = 0.0;
-	public static final int kDencoder = 0.0;
+	public static final double kPencoder = 1.7;
+	public static final double kIencoder = 0.0;
+	public static final double kDencoder = 0.0;
 
 	
 	
