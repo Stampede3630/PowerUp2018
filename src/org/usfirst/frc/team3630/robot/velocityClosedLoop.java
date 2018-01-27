@@ -46,7 +46,7 @@ public class velocityClosedLoop {
 			/* set closed loop gains in slot0 */
 			_talon.config_kF(0, 0.1097, 10);
 			_talon.config_kP(0, 0.113333, 10);
-			_talon.config_kI(0, kPIDLoopIdx, 0, 10);
+			_talon.config_kI(0, 0, 0, 10);
 			_talon.config_kD(0, 0, 10);
 		}
 

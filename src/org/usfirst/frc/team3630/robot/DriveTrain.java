@@ -1,16 +1,15 @@
 package src.org.usfirst.frc.team3630.robot;
 
 import com.ctre.phoenix.*;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-<<<<<<< HEAD
 import com.kauailabs.navx.frc.AHRS;
-=======
->>>>>>> master
+
 
 public class DriveTrain  {
 	
@@ -188,10 +187,14 @@ public double ahrsYaw() {
 			
 			// implements pid output
 					
-
+			
 				
 					public void pidWrite(double output) {
-						correctionAngle=output;
+						 */
+							double targetVelocity_UnitsPer100ms = output * 500.0 * 4096 / 600;
+							
+						 /* 500 RPM in either direction */
+			
 						
 						
 					}
