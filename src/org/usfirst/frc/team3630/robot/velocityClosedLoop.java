@@ -34,20 +34,20 @@ public class velocityClosedLoop {
 
 		public  velocityClosedLoop() {
 			/* first choose the sensor */
-			_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
+			_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 			_talon.setSensorPhase(true);
 
 			/* set the peak, nominal outputs */
-			_talon.configNominalOutputForward(0, Constants.kTimeoutMs);
-			_talon.configNominalOutputReverse(0, Constants.kTimeoutMs);
-			_talon.configPeakOutputForward(1, Constants.kTimeoutMs);
-			_talon.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+			_talon.configNominalOutputForward(0, 10);
+			_talon.configNominalOutputReverse(0, 10);
+			_talon.configPeakOutputForward(1, 10);
+			_talon.configPeakOutputReverse(-1, 10);
 
 			/* set closed loop gains in slot0 */
-			_talon.config_kF(Constants.kPIDLoopIdx, 0.1097, Constants.kTimeoutMs);
-			_talon.config_kP(Constants.kPIDLoopIdx, 0.113333, Constants.kTimeoutMs);
-			_talon.config_kI(Constants.kPIDLoopIdx, 0, Constants.kTimeoutMs);
-			_talon.config_kD(Constants.kPIDLoopIdx, 0, Constants.kTimeoutMs);
+			_talon.config_kF(0, 0.1097, 10);
+			_talon.config_kP(0, 0.113333, 10);
+			_talon.config_kI(0, kPIDLoopIdx, 0, 10);
+			_talon.config_kD(0, 0, 10);
 		}
 
 		/**
@@ -61,7 +61,7 @@ public class velocityClosedLoop {
 			_sb.append("\tout:");
 			_sb.append(motorOutput);
 			_sb.append("\tspd:");
-			_sb.append(_talon.getSelectedSensorVelocity(Constants.kPIDLoopIdx));
+			_sb.append(_talon.getSelectedSensorVelocity(0));
 
 			if (_joy.getRawButton(1)) {
 				/* Speed mode */
@@ -76,7 +76,7 @@ public class velocityClosedLoop {
 
 				/* append more signals to print when in speed mode. */
 				_sb.append("\terr:");
-				_sb.append(_talon.getClosedLoopError(Constants.kPIDLoopIdx));
+				_sb.append(_talon.getClosedLoopError(0));
 				_sb.append("\ttrg:");
 				_sb.append(targetVelocity_UnitsPer100ms);
 			} else {
