@@ -130,11 +130,13 @@ public class DriveTrain {
 	}
 
 	public void testDriveTrainPeriodic() {
-		SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
-		driveTrain.arcadeDrive(posOutput, 0);
+		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
+		
+		driveTrain.arcadeDrive(posOutput, turnOutput);
+		
 		SmartDashboard.putNumber("Position Setpoint", posController.getSetpoint());
 		SmartDashboard.putNumber("Position Error", posController.getError());
-		SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
+		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
 		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
 		SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
 		SmartDashboard.putNumber("posController kP", posController.getP());
