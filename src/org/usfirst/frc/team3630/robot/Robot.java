@@ -13,9 +13,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	DriveTrain _driveTrain;
 	Timer  autoTime; 
+	velocityClosedLoop velocity;
+
 	public void robotInit() {
 	_driveTrain = new DriveTrain();
 	autoTime = new Timer();
+	velocity= new velocityClosedLoop();
 	}
 	public void teleopPeriodic() {
 		//_driveTrain.driveTrainPeriodic();
@@ -28,6 +31,7 @@ public class Robot extends IterativeRobot {
 		_driveTrain.autoInit();
 		_driveTrain.driveStraight();
 		_driveTrain.testInit();
+		
 	}
 	
 	public void DriveAngle() {
@@ -68,7 +72,8 @@ public class Robot extends IterativeRobot {
 	
 
 	public void testPeriodic() {
-		_driveTrain.testPeriodic();
+		//_driveTrain.testPeriodic();
+		velocity.teleopPeriodicClosedLoop();
 	}
 	
 
