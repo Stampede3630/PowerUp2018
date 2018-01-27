@@ -10,13 +10,7 @@ import edu.wpi.first.wpilibj.hal.HAL;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 
 public class homeBrewArcadeDrive extends RobotDriveBasee {
-	/*----------------------------------------------------------------------------*/
-	/* Copyright (c) 2008-2018 FIRST. All Rights Reserved.                        */
-	/* Open Source Software - may be modified and shared by FRC teams. The code   */
-	/* must be accompanied by the FIRST BSD license file in the root directory of */
-	/* the project.                                                               */
-	/*----------------------------------------------------------------------------*/
-
+	
 
 	  public static final double kDefaultQuickStopThreshold = 0.2;
 	  public static final double kDefaultQuickStopAlpha = 0.1;
@@ -33,24 +27,14 @@ public class homeBrewArcadeDrive extends RobotDriveBasee {
 
 
 	  public homeBrewArcadeDrive(  TalonSRX _talonLeft, TalonSRX _talonRight ) {
-		  _talonLeft = leftMotor;
-		  _talonRight = rightMotor;
+		
 		  // eventualy put talon closed loop conctuct in here 
 	   
 	    
 	    
 	  }
 
-	  /**
-	   * Arcade drive method for differential drive platform.
-	   * The calculated values will be squared to decrease sensitivity at low speeds.
-	   *
-	   * @param xSpeed    The robot's speed along the X axis [-1.0..1.0]. Forward is positive.
-	   * @param zRotation The robot's rotation rate around the Z axis [-1.0..1.0]. Clockwise is
-	   *                  positive.
-	   */
-	
-	
+
 
 	  /**
 	   * Arcade drive method for differential drive platform.
