@@ -12,18 +12,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 public class homeBrewArcadeDrive extends RobotDriveBasee {
 	
 
-	  public static final double kDefaultQuickStopThreshold = 0.2;
-	  public static final double kDefaultQuickStopAlpha = 0.1;
+	//  public static final double kDefaultQuickStopThreshold = 0.2;
+	//  public static final double kDefaultQuickStopAlpha = 0.1;
+	//  private static int instances = 0;
 
-	  private static int instances = 0;
-
+	// init as srx or wpilib talons? 
 	  private TalonSRX _talonLeft;
 	  private TalonSRX _talonRight;
 
-	  private double m_quickStopThreshold = kDefaultQuickStopThreshold;
-	  private double m_quickStopAlpha = kDefaultQuickStopAlpha;
-	  private double m_quickStopAccumulator = 0.0;
-	  private boolean m_reported = false;
+	//  private double m_quickStopThreshold = kDefaultQuickStopThreshold;
+	//  private double m_quickStopAlpha = kDefaultQuickStopAlpha;
+	//  private double m_quickStopAccumulator = 0.0;
+	//  private boolean m_reported = false;
 
 
 	  public homeBrewArcadeDrive(  TalonSRX _talonLeft, TalonSRX _talonRight ) {
@@ -80,6 +80,7 @@ public class homeBrewArcadeDrive extends RobotDriveBasee {
 	        rightMotorOutput = xSpeed - zRotation;
 	      }
 	    }
+	    // need to double check math 
 	    double leftSetpoint =(leftMotorOutput )*( 500.0 * 4096 / 600);
 	    double rightSetpoint = (rightMotorOutput )*( 500.0 * 4096 / 600) ;
 	    _talonLeft.set(ControlMode.Velocity,leftSetpoint  );
