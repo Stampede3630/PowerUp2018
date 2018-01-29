@@ -1,7 +1,7 @@
 
 package org.usfirst.frc.team3630.robot;
 
-	import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.*;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.hal.FRCNetComm.tInstances;
@@ -9,21 +9,15 @@ import edu.wpi.first.wpilibj.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.wpilibj.hal.HAL;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 
-public class homeBrewArcadeDrive extends RobotDriveBasee {
+public class homeBrewArcadeDrive {
 	
 
-	//  public static final double kDefaultQuickStopThreshold = 0.2;
-	//  public static final double kDefaultQuickStopAlpha = 0.1;
-	//  private static int instances = 0;
-
+	
 	// init as srx or wpilib talons? 
 	  private TalonSRX _talonLeft;
 	  private TalonSRX _talonRight;
 
-	//  private double m_quickStopThreshold = kDefaultQuickStopThreshold;
-	//  private double m_quickStopAlpha = kDefaultQuickStopAlpha;
-	//  private double m_quickStopAccumulator = 0.0;
-	//  private boolean m_reported = false;
+
 
 
 	  public homeBrewArcadeDrive(  TalonSRX _talonLeft, TalonSRX _talonRight ) {
@@ -44,12 +38,9 @@ public class homeBrewArcadeDrive extends RobotDriveBasee {
 	   *                      positive.
 	   * @param squaredInputs If set, decreases the input sensitivity at low speeds.
 	   */
-	  @SuppressWarnings("ParameterName")
+	  
 	  public void homebrewarcadeDrivePeriodic(double xSpeed, double zRotation) {
-	    if (!m_reported) {
-	      HAL.report(tResourceType.kResourceType_RobotDrive, 2, tInstances.kRobotDrive_ArcadeStandard);
-	      m_reported = true;
-	    }
+	 
 
 	   
 
@@ -81,8 +72,8 @@ public class homeBrewArcadeDrive extends RobotDriveBasee {
 	      }
 	    }
 	    // need to double check math 
-	    double leftSetpoint =(leftMotorOutput )* 1023;
-	    double rightSetpoint = (rightMotorOutput )*1023 ;
+	    double leftSetpoint =(leftMotorOutput )* Consts.powertoSRXConversion;
+	    double rightSetpoint = (rightMotorOutput )*Consts.powertoSRXConversion;
 	    _talonLeft.set(ControlMode.Velocity,leftSetpoint  );
 	    _talonRight.set(ControlMode.Velocity, rightSetpoint );
 
