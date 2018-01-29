@@ -45,7 +45,7 @@ public class homeBrewArcadeDrive extends RobotDriveBasee {
 	   * @param squaredInputs If set, decreases the input sensitivity at low speeds.
 	   */
 	  @SuppressWarnings("ParameterName")
-	  public void homebrewarcadeDrive(double xSpeed, double zRotation) {
+	  public void homebrewarcadeDrivePeriodic(double xSpeed, double zRotation) {
 	    if (!m_reported) {
 	      HAL.report(tResourceType.kResourceType_RobotDrive, 2, tInstances.kRobotDrive_ArcadeStandard);
 	      m_reported = true;
@@ -81,8 +81,8 @@ public class homeBrewArcadeDrive extends RobotDriveBasee {
 	      }
 	    }
 	    // need to double check math 
-	    double leftSetpoint =(leftMotorOutput )*( 500.0 * 4096 / 600);
-	    double rightSetpoint = (rightMotorOutput )*( 500.0 * 4096 / 600) ;
+	    double leftSetpoint =(leftMotorOutput )* 1023;
+	    double rightSetpoint = (rightMotorOutput )*1023 ;
 	    _talonLeft.set(ControlMode.Velocity,leftSetpoint  );
 	    _talonRight.set(ControlMode.Velocity, rightSetpoint );
 
