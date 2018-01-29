@@ -122,7 +122,7 @@ public double ahrsYaw() {
 	private void configureTalon(TalonSRX _talon) {
 		_talon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
 		
-		_talon.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, 0);
+		_talon.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity, 0);
 		_talon.configNominalOutputForward(0, Consts.timeOutMs);
 		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
@@ -165,7 +165,7 @@ public double ahrsYaw() {
 		//	backLeft.follow(frontLeft);
 		//	backRight.follow(frontRight);
 			// n
-			myHomebrew.homebrewarcadeDrivePeriodic(.5 , .4);
+			myHomebrew.homebrewarcadeDrivePeriodic(.5 , 0);
 			SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
 		}
 		public void testInit() {

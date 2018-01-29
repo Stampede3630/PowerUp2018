@@ -14,8 +14,8 @@ public class homeBrewArcadeDrive {
 
 	
 	// init as srx or wpilib talons? 
-	  private TalonSRX _talonLeft;
-	  private TalonSRX _talonRight;
+	  private WPI_TalonSRX _talonLeft;
+	  private WPI_TalonSRX _talonRight;
 
 
 
@@ -74,8 +74,8 @@ public class homeBrewArcadeDrive {
 	    // need to double check math 
 	    double leftSetpoint =(leftMotorOutput )* Consts.powertoSRXConversion;
 	    double rightSetpoint = (rightMotorOutput )*Consts.powertoSRXConversion;
-	    _talonLeft.set(ControlMode.Velocity,leftSetpoint  );
-	    _talonRight.set(ControlMode.Velocity, rightSetpoint );
+	    _talonLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity,leftSetpoint  );
+	    _talonRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity,rightSetpoint );
 
 	
 	  }

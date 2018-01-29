@@ -72,7 +72,7 @@ public class Robot extends IterativeRobot {
 	
 
 	public void testPeriodic() {
-		//_driveTrain.testPeriodic();
+		_driveTrain.testPeriodic();
 	
 	}
 	
