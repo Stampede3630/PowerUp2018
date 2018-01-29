@@ -1,4 +1,4 @@
-package src.org.usfirst.frc.team3630.robot;
+package org.usfirst.frc.team3630.robot;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,12 +13,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	DriveTrain _driveTrain;
 	Timer  autoTime; 
-	velocityClosedLoop velocity;
+
 
 	public void robotInit() {
 	_driveTrain = new DriveTrain();
 	autoTime = new Timer();
-	velocity= new velocityClosedLoop();
+
 	}
 	public void teleopPeriodic() {
 		//_driveTrain.driveTrainPeriodic();
@@ -73,7 +73,7 @@ public class Robot extends IterativeRobot {
 
 	public void testPeriodic() {
 		//_driveTrain.testPeriodic();
-		velocity.teleopPeriodicClosedLoop();
+	
 	}
 	
 

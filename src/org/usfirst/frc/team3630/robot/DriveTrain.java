@@ -1,4 +1,4 @@
-package src.org.usfirst.frc.team3630.robot;
+package org.usfirst.frc.team3630.robot;
 
 import com.ctre.phoenix.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -18,6 +18,7 @@ public class DriveTrain  {
 	AHRS ahrs;
 	// corection angle for PID Source 
 	public double correctionAngle = 0;
+	homeBrewArcadeDrive  myHomebrew; 
 	
 	// add coment about from what perspective of robot 
 	// need to test
@@ -39,7 +40,7 @@ public class DriveTrain  {
 
 	public DriveTrain()  {
 		//calibrate navx !!!!!
-	    
+	
 		 ahrs = new AHRS(SPI.Port.kMXP); 
 		 ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 		_xBox = new XboxController(Consts.xBoxComPort);
@@ -63,7 +64,7 @@ public class DriveTrain  {
 	        turnController.setAbsoluteTolerance(Consts.kToleranceDegrees);
 	        turnController.setContinuous(true);
 	        turnController.disable();
-	        
+	        myHomebrew = new homeBrewArcadeDrive(frontLeft, frontRight);
 	      
 	}
 	
@@ -159,10 +160,12 @@ public double ahrsYaw() {
 			SmartDashboard.putNumber("Back Left Velocity", getVelocity(backLeft));
 			//SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
 			//SmartDashboard.putString("control mode",frontLeft.getControlMode() );
-			frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-			frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-			backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-			backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+			//frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+		//	frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+		//	backLeft.follow(frontLeft);
+		//	backRight.follow(frontRight);
+			// n
+			myHomebrew.homebrewarcadeDrivePeriodic(.5 , .4);
 			SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
 		}
 		public void testInit() {
