@@ -64,7 +64,17 @@ public class DriveTrain  {
 	        turnController.setAbsoluteTolerance(Consts.kToleranceDegrees);
 	        turnController.setContinuous(true);
 	        turnController.disable();
+	        
+	   			configureTalon(frontLeft);
+	   			configureTalon(frontRight);
+	   			configureTalon(backLeft);
+	   			configureTalon(backRight);
+	   			
+	   			
+	   	        frontRight.setInverted(true);
+	   	        backRight.setInverted(true);
 	        myHomebrew = new homeBrewArcadeDrive(frontLeft, frontRight);
+	   
 	      
 	}
 	
@@ -103,20 +113,15 @@ public double ahrsYaw() {
 }
 
 	public void driveTrainPeriodic() {
-		double speed = _xBox.getY(GenericHID.Hand.kLeft);
-		double heading = _xBox.getX(GenericHID.Hand.kRight);
+	//	double speed = _xBox.getY(GenericHID.Hand.kLeft);
+	//	double heading = _xBox.getX(GenericHID.Hand.kRight);
 
 	
 		
-		configureTalon(frontLeft);
-		configureTalon(frontRight);
-		configureTalon(backLeft);
-		configureTalon(backRight);
-		frontRight.setInverted(true);
-		backRight.setInverted(true);
 
+		SmartDashboard.putNumber("xspeed", .5);
 		
-		SmartDashboard.putNumber("Setpoint", 1000);
+		SmartDashboard.putNumber("rotation",0 );
 		
 	}
 	private void configureTalon(TalonSRX _talon) {
@@ -136,9 +141,12 @@ public double ahrsYaw() {
 
 
 	public void testDriveTrainPeriodic() {
+		SmartDashboard.putNumber("xspeed", .5);
+		
+		SmartDashboard.putNumber("rotation",0 );
 	
 	
-		driveTrain.arcadeDrive(.6, correctionAngle);
+		//driveTrain.arcadeDrive(.6, correctionAngle);
 	}
 	
 	public void putData() {
@@ -149,27 +157,31 @@ public double ahrsYaw() {
 	public void stop(){
 		driveTrain.arcadeDrive(0,0);
 	}
-		public void testPeriodic() {
-			SmartDashboard.putNumber("Front Right Position", getRotations(frontRight));
+	public void testPeriodic() {
+		
 			SmartDashboard.putNumber("Front Right Velocity", getVelocity(frontRight));
-			SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
+			
 			SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
-			SmartDashboard.putNumber("Back Right Position", getRotations(backRight));
+			
 			SmartDashboard.putNumber("Back Right Velocity", getVelocity(backRight));
-			SmartDashboard.putNumber("Back Left Position", getRotations(backLeft));
+
 			SmartDashboard.putNumber("Back Left Velocity", getVelocity(backLeft));
+			SmartDashboard.putBoolean("RightInverted", frontRight.getInverted());
+		
 			//SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
-			//SmartDashboard.putString("control mode",frontLeft.getControlMode() );
+			//SmartDashboard.putString("control mode",frontLeft );
 			//frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
 		//	frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-		//	backLeft.follow(frontLeft);
-		//	backRight.follow(frontRight);
-			// n
-			myHomebrew.homebrewarcadeDrivePeriodic(.5 , 0);
-			SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
+	
+			
+			backLeft.follow(frontLeft);
+			backRight.follow(frontRight);
+			myHomebrew.homebrewarcadeDrivePeriodic(		.3,.7 );
 		}
 		public void testInit() {
 			frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+			
+			
 		}
 		
 		public double getRotations(TalonSRX _talon) {
@@ -180,7 +192,7 @@ public double ahrsYaw() {
 		}
 		public double getVelocity(TalonSRX _talon) {
 			double velocity_milliseconds = (double) _talon.getSelectedSensorVelocity(0)/Consts.ticksPerRotation;
-			System.out.println(velocity_milliseconds);
+			//System.out.println(velocity_milliseconds);
 			double velocity_seconds = velocity_milliseconds*Consts.millisecondsPerSecond;
 			return velocity_seconds;
 		}

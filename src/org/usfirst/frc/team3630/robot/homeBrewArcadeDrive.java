@@ -8,12 +8,13 @@ import edu.wpi.first.wpilibj.hal.FRCNetComm.tInstances;
 import edu.wpi.first.wpilibj.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.wpilibj.hal.HAL;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class homeBrewArcadeDrive {
 
 	//NOTE (SAM): These should be able to be TalonSRXs
-	  private WPI_TalonSRX _talonLeft;
-	  private WPI_TalonSRX _talonRight;
+	  private TalonSRX _talonLeft;
+	  private TalonSRX _talonRight;
 
 
 
@@ -65,7 +66,13 @@ public class homeBrewArcadeDrive {
 	    double leftSetpoint =(leftMotorOutput )* Consts.powertoSRXConversion;
 	    double rightSetpoint = (rightMotorOutput )*Consts.powertoSRXConversion;
 	    _talonLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity,leftSetpoint);
+	    System.out.println(rightSetpoint);
+	    System.out.println(leftSetpoint);
+	
 	    _talonRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity,rightSetpoint);
+	  //  SmartDashboard.putNumber("rightSetpoint", _talonRight.);
+	 //   SmartDashboard.putNumber("LeftSetpoint", leftSetpoint);
+	    
 	  }
 
 	

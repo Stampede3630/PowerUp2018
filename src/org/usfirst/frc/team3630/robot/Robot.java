@@ -21,7 +21,6 @@ public class Robot extends IterativeRobot {
 
 	}
 	public void teleopPeriodic() {
-		//_driveTrain.driveTrainPeriodic();
 		
 	}
 	@Override
@@ -31,6 +30,8 @@ public class Robot extends IterativeRobot {
 		_driveTrain.autoInit();
 		_driveTrain.driveStraight();
 		_driveTrain.testInit();
+
+		
 		
 	}
 	
@@ -72,7 +73,9 @@ public class Robot extends IterativeRobot {
 	
 
 	public void testPeriodic() {
+		_driveTrain.testDriveTrainPeriodic();
 		_driveTrain.testPeriodic();
+	
 	
 	}
 	
