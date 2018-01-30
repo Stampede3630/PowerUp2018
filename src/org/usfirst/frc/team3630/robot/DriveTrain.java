@@ -60,7 +60,7 @@ public class DriveTrain {
 
 		//SmartDashboard.putNumber("Setpoint", 1000);
 		SmartDashboard.putNumber("pos Setpoint", 24);
-		SmartDashboard.putNumber("posController kP", 0.01);
+		SmartDashboard.putNumber("posController kP", 0.07);
 
 		leftSpeedController = new SpeedControllerGroup(frontLeft, new SpeedController[] { backLeft });
 		rightSpeedController = new SpeedControllerGroup(frontRight, new SpeedController[] { backRight });
@@ -71,7 +71,7 @@ public class DriveTrain {
 
 		// setting range and disable it
 		turnController.setInputRange(-180.0f, 180.0f);
-		turnController.setOutputRange(-.5, .5);
+		turnController.setOutputRange(-1, 1);
 		turnController.setAbsoluteTolerance(Consts.kToleranceDegrees);
 		turnController.setContinuous(true);
 		turnController.disable();
@@ -79,7 +79,7 @@ public class DriveTrain {
 		positionEncoderSource = new EncoderPIDSource(frontLeft);
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
-		posController.setOutputRange(-0.5, 0.5);
+		posController.setOutputRange(-.5, .5);
 		posController.setAbsoluteTolerance(Consts.kToleranceDistance);
 		posController.disable();
 
@@ -142,7 +142,7 @@ public class DriveTrain {
 		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
 		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
 		SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
-		posController.setP(SmartDashboard.getNumber("posController kP", 0.01));
+		posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
 		posController.setSetpoint(SmartDashboard.getNumber("pos Setpoint", 48));
 	}
 

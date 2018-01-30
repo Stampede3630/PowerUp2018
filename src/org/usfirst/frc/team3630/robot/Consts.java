@@ -25,7 +25,7 @@ public class Consts {
 	public static final double  kDRotAng = 0;
 	
 
-    public static final double kToleranceDegrees = .5f;
+    public static final double kToleranceDegrees = 0f;
     public static final double kToleranceDistance = 1;
 	
 	//Wheel Measurements
