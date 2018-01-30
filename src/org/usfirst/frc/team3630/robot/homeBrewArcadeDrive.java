@@ -10,24 +10,21 @@ import edu.wpi.first.wpilibj.hal.HAL;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 
 public class homeBrewArcadeDrive {
-	
 
-	
-	// init as srx or wpilib talons? 
+	//NOTE (SAM): These should be able to be TalonSRXs
 	  private WPI_TalonSRX _talonLeft;
 	  private WPI_TalonSRX _talonRight;
 
 
 
 
-	  public homeBrewArcadeDrive(  TalonSRX _talonLeft, TalonSRX _talonRight ) {
+	  public homeBrewArcadeDrive(  TalonSRX talonLeft, TalonSRX talonRight ) {
 		
 		  // eventualy put talon closed loop conctuct in here 
-	   
-	    
-	    
+		 //MADE CHANGES HERE:
+	   _talonLeft = talonLeft;
+	   _talonRight = talonRight;
 	  }
-
 
 
 	  /**
@@ -36,16 +33,8 @@ public class homeBrewArcadeDrive {
 	   * @param xSpeed        The robot's speed along the X axis [-1.0..1.0]. Forward is positive.
 	   * @param zRotation     The robot's rotation rate around the Z axis [-1.0..1.0]. Clockwise is
 	   *                      positive.
-	   * @param squaredInputs If set, decreases the input sensitivity at low speeds.
 	   */
-	  
 	  public void homebrewarcadeDrivePeriodic(double xSpeed, double zRotation) {
-	 
-
-	   
-
-	    
-	    
 
 	    double leftMotorOutput;
 	    double rightMotorOutput;
@@ -61,6 +50,7 @@ public class homeBrewArcadeDrive {
 	        leftMotorOutput = xSpeed + zRotation;
 	        rightMotorOutput = maxInput;
 	      }
+	      
 	    } else {
 	      // Third quadrant, else fourth quadrant
 	      if (zRotation >= 0.0) {
@@ -74,10 +64,8 @@ public class homeBrewArcadeDrive {
 	    // need to double check math 
 	    double leftSetpoint =(leftMotorOutput )* Consts.powertoSRXConversion;
 	    double rightSetpoint = (rightMotorOutput )*Consts.powertoSRXConversion;
-	    _talonLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity,leftSetpoint  );
-	    _talonRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity,rightSetpoint );
-
-	
+	    _talonLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity,leftSetpoint);
+	    _talonRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity,rightSetpoint);
 	  }
 
 	
