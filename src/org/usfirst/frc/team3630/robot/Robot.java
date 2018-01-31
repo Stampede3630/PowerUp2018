@@ -1,4 +1,4 @@
-package src.org.usfirst.frc.team3630.robot;
+package org.usfirst.frc.team3630.robot;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,9 +13,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	DriveTrain _driveTrain;
 	Timer  autoTime; 
+	TankDrivePath path;
 	public void robotInit() {
 	_driveTrain = new DriveTrain();
 	autoTime = new Timer();
+	path = new TankDrivePath();
 	}
 	public void teleopPeriodic() {
 		//_driveTrain.driveTrainPeriodic();
@@ -27,7 +29,7 @@ public class Robot extends IterativeRobot {
 		autoTime.start();
 		_driveTrain.autoInit();
 		_driveTrain.driveStraight();
-		_driveTrain.testInit();
+	
 	}
 	
 	public void DriveAngle() {
@@ -68,7 +70,7 @@ public class Robot extends IterativeRobot {
 	
 
 	public void testPeriodic() {
-		_driveTrain.testPeriodic();
+	//	_driveTrain.testPeriodic();
 	}
 	
 

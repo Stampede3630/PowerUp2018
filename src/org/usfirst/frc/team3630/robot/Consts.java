@@ -1,4 +1,4 @@
-package src.org.usfirst.frc.team3630.robot;
+package org.usfirst.frc.team3630.robot;
 
 public class Consts {
 	
