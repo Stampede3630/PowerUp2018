@@ -91,7 +91,7 @@ public class TankDrivePath {
 	// The second argument is the integral gain. This is unused for motion profiling
 	// The third argument is the derivative gain. Tweak this if you are unhappy with the tracking of the trajectory
 	// The fourth argument is the velocity ratio. This is 1 over the maximum velocity you provided in the 
-//	      trajectory configuration (it translates m/s to a -1 to 1 scale that your motors can read)
+//	 trajectory configuration (it translates m/s to a -1 to 1 scale that your motors can read)
 	// The fifth argument is your acceleration gain. Tweak this if you want to get to a higher or lower speed quicker
 	left.configurePIDVA(1.0, 0.0, 0.0, 1 / max_velocity, 0);
 	right.configurePIDVA(1.0, 0.0, 0.0, 1 / max_velocity, 0);
@@ -108,11 +108,11 @@ public class TankDrivePath {
 
 	 double outputRight = right.calculate(encoder_position);
 	 lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, outputLeft);
-rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, outputRight);
+`	rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, outputRight);
 
 	
 	// add gyro feeedback 
-	// follow pathfinder 
+	
 	
 	
 	
