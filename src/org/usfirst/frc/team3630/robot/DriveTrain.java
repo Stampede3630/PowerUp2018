@@ -21,7 +21,8 @@ public class DriveTrain {
 	// need to test
 	double turnOutput;
 	double posOutput;
-	boolean turnStarted = false;
+	boolean init = true;
+	int myCurrentCase = 1;		
 	PIDController turnController;
 	PIDController posController;
 	double rotateToAngleRate;
@@ -79,9 +80,10 @@ public class DriveTrain {
 		positionEncoderSource = new EncoderPIDSource(frontLeft);
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
-		posController.setOutputRange(-.5, .5);
+		posController.setOutputRange(-.75, .75);
 		posController.setAbsoluteTolerance(Consts.kToleranceDistance);
 		posController.disable();
+		
 
 	}
 	// init method for navx calibaration setting
@@ -115,6 +117,7 @@ public class DriveTrain {
 	public void driveTrainPeriodic() {
 		double speed = _xBox.getY(GenericHID.Hand.kLeft);
 		double heading = _xBox.getX(GenericHID.Hand.kRight);
+		driveTrain.arcadeDrive(speed, heading);
 
 	}
 
@@ -131,11 +134,12 @@ public class DriveTrain {
 		_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
 		_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
 		_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
+	
 	}
 
 	public void testDriveTrainPeriodic() {
 		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
-		
+	     
 		driveTrain.arcadeDrive(posOutput, turnOutput);
 		SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
 		SmartDashboard.putNumber("Position Setpoint", posController.getSetpoint());
@@ -143,25 +147,53 @@ public class DriveTrain {
 		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
 		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
 		SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
+		SmartDashboard.putNumber("Stage", myCurrentCase);
+		SmartDashboard.putNumber("turn controller error", turnController.getError());
 		//posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
-		posController.setSetpoint(Consts.midOfSwitch);
+		if (myCurrentCase  == 1) {
+			if(init) {
+				posController.setSetpoint(Consts.midOfSwitch);
+				init = false;
+			}
+		     if(Math.abs(posController.getError()) < 1) {
+		     		myCurrentCase = 2;
+		     		init = true;
+		     	}
+		     			
+		}
 		//posController.setSetpoint(SmartDashboard.getNumber("pos Setpoint", 48))
 		
-		if (Math.abs(posController.getError())<1 ) {
-			posController.disable();
-			turnDegree(90f);
-		    turnStarted = true;
+		if (myCurrentCase == 2) {
+			if(init) {
+				posController.disable();
+				turnDegree(90f);
+				init = false;
+			}
+			if(Math.abs(turnController.getError())<4) {
+				myCurrentCase = 3;
+	     		init = true;
+			}
+		    
 			
 			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
 			}
-		if (Math.abs(turnController.getError())<4 && turnStarted ) {
-			turnController.disable();
-			
-			posController.setSetpoint(Consts.afterTurnToSwitch + posController.get());
-			posController.enable();
-			
+		if (myCurrentCase == 3) {
+			if(init) {
+
+				posController.setSetpoint(Consts.afterTurnToSwitch + positionEncoderSource.pidGet());
+				posController.enable();
+				init = false;
+			}
+			if(Math.abs(posController.getError()) < 1) {
+				myCurrentCase = 4;
+	     		init = true;
 			}
 		}
+		if(myCurrentCase == 4) {
+			turnController.disable();
+			posController.disable();
+		}
+	}
 	
 
 	public void putData() {
@@ -196,6 +228,8 @@ public class DriveTrain {
 		ahrs.reset();
 		frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
+		
+		
 	}
 
 	public double getRotations(TalonSRX _talon) {

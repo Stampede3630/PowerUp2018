@@ -44,7 +44,7 @@ public class Consts {
 	public static final double kDPos = 0;
 	// Auto Distances
 	public static final double midOfSwitch = 168;
-	public static final double afterTurnToSwitch = 6;
+	public static final double afterTurnToSwitch = 24;
 	
 			
 	
