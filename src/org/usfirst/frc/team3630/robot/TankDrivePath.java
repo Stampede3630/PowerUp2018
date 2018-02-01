@@ -9,8 +9,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 public class TankDrivePath {
 //	  Trajectory right,left;\
 	   TankModifier modifier;
-	private  TalonSRX Left, Right;
-	public TankDrivePath () {
+	private  TalonSRX lTalon;
+	private  TalonSRX rTalon;
+	  EncoderFollower left, right;
+	public TankDrivePath ( TalonSRX leftSRXSide,TalonSRX rightSRXSide) {
 		 
 		// Create the Trajectory Configuration
 		//
@@ -35,15 +37,15 @@ public class TankDrivePath {
             Trajectory trajectory = Pathfinder.generate(points, config);
 
             // Wheelbase Width = 0.5m
-            TankModifier modifier = new TankModifier(trajectory).modify(0.5);
+             modifier = new TankModifier(trajectory).modify(0.5);
 
             // Do something with the new Trajectories...
-            Trajectory    left = modifier.getLeftTrajectory();
+            Trajectory    leftT = modifier.getLeftTrajectory();
             
             
             // outputs data from path put to csv 
            
-            for (int i = 0; i<left.length(); i++){
+         /*   for (int i = 0; i<left.length(); i++){
             	
             	 System.out.print(left.get(i).acceleration);
             	 System.out.print(",");
@@ -65,10 +67,16 @@ public class TankDrivePath {
 
 
             }
-            Trajectory     right = modifier.getRightTrajectory();
-        	Right.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
-        	Left.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
-        
+            */
+           
+            lTalon =  leftSRXSide;
+            rTalon = rightSRXSide;
+            Trajectory     rightT = modifier.getRightTrajectory();
+            rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
+            lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
+             left = new EncoderFollower(modifier.getLeftTrajectory());
+        	 right = new EncoderFollower(modifier.getRightTrajectory());
+        	
     		
 	}
 	
@@ -77,8 +85,6 @@ public class TankDrivePath {
 		
 	
 	// set encoders 
-	EncoderFollower left = new EncoderFollower(modifier.getLeftTrajectory());
-	EncoderFollower right = new EncoderFollower(modifier.getRightTrajectory());
 	
 	// configure pidva 
 	// The first argument is the proportional gain. Usually this will be quite high
@@ -101,8 +107,8 @@ public class TankDrivePath {
 	double outputLeft = left.calculate(encoder_position);
 
 	 double outputRight = right.calculate(encoder_position);
-Left.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, outputLeft);
-Right.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, outputRight);
+	 lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, outputLeft);
+rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, outputRight);
 
 	
 	// add gyro feeedback 
