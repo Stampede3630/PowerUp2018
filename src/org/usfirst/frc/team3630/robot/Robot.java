@@ -15,9 +15,11 @@ public class Robot extends IterativeRobot {
 	Timer  autoTime; 
 	TankDrivePath path;
 	public void robotInit() {
-	_driveTrain = new DriveTrain();
-	autoTime = new Timer();
-	path = new TankDrivePath();
+		_driveTrain = new DriveTrain();
+		autoTime = new Timer();
+		
+		
+	
 	}
 	public void teleopPeriodic() {
 		//_driveTrain.driveTrainPeriodic();
@@ -25,10 +27,8 @@ public class Robot extends IterativeRobot {
 	}
 	@Override
 	public void testInit() {
-		autoTime.reset();
-		autoTime.start();
-		_driveTrain.autoInit();
-		_driveTrain.driveStraight();
+		
+		path = new TankDrivePath();
 	
 	}
 	
@@ -70,7 +70,7 @@ public class Robot extends IterativeRobot {
 	
 
 	public void testPeriodic() {
-	//	_driveTrain.testPeriodic();
+		//_driveTrain.testPeriodic();
 	}
 	
 
