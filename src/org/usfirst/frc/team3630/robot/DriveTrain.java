@@ -22,7 +22,7 @@ public class DriveTrain {
 	double turnOutput;
 	double posOutput;
 	boolean init = true;
-	int myCurrentCase = 1;		
+	int myCurrentCase;		
 	PIDController turnController;
 	PIDController posController;
 	double rotateToAngleRate;
@@ -153,6 +153,9 @@ public class DriveTrain {
 		if (myCurrentCase  == 1) {
 			if(init) {
 				posController.setSetpoint(Consts.midOfSwitch);
+				posController.enable();
+				turnController.enable();
+				turnController.setSetpoint(0);
 				init = false;
 			}
 		     if(Math.abs(posController.getError()) < 1) {
@@ -166,6 +169,7 @@ public class DriveTrain {
 		if (myCurrentCase == 2) {
 			if(init) {
 				posController.disable();
+				turnController.enable();
 				turnDegree(90f);
 				init = false;
 			}
@@ -228,6 +232,8 @@ public class DriveTrain {
 		ahrs.reset();
 		frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
+		myCurrentCase = 1;	
+		
 		
 		
 	}
