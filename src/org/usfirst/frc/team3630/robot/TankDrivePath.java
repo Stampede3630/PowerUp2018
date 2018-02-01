@@ -3,14 +3,31 @@ import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.modifiers.TankModifier;
+import com.ctre.phoenix.*;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class TankDrivePath {
-	
+//	  Trajectory right,left;\
+	   TankModifier modifier;
+	private  TalonSRX Left, Right;
 	public TankDrivePath () {
-		 Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
-	        Waypoint[] points = new Waypoint[] {
+		 
+		// Create the Trajectory Configuration
+		//
+		// Arguments:
+		// Fit Method:          HERMITE_CUBIC or HERMITE_QUINTIC
+		// Sample Count:        SAMPLES_HIGH (100 000)
+//		                      SAMPLES_LOW  (10 000)
+//		                      SAMPLES_FAST (1 000)
+		// Time Step:           0.05 Seconds
+		// Max Velocity:        1.7 m/s
+		// Max Acceleration:    2.0 m/s/s
+		// Max Jerk:            60.0 m/s/s/s
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
+	
+		 Waypoint[] points = new Waypoint[] {
 	            //    new Waypoint(-4, -1, Pathfinder.d2r(-45)),
-	        		   new Waypoint(-4, -1, Pathfinder.d2r(-45)),
+	        		   new Waypoint(-4, -1, Pathfinder.d2r(-45)),   // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
 	                   new Waypoint(-2, -2, 0),
 	                   new Waypoint(0, 0, 0)
 	           };
@@ -21,8 +38,10 @@ public class TankDrivePath {
             TankModifier modifier = new TankModifier(trajectory).modify(0.5);
 
             // Do something with the new Trajectories...
-            Trajectory left = modifier.getLeftTrajectory();
+            Trajectory    left = modifier.getLeftTrajectory();
             
+            
+            // outputs data from path put to csv 
            
             for (int i = 0; i<left.length(); i++){
             	
@@ -41,13 +60,57 @@ public class TankDrivePath {
             	 System.out.print(left.get(i).x);
             	 System.out.print(",");
             	 System.out.print(left.get(i).y);
-            	 
+             
             	 System.out.print("\n");
 
 
             }
-            Trajectory right = modifier.getRightTrajectory();
-}
+            Trajectory     right = modifier.getRightTrajectory();
+        	Right.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
+        	Left.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
+        
+    		
+	}
+	
+	
+	public void pathFeedback(){
+		
+	
+	// set encoders 
+	EncoderFollower left = new EncoderFollower(modifier.getLeftTrajectory());
+	EncoderFollower right = new EncoderFollower(modifier.getRightTrajectory());
+	
+	// configure pidva 
+	// The first argument is the proportional gain. Usually this will be quite high
+	// The second argument is the integral gain. This is unused for motion profiling
+	// The third argument is the derivative gain. Tweak this if you are unhappy with the tracking of the trajectory
+	// The fourth argument is the velocity ratio. This is 1 over the maximum velocity you provided in the 
+//	      trajectory configuration (it translates m/s to a -1 to 1 scale that your motors can read)
+	// The fifth argument is your acceleration gain. Tweak this if you want to get to a higher or lower speed quicker
+	left.configurePIDVA(1.0, 0.0, 0.0, 1 / max_velocity, 0);
+	right.configurePIDVA(1.0, 0.0, 0.0, 1 / max_velocity, 0);
+	
+	
+	
+	\
+	// add gyro feedbaclk
+	
+	
+	// get desired output 
+	
+	double outputLeft = left.calculate(encoder_position);
+
+	 double outputRight = right.calculate(encoder_position);
+Left.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, outputLeft);
+Right.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, outputRight);
+
+	
+	// add gyro feeedback 
+	// follow pathfinder 
+	
+	
+	
+	}
 	        }
 
   
