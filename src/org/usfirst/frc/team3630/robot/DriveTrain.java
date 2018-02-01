@@ -21,7 +21,7 @@ public class DriveTrain {
 	// need to test
 	double turnOutput;
 	double posOutput;
-	
+	boolean turnStarted = false;
 	PIDController turnController;
 	PIDController posController;
 	double rotateToAngleRate;
@@ -59,8 +59,8 @@ public class DriveTrain {
 		*/
 
 		//SmartDashboard.putNumber("Setpoint", 1000);
-		SmartDashboard.putNumber("pos Setpoint", 24);
-		SmartDashboard.putNumber("posController kP", 0.07);
+		//SmartDashboard.putNumber("pos Setpoint", 24);
+		//SmartDashboard.putNumber("posController kP", 0.07);
 
 		leftSpeedController = new SpeedControllerGroup(frontLeft, new SpeedController[] { backLeft });
 		rightSpeedController = new SpeedControllerGroup(frontRight, new SpeedController[] { backRight });
@@ -71,7 +71,7 @@ public class DriveTrain {
 
 		// setting range and disable it
 		turnController.setInputRange(-180.0f, 180.0f);
-		turnController.setOutputRange(-1, 1);
+		turnController.setOutputRange(-.75, .75);
 		turnController.setAbsoluteTolerance(Consts.kToleranceDegrees);
 		turnController.setContinuous(true);
 		turnController.disable();
@@ -103,6 +103,7 @@ public class DriveTrain {
 	public void turnDegree(double degrees) {
 		kTargetAngleDegrees = degrees;
 		turnController.setSetpoint(kTargetAngleDegrees);
+	
 
 	}
 
@@ -136,15 +137,32 @@ public class DriveTrain {
 		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
 		
 		driveTrain.arcadeDrive(posOutput, turnOutput);
-		
+		SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
 		SmartDashboard.putNumber("Position Setpoint", posController.getSetpoint());
 		SmartDashboard.putNumber("Position Error", posController.getError());
 		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
 		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
 		SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
-		posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
-		posController.setSetpoint(SmartDashboard.getNumber("pos Setpoint", 48));
-	}
+		//posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
+		posController.setSetpoint(Consts.midOfSwitch);
+		//posController.setSetpoint(SmartDashboard.getNumber("pos Setpoint", 48))
+		
+		if (Math.abs(posController.getError())<1 ) {
+			posController.disable();
+			turnDegree(90f);
+		    turnStarted = true;
+			
+			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+			}
+		if (Math.abs(turnController.getError())<4 && turnStarted ) {
+			turnController.disable();
+			
+			posController.setSetpoint(Consts.afterTurnToSwitch + posController.get());
+			posController.enable();
+			
+			}
+		}
+	
 
 	public void putData() {
 		SmartDashboard.putNumber("correctionAngle", turnOutput);
