@@ -46,6 +46,7 @@ public class Consts {
 	public static final double midOfSwitch = 168;
 	public static final double afterTurnToSwitch = 24;
 	public static final double midOfScale = 324;
+	public static final double afterTurnToScale = 13.68;
 	
 			
 	

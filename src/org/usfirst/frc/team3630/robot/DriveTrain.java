@@ -55,9 +55,9 @@ public class DriveTrain {
 		configureTalon(frontRight);
 		configureTalon(backLeft);
 		configureTalon(backRight);
-		/*frontRight.setInverted(true);
-		backRight.setInverted(true); 
-		*/
+		frontRight.setInverted(false);
+		backRight.setInverted(false); 
+		
 
 		//SmartDashboard.putNumber("Setpoint", 1000);
 		//SmartDashboard.putNumber("pos Setpoint", 24);
@@ -77,10 +77,10 @@ public class DriveTrain {
 		turnController.setContinuous(true);
 		turnController.disable();
 
-		positionEncoderSource = new EncoderPIDSource(frontLeft);
+		positionEncoderSource = new EncoderPIDSource(frontLeft, frontRight);
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
-		posController.setOutputRange(-1.0, 1.0);
+		posController.setOutputRange(-1, 1);
 		posController.setAbsoluteTolerance(Consts.kToleranceDistance);
 		posController.disable();
 		
@@ -150,10 +150,10 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Stage", myCurrentCase);
 		SmartDashboard.putNumber("turn controller error", turnController.getError());
 		//posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
-		//leftSwitchLeft();
+		leftSwitchLeft();
 		//rightSwitchRight();
 		//rightScaleRight();
-		leftScaleLeft();
+		//leftScaleLeft();
 		
 	}
 	
@@ -390,6 +390,7 @@ public class DriveTrain {
 	public void testInit() {
 		ahrs.reset();
 		frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		frontRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
 		myCurrentCase = 1;	
 		
@@ -436,16 +437,21 @@ public class DriveTrain {
 
 
 	private class EncoderPIDSource implements PIDSource {
-		private TalonSRX _talon;
+		private TalonSRX _frontLeft, _frontRight;
 
-		public EncoderPIDSource(TalonSRX talon) {
-			_talon = talon;
+		public EncoderPIDSource(TalonSRX talon1,TalonSRX talon2) {
+			_frontLeft = talon1;
+			_frontRight = talon2;
 
 		}
 
 		public double pidGet() {
-			int position_raw = _talon.getSelectedSensorPosition(0);
-			double position_inches = position_raw * (2 * Math.PI * Consts.wheelRadius) / Consts.ticksPerRotation ;
+			double fLGetSelected = _frontLeft.getSelectedSensorPosition(0);
+			double fRGetSelected = _frontRight.getSelectedSensorPosition(0)*-1;
+			double position_raw = (fLGetSelected + fRGetSelected)/2;
+			double position_inches = position_raw * (double) (2 * Math.PI * Consts.wheelRadius) / (double) Consts.ticksPerRotation ;
+			SmartDashboard.putNumber("Front Left Talon Position", fRGetSelected);
+			SmartDashboard.putNumber("Front Right Talon Position", fRGetSelected);
 			return position_inches;
 		}
 
