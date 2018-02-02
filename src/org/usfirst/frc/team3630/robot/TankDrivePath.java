@@ -26,63 +26,77 @@ public class TankDrivePath {
 		// Max Velocity:        1.7 m/s
 		// Max Acceleration:    2.0 m/s/s
 		// Max Jerk:            60.0 m/s/s/s
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 105, 50, 100);
 	
 		 Waypoint[] points = new Waypoint[] {
 	            //    new Waypoint(-4, -1, Pathfinder.d2r(-45)),
-	        		   new Waypoint(-4, -1, 0),   // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
-	                   new Waypoint(-2, -2, 0),
-	                   new Waypoint(0, 0, 0)
+	        		   new Waypoint(0, 0, 0),   // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
+	                   new Waypoint(12, 0, 0),
+	                   //new Waypoint(0, 0, 0)
 	           };
 
             Trajectory trajectory = Pathfinder.generate(points, config);
 
-            // Wheelbase Width = 0.5m
-             modifier = new TankModifier(trajectory).modify(0.5);
+            // Wheelbase Width = in
+             modifier = new TankModifier(trajectory).modify(14);
 
             // Do something with the new Trajectories...
             Trajectory    leftT = modifier.getLeftTrajectory();
+            Trajectory     rightT = modifier.getRightTrajectory();
             
             
-            // outputs data from path put to csv 
-           
-         /*   for (int i = 0; i<left.length(); i++){
-            	
-            	 System.out.print(left.get(i).acceleration);
-            	 System.out.print(",");
-            	 System.out.print(left.get(i).dt);
-            	 System.out.print(",");
-               	 System.out.print(left.get(i).heading);
-            	 System.out.print(",");
-             	 System.out.print(left.get(i).jerk);
-            	 System.out.print(",");
-            	 System.out.print(left.get(i).position);
-            	 System.out.print(",");
-            	 System.out.print(left.get(i).velocity);
-            	 System.out.print(",");
-            	 System.out.print(left.get(i).x);
-            	 System.out.print(",");
-            	 System.out.print(left.get(i).y);
-             
-            	 System.out.print("\n");
-
-
-            }
-            */
+        
            
             lTalon =  leftSRXSide;
             rTalon = rightSRXSide;
-            Trajectory     rightT = modifier.getRightTrajectory();
             rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
             rTalon.getSelectedSensorPosition(0)
-            
+            lTalon.getSelectedSensorPosition(0)
             lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
           
-            getDistance(rTalon);
+
              left = new EncoderFollower(modifier.getLeftTrajectory());
         	 right = new EncoderFollower(modifier.getRightTrajectory());
-        	
-    		
+        	    // outputs data from path put to csv 
+             
+             /*   for (int i = 0; i<left.length(); i++){
+                	
+                	 System.out.print(left.get(i).acceleration);
+                	 System.out.print(",");
+                	 System.out.print(left.get(i).dt);
+                	 System.out.print(",");
+                   	 System.out.print(left.get(i).heading);
+                	 System.out.print(",");
+                 	 System.out.print(left.get(i).jerk);
+                	 System.out.print(",");
+                	 System.out.print(left.get(i).position);
+                	 System.out.print(",");
+                	 System.out.print(left.get(i).velocity);
+                	 System.out.print(",");
+                	 System.out.print(left.get(i).x);
+                	 System.out.print(",");
+                	 System.out.print(left.get(i).y);
+                 
+                	 System.out.print("\n");
+
+
+                }
+                */
+
+        		// set encoders 
+        		
+        		// configure pidva 
+        		// The first argument is the proportional gain. Usually this will be quite high
+        		// The second argument is the integral gain. This is unused for motion profiling
+        		// The third argument is the derivative gain. Tweak this if you are unhappy with the tracking of the trajectory
+        		// The fourth argument is the velocity ratio. This is 1 over the maximum velocity you provided in the 
+//        		 trajectory configuration (it translates m/s to a -1 to 1 scale that your motors can read)
+        		// The fifth argument is your acceleration gain. Tweak this if you want to get to a higher or lower speed quicker
+
+        		
+        		
+        		left.configurePIDVA(1.0, 0.0, 0.0, 1 /105 , 0);
+        		right.configurePIDVA(1.0, 0.0, 0.0, 1 /105 , 0);
 	}
 	
 	public double getDistance(TalonSRX _talon) {
@@ -100,19 +114,6 @@ public class TankDrivePath {
 	}
 	public void pathFeedback(){
 		
-	
-	// set encoders 
-	
-	// configure pidva 
-	// The first argument is the proportional gain. Usually this will be quite high
-	// The second argument is the integral gain. This is unused for motion profiling
-	// The third argument is the derivative gain. Tweak this if you are unhappy with the tracking of the trajectory
-	// The fourth argument is the velocity ratio. This is 1 over the maximum velocity you provided in the 
-//	 trajectory configuration (it translates m/s to a -1 to 1 scale that your motors can read)
-	// The fifth argument is your acceleration gain. Tweak this if you want to get to a higher or lower speed quicker
-	left.configurePIDVA(1.0, 0.0, 0.0, 1 / 26.4, 0);
-	right.configurePIDVA(1.0, 0.0, 0.0, 1 / max_velocity, 0);
-	
 	
 	
 	
