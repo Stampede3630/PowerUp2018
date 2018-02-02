@@ -29,7 +29,7 @@ public class TankDrivePath {
 	
 		 Waypoint[] points = new Waypoint[] {
 	            //    new Waypoint(-4, -1, Pathfinder.d2r(-45)),
-	        		   new Waypoint(-4, -1, Pathfinder.d2r(-45)),   // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
+	        		   new Waypoint(-4, -1, 0),   // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
 	                   new Waypoint(-2, -2, 0),
 	                   new Waypoint(0, 0, 0)
 	           };

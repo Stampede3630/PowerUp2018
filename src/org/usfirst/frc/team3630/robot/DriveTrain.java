@@ -16,10 +16,12 @@ public class DriveTrain  {
 	AHRS ahrs;
 	// corection angle for PID Source 
 	public double correctionAngle = 0;
-	
+	TankDrivePath path;
 	// add coment about from what perspective of robot 
 	// need to test
 	 PIDController turnController;
+	 
+		TankDrivePath path;
 	 double rotateToAngleRate;
 	    static final double kP = 0.1 ;
     static final double kI = 0.00;
@@ -36,7 +38,7 @@ public class DriveTrain  {
 
 	public DriveTrain()  {
 		//calibrate navx !!!!!
-	    
+		path = new TankDrivePath();
 		 ahrs = new AHRS(SPI.Port.kMXP); 
 		 ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 		_xBox = new XboxController(Consts.xBoxComPort);
@@ -62,6 +64,16 @@ public class DriveTrain  {
 	        turnController.disable();
 	        
 	      
+	     
+	        
+	    	configureTalon(frontLeft);
+			configureTalon(frontRight);
+			configureTalon(backLeft);
+			configureTalon(backRight);
+			frontRight.setInverted(true);
+			backRight.setInverted(true);
+			   path = new TankDrivePath(frontLeft,frontRight);
+			
 	}
 	
 	public void autoInit() {
@@ -104,20 +116,13 @@ public double ahrsYaw() {
 
 	
 		
-		configureTalon(frontLeft);
-		configureTalon(frontRight);
-		configureTalon(backLeft);
-		configureTalon(backRight);
-		frontRight.setInverted(true);
-		backRight.setInverted(true);
-
-		
+	
 		SmartDashboard.putNumber("Setpoint", 1000);
 		
 	}
 	private void configureTalon(TalonSRX _talon) {
-		_talon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
-		
+	
+			_talon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
 		_talon.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, 0);
 		_talon.configNominalOutputForward(0, Consts.timeOutMs);
 		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
@@ -156,11 +161,12 @@ public double ahrsYaw() {
 			SmartDashboard.putNumber("Back Left Velocity", getVelocity(backLeft));
 			//SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
 			//SmartDashboard.putString("control mode",frontLeft.getControlMode() );
-			frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-			frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-			backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-			backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-			SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
+			//frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+			//frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+			//backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+			//backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+			//SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
+			path.pathFeedback()
 		}
 		public void testInit() {
 			frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
