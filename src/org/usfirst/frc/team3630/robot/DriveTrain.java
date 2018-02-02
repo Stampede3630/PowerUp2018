@@ -173,7 +173,7 @@ public double ahrsYaw() {
 			return distance_rotations;
 			
 		}
-		
+		 
 		public double getVelocity(TalonSRX _talon) {
 			double velocity_milliseconds = (double) _talon.getSelectedSensorVelocity(0)/Consts.ticksPerRotation;
 			System.out.println(velocity_milliseconds);
