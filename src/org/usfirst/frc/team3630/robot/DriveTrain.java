@@ -150,12 +150,14 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Stage", myCurrentCase);
 		SmartDashboard.putNumber("turn controller error", turnController.getError());
 		//posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
-		//leftSwitchPathOne();
-		rightSwitchPathOne();
+		//leftSwitchLeft();
+		//rightSwitchRight();
+		//rightScaleRight();
+		leftScaleLeft();
 		
 	}
 	
-	public void leftSwitchPathOne() {
+	public void leftSwitchLeft() {
 		if (myCurrentCase  == 1) {
 			if(init) {
 				posController.setSetpoint(Consts.midOfSwitch);
@@ -205,7 +207,7 @@ public class DriveTrain {
 		}
 	}
 
-	public void rightSwitchPathOne() {
+	public void rightSwitchRight() {
 		if (myCurrentCase  == 1) {
 			if(init) {
 				posController.setSetpoint(Consts.midOfSwitch);
@@ -255,6 +257,107 @@ public class DriveTrain {
 		}
 	}
 	
+	public void rightScaleRight() {
+		if (myCurrentCase  == 1) {
+			if(init) {
+				posController.setSetpoint(Consts.midOfScale);
+				posController.enable();
+				turnController.enable();
+				turnController.setSetpoint(0);
+				init = false;
+			}
+		     if(Math.abs(posController.getError()) < 1) {
+		     		myCurrentCase = 2;
+		     		init = true;
+		     	}
+		     			
+		}
+		//posController.setSetpoint(SmartDashboard.getNumber("pos Setpoint", 48))
+		
+		if (myCurrentCase == 2) {
+			if(init) {
+				posController.disable();
+				turnController.enable();
+				turnDegree(-90f);
+				init = false;
+			}
+			if(Math.abs(turnController.getError())<4) {
+				myCurrentCase = 3;
+	     		init = true;
+			}
+		    
+			
+			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+			}
+		if (myCurrentCase == 3) {
+			if(init) {
+
+				posController.setSetpoint(Consts.afterTurnToSwitch + positionEncoderSource.pidGet());
+				posController.enable();
+				init = false;
+			}
+			if(Math.abs(posController.getError()) < 1) {
+				myCurrentCase = 4;
+	     		init = true;
+			}
+		}
+		if(myCurrentCase == 4) {
+			turnController.disable();
+			posController.disable();
+		}
+		
+	}
+	
+	public void leftScaleLeft() {
+		if (myCurrentCase  == 1) {
+			if(init) {
+				posController.setSetpoint(Consts.midOfScale);
+				posController.enable();
+				turnController.enable();
+				turnController.setSetpoint(0);
+				init = false;
+			}
+		     if(Math.abs(posController.getError()) < 1) {
+		     		myCurrentCase = 2;
+		     		init = true;
+		     	}
+		     			
+		}
+		//posController.setSetpoint(SmartDashboard.getNumber("pos Setpoint", 48))
+		
+		if (myCurrentCase == 2) {
+			if(init) {
+				posController.disable();
+				turnController.enable();
+				turnDegree(90f);
+				init = false;
+			}
+			if(Math.abs(turnController.getError())<4) {
+				myCurrentCase = 3;
+	     		init = true;
+			}
+		    
+			
+			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+			}
+		if (myCurrentCase == 3) {
+			if(init) {
+
+				posController.setSetpoint(Consts.afterTurnToSwitch + positionEncoderSource.pidGet());
+				posController.enable();
+				init = false;
+			}
+			if(Math.abs(posController.getError()) < 1) {
+				myCurrentCase = 4;
+	     		init = true;
+			}
+		}
+		if(myCurrentCase == 4) {
+			turnController.disable();
+			posController.disable();
+		}
+	}
+		
 	public void putData() {
 		SmartDashboard.putNumber("correctionAngle", turnOutput);
 		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());

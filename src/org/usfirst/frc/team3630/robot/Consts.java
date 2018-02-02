@@ -45,6 +45,7 @@ public class Consts {
 	// Auto Distances
 	public static final double midOfSwitch = 168;
 	public static final double afterTurnToSwitch = 24;
+	public static final double midOfScale = 324;
 	
 			
 	
