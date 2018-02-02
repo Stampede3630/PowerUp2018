@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
 		//autoTime.reset();
 		//autoTime.start();
 		_driveTrain.testInit();
-		_driveTrain.driveStraight();
+		//_driveTrain.driveStraight();
 	}
 	@Override
 	public void disabledPeriodic() {

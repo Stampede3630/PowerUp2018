@@ -360,7 +360,7 @@ public class DriveTrain {
 		
 	public void putData() {
 		SmartDashboard.putNumber("correctionAngle", turnOutput);
-		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());
+		
 
 	}
 
@@ -369,6 +369,7 @@ public class DriveTrain {
 	}
 
 	public void testPeriodic() {
+		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());
 		SmartDashboard.putNumber("Front Right Position", getRotations(frontRight));
 		SmartDashboard.putNumber("Front Right Velocity", getVelocity(frontRight));
 		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
