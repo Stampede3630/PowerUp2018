@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	DriveTrain _driveTrain;
 	Timer  autoTime; 
-	TankDrivePath path;
+
 	public void robotInit() {
 		_driveTrain = new DriveTrain();
 		autoTime = new Timer();
@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testInit() {
 		
-		path = new TankDrivePath();
+	
 	
 	}
 	

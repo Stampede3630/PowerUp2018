@@ -72,6 +72,8 @@ public class DriveTrain  {
 			configureTalon(backRight);
 			frontRight.setInverted(true);
 			backRight.setInverted(true);
+			backLeft.follow(frontLeft);;
+			backRight.follow(backRight);
 			   path = new TankDrivePath(frontLeft,frontRight);
 			
 	}
@@ -151,19 +153,12 @@ public double ahrsYaw() {
 		driveTrain.arcadeDrive(0,0);
 	}
 		public void testPeriodic() {
-			SmartDashboard.putNumber("Front Right Position", getRotations(frontRight));
-			SmartDashboard.putNumber("Front Right Velocity", getVelocity(frontRight));
-			SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
-			SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
-			SmartDashboard.putNumber("Back Right Position", getRotations(backRight));
-			SmartDashboard.putNumber("Back Right Velocity", getVelocity(backRight));
-			SmartDashboard.putNumber("Back Left Position", getRotations(backLeft));
-			SmartDashboard.putNumber("Back Left Velocity", getVelocity(backLeft));
+		
 			//SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
 			//SmartDashboard.putString("control mode",frontLeft.getControlMode() );
 			//frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
 			//frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-			//backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+	
 			//backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
 			//SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
 			path.pathFeedback()
@@ -178,6 +173,7 @@ public double ahrsYaw() {
 			return distance_rotations;
 			
 		}
+		
 		public double getVelocity(TalonSRX _talon) {
 			double velocity_milliseconds = (double) _talon.getSelectedSensorVelocity(0)/Consts.ticksPerRotation;
 			System.out.println(velocity_milliseconds);

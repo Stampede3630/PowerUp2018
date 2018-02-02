@@ -4,6 +4,7 @@ import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.modifiers.TankModifier;
 import com.ctre.phoenix.*;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class TankDrivePath {
@@ -11,7 +12,7 @@ public class TankDrivePath {
 	   TankModifier modifier;
 	private  TalonSRX lTalon;
 	private  TalonSRX rTalon;
-	  EncoderFollower left, right;
+	EncoderFollower left, right;
 	public TankDrivePath ( TalonSRX leftSRXSide,TalonSRX rightSRXSide) {
 		 
 		// Create the Trajectory Configuration
@@ -73,14 +74,30 @@ public class TankDrivePath {
             rTalon = rightSRXSide;
             Trajectory     rightT = modifier.getRightTrajectory();
             rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
+            rTalon.getSelectedSensorPosition(0)
+            
             lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
+          
+            getDistance(rTalon);
              left = new EncoderFollower(modifier.getLeftTrajectory());
         	 right = new EncoderFollower(modifier.getRightTrajectory());
         	
     		
 	}
 	
+	public double getDistance(TalonSRX _talon) {
+		double distance_ticks = _talon.getSelectedSensorPosition(0);
+		double distance_rotations = distance_ticks/Consts.ticksPerRotation;
+		double distance = distance_rotations * Consts.rotConversion;
+		
+	}
+	public double reConvert(double  output) {
 	
+		double rads = output * Consts.rotConversion;
+		double ticks = rads *1000;
+		double ms = (ticks /1000)*100;
+		return ms ;
+	}
 	public void pathFeedback(){
 		
 	
@@ -93,22 +110,24 @@ public class TankDrivePath {
 	// The fourth argument is the velocity ratio. This is 1 over the maximum velocity you provided in the 
 //	 trajectory configuration (it translates m/s to a -1 to 1 scale that your motors can read)
 	// The fifth argument is your acceleration gain. Tweak this if you want to get to a higher or lower speed quicker
-	left.configurePIDVA(1.0, 0.0, 0.0, 1 / max_velocity, 0);
+	left.configurePIDVA(1.0, 0.0, 0.0, 1 / 26.4, 0);
 	right.configurePIDVA(1.0, 0.0, 0.0, 1 / max_velocity, 0);
 	
 	
 	
-	\
+	
 	// add gyro feedbaclk
 	
 	
 	// get desired output 
 	
-	double outputLeft = left.calculate(encoder_position);
+	 double outputLeft = left.calculate(  getDistance(lTalon));
 
-	 double outputRight = right.calculate(encoder_position);
-	 lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, outputLeft);
-`	rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, outputRight);
+	 double outputRight = right.calculate( getDistance(rTalon));
+	 
+	 // adeded conversions 
+	 lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity,  reConvert(  outputLeft)) ;
+	 rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity, reConvert outputRight));
 
 	
 	// add gyro feeedback 
