@@ -35,7 +35,7 @@ public class TankDrivePath {
 	            //    new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 	        		   new Waypoint(0, 0, 0),   // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
 	             
-				 new Waypoint(200, 0, 0),
+				 new Waypoint(1000, 0, 0),
 	                
 	           };
 
@@ -101,8 +101,8 @@ public class TankDrivePath {
 
         		
         		
-        		left.configurePIDVA(1.0, 0.0, 0.0, 1 /105 , 0);
-        		right.configurePIDVA(1.0, 0.0, 0.0, 1 /105 , 0);
+        		left.configurePIDVA(.5, 0.0, 0.0, 1 /105 , 0);
+        		right.configurePIDVA(.5, 0.0, 0.0, 1 /105 , 0);
 	}
 	
 	public int  getDistance(TalonSRX _talon) {
