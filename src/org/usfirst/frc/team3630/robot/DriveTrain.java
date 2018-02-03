@@ -115,7 +115,7 @@ public class DriveTrain {
 	}
 
 	public void driveTrainPeriodic() {
-		double speed = _xBox.getY(GenericHID.Hand.kLeft);
+		double speed = (_xBox.getY(GenericHID.Hand.kLeft))*-1;
 		double heading = _xBox.getX(GenericHID.Hand.kRight);
 		driveTrain.arcadeDrive(speed, heading);
 
@@ -141,6 +141,7 @@ public class DriveTrain {
 		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
 	     
 		driveTrain.arcadeDrive(posOutput, turnOutput);
+		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());
 		SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
 		SmartDashboard.putNumber("Position Setpoint", posController.getSetpoint());
 		SmartDashboard.putNumber("Position Error", posController.getError());
@@ -150,8 +151,8 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Stage", myCurrentCase);
 		SmartDashboard.putNumber("turn controller error", turnController.getError());
 		//posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
-		leftSwitchLeft();
-		//rightSwitchRight();
+		//leftSwitchLeft();
+		rightSwitchRight();
 		//rightScaleRight();
 		//leftScaleLeft();
 		
@@ -357,6 +358,65 @@ public class DriveTrain {
 			posController.disable();
 		}
 	}
+	
+	
+/*public void leftSwitchRight() {
+	if (myCurrentCase  == 1) {
+		if(init) {
+			posController.setSetpoint(Consts.midOfScale);//Need to change distance
+			posController.enable();
+			turnController.enable();
+			turnController.setSetpoint(0);
+			init = false;
+		}
+	     if(Math.abs(posController.getError()) < 1) {
+	     		myCurrentCase = 2;
+	     		init = true;
+	     	}
+	     			
+	}
+	//posController.setSetpoint(SmartDashboard.getNumber("pos Setpoint", 48))
+	
+	if (myCurrentCase == 2) {
+		if(init) {
+			posController.disable();
+			turnController.enable();
+			turnDegree(90f);
+			init = false;
+		}
+		if(Math.abs(turnController.getError())<4) {
+			myCurrentCase = 3;
+     		init = true;
+		}
+	    
+		
+		SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+		}
+	if (myCurrentCase == 3) {
+		if(init) {
+
+			posController.setSetpoint(Consts.afterTurnToSwitch + positionEncoderSource.pidGet());//Change distance
+			posController.enable();
+			init = false;
+		}
+		if(Math.abs(posController.getError()) < 1) {
+			myCurrentCase = 4;
+     		init = true;
+		}
+	}
+	if (myCurrentCase == 4) {
+		if(init)
+			posController.disable();
+			turnController.enable();
+			turnDegree(90f)
+		if(Math.abs(posController.get))
+	}
+	if(myCurrentCase == 4) {
+		turnController.disable();
+		posController.disable();
+	}
+*/
+	
 		
 	public void putData() {
 		SmartDashboard.putNumber("correctionAngle", turnOutput);
@@ -369,7 +429,7 @@ public class DriveTrain {
 	}
 
 	public void testPeriodic() {
-		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());
+		
 		SmartDashboard.putNumber("Front Right Position", getRotations(frontRight));
 		SmartDashboard.putNumber("Front Right Velocity", getVelocity(frontRight));
 		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
