@@ -2,14 +2,17 @@ package org.usfirst.frc.team3630.robot;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
+import jaci.pathfinder.followers.EncoderFollower;
 import jaci.pathfinder.modifiers.TankModifier;
 import com.ctre.phoenix.*;
+
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TankDrivePath {
 //	  Trajectory right,left;\
-	   TankModifier modifier;
+	TankModifier modifier;
 	private  TalonSRX lTalon;
 	private  TalonSRX rTalon;
 	EncoderFollower left, right;
@@ -31,8 +34,9 @@ public class TankDrivePath {
 		 Waypoint[] points = new Waypoint[] {
 	            //    new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 	        		   new Waypoint(0, 0, 0),   // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
-	                   new Waypoint(12, 0, 0),
-	                   //new Waypoint(0, 0, 0)
+	             
+				 new Waypoint(200, 0, 0),
+	                
 	           };
 
             Trajectory trajectory = Pathfinder.generate(points, config);
@@ -49,14 +53,16 @@ public class TankDrivePath {
            
             lTalon =  leftSRXSide;
             rTalon = rightSRXSide;
+         
             rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
-            rTalon.getSelectedSensorPosition(0)
-            lTalon.getSelectedSensorPosition(0)
             lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
           
-
-             left = new EncoderFollower(modifier.getLeftTrajectory());
-        	 right = new EncoderFollower(modifier.getRightTrajectory());
+            
+            left = new EncoderFollower(modifier.getLeftTrajectory());
+        	 	right = new EncoderFollower(modifier.getRightTrajectory());
+        	 
+        	 	left.configureEncoder(0, Consts.ticksPerRotation, 3);
+        	 	right.configureEncoder(0, Consts.ticksPerRotation, 3);
         	    // outputs data from path put to csv 
              
              /*   for (int i = 0; i<left.length(); i++){
@@ -99,11 +105,9 @@ public class TankDrivePath {
         		right.configurePIDVA(1.0, 0.0, 0.0, 1 /105 , 0);
 	}
 	
-	public double getDistance(TalonSRX _talon) {
-		double distance_ticks = _talon.getSelectedSensorPosition(0);
-		double distance_rotations = distance_ticks/Consts.ticksPerRotation;
-		double distance = distance_rotations * Consts.rotConversion;
-		
+	public int  getDistance(TalonSRX _talon) {
+		int  distance_ticks = _talon.getSelectedSensorPosition(0);
+		return distance_ticks;
 	}
 	public double reConvert(double  output) {
 	
@@ -122,17 +126,26 @@ public class TankDrivePath {
 	
 	// get desired output 
 	
-	 double outputLeft = left.calculate(  getDistance(lTalon));
+	 double outputLeft = left.calculate( getDistance(lTalon)  );
 
+	 
+	
 	 double outputRight = right.calculate( getDistance(rTalon));
 	 
+	 
+	 double convertLeft = (outputLeft* Consts.pathConversion * 1000)/ Consts.rotConversion;
+	 //SmartDashboard.putNumber("pathoutputLeft ", outputLeft);
+	 //SmartDashboard.putNumber("PathRight ", outputRight);
+	 double convertRight = (outputRight* Consts.pathConversion*1000 )/ Consts.rotConversion;
+	 
+	 System.out.println(convertRight);
+	 SmartDashboard.putNumber("left output ", convertLeft);
+	 SmartDashboard.putNumber("Right  output ", convertRight);
+	
 	 // adeded conversions 
-	 lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity,  reConvert(  outputLeft)) ;
-	 rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity, reConvert outputRight));
+	 lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity,  convertLeft) ;
+	 rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity, convertRight);
 
-	
-	// add gyro feeedback 
-	
 	
 	
 	
