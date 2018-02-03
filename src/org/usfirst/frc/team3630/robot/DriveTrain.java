@@ -66,7 +66,7 @@ public class DriveTrain  {
 	      
 	     
 	        
-	    		configureTalon(frontLeft);
+	    	configureTalon(frontLeft);
 			configureTalon(frontRight);
 			configureTalon(backLeft);
 			configureTalon(backRight);
@@ -157,6 +157,7 @@ public double ahrsYaw() {
 		driveTrain.arcadeDrive(0,0);
 	}
 	public void testInit() {
+		// resets encoders
 		frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		frontRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		backRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);

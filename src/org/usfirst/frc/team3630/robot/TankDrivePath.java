@@ -28,12 +28,16 @@ public class TankDrivePath {
 		// Max Velocity:        1.7 m/s
 		// Max Acceleration:    2.0 m/s/s
 		// Max Jerk:            60.0 m/s/s/s
+		
+		
+		// comsts ok???
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 135, 500, 500);
 	
 		 Waypoint[] points = new Waypoint[] {
 	            //    new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 	        		   new Waypoint(0, 0, 0),   // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
-	             
+	              // connts under setpoint acoring to math. why dose pathfinder stop??
+	        	
 				 new Waypoint(168, 0, 0)
 			     
 			
@@ -41,7 +45,7 @@ public class TankDrivePath {
 
             Trajectory trajectory = Pathfinder.generate(points, config);
 
-            // Wheelbase Width = in
+            // Wheelbase Width = in acurate ?
              modifier = new TankModifier(trajectory).modify(14);
 
             // Do something with the new Trajectories...
@@ -60,7 +64,7 @@ public class TankDrivePath {
             
             left = new EncoderFollower(modifier.getLeftTrajectory());
         	right = new EncoderFollower(modifier.getRightTrajectory());
-        	 
+        	 // set encoder infomartion 
         	 	left.configureEncoder(0, Consts.ticksPerRotation, 6);
         	 	right.configureEncoder(0, Consts.ticksPerRotation, 6);
         	    // outputs data from path put to csv 
@@ -99,13 +103,16 @@ public class TankDrivePath {
 //        		 trajectory configuration (it translates m/s to a -1 to 1 scale that your motors can read)
         		// The fifth argument is your acceleration gain. Tweak this if you want to get to a higher or lower speed quicker
 
-        		
+        		// is kf term correct 1/135
+        	 	// should reset kp 
+        	 	
         		
         		left.configurePIDVA(50, 0.0, 0.0, 1/135 , 0);
         		right.configurePIDVA(50, 0.0, 0.0, ( 1/135) , 0);
 	}
 	
 	public int  getDistance(TalonSRX _talon) {
+		// gets ticks ?? 
 		int  distance_ticks = _talon.getSelectedSensorPosition(0);
 		
 		return distance_ticks;
@@ -122,10 +129,9 @@ public class TankDrivePath {
 	
 	
 	
-	// add gyro feedbaclk
 	
 	
-	// get desired output 
+	// get desired output  . calucate coverts ticks to inches based on input 
 	
 	 double outputLeft = left.calculate( getDistance(lTalon)  );
 	
@@ -142,7 +148,7 @@ public class TankDrivePath {
 	SmartDashboard.putNumber("left encoder  ", getDistance(lTalon));
 	SmartDashboard.putNumber("Right encoder ", getDistance(rTalon ));
 	
-	 // adeded conversions 
+	 
 	 lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput,  outputLeft) ;
 	 rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputRight);
 
