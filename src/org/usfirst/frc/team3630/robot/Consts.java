@@ -31,7 +31,8 @@ public class Consts {
 	public static final int ticksPerRotation = 1000;
 	public static final int millisecondsPerSecond = 1000;
 	public static final int timeOutMs = 10;
-	public static final double rotConversion = 2* Math.PI();
+	public static final double rotConversion = 6* Math.PI;
+	public static final double pathConversion  = .1;
 	//PID encoders drive number of rotations
 	public static final double kPencoder = 1.7;
 	public static final double kIencoder = 0.0;

@@ -16,12 +16,12 @@ public class DriveTrain  {
 	AHRS ahrs;
 	// corection angle for PID Source 
 	public double correctionAngle = 0;
-	TankDrivePath path;
+
 	// add coment about from what perspective of robot 
 	// need to test
 	 PIDController turnController;
 	 
-		TankDrivePath path;
+	TankDrivePath path;
 	 double rotateToAngleRate;
 	    static final double kP = 0.1 ;
     static final double kI = 0.00;
@@ -38,7 +38,7 @@ public class DriveTrain  {
 
 	public DriveTrain()  {
 		//calibrate navx !!!!!
-		path = new TankDrivePath();
+	
 		 ahrs = new AHRS(SPI.Port.kMXP); 
 		 ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 		_xBox = new XboxController(Consts.xBoxComPort);
@@ -49,10 +49,10 @@ public class DriveTrain  {
 		backRight = new WPI_TalonSRX(Consts.backRightTalon);
 		//////////////////////////
 	
-	leftSpeedController = new SpeedControllerGroup (frontLeft, new SpeedController[] {backLeft});
-	rightSpeedController = new SpeedControllerGroup (frontRight, new SpeedController[] {backRight});
+	//leftSpeedController = new SpeedControllerGroup (frontLeft, new SpeedController[] {backLeft});
+	///rightSpeedController = new SpeedControllerGroup (frontRight, new SpeedController[] {backRight});
 ////////////
-		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
+		//driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
 
 		
 		   turnController = new PIDController(Consts.kPA, Consts.kIA, Consts.kID,  ahrs, new MyPidOutput());
@@ -66,15 +66,15 @@ public class DriveTrain  {
 	      
 	     
 	        
-	    	configureTalon(frontLeft);
+	    		configureTalon(frontLeft);
 			configureTalon(frontRight);
 			configureTalon(backLeft);
 			configureTalon(backRight);
 			frontRight.setInverted(true);
 			backRight.setInverted(true);
-			backLeft.follow(frontLeft);;
-			backRight.follow(backRight);
-			   path = new TankDrivePath(frontLeft,frontRight);
+		
+		
+			path = new TankDrivePath(frontLeft,frontRight);
 			
 	}
 	
@@ -124,8 +124,8 @@ public double ahrsYaw() {
 	}
 	private void configureTalon(TalonSRX _talon) {
 	
-			_talon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
-		_talon.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, 0);
+		_talon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
+		//_talon.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity, 0);
 		_talon.configNominalOutputForward(0, Consts.timeOutMs);
 		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
@@ -161,7 +161,9 @@ public double ahrsYaw() {
 	
 			//backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
 			//SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
-			path.pathFeedback()
+			backLeft.follow(frontLeft);
+			backRight.follow(backRight);
+			path.pathFeedback();
 		}
 		public void testInit() {
 			frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
