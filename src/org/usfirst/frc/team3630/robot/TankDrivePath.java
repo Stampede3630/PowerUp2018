@@ -68,7 +68,10 @@ public class TankDrivePath {
         	 	left.configureEncoder(0, Consts.ticksPerRotation, 6);
         	 	right.configureEncoder(0, Consts.ticksPerRotation, 6);
         	    // outputs data from path put to csv 
-             
+             // lets produce trajectory graphs. to check conttants are correct ? 
+        	 	// pos and velocity per time 
+        	 	//acceloration per time 
+        	 	// any other graphs?
              /*   for (int i = 0; i<left.length(); i++){
                 	
                 	 System.out.print(left.get(i).acceleration);
@@ -103,8 +106,7 @@ public class TankDrivePath {
 //        		 trajectory configuration (it translates m/s to a -1 to 1 scale that your motors can read)
         		// The fifth argument is your acceleration gain. Tweak this if you want to get to a higher or lower speed quicker
 
-        		// is kf term correct 1/135
-        	 	// should reset kp 
+        		// is kf term correct at 1/135? i don't know??
         	 	
         		
         		left.configurePIDVA(50, 0.0, 0.0, 1/135 , 0);
@@ -133,9 +135,13 @@ public class TankDrivePath {
 	
 	// get desired output  . calucate coverts ticks to inches based on input 
 	
+		
+	// output should be between -1 and 1 correct? should check output and print it out 
 	 double outputLeft = left.calculate( getDistance(lTalon)  );
 	
 	//System.out.println(getDistance(lTalon)) ;
+	 
+	 
 	 double outputRight = right.calculate( getDistance(rTalon));
 	 
 	 
