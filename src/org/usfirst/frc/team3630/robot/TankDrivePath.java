@@ -5,7 +5,7 @@ import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.followers.EncoderFollower;
 import jaci.pathfinder.modifiers.TankModifier;
 import com.ctre.phoenix.*;
-
+import edu.wpi.first.wpilibj.smartdashboard.*;;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 
@@ -22,20 +22,21 @@ public class TankDrivePath {
 		// Arguments:
 		// Fit Method:          HERMITE_CUBIC or HERMITE_QUINTIC
 		// Sample Count:        SAMPLES_HIGH (100 000)
-//		                      SAMPLES_LOW  (10 000)
+//		              SAMPLES_LOW  (10 000)
 //		                      SAMPLES_FAST (1 000)
 		// Time Step:           0.05 Seconds
 		// Max Velocity:        1.7 m/s
 		// Max Acceleration:    2.0 m/s/s
 		// Max Jerk:            60.0 m/s/s/s
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 105, 50, 100);
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 135, 500, 500);
 	
 		 Waypoint[] points = new Waypoint[] {
 	            //    new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 	        		   new Waypoint(0, 0, 0),   // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
 	             
-				 new Waypoint(1000, 0, 0),
-	                
+				 new Waypoint(168, 0, 0)
+			     
+			
 	           };
 
             Trajectory trajectory = Pathfinder.generate(points, config);
@@ -60,8 +61,8 @@ public class TankDrivePath {
             left = new EncoderFollower(modifier.getLeftTrajectory());
         	right = new EncoderFollower(modifier.getRightTrajectory());
         	 
-        	 	left.configureEncoder(0, Consts.ticksPerRotation, 3);
-        	 	right.configureEncoder(0, Consts.ticksPerRotation, 3);
+        	 	left.configureEncoder(0, Consts.ticksPerRotation, 6);
+        	 	right.configureEncoder(0, Consts.ticksPerRotation, 6);
         	    // outputs data from path put to csv 
              
              /*   for (int i = 0; i<left.length(); i++){
@@ -100,12 +101,13 @@ public class TankDrivePath {
 
         		
         		
-        		left.configurePIDVA(.5, 0.0, 0.0, 1023/135 , 0);
-        		right.configurePIDVA(.5, 0.0, 0.0, ( 1023/135) , 0);
+        		left.configurePIDVA(50, 0.0, 0.0, 1/135 , 0);
+        		right.configurePIDVA(50, 0.0, 0.0, ( 1/135) , 0);
 	}
 	
 	public int  getDistance(TalonSRX _talon) {
 		int  distance_ticks = _talon.getSelectedSensorPosition(0);
+		
 		return distance_ticks;
 	}
 	public double reConvert(double  output) {
@@ -126,19 +128,19 @@ public class TankDrivePath {
 	// get desired output 
 	
 	 double outputLeft = left.calculate( getDistance(lTalon)  );
-
-	 
 	
+	//System.out.println(getDistance(lTalon)) ;
 	 double outputRight = right.calculate( getDistance(rTalon));
 	 
 	 
-	 //SmartDashboard.putNumber("pathoutputLeft ", outputLeft);
-	 //SmartDashboard.putNumber("PathRight ", outputRight);
+	 SmartDashboard.putNumber("pathtLeft ", outputLeft);
+	 SmartDashboard.putNumber("PathRight ", outputRight);
+	// SmartDashboard.putString("talonmode", value)
 	 
 	 
-	 System.out.println(convertRight);
-	 SmartDashboard.putNumber("left output ", convertLeft);
-	 SmartDashboard.putNumber("Right  output ", convertRight);
+	 System.out.println(outputLeft);
+	SmartDashboard.putNumber("left encoder  ", getDistance(lTalon));
+	SmartDashboard.putNumber("Right encoder ", getDistance(rTalon ));
 	
 	 // adeded conversions 
 	 lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput,  outputLeft) ;

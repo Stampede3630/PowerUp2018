@@ -22,11 +22,12 @@ public class Robot extends IterativeRobot {
 	
 	}
 	public void teleopPeriodic() {
-		//_driveTrain.driveTrainPeriodic();
+		_driveTrain.driveTrainPeriodic();
 		
 	}
 	@Override
 	public void testInit() {
+		_driveTrain.testInit() ;
 		
 	
 	

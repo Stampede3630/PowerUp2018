@@ -21,7 +21,7 @@ public class DriveTrain  {
 	// need to test
 	 PIDController turnController;
 	 
-	TankDrivePath path;
+	public TankDrivePath path;
 	 double rotateToAngleRate;
 	    static final double kP = 0.1 ;
     static final double kI = 0.00;
@@ -70,11 +70,15 @@ public class DriveTrain  {
 			configureTalon(frontRight);
 			configureTalon(backLeft);
 			configureTalon(backRight);
+		
+
+			frontLeft.setInverted(false);
+			backLeft.setInverted(false);
 			frontRight.setInverted(true);
 			backRight.setInverted(true);
+			
+			
 		
-		
-			path = new TankDrivePath(frontLeft,frontRight);
 			
 	}
 	
@@ -113,28 +117,28 @@ public double ahrsYaw() {
 }
 
 	public void driveTrainPeriodic() {
-		double speed = _xBox.getY(GenericHID.Hand.kLeft);
+		double speed = _xBox.getY(GenericHID.Hand.kLeft)*-.5;
 		double heading = _xBox.getX(GenericHID.Hand.kRight);
 
 	
-		
+	//	driveTrain.arcadeDrive( speed, heading);
 	
-		SmartDashboard.putNumber("Setpoint", 1000);
+		//SmartDashboard.putNumber("Setpoint", 1000);
 		
 	}
 	private void configureTalon(TalonSRX _talon) {
 	
 		_talon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
-		//_talon.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity, 0);
+		_talon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, 0);
 		_talon.configNominalOutputForward(0, Consts.timeOutMs);
 		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
 		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
 		_talon.setSensorPhase(true);
-		_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
-		_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
-		_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
-		_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
+		//_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
+		//_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
+		//_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
+		//_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
 	}
 
 
@@ -152,6 +156,15 @@ public double ahrsYaw() {
 	public void stop(){
 		driveTrain.arcadeDrive(0,0);
 	}
+	public void testInit() {
+		frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		frontRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		backRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		backLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		// need to put in robot init for speed 
+		path = new TankDrivePath(frontLeft,frontRight);
+	}
+	
 		public void testPeriodic() {
 		
 			//SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
@@ -162,13 +175,10 @@ public double ahrsYaw() {
 			//backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
 			//SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
 			backLeft.follow(frontLeft);
-			backRight.follow(backRight);
+			backRight.follow(frontRight);
 			path.pathFeedback();
 		}
-		public void testInit() {
-			frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-		}
-		
+	
 		public double getRotations(TalonSRX _talon) {
 			double distance_ticks = _talon.getSelectedSensorPosition(0);
 			double distance_rotations = distance_ticks/Consts.ticksPerRotation;
