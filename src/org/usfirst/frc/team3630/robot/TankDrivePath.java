@@ -138,7 +138,7 @@ public class TankDrivePath {
 	// SmartDashboard.putString("talonmode", value)
 	 
 	 
-	 System.out.println(outputLeft);
+	
 	SmartDashboard.putNumber("left encoder  ", getDistance(lTalon));
 	SmartDashboard.putNumber("Right encoder ", getDistance(rTalon ));
 	
