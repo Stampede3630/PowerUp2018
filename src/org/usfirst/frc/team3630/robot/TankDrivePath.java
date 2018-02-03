@@ -8,7 +8,6 @@ import com.ctre.phoenix.*;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TankDrivePath {
 //	  Trajectory right,left;\
@@ -59,7 +58,7 @@ public class TankDrivePath {
           
             
             left = new EncoderFollower(modifier.getLeftTrajectory());
-        	 	right = new EncoderFollower(modifier.getRightTrajectory());
+        	right = new EncoderFollower(modifier.getRightTrajectory());
         	 
         	 	left.configureEncoder(0, Consts.ticksPerRotation, 3);
         	 	right.configureEncoder(0, Consts.ticksPerRotation, 3);
@@ -101,8 +100,8 @@ public class TankDrivePath {
 
         		
         		
-        		left.configurePIDVA(.5, 0.0, 0.0, 1 /105 , 0);
-        		right.configurePIDVA(.5, 0.0, 0.0, 1 /105 , 0);
+        		left.configurePIDVA(.5, 0.0, 0.0, 1023/135 , 0);
+        		right.configurePIDVA(.5, 0.0, 0.0, ( 1023/135) , 0);
 	}
 	
 	public int  getDistance(TalonSRX _talon) {
@@ -133,18 +132,17 @@ public class TankDrivePath {
 	 double outputRight = right.calculate( getDistance(rTalon));
 	 
 	 
-	 double convertLeft = (outputLeft* Consts.pathConversion * 1000)/ Consts.rotConversion;
 	 //SmartDashboard.putNumber("pathoutputLeft ", outputLeft);
 	 //SmartDashboard.putNumber("PathRight ", outputRight);
-	 double convertRight = (outputRight* Consts.pathConversion*1000 )/ Consts.rotConversion;
+	 
 	 
 	 System.out.println(convertRight);
 	 SmartDashboard.putNumber("left output ", convertLeft);
 	 SmartDashboard.putNumber("Right  output ", convertRight);
 	
 	 // adeded conversions 
-	 lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity,  convertLeft) ;
-	 rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Velocity, convertRight);
+	 lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput,  outputLeft) ;
+	 rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputRight);
 
 	
 	
@@ -155,5 +153,5 @@ public class TankDrivePath {
   
 
     
-
+  
 
