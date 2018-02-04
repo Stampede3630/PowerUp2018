@@ -9,6 +9,27 @@ import edu.wpi.first.wpilibj.smartdashboard.*;;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 
+
+// debug checklist: 
+// confirm talon setpoint between -1 and 1 
+// confirm units 
+	// sensor ticks in , -1, 1 output 
+	
+// check max acceloration and jerk make sence. Probobly talk mr lampe about that 
+// check waypoints are generated properly and make sence 
+// graph in excel 
+// is the talon kp ki kd constans competing with the pivda in pathfinder? 
+
+
+// deferntial debuging 
+// probobly not kp problem
+// a units problem? 
+// outputing enough 
+// pathfinder libary problem 
+// is everything init properly? looks ok to me. will look though libary though 
+// why dose pathfinder stop when we don't think we got to setpoint right place. Makes me think units problem
+
+
 public class TankDrivePath {
 //	  Trajectory right,left;\
 	TankModifier modifier;
@@ -31,6 +52,7 @@ public class TankDrivePath {
 		
 		
 		// comsts ok???
+		// should we modlify time step 
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 135, 500, 500);
 	
 		 Waypoint[] points = new Waypoint[] {
@@ -63,8 +85,9 @@ public class TankDrivePath {
           
             
             left = new EncoderFollower(modifier.getLeftTrajectory());
-        	right = new EncoderFollower(modifier.getRightTrajectory());
+            right = new EncoderFollower(modifier.getRightTrajectory());
         	 // set encoder infomartion 
+          // peramiters enc starting point, total amount ticks, wheel diamitor
         	 	left.configureEncoder(0, Consts.ticksPerRotation, 6);
         	 	right.configureEncoder(0, Consts.ticksPerRotation, 6);
         	    // outputs data from path put to csv 
@@ -108,13 +131,13 @@ public class TankDrivePath {
 
         		// is kf term correct at 1/135? i don't know??
         	 	
-        		
+        		// mabey reset kp 
         		left.configurePIDVA(50, 0.0, 0.0, 1/135 , 0);
         		right.configurePIDVA(50, 0.0, 0.0, ( 1/135) , 0);
 	}
 	
 	public int  getDistance(TalonSRX _talon) {
-		// gets ticks ?? 
+	
 		int  distance_ticks = _talon.getSelectedSensorPosition(0);
 		
 		return distance_ticks;
@@ -137,9 +160,11 @@ public class TankDrivePath {
 	
 		
 	// output should be between -1 and 1 correct? should check output and print it out 
+		
+
 	 double outputLeft = left.calculate( getDistance(lTalon)  );
 	
-	//System.out.println(getDistance(lTalon)) ;
+	System.out.println(getDistance(lTalon)) ;
 	 
 	 
 	 double outputRight = right.calculate( getDistance(rTalon));
@@ -154,7 +179,9 @@ public class TankDrivePath {
 	SmartDashboard.putNumber("left encoder  ", getDistance(lTalon));
 	SmartDashboard.putNumber("Right encoder ", getDistance(rTalon ));
 	
-	 
+	 // setpint needs to be petween -1 and 1 need to confirm  
+	// are we feeding pathfinder enoughpoints 
+	// are th
 	 lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput,  outputLeft) ;
 	 rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputRight);
 
