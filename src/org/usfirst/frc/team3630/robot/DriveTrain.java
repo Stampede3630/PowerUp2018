@@ -22,6 +22,7 @@ public class DriveTrain {
 	double turnOutput;
 	double posOutput;
 	boolean init = true;
+	boolean right = true;
 	int myCurrentCase;		
 	PIDController turnController;
 	PIDController posController;
@@ -152,8 +153,8 @@ public class DriveTrain {
 		SmartDashboard.putNumber("turn controller error", turnController.getError());
 		//posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
 		//leftSwitchLeft();
-		rightSwitchRight();
-		//rightScaleRight();
+		//rightSwitchRight();
+		rightScaleRight();
 		//leftScaleLeft();
 		
 	}
@@ -161,6 +162,7 @@ public class DriveTrain {
 	public void leftSwitchLeft() {
 		if (myCurrentCase  == 1) {
 			if(init) {
+				right = false;
 				posController.setSetpoint(Consts.midOfSwitch);
 				posController.enable();
 				turnController.enable();
@@ -182,7 +184,7 @@ public class DriveTrain {
 				turnDegree(90f);
 				init = false;
 			}
-			if(Math.abs(turnController.getError())<4) {
+			if(Math.abs(turnController.getError())<3) {
 				myCurrentCase = 3;
 	     		init = true;
 			}
@@ -211,6 +213,7 @@ public class DriveTrain {
 	public void rightSwitchRight() {
 		if (myCurrentCase  == 1) {
 			if(init) {
+				right = true;
 				posController.setSetpoint(Consts.midOfSwitch);
 				posController.enable();
 				turnController.enable();
@@ -232,7 +235,7 @@ public class DriveTrain {
 				turnDegree(-90f);
 				init = false;
 			}
-			if(Math.abs(turnController.getError())<4) {
+			if(Math.abs(turnController.getError())<3) {
 				myCurrentCase = 3;
 	     		init = true;
 			}
@@ -261,6 +264,7 @@ public class DriveTrain {
 	public void rightScaleRight() {
 		if (myCurrentCase  == 1) {
 			if(init) {
+				right = true;
 				posController.setSetpoint(Consts.midOfScale);
 				posController.enable();
 				turnController.enable();
@@ -282,7 +286,7 @@ public class DriveTrain {
 				turnDegree(-90f);
 				init = false;
 			}
-			if(Math.abs(turnController.getError())<4) {
+			if(Math.abs(turnController.getError())<3) {
 				myCurrentCase = 3;
 	     		init = true;
 			}
@@ -312,6 +316,7 @@ public class DriveTrain {
 	public void leftScaleLeft() {
 		if (myCurrentCase  == 1) {
 			if(init) {
+				right = false;
 				posController.setSetpoint(Consts.midOfScale);
 				posController.enable();
 				turnController.enable();
@@ -333,7 +338,7 @@ public class DriveTrain {
 				turnDegree(90f);
 				init = false;
 			}
-			if(Math.abs(turnController.getError())<4) {
+			if(Math.abs(turnController.getError())<3) {
 				myCurrentCase = 3;
 	     		init = true;
 			}
@@ -498,7 +503,6 @@ public class DriveTrain {
 
 	private class EncoderPIDSource implements PIDSource {
 		private TalonSRX _frontLeft, _frontRight;
-
 		public EncoderPIDSource(TalonSRX talon1,TalonSRX talon2) {
 			_frontLeft = talon1;
 			_frontRight = talon2;
@@ -508,11 +512,20 @@ public class DriveTrain {
 		public double pidGet() {
 			double fLGetSelected = _frontLeft.getSelectedSensorPosition(0);
 			double fRGetSelected = _frontRight.getSelectedSensorPosition(0)*-1;
-			double position_raw = (fLGetSelected + fRGetSelected)/2;
-			double position_inches = position_raw * (double) (2 * Math.PI * Consts.wheelRadius) / (double) Consts.ticksPerRotation ;
-			SmartDashboard.putNumber("Front Left Talon Position", fRGetSelected);
-			SmartDashboard.putNumber("Front Right Talon Position", fRGetSelected);
-			return position_inches;
+			double positionInches;
+			//double position_raw = (fLGetSelected + fRGetSelected)/2;
+			if(right) {
+				positionInches = fRGetSelected * (double) (2 * Math.PI * Consts.wheelRadius) / (double) Consts.ticksPerRotation ;
+				SmartDashboard.putString("Right", "Right calling");
+			}
+			else {
+				positionInches = fLGetSelected * (double) (2 * Math.PI * Consts.wheelRadius) / (double) Consts.ticksPerRotation ;
+				SmartDashboard.putString("Left", "Left calling");
+			}
+			//double position_inches = position_raw * (double) (2 * Math.PI * Consts.wheelRadius) / (double) Consts.ticksPerRotation ;
+			//SmartDashboard.putNumber("Front Left Talon Position", fRGetSelected);
+			//SmartDashboard.putNumber("Front Right Talon Position", fRGetSelected);
+			return positionInches;
 		}
 
 		public PIDSourceType getPIDSourceType() {
