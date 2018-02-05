@@ -47,6 +47,15 @@ public class Consts {
 	public static final double afterTurnToSwitch = 24;
 	public static final double midOfScale = 324;
 	public static final double afterTurnToScale = 13.68;
+	public static final double autoA = 67;
+	public static final double autoB = 101;
+	public static final double autoC = 156;
+	public static final double autoD = 73;
+	public static final double autoE = 55.56;
+	public static final double autoF = 41.88;
+	public static final double autoG = 192.62;
+	public static final double autoH = 264.62;
+	public static final double autoI = 120.62;
 	
 			
 	

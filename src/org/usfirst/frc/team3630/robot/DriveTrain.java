@@ -363,16 +363,16 @@ public class DriveTrain {
 			posController.disable();
 		}
 	}
-	
-	
-/*public void leftSwitchRight() {
+		
+	public void leftSwitchRight() {
 	if (myCurrentCase  == 1) {
 		if(init) {
-			posController.setSetpoint(Consts.midOfScale);//Need to change distance
+			posController.setSetpoint(Consts.autoA);//Need to change distance
 			posController.enable();
 			turnController.enable();
 			turnController.setSetpoint(0);
 			init = false;
+			right = false;
 		}
 	     if(Math.abs(posController.getError()) < 1) {
 	     		myCurrentCase = 2;
@@ -380,7 +380,6 @@ public class DriveTrain {
 	     	}
 	     			
 	}
-	//posController.setSetpoint(SmartDashboard.getNumber("pos Setpoint", 48))
 	
 	if (myCurrentCase == 2) {
 		if(init) {
@@ -389,7 +388,7 @@ public class DriveTrain {
 			turnDegree(90f);
 			init = false;
 		}
-		if(Math.abs(turnController.getError())<4) {
+		if(Math.abs(turnController.getError())<3) {
 			myCurrentCase = 3;
      		init = true;
 		}
@@ -400,9 +399,10 @@ public class DriveTrain {
 	if (myCurrentCase == 3) {
 		if(init) {
 
-			posController.setSetpoint(Consts.afterTurnToSwitch + positionEncoderSource.pidGet());//Change distance
+			posController.setSetpoint(Consts.autoG + positionEncoderSource.pidGet());
 			posController.enable();
 			init = false;
+			right = true;
 		}
 		if(Math.abs(posController.getError()) < 1) {
 			myCurrentCase = 4;
@@ -410,19 +410,302 @@ public class DriveTrain {
 		}
 	}
 	if (myCurrentCase == 4) {
-		if(init)
+		if(init) {
 			posController.disable();
-			turnController.enable();
-			turnDegree(90f)
-		if(Math.abs(posController.get))
+			turnDegree(-90f);
+			init = false;
+		}
+		if(Math.abs(turnController.getError())<3) {
+			myCurrentCase = 5;
+	     	init = true;
+		}
 	}
-	if(myCurrentCase == 4) {
+	if(myCurrentCase == 5) {
+		if(init) {
+			posController.setSetpoint(positionEncoderSource.pidGet() + Consts.autoD);
+			posController.enable();
+			init = false;
+		}
+		if(Math.abs(posController.getError())<1) {
+			myCurrentCase = 6;
+	     	init = true;
+		}
+	}
+	
+	if(myCurrentCase == 6) {
 		turnController.disable();
 		posController.disable();
 	}
-*/
+}
+
+	public void rightSwitchLeft() {
+	if (myCurrentCase  == 1) {
+		if(init) {
+			posController.setSetpoint(Consts.autoA);
+			posController.enable();
+			turnController.enable();
+			turnController.setSetpoint(0);
+			init = false;
+			right = true;
+		}
+	     if(Math.abs(posController.getError()) < 1) {
+	     		myCurrentCase = 2;
+	     		init = true;
+	     	}
+	     			
+	}
 	
+	if (myCurrentCase == 2) {
+		if(init) {
+			posController.disable();
+			turnController.enable();
+			turnDegree(-90f);
+			init = false;
+		}
+		if(Math.abs(turnController.getError())<3) {
+			myCurrentCase = 3;
+     		init = true;
+		}
+	    
 		
+		SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+		}
+	if (myCurrentCase == 3) {
+		if(init) {
+
+			posController.setSetpoint(Consts.autoG + positionEncoderSource.pidGet());
+			posController.enable();
+			init = false;
+			right = false;
+		}
+		if(Math.abs(posController.getError()) < 1) {
+			myCurrentCase = 4;
+     		init = true;
+		}
+	}
+	if (myCurrentCase == 4) {
+		if(init) {
+			posController.disable();
+			turnDegree(90f);
+			init = false;
+		}
+		if(Math.abs(turnController.getError())<3) {
+			myCurrentCase = 5;
+	     	init = true;
+		}
+	}
+	if(myCurrentCase == 5) {
+		if(init) {
+			posController.setSetpoint(positionEncoderSource.pidGet() + Consts.autoD);
+			posController.enable();
+			init = false;
+		}
+		if(Math.abs(posController.getError())<1) {
+			myCurrentCase = 6;
+	     	init = true;
+		}
+	}
+	
+	if(myCurrentCase == 6) {
+		turnController.disable();
+		posController.disable();
+	}
+}
+		
+	public void leftScaleRight() {
+		if (myCurrentCase  == 1) {
+			if(init) {
+				right = false;
+				posController.setSetpoint(Consts.autoA);
+				posController.enable();
+				turnController.enable();
+				turnController.setSetpoint(0);
+				init = false;
+			}
+		     if(Math.abs(posController.getError()) < 1) {
+		     		myCurrentCase = 2;
+		     		init = true;
+		     	}
+		}
+		if (myCurrentCase == 2) {
+			if(init) {
+				posController.disable();
+				turnDegree(90f);
+				init = false;
+			}
+			if(Math.abs(turnController.getError())<3) {
+				myCurrentCase = 3;
+	     		init = true;
+			}
+		    
+			
+			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+			}
+		if (myCurrentCase  == 3) {
+			if(init) {
+				right = false;
+				posController.setSetpoint(Consts.autoH + positionEncoderSource.pidGet());
+				turnController.enable();
+				turnController.setSetpoint(0);
+				init = true;
+			}
+		     if(Math.abs(posController.getError()) < 1) {
+		     		myCurrentCase = 4;
+		     		init = true;
+		     	}
+		}
+		if (myCurrentCase == 4) {
+			if(init) {
+				posController.disable();
+				turnDegree(-90f);
+				init = false;
+			}
+			if(Math.abs(turnController.getError())<3) {
+				myCurrentCase = 5;
+	     		init = true;
+			}
+			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+			}
+		if (myCurrentCase  == 5) {
+			if(init) {
+				right = false;
+				posController.setSetpoint(Consts.autoB + Consts.autoC + positionEncoderSource.pidGet());
+				turnController.enable();
+				turnController.setSetpoint(0);
+				init = true;
+			}
+		     if(Math.abs(posController.getError()) < 1) {
+		     		myCurrentCase = 6;
+		     		init = true;
+		     	}
+		}
+		if (myCurrentCase == 6) {
+			if(init) {
+				posController.disable();
+				turnDegree(-90f);
+				init = false;
+			}
+			if(Math.abs(turnController.getError())<3) {
+				myCurrentCase = 7;
+	     		init = true;
+			}
+			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+			}
+		if (myCurrentCase  == 7) {
+			if(init) {
+				posController.setSetpoint(Consts.autoF + positionEncoderSource.pidGet());
+				turnController.enable();
+				turnController.setSetpoint(0);
+				init = true;
+			}
+		     if(Math.abs(posController.getError()) < 1) {
+		     		myCurrentCase = 8;
+		     		init = true;
+		     	}
+		}
+		if(myCurrentCase == 8) {
+			turnController.disable();
+			posController.disable();
+		}
+	}
+	
+	public void rightScaleLeft() {
+		if (myCurrentCase  == 1) {
+			if(init) {
+				right = false;
+				posController.setSetpoint(Consts.autoA);
+				posController.enable();
+				turnController.enable();
+				turnController.setSetpoint(0);
+				init = false;
+			}
+		     if(Math.abs(posController.getError()) < 1) {
+		     		myCurrentCase = 2;
+		     		init = true;
+		     	}
+		}
+		if (myCurrentCase == 2) {
+			if(init) {
+				posController.disable();
+				turnDegree(-90f);
+				init = false;
+			}
+			if(Math.abs(turnController.getError())<3) {
+				myCurrentCase = 3;
+	     		init = true;
+			}
+		    
+			
+			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+			}
+		if (myCurrentCase  == 3) {
+			if(init) {
+				right = true;
+				posController.setSetpoint(Consts.autoH + positionEncoderSource.pidGet());
+				turnController.enable();
+				turnController.setSetpoint(0);
+				init = true;
+			}
+		     if(Math.abs(posController.getError()) < 1) {
+		     		myCurrentCase = 4;
+		     		init = true;
+		     	}
+		}
+		if (myCurrentCase == 4) {
+			if(init) {
+				posController.disable();
+				turnDegree(90f);
+				init = false;
+			}
+			if(Math.abs(turnController.getError())<3) {
+				myCurrentCase = 5;
+	     		init = true;
+			}
+			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+			}
+		if (myCurrentCase  == 5) {
+			if(init) {
+				right = true;
+				posController.setSetpoint(Consts.autoB + Consts.autoC + positionEncoderSource.pidGet());
+				turnController.enable();
+				turnController.setSetpoint(0);
+				init = true;
+			}
+		     if(Math.abs(posController.getError()) < 1) {
+		     		myCurrentCase = 6;
+		     		init = true;
+		     	}
+		}
+		if (myCurrentCase == 6) {
+			if(init) {
+				posController.disable();
+				turnDegree(90f);
+				init = false;
+			}
+			if(Math.abs(turnController.getError())<3) {
+				myCurrentCase = 7;
+	     		init = true;
+			}
+			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+			}
+		if (myCurrentCase  == 7) {
+			if(init) {
+				posController.setSetpoint(Consts.autoF + positionEncoderSource.pidGet());
+				turnController.enable();
+				turnController.setSetpoint(0);
+				init = true;
+			}
+		     if(Math.abs(posController.getError()) < 1) {
+		     		myCurrentCase = 8;
+		     		init = true;
+		     	}
+		}
+		if(myCurrentCase == 8) {
+			turnController.disable();
+			posController.disable();
+		}
+	}
+	
 	public void putData() {
 		SmartDashboard.putNumber("correctionAngle", turnOutput);
 		
