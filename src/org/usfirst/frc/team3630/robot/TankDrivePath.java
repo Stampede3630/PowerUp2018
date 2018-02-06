@@ -52,7 +52,7 @@ public class TankDrivePath {
 		// comsts ok???
 		// should we modlify time step
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,
-				Trajectory.Config.SAMPLES_HIGH, 0.05, 76, 50, 100);
+				Trajectory.Config.SAMPLES_HIGH, 0.05, 45, 100, 100);
 
 		Waypoint[] points = new Waypoint[] {
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
@@ -124,8 +124,10 @@ public class TankDrivePath {
 		// is kf term correct at 1/135? i don't know??
 
 		// mabey reset kp
-		left.configurePIDVA(.005, 0.0, 0.0, 1 / 76, 0);
-		right.configurePIDVA(.005, 0.0, 0.0, (1 / 76), 0);
+		  // could we be under dampond 
+		  
+		left.configurePIDVA(0.0, 0.0, 0.0, 1 / 135, 0);
+		right.configurePIDVA(0.0, 0.0, 0.0, (1 / 135), 0);
 	}
 
 	public int getDistance(TalonSRX _talon) {
@@ -152,23 +154,25 @@ public class TankDrivePath {
 
 		double outputLeft = left.calculate(getDistance(lTalon));
 		double outputRight = right.calculate(getDistance(rTalon));
-
-		System.out.println(outputLeft) ;
 /*
+		System.out.println(outputLeft) ;
+
 		
 		double distance_coveredLeft = ((double) (getDistance(lTalon)) / 1000) * (6 * Math.PI);
 		double leftError = left.getSegment().position - distance_coveredLeft;
-		//System.out.println(leftError);
 		
 		// very large and add to number 
 		double pPart = .005 * leftError;
 		double leftVelocity = (1 / 135) * left.getSegment().velocity;
-
-		double calculated_value = pPart + leftVelocity;
+		double leftAcceloratin= left.getSegment().acceleration; 
+		*/
+		//System.out.println(leftError);
+		
+		//double calculated_value = pPart + leftVelocity;
 
 		SmartDashboard.putNumber("pathtLeft ", outputLeft);
 		SmartDashboard.putNumber("PathRight ", outputRight);
-
+/*
 		SmartDashboard.putNumber("leftError ", leftError);
 		SmartDashboard.putNumber("pPartLeft ", pPart);
 		SmartDashboard.putNumber("LeftCalcualtedValue ", calculated_value);
@@ -177,7 +181,11 @@ public class TankDrivePath {
 		*/
 		SmartDashboard.putNumber("left encoder  ", getDistance(lTalon));
 		SmartDashboard.putNumber("Right encoder ", getDistance(rTalon));
-		SmartDashboard.putNumber(" vLeft", left.getSegment().velocity);
+		
+		  
+	
+		 
+		//SmartDashboard.putNumber(" vLeft", left.getSegment().velocity);
 		// setpint needs to be petween -1 and 1 need to confirm
 		// are we feeding pathfinder enoughpoints
 		// are th

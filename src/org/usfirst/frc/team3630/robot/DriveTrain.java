@@ -135,8 +135,8 @@ public double ahrsYaw() {
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
 		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
 		_talon.setSensorPhase(true);
-		//_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
-		//_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
+		_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
+		_talon.config_kP(0, 0, Consts.timeOutMs);
 		//_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
 		//_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
 	}
