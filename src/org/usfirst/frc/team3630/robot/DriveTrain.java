@@ -81,7 +81,7 @@ public class DriveTrain {
 		positionEncoderSource = new EncoderPIDSource(frontLeft, frontRight);
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
-		posController.setOutputRange(-1, 1);
+		posController.setOutputRange(-.75, .75);
 		posController.setAbsoluteTolerance(Consts.kToleranceDistance);
 		posController.disable();
 		
@@ -152,9 +152,9 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Stage", myCurrentCase);
 		SmartDashboard.putNumber("turn controller error", turnController.getError());
 		//posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
-		//leftSwitchLeft();
+		leftSwitchLeft();
 		//rightSwitchRight();
-		rightScaleRight();
+		//rightScaleRight();
 		//leftScaleLeft();
 		
 	}
@@ -162,12 +162,9 @@ public class DriveTrain {
 	public void leftSwitchLeft() {
 		if (myCurrentCase  == 1) {
 			if(init) {
-				right = false;
-				posController.setSetpoint(Consts.midOfSwitch);
-				posController.enable();
 				turnController.enable();
 				turnController.setSetpoint(0);
-				init = false;
+				autoDriveFw(Consts.midOfSwitch);
 			}
 		     if(Math.abs(posController.getError()) < 1) {
 		     		myCurrentCase = 2;
@@ -179,25 +176,17 @@ public class DriveTrain {
 		
 		if (myCurrentCase == 2) {
 			if(init) {
-				posController.disable();
-				turnController.enable();
-				turnDegree(90f);
-				init = false;
+				autoTurnDegree(90);
 			}
 			if(Math.abs(turnController.getError())<3) {
 				myCurrentCase = 3;
 	     		init = true;
 			}
-		    
-			
 			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
-			}
+		}
 		if (myCurrentCase == 3) {
 			if(init) {
-
-				posController.setSetpoint(Consts.afterTurnToSwitch + positionEncoderSource.pidGet());
-				posController.enable();
-				init = false;
+				autoDriveFw(Consts.afterTurnToSwitch);
 			}
 			if(Math.abs(posController.getError()) < 1) {
 				myCurrentCase = 4;
@@ -213,42 +202,30 @@ public class DriveTrain {
 	public void rightSwitchRight() {
 		if (myCurrentCase  == 1) {
 			if(init) {
-				right = true;
-				posController.setSetpoint(Consts.midOfSwitch);
-				posController.enable();
 				turnController.enable();
 				turnController.setSetpoint(0);
-				init = false;
+				autoDriveFw(Consts.midOfSwitch);
 			}
 		     if(Math.abs(posController.getError()) < 1) {
 		     		myCurrentCase = 2;
 		     		init = true;
-		     	}
-		     			
+		     	} 			
 		}
 		//posController.setSetpoint(SmartDashboard.getNumber("pos Setpoint", 48))
 		
 		if (myCurrentCase == 2) {
 			if(init) {
-				posController.disable();
-				turnController.enable();
-				turnDegree(-90f);
-				init = false;
+				autoTurnDegree(-90);
 			}
 			if(Math.abs(turnController.getError())<3) {
 				myCurrentCase = 3;
 	     		init = true;
 			}
-		    
-			
 			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
-			}
+		}
 		if (myCurrentCase == 3) {
 			if(init) {
-
-				posController.setSetpoint(Consts.afterTurnToSwitch + positionEncoderSource.pidGet());
-				posController.enable();
-				init = false;
+				autoDriveFw(Consts.afterTurnToSwitch);
 			}
 			if(Math.abs(posController.getError()) < 1) {
 				myCurrentCase = 4;
@@ -264,27 +241,20 @@ public class DriveTrain {
 	public void rightScaleRight() {
 		if (myCurrentCase  == 1) {
 			if(init) {
-				right = true;
-				posController.setSetpoint(Consts.midOfScale);
-				posController.enable();
 				turnController.enable();
 				turnController.setSetpoint(0);
-				init = false;
+				autoDriveFw(Consts.midOfScale);
 			}
 		     if(Math.abs(posController.getError()) < 1) {
 		     		myCurrentCase = 2;
 		     		init = true;
-		     	}
-		     			
+		     }		
 		}
 		//posController.setSetpoint(SmartDashboard.getNumber("pos Setpoint", 48))
 		
 		if (myCurrentCase == 2) {
 			if(init) {
-				posController.disable();
-				turnController.enable();
-				turnDegree(-90f);
-				init = false;
+				autoTurnDegree(-90);
 			}
 			if(Math.abs(turnController.getError())<3) {
 				myCurrentCase = 3;
@@ -296,10 +266,7 @@ public class DriveTrain {
 			}
 		if (myCurrentCase == 3) {
 			if(init) {
-
-				posController.setSetpoint(Consts.afterTurnToSwitch + positionEncoderSource.pidGet());
-				posController.enable();
-				init = false;
+				autoDriveFw(Consts.afterTurnToSwitch);
 			}
 			if(Math.abs(posController.getError()) < 1) {
 				myCurrentCase = 4;
@@ -316,42 +283,30 @@ public class DriveTrain {
 	public void leftScaleLeft() {
 		if (myCurrentCase  == 1) {
 			if(init) {
-				right = false;
-				posController.setSetpoint(Consts.midOfScale);
-				posController.enable();
 				turnController.enable();
 				turnController.setSetpoint(0);
-				init = false;
+				autoDriveFw(Consts.midOfScale);
 			}
 		     if(Math.abs(posController.getError()) < 1) {
 		     		myCurrentCase = 2;
 		     		init = true;
-		     	}
-		     			
+		     }  			
 		}
 		//posController.setSetpoint(SmartDashboard.getNumber("pos Setpoint", 48))
 		
 		if (myCurrentCase == 2) {
 			if(init) {
-				posController.disable();
-				turnController.enable();
-				turnDegree(90f);
-				init = false;
+				autoTurnDegree(90);
 			}
 			if(Math.abs(turnController.getError())<3) {
 				myCurrentCase = 3;
 	     		init = true;
 			}
-		    
-			
 			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
-			}
+		}
 		if (myCurrentCase == 3) {
 			if(init) {
-
-				posController.setSetpoint(Consts.afterTurnToSwitch + positionEncoderSource.pidGet());
-				posController.enable();
-				init = false;
+				autoDriveFw(Consts.afterTurnToSwitch);
 			}
 			if(Math.abs(posController.getError()) < 1) {
 				myCurrentCase = 4;
@@ -367,12 +322,9 @@ public class DriveTrain {
 	public void leftSwitchRight() {
 	if (myCurrentCase  == 1) {
 		if(init) {
-			posController.setSetpoint(Consts.autoA);//Need to change distance
-			posController.enable();
 			turnController.enable();
 			turnController.setSetpoint(0);
-			init = false;
-			right = false;
+			autoDriveFw(Consts.autoA);
 		}
 	     if(Math.abs(posController.getError()) < 1) {
 	     		myCurrentCase = 2;
@@ -383,10 +335,7 @@ public class DriveTrain {
 	
 	if (myCurrentCase == 2) {
 		if(init) {
-			posController.disable();
-			turnController.enable();
-			turnDegree(90f);
-			init = false;
+			autoTurnDegree(90);
 		}
 		if(Math.abs(turnController.getError())<3) {
 			myCurrentCase = 3;
@@ -398,11 +347,7 @@ public class DriveTrain {
 		}
 	if (myCurrentCase == 3) {
 		if(init) {
-
-			posController.setSetpoint(Consts.autoG + positionEncoderSource.pidGet());
-			posController.enable();
-			init = false;
-			right = true;
+			autoDriveFw(Consts.autoG)
 		}
 		if(Math.abs(posController.getError()) < 1) {
 			myCurrentCase = 4;
@@ -411,9 +356,7 @@ public class DriveTrain {
 	}
 	if (myCurrentCase == 4) {
 		if(init) {
-			posController.disable();
-			turnDegree(-90f);
-			init = false;
+			autoTurnDegree(-90);
 		}
 		if(Math.abs(turnController.getError())<3) {
 			myCurrentCase = 5;
@@ -422,9 +365,7 @@ public class DriveTrain {
 	}
 	if(myCurrentCase == 5) {
 		if(init) {
-			posController.setSetpoint(positionEncoderSource.pidGet() + Consts.autoD);
-			posController.enable();
-			init = false;
+			autoDriveFw(Consts.autoD);
 		}
 		if(Math.abs(posController.getError())<1) {
 			myCurrentCase = 6;
@@ -441,12 +382,9 @@ public class DriveTrain {
 	public void rightSwitchLeft() {
 	if (myCurrentCase  == 1) {
 		if(init) {
-			posController.setSetpoint(Consts.autoA);
-			posController.enable();
 			turnController.enable();
 			turnController.setSetpoint(0);
-			init = false;
-			right = true;
+			autoDriveFw(Consts.autoA);
 		}
 	     if(Math.abs(posController.getError()) < 1) {
 	     		myCurrentCase = 2;
@@ -457,10 +395,7 @@ public class DriveTrain {
 	
 	if (myCurrentCase == 2) {
 		if(init) {
-			posController.disable();
-			turnController.enable();
-			turnDegree(-90f);
-			init = false;
+			autoTurnDegree(-90);
 		}
 		if(Math.abs(turnController.getError())<3) {
 			myCurrentCase = 3;
@@ -472,11 +407,7 @@ public class DriveTrain {
 		}
 	if (myCurrentCase == 3) {
 		if(init) {
-
-			posController.setSetpoint(Consts.autoG + positionEncoderSource.pidGet());
-			posController.enable();
-			init = false;
-			right = false;
+			autoDriveFw(Consts.autoG);
 		}
 		if(Math.abs(posController.getError()) < 1) {
 			myCurrentCase = 4;
@@ -485,9 +416,7 @@ public class DriveTrain {
 	}
 	if (myCurrentCase == 4) {
 		if(init) {
-			posController.disable();
-			turnDegree(90f);
-			init = false;
+			autoTurnDegree(90);
 		}
 		if(Math.abs(turnController.getError())<3) {
 			myCurrentCase = 5;
@@ -496,9 +425,7 @@ public class DriveTrain {
 	}
 	if(myCurrentCase == 5) {
 		if(init) {
-			posController.setSetpoint(positionEncoderSource.pidGet() + Consts.autoD);
-			posController.enable();
-			init = false;
+			autoDriveFw(Consts.autoD);
 		}
 		if(Math.abs(posController.getError())<1) {
 			myCurrentCase = 6;
@@ -515,12 +442,9 @@ public class DriveTrain {
 	public void leftScaleRight() {
 		if (myCurrentCase  == 1) {
 			if(init) {
-				right = false;
-				posController.setSetpoint(Consts.autoA);
-				posController.enable();
 				turnController.enable();
 				turnController.setSetpoint(0);
-				init = false;
+				autoDriveFw(Consts.autoA);
 			}
 		     if(Math.abs(posController.getError()) < 1) {
 		     		myCurrentCase = 2;
@@ -529,9 +453,7 @@ public class DriveTrain {
 		}
 		if (myCurrentCase == 2) {
 			if(init) {
-				posController.disable();
-				turnDegree(90f);
-				init = false;
+				autoTurnDegree(90f);
 			}
 			if(Math.abs(turnController.getError())<3) {
 				myCurrentCase = 3;
@@ -543,11 +465,7 @@ public class DriveTrain {
 			}
 		if (myCurrentCase  == 3) {
 			if(init) {
-				right = false;
-				posController.setSetpoint(Consts.autoH + positionEncoderSource.pidGet());
-				turnController.enable();
-				turnController.setSetpoint(0);
-				init = true;
+				autoDriveFw(Consts.autoH);
 			}
 		     if(Math.abs(posController.getError()) < 1) {
 		     		myCurrentCase = 4;
@@ -556,9 +474,7 @@ public class DriveTrain {
 		}
 		if (myCurrentCase == 4) {
 			if(init) {
-				posController.disable();
-				turnDegree(-90f);
-				init = false;
+				 autoTurnDegree(-90);
 			}
 			if(Math.abs(turnController.getError())<3) {
 				myCurrentCase = 5;
@@ -568,11 +484,7 @@ public class DriveTrain {
 			}
 		if (myCurrentCase  == 5) {
 			if(init) {
-				right = false;
-				posController.setSetpoint(Consts.autoB + Consts.autoC + positionEncoderSource.pidGet());
-				turnController.enable();
-				turnController.setSetpoint(0);
-				init = true;
+				autoDriveFw(Consts.autoB + Consts.autoC);
 			}
 		     if(Math.abs(posController.getError()) < 1) {
 		     		myCurrentCase = 6;
@@ -581,9 +493,7 @@ public class DriveTrain {
 		}
 		if (myCurrentCase == 6) {
 			if(init) {
-				posController.disable();
-				turnDegree(-90f);
-				init = false;
+				autoTurnDegree(-90f);
 			}
 			if(Math.abs(turnController.getError())<3) {
 				myCurrentCase = 7;
@@ -593,10 +503,7 @@ public class DriveTrain {
 			}
 		if (myCurrentCase  == 7) {
 			if(init) {
-				posController.setSetpoint(Consts.autoF + positionEncoderSource.pidGet());
-				turnController.enable();
-				turnController.setSetpoint(0);
-				init = true;
+				autoDriveFw(Consts.autoF);
 			}
 		     if(Math.abs(posController.getError()) < 1) {
 		     		myCurrentCase = 8;
@@ -612,12 +519,9 @@ public class DriveTrain {
 	public void rightScaleLeft() {
 		if (myCurrentCase  == 1) {
 			if(init) {
-				right = false;
-				posController.setSetpoint(Consts.autoA);
-				posController.enable();
 				turnController.enable();
 				turnController.setSetpoint(0);
-				init = false;
+				autoDriveFw(Consts.autoA);
 			}
 		     if(Math.abs(posController.getError()) < 1) {
 		     		myCurrentCase = 2;
@@ -626,9 +530,7 @@ public class DriveTrain {
 		}
 		if (myCurrentCase == 2) {
 			if(init) {
-				posController.disable();
-				turnDegree(-90f);
-				init = false;
+				autoTurnDegree(-90f);
 			}
 			if(Math.abs(turnController.getError())<3) {
 				myCurrentCase = 3;
@@ -640,11 +542,7 @@ public class DriveTrain {
 			}
 		if (myCurrentCase  == 3) {
 			if(init) {
-				right = true;
-				posController.setSetpoint(Consts.autoH + positionEncoderSource.pidGet());
-				turnController.enable();
-				turnController.setSetpoint(0);
-				init = true;
+				autoDriveFw(Consts.autoH);
 			}
 		     if(Math.abs(posController.getError()) < 1) {
 		     		myCurrentCase = 4;
@@ -653,23 +551,17 @@ public class DriveTrain {
 		}
 		if (myCurrentCase == 4) {
 			if(init) {
-				posController.disable();
-				turnDegree(90f);
-				init = false;
+				autoTurnDegree(90f);
 			}
 			if(Math.abs(turnController.getError())<3) {
 				myCurrentCase = 5;
 	     		init = true;
 			}
 			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
-			}
+		}
 		if (myCurrentCase  == 5) {
 			if(init) {
-				right = true;
-				posController.setSetpoint(Consts.autoB + Consts.autoC + positionEncoderSource.pidGet());
-				turnController.enable();
-				turnController.setSetpoint(0);
-				init = true;
+				autoDriveFw(Consts.autoB + Consts.autoC);
 			}
 		     if(Math.abs(posController.getError()) < 1) {
 		     		myCurrentCase = 6;
@@ -678,9 +570,7 @@ public class DriveTrain {
 		}
 		if (myCurrentCase == 6) {
 			if(init) {
-				posController.disable();
-				turnDegree(90f);
-				init = false;
+				autoTurnDegree(90f);
 			}
 			if(Math.abs(turnController.getError())<3) {
 				myCurrentCase = 7;
@@ -690,10 +580,7 @@ public class DriveTrain {
 			}
 		if (myCurrentCase  == 7) {
 			if(init) {
-				posController.setSetpoint(Consts.autoF + positionEncoderSource.pidGet());
-				turnController.enable();
-				turnController.setSetpoint(0);
-				init = true;
+				autoDriveFw(Consts.autoF);
 			}
 		     if(Math.abs(posController.getError()) < 1) {
 		     		myCurrentCase = 8;
@@ -704,6 +591,46 @@ public class DriveTrain {
 			turnController.disable();
 			posController.disable();
 		}
+	}
+
+	public void middleSwitchLeft() {
+		if (myCurrentCase == 1) {
+			if(init) {
+				turnController.enable();
+				turnController.setSetpoint(0);
+				autoDriveFw(Consts.autoA);
+			}
+			if(Math.abs(posController.getError()) < 1) {
+					myCurrentCase = 2;
+					init = true;
+				}			
+		}
+		if(myCurrentCase == 2) {
+			if(init) {
+				autoTurnDegree(-90);
+			}
+			if
+		}
+			
+		
+						
+	}
+	
+	public void autoDriveFw(double inches) {
+		posController.setSetpoint(inches + positionEncoderSource.pidGet());
+		posController.enable();
+		init = false;
+		}
+	public void autoTurnDegree(int degree) {
+		if (degree>0) {
+			right = false;
+		}
+		else {
+			right = true;
+		}
+		posController.disable();
+		turnDegree(degree + turnController.get());
+		init = false;
 	}
 	
 	public void putData() {
