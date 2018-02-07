@@ -38,7 +38,7 @@ public class TankDrivePath {
 	Trajectory rightTrajectory;
 	private TalonSRX lTalon;
 	private TalonSRX rTalon;
-	EncoderFollower left, right;
+	public EncoderFollower left, right;
 	DistanceFollower leftDiagnostics, rightDiagnostics;
 
 	public TankDrivePath(TalonSRX leftSRXSide, TalonSRX rightSRXSide) {
@@ -65,7 +65,7 @@ public class TankDrivePath {
 		
 		//Settings for trajectory config
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,
-				Trajectory.Config.SAMPLES_HIGH, 0.05, 3.3528, 2.54, 2.54);
+				Trajectory.Config.SAMPLES_HIGH, 0.05, 3.3528, .5, .5);
 
 		//Generates points for the path.
 		Waypoint[] points = new Waypoint[] {
@@ -87,6 +87,7 @@ public class TankDrivePath {
 		lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
 
 		left = new EncoderFollower(leftTrajectory);
+		
 		right = new EncoderFollower(rightTrajectory);
 		
 		leftDiagnostics = new DistanceFollower (leftTrajectory);
@@ -134,8 +135,8 @@ public class TankDrivePath {
 		// mabey reset kp
 		  // could we be under dampond 
 		  
-		left.configurePIDVA(1, 0.0, 0.0, (1/3.3528) , 0);
-	right.configurePIDVA(1, 0.0, 0.0, (1/3.3528), 0);
+		left.configurePIDVA(.8, 0.0, 0.0, (1/3.3528) , 0);
+	right.configurePIDVA(.8, 0.0, 0.0, (1/3.3528), 0);
 		
 		System.out.print("Wheel circumfrence: ");
 	}

@@ -161,6 +161,8 @@ public double ahrsYaw() {
 		backRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		backLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		// need to put in robot init for speed 
+		path.left.reset();
+		path.right.reset();
 	}
 	
 		public void testPeriodic() {
