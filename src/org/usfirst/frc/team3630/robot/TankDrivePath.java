@@ -65,20 +65,20 @@ public class TankDrivePath {
 		
 		//Settings for trajectory config
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,
-				Trajectory.Config.SAMPLES_HIGH, 0.05, 45, 100, 100);
+				Trajectory.Config.SAMPLES_HIGH, 0.05, 3.3528, 2.54, 2.54);
 
 		//Generates points for the path.
 		Waypoint[] points = new Waypoint[] {
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
-				new Waypoint(168, 0, 0) //14 feet forward
+				new Waypoint(4.2672, 0, 0) //14 feet forward should clock in 8,000 clicks way undeer 
 		};
 
 		Trajectory trajectory = Pathfinder.generate(points, config);
 
-		_modifier = new TankModifier(trajectory).modify(Consts.robotWidth);
+		_modifier = new TankModifier(trajectory).modify(Consts.robotWidthMeters);
 
-		// Do something with the new Trajectories...
+
 		leftTrajectory = _modifier.getLeftTrajectory();
 		rightTrajectory = _modifier.getRightTrajectory();
 		System.out.println("trajectories generated");
@@ -90,16 +90,16 @@ public class TankDrivePath {
 		right = new EncoderFollower(rightTrajectory);
 		
 		leftDiagnostics = new DistanceFollower (leftTrajectory);
-		// set encoder infomartion
+		
 		// peramiters enc starting point, total amount ticks, wheel diamitor
-		left.configureEncoder(0, Consts.ticksPerRotation, 6);
-		right.configureEncoder(0, Consts.ticksPerRotation, 6);
+		left.configureEncoder(0, Consts.ticksPerRotation, 0.1524);
+		right.configureEncoder(0, Consts.ticksPerRotation, 0.1524);
 		// outputs data from path put to csv
 		// lets produce trajectory graphs. to check conttants are correct ?
 		// pos and velocity per time
 		// acceloration per time
 		// any other graphs?
-	/*
+	// generate path
 		 //OUTPUTS PATH
 		  for (int i = 0; i<leftTrajectory.length(); i++){
 		 
@@ -114,7 +114,6 @@ public class TankDrivePath {
 			  System.out.print("\n");
 		  
 		  }
-	*/
 		
 		// set encoders
 
@@ -130,13 +129,13 @@ public class TankDrivePath {
 		// The fifth argument is your acceleration gain. Tweak this if you want to get
 		// to a higher or lower speed quicker
 
-		// is kf term correct at 1/135? i don't know??
+	
 
 		// mabey reset kp
 		  // could we be under dampond 
 		  
-		left.configurePIDVA(0.0, 0.0, 0.0, (1) , 0);
-		right.configurePIDVA(0.0, 0.0, 0.0, (1), 0);
+		left.configurePIDVA(1, 0.0, 0.0, (1/3.3528) , 0);
+	right.configurePIDVA(1, 0.0, 0.0, (1/3.3528), 0);
 		
 		System.out.print("Wheel circumfrence: ");
 	}
@@ -149,14 +148,14 @@ public class TankDrivePath {
 		int distance_ticks = _talon.getSelectedSensorPosition(0);
 		return distance_ticks;
 	}
-
+/*
 	public double getVelocity_talonSpeed(double inPerSec) {
-		double rads = inPerSec * Consts.rotConversion;
-		double ticks = rads * 1000;
-		double ms = (ticks / 1000) * 100;
-		return ms;
+	//	double rads = inPerSec * Consts.rotConversionMeters;
+		//double ticks = rads * 1000;
+		//double ms = (ticks / 1000) * 100;
+		//return ms;
 	}
-
+*/
 
 	/**
 	 * Iterative method that runs through path. Expected that this is called each 50ms (as expected through TimedRobot) 
@@ -170,7 +169,7 @@ public class TankDrivePath {
 
 		double outputLeft = left.calculate(getDistance_ticks(lTalon));
 		double outputRight = right.calculate(getDistance_ticks(rTalon));
-		System.out.println("calculate called.");
+		System.out.println(outputLeft);
 /*
 		System.out.println(outputLeft) ;
 
@@ -183,10 +182,10 @@ public class TankDrivePath {
 		double leftVelocity = (1 / 135) * left.getSegment().velocity;
 		double leftAcceloratin= left.getSegment().acceleration; 
 		*/
-		//System.out.println(leftError);
+		System.out.println(outputLeft);
 		
 		//double calculated_value = pPart + leftVelocity;
-
+/*
 		SmartDashboard.putNumber("left output ", outputLeft);
 		SmartDashboard.putNumber("right output ", outputRight);
 		SmartDashboard.putBoolean("finished?", left.isFinished());
@@ -202,14 +201,16 @@ public class TankDrivePath {
 		SmartDashboard.putNumber("Right encoder distance", getDistance_ticks(rTalon));
 		
 		  
-	
+	/*
+	 * 
+	 */
 		 
 		//SmartDashboard.putNumber(" vLeft", left.getSegment().velocity);
 		// setpint needs to be petween -1 and 1 need to confirm
 		// are we feeding pathfinder enoughpoints
 		// are th
-		lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputLeft/135);
-		rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputRight/135);
+		lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputLeft);
+		rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputRight);
 
 	}
 }

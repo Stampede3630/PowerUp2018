@@ -29,7 +29,7 @@ public class Consts {
     public static final double kToleranceDegrees = .5f;    
 	
     //Drivetrain measurements
-    public static final double robotWidth = 30;
+    public static final double robotWidthMeters = 0.762;
 	//Wheel Measurements
 	public static final int ticksPerRotation = 1000;
 	public static final int millisecondsPerSecond = 1000;
