@@ -28,7 +28,7 @@ public class Consts {
 
     public static final double kToleranceDegrees = .5f;    
 	
-    //Drivetrain measurements
+    //pathfinder units all needs to be in meeters
     public static final double robotWidthMeters = 0.762;
 	//Wheel Measurements
 	public static final int ticksPerRotation = 1000;
