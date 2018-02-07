@@ -39,7 +39,6 @@ public class DriveTrain  {
 
 	public DriveTrain()  {
 		//calibrate navx !!!!!
-		path = new TankDrivePath(frontLeft,frontRight);
 
 		 ahrs = new AHRS(SPI.Port.kMXP); 
 		 ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
@@ -49,6 +48,9 @@ public class DriveTrain  {
 		backLeft = new WPI_TalonSRX(Consts.backLeftTalon);
 		frontRight = new WPI_TalonSRX(Consts.frontRightTalon);
 		backRight = new WPI_TalonSRX(Consts.backRightTalon);
+		
+		path = new TankDrivePath(frontLeft,frontRight);
+
 		//////////////////////////
 	
 	//leftSpeedController = new SpeedControllerGroup (frontLeft, new SpeedController[] {backLeft});
