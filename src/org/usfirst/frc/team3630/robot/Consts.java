@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3630.robot;
 
+
 public class Consts {
 	
 	// naming file convention can't reemeb
@@ -27,6 +28,8 @@ public class Consts {
 
     public static final double kToleranceDegrees = .5f;    
 	
+    //Drivetrain measurements
+    public static final double robotWidth = 30;
 	//Wheel Measurements
 	public static final int ticksPerRotation = 1000;
 	public static final int millisecondsPerSecond = 1000;

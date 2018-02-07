@@ -1,12 +1,14 @@
 package org.usfirst.frc.team3630.robot;
 
+
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.followers.EncoderFollower;
+import jaci.pathfinder.followers.DistanceFollower;
 import jaci.pathfinder.modifiers.TankModifier;
 import com.ctre.phoenix.*;
-import edu.wpi.first.wpilibj.smartdashboard.*;;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 // debug checklist: 
@@ -29,14 +31,21 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class TankDrivePath {
 	// Trajectory right,left;\
-	TankModifier modifier;
-	Trajectory leftT;
+	TankModifier _modifier;
+	Trajectory leftTrajectory;
+	Trajectory rightTrajectory;
 	private TalonSRX lTalon;
 	private TalonSRX rTalon;
 	EncoderFollower left, right;
+	DistanceFollower leftDiagnostics, rightDiagnostics;
 
 	public TankDrivePath(TalonSRX leftSRXSide, TalonSRX rightSRXSide) {
 
+
+		lTalon = leftSRXSide;
+		rTalon = rightSRXSide;
+		
+		
 		// Create the Trajectory Configuration
 		//
 		// Arguments:
@@ -45,41 +54,40 @@ public class TankDrivePath {
 		// SAMPLES_LOW (10 000)
 		// SAMPLES_FAST (1 000)
 		// Time Step: 0.05 Seconds
-		// Max Velocity: 1.7 m/s
-		// Max Acceleration: 2.0 m/s/s
-		// Max Jerk: 60.0 m/s/s/s
+		// Max Velocity: 45 in/sec
+		// Max Acceleration: 100 in/s/s
+		// Max Jerk: 100 in/s/s/s
 
 		// comsts ok???
 		// should we modlify time step
+		
+		//Settings for trajectory config
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,
 				Trajectory.Config.SAMPLES_HIGH, 0.05, 45, 100, 100);
 
+		//Generates points for the path.
 		Waypoint[] points = new Waypoint[] {
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
-				new Waypoint(0, 0, 0), // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
-				// connts under setpoint acoring to math. why dose pathfinder stop??
-
-				new Waypoint(168, 0, 0)
-
+				new Waypoint(0, 0, 0),
+				new Waypoint(168, 0, 0) //14 feet forward
 		};
 
 		Trajectory trajectory = Pathfinder.generate(points, config);
 
-		// Wheelbase Width = in acurate ?
-		modifier = new TankModifier(trajectory).modify(14);
+		_modifier = new TankModifier(trajectory).modify(Consts.robotWidth);
 
 		// Do something with the new Trajectories...
-		leftT = modifier.getLeftTrajectory();
-		Trajectory rightT = modifier.getRightTrajectory();
+		leftTrajectory = _modifier.getLeftTrajectory();
+		rightTrajectory = _modifier.getRightTrajectory();
 
-		lTalon = leftSRXSide;
-		rTalon = rightSRXSide;
 
 		rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
 		lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
 
-		left = new EncoderFollower(leftT);
-		right = new EncoderFollower(rightT);
+		left = new EncoderFollower(leftTrajectory);
+		right = new EncoderFollower(rightTrajectory);
+		
+		leftDiagnostics = new DistanceFollower (leftTrajectory);
 		// set encoder infomartion
 		// peramiters enc starting point, total amount ticks, wheel diamitor
 		left.configureEncoder(0, Consts.ticksPerRotation, 6);
@@ -89,24 +97,23 @@ public class TankDrivePath {
 		// pos and velocity per time
 		// acceloration per time
 		// any other graphs?
-		
-		  for (int i = 0; i<leftT.length(); i++){
+	/*
+		 //OUTPUTS PATH
+		  for (int i = 0; i<leftTrajectory.length(); i++){
 		 
-		  System.out.print(leftT.get(i).acceleration); System.out.print(",");
-		  System.out.print(leftT.get(i).dt); System.out.print(",");
-		  System.out.print(leftT.get(i).heading); System.out.print(",");
-		  System.out.print(leftT.get(i).jerk); System.out.print(",");
-		  System.out.print(leftT.get(i).position); System.out.print(",");
-		  System.out.print(leftT.get(i).velocity); System.out.print(",");
-		  System.out.print(leftT.get(i).x); System.out.print(",");
-		  System.out.print(leftT.get(i).y);
-		  
-		  System.out.print("\n");
-		  
+			  System.out.print(leftTrajectory.get(i).acceleration); System.out.print(",");
+			  System.out.print(leftTrajectory.get(i).dt); System.out.print(",");
+			  System.out.print(leftTrajectory.get(i).heading); System.out.print(",");
+			  System.out.print(leftTrajectory.get(i).jerk); System.out.print(",");
+			  System.out.print(leftTrajectory.get(i).position); System.out.print(",");
+			  System.out.print(leftTrajectory.get(i).velocity); System.out.print(",");
+			  System.out.print(leftTrajectory.get(i).x); System.out.print(",");
+			  System.out.print(leftTrajectory.get(i).y);
+			  System.out.print("\n");
 		  
 		  }
-		 
-
+	*/
+		
 		// set encoders
 
 		// configure pidva
@@ -128,23 +135,30 @@ public class TankDrivePath {
 		  
 		left.configurePIDVA(0.0, 0.0, 0.0, 1 / 135, 0);
 		right.configurePIDVA(0.0, 0.0, 0.0, (1 / 135), 0);
+		
+		System.out.print("Wheel circumfrence: ");
 	}
 
-	public int getDistance(TalonSRX _talon) {
-
+	/**
+	 * @param _talon talon for requested encoder distance
+	 * @return encoder distance in ticks
+	 */
+	public int getDistance_ticks(TalonSRX _talon) {
 		int distance_ticks = _talon.getSelectedSensorPosition(0);
-
 		return distance_ticks;
 	}
 
-	public double reConvert(double output) {
-
-		double rads = output * Consts.rotConversion;
+	public double getVelocity_talonSpeed(double inPerSec) {
+		double rads = inPerSec * Consts.rotConversion;
 		double ticks = rads * 1000;
 		double ms = (ticks / 1000) * 100;
 		return ms;
 	}
 
+
+	/**
+	 * Iterative method that runs through path. Expected that this is called each 50ms (as expected through TimedRobot) 
+	 */
 	public void pathFeedback() {
 
 		// get desired output . calucate coverts ticks to inches based on input
@@ -152,8 +166,8 @@ public class TankDrivePath {
 		// output should be between -1 and 1 correct? should check output and print it
 		// out
 
-		double outputLeft = left.calculate(getDistance(lTalon));
-		double outputRight = right.calculate(getDistance(rTalon));
+		double outputLeft = left.calculate(getDistance_ticks(lTalon));
+		double outputRight = right.calculate(getDistance_ticks(rTalon));
 /*
 		System.out.println(outputLeft) ;
 
@@ -179,8 +193,8 @@ public class TankDrivePath {
 		SmartDashboard.putNumber("Left encoder setpoiny  ", distance_coveredLeft);
 		SmartDashboard.putNumber("LeftVelocitysetpoint ", leftVelocity);
 		*/
-		SmartDashboard.putNumber("left encoder  ", getDistance(lTalon));
-		SmartDashboard.putNumber("Right encoder ", getDistance(rTalon));
+		SmartDashboard.putNumber("left encoder distance", getDistance_ticks(lTalon));
+		SmartDashboard.putNumber("Right encoder distance", getDistance_ticks(rTalon));
 		
 		  
 	
