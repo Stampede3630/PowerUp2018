@@ -2,6 +2,7 @@ package org.usfirst.frc.team3630.robot;
 
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -26,21 +27,20 @@ public class Robot extends TimedRobot {
 		_driveTrain.driveTrainPeriodic();
 		
 	}
-	@Override
+
+
 	public void testInit() {
 		_driveTrain.testInit() ;
+		LiveWindow.disableAllTelemetry();
 		
 	
 	
 	}
-	
-
-		
-
-	
 
 	public void testPeriodic() {
 		_driveTrain.testPeriodic();
+		LiveWindow.disableAllTelemetry();
+
 	}
 	
 

@@ -132,15 +132,15 @@ public double ahrsYaw() {
 	}
 	private void configureTalon(TalonSRX _talon) {
 	
-		_talon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
+		_talon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,Consts.timeOutMs);
 		_talon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, 0);
 		_talon.configNominalOutputForward(0, Consts.timeOutMs);
 		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
 		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
 		_talon.setSensorPhase(true);
-		_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
-		_talon.config_kP(0, 0, Consts.timeOutMs);
+		//_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
+		//_talon.config_kP(0, 0, Consts.timeOutMs);
 		//_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
 		//_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
 	}

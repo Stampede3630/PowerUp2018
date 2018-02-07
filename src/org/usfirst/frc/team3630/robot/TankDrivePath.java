@@ -81,10 +81,10 @@ public class TankDrivePath {
 		// Do something with the new Trajectories...
 		leftTrajectory = _modifier.getLeftTrajectory();
 		rightTrajectory = _modifier.getRightTrajectory();
+		System.out.println("trajectories generated");
 
-
-		rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
-		lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
+		rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
+		lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
 
 		left = new EncoderFollower(leftTrajectory);
 		right = new EncoderFollower(rightTrajectory);
@@ -135,8 +135,8 @@ public class TankDrivePath {
 		// mabey reset kp
 		  // could we be under dampond 
 		  
-		left.configurePIDVA(0.0, 0.0, 0.0, 1 / 135, 0);
-		right.configurePIDVA(0.0, 0.0, 0.0, (1 / 135), 0);
+		left.configurePIDVA(0.0, 0.0, 0.0, (1) , 0);
+		right.configurePIDVA(0.0, 0.0, 0.0, (1), 0);
 		
 		System.out.print("Wheel circumfrence: ");
 	}
@@ -170,6 +170,7 @@ public class TankDrivePath {
 
 		double outputLeft = left.calculate(getDistance_ticks(lTalon));
 		double outputRight = right.calculate(getDistance_ticks(rTalon));
+		System.out.println("calculate called.");
 /*
 		System.out.println(outputLeft) ;
 
@@ -207,8 +208,8 @@ public class TankDrivePath {
 		// setpint needs to be petween -1 and 1 need to confirm
 		// are we feeding pathfinder enoughpoints
 		// are th
-		lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputLeft);
-		rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputRight);
+		lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputLeft/135);
+		rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputRight/135);
 
 	}
 }
