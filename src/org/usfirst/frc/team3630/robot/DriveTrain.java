@@ -39,7 +39,8 @@ public class DriveTrain  {
 
 	public DriveTrain()  {
 		//calibrate navx !!!!!
-	
+		path = new TankDrivePath(frontLeft,frontRight);
+
 		 ahrs = new AHRS(SPI.Port.kMXP); 
 		 ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 		_xBox = new XboxController(Consts.xBoxComPort);
@@ -56,7 +57,7 @@ public class DriveTrain  {
 		//driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
 
 		
-		   turnController = new PIDController(Consts.kPA, Consts.kIA, Consts.kID,  ahrs, new MyPidOutput());
+		   turnController = new PIDController(Consts.kPA, Consts.kIA, Consts.kID,  ahrs, new NavXPIDOutput());
 	       // setting range and disable it 
 		   turnController.setInputRange(-180.0f,  180.0f);
 	        turnController.setOutputRange(-1.0, 1.0);
@@ -143,14 +144,8 @@ public double ahrsYaw() {
 	}
 
 
-	public void testDriveTrainPeriodic() {
-	
-	
-		driveTrain.arcadeDrive(.6, correctionAngle);
-	}
-	
 	public void putData() {
-		SmartDashboard.putNumber("corectionAnnge", correctionAngle);
+		SmartDashboard.putNumber("correctionAngle", correctionAngle);
 		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());
 
 	}
@@ -164,7 +159,6 @@ public double ahrsYaw() {
 		backRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		backLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		// need to put in robot init for speed 
-		path = new TankDrivePath(frontLeft,frontRight);
 	}
 	
 		public void testPeriodic() {
@@ -176,9 +170,10 @@ public double ahrsYaw() {
 	
 			//backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
 			//SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
-			backLeft.follow(frontLeft);
-			backRight.follow(frontRight);
-			path.pathFeedback();
+			backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontLeft.getDeviceID());
+			backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontRight.getDeviceID());
+
+			path.autoPeriodic();
 		}
 	
 		public double getRotations(TalonSRX _talon) {
@@ -196,18 +191,11 @@ public double ahrsYaw() {
 		}
 
 		
-		public  class MyPidOutput implements PIDOutput {
-			
+		public  class NavXPIDOutput implements PIDOutput {
 			// implements pid output
-					
-
-				
 					public void pidWrite(double output) {
 						correctionAngle=output;
-						
-						
 					}
-					
 				}
 
 }

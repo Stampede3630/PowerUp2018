@@ -8,6 +8,8 @@ import jaci.pathfinder.followers.EncoderFollower;
 import jaci.pathfinder.followers.DistanceFollower;
 import jaci.pathfinder.modifiers.TankModifier;
 import com.ctre.phoenix.*;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -159,7 +161,7 @@ public class TankDrivePath {
 	/**
 	 * Iterative method that runs through path. Expected that this is called each 50ms (as expected through TimedRobot) 
 	 */
-	public void pathFeedback() {
+	public void autoPeriodic() {
 
 		// get desired output . calucate coverts ticks to inches based on input
 
@@ -184,8 +186,10 @@ public class TankDrivePath {
 		
 		//double calculated_value = pPart + leftVelocity;
 
-		SmartDashboard.putNumber("pathtLeft ", outputLeft);
-		SmartDashboard.putNumber("PathRight ", outputRight);
+		SmartDashboard.putNumber("left output ", outputLeft);
+		SmartDashboard.putNumber("right output ", outputRight);
+		SmartDashboard.putBoolean("finished?", left.isFinished());
+		SmartDashboard.putNumber("time", Timer.getMatchTime());
 /*
 		SmartDashboard.putNumber("leftError ", leftError);
 		SmartDashboard.putNumber("pPartLeft ", pPart);

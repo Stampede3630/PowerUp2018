@@ -34,39 +34,7 @@ public class Robot extends TimedRobot {
 	
 	}
 	
-	public void DriveAngle() {
-		
-		// rest navx
-		_driveTrain.autoInit();
-		
-		SmartDashboard.putNumber("timer", autoTime.get());
-		_driveTrain.putData();
-	
-		
-		if (	autoTime.get()< 6) {
-			
-			// go straight
-			_driveTrain.testDriveTrainPeriodic();
-	}
 
-		else if (autoTime.get()<15 ) {
-			// turn 90 degrees 
-			_driveTrain.turnDegree(90f);
-			
-			_driveTrain.testDriveTrainPeriodic();
-			
-		}
-		
-	
-		
-		else {
-			
-			// stop 
-			_driveTrain.stop();
-			
-		}
-			
-		}
 		
 
 	
