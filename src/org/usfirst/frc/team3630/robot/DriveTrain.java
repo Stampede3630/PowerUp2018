@@ -39,7 +39,6 @@ public class DriveTrain  {
 
 	public DriveTrain()  {
 		//calibrate navx !!!!!
-		path = new TankDrivePath(frontLeft,frontRight);
 
 		 ahrs = new AHRS(SPI.Port.kMXP); 
 		 ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
@@ -49,6 +48,9 @@ public class DriveTrain  {
 		backLeft = new WPI_TalonSRX(Consts.backLeftTalon);
 		frontRight = new WPI_TalonSRX(Consts.frontRightTalon);
 		backRight = new WPI_TalonSRX(Consts.backRightTalon);
+		
+		path = new TankDrivePath(frontLeft,frontRight);
+
 		//////////////////////////
 	
 	//leftSpeedController = new SpeedControllerGroup (frontLeft, new SpeedController[] {backLeft});
@@ -130,15 +132,15 @@ public double ahrsYaw() {
 	}
 	private void configureTalon(TalonSRX _talon) {
 	
-		_talon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,10);
+		_talon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0,Consts.timeOutMs);
 		_talon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, 0);
 		_talon.configNominalOutputForward(0, Consts.timeOutMs);
 		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
 		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
 		_talon.setSensorPhase(true);
-		_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
-		_talon.config_kP(0, 0, Consts.timeOutMs);
+		//_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
+		//_talon.config_kP(0, 0, Consts.timeOutMs);
 		//_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
 		//_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
 	}
@@ -159,6 +161,8 @@ public double ahrsYaw() {
 		backRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		backLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		// need to put in robot init for speed 
+		path.left.reset();
+		path.right.reset();
 	}
 	
 		public void testPeriodic() {
