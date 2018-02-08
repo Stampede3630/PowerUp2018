@@ -11,11 +11,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
+	SendableChooser autoChooser;
 	DriveTrain _driveTrain;
 	//Timer  autoTime; 
 	
 	public void robotInit() {
 	_driveTrain = new DriveTrain();
+		autochooser = new SendableChooser();
+		autochoose.addDefault("left")
 	//autoTime = new Timer();
 	}
 	
