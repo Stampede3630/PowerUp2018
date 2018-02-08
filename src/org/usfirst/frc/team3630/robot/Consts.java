@@ -43,10 +43,6 @@ public class Consts {
 	public static final double kIPos = 0;
 	public static final double kDPos = 0;
 	// Auto Distances
-	public static final double midOfSwitch = 168;
-	public static final double afterTurnToSwitch = 24;
-	public static final double midOfScale = 324;
-	public static final double afterTurnToScale = 13.68;
 	public static final double autoA = 67;
 	public static final double autoB = 101;
 	public static final double autoC = 156;
