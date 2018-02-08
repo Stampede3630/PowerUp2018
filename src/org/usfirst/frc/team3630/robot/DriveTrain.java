@@ -114,7 +114,7 @@ public class DriveTrain  {
 		double heading = _xBox.getX(GenericHID.Hand.kRight);
 
 	
-	//	driveTrain.arcadeDrive( speed, heading);
+		driveTrain.arcadeDrive( speed, heading);
 	
 		//SmartDashboard.putNumber("Setpoint", 1000);
 		

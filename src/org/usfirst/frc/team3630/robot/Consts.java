@@ -30,7 +30,7 @@ public class Consts {
 	
     //pathfinder units all needs to be in meeters
     public static final double degtoRad = ( 3.14 /180.0);
-    public static final double robotWidthMeters = 0.762;
+    public static final double robotWidthMeters = 0.7493;
 	//Wheel Measurements
 	public static final int ticksPerRotation = 1000;
 	public static final int millisecondsPerSecond = 1000;
@@ -41,6 +41,8 @@ public class Consts {
 	public static final double kPencoder = 1.7;
 	public static final double kIencoder = 0.0;
 	public static final double kDencoder = 0.0;
+	
+	public static final double turnKp = -.01;
 
 	
 	

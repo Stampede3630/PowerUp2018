@@ -29,7 +29,7 @@ public class TankDrivePath  {
 	
 	public TankDrivePath(TalonSRX leftSRXSide, TalonSRX rightSRXSide) {
 		 ahrs = new AHRS(SPI.Port.kMXP); 
-	
+		 ahrs.reset();
 		lTalon = leftSRXSide;
 		rTalon = rightSRXSide;
 		
@@ -47,14 +47,14 @@ public class TankDrivePath  {
 
 		
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,
-				Trajectory.Config.SAMPLES_HIGH, 0.05, 3.3528, .5, .5);
+				Trajectory.Config.SAMPLES_HIGH, 0.05, 3.3528, .5, .3);
 
 		//Generates points for the path.
 		Waypoint[] points = new Waypoint[] {
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
-				new Waypoint(4.2672, 0, Consts.degtoRad* (-90) ) //14 feet forward should clock in 8,000 clicks way undeer 
-				//new Waypoint(0,0,)
+				new Waypoint(2, 1, Pathfinder.d2r(-45.0)), //14 feet forward should clock in 8,000 clicks way undeer 
+		//	new Waypoint(1.0 ,3  ,Pathfinder.d2r(-90.0))
 				//new Waypoint(4.2672, 0, (-90 * Consts.degtoRad))
 		};
 
@@ -148,20 +148,21 @@ public class TankDrivePath  {
 		SmartDashboard.putNumber("left encoder distance", getDistance_ticks(lTalon));
 		SmartDashboard.putNumber("Right encoder distance", getDistance_ticks(rTalon));
 		
-		  
-		
 
 		double gyro_heading =  ahrs.getYaw();  // Assuming the gyro is giving a value in degrees
-		//double desired_heading = (180/Math.PI)*(left.getHeading());  // Should also be in degrees
 
-	//	double angleDifference = (desired_heading - gyro_heading);
-	//	double turn = 0.8 * (-1.0/80.0) * angleDifference;
+		SmartDashboard.putNumber("robot yaw", gyro_heading);
+		
+		double desired_heading = (180/Math.PI)*(left.getHeading());  // Should also be in degrees
 
-		//double setLeftMotors= outputLeft ;
-	//double setRightMotors = outputRight  ;
+		double angleDifference = (desired_heading - gyro_heading);
+		double turn = 0.8 * (-1.0/80.0) * angleDifference;// dont understand 
+
+		double setLeftMotors= outputLeft+turn ;
+	double setRightMotors = outputRight - turn ;
 		 
 		
-	//	SmartDashboard.putNumber(" vLeft", setLeftMotors);
+		SmartDashboard.putNumber(" vLeft", );
 		
 		lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputLeft);
 		rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputRight);
