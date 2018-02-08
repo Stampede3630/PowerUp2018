@@ -16,8 +16,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 
-public class TankDrivePath {
-	// Trajectory right,left;\
+public class TankDrivePath  {
+	// Trajectory right,left
+	public AHRS ahrs;
 	TankModifier _modifier;
 	Trajectory leftTrajectory;
 	Trajectory rightTrajectory;
@@ -25,10 +26,10 @@ public class TankDrivePath {
 	private TalonSRX rTalon;
 	public EncoderFollower left, right;
 	DistanceFollower leftDiagnostics, rightDiagnostics;
-	AHRS ahrs; 
+	
 	public TankDrivePath(TalonSRX leftSRXSide, TalonSRX rightSRXSide) {
-		ahrs = new AHRS(SPI.Port.kMXP); 
-
+		 ahrs = new AHRS(SPI.Port.kMXP); 
+	
 		lTalon = leftSRXSide;
 		rTalon = rightSRXSide;
 		
@@ -52,7 +53,9 @@ public class TankDrivePath {
 		Waypoint[] points = new Waypoint[] {
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
-				new Waypoint(4.2672, 0, 0) //14 feet forward should clock in 8,000 clicks way undeer 
+				new Waypoint(4.2672, 0, Consts.degtoRad* (-90) ) //14 feet forward should clock in 8,000 clicks way undeer 
+				//new Waypoint(0,0,)
+				//new Waypoint(4.2672, 0, (-90 * Consts.degtoRad))
 		};
 
 		Trajectory trajectory = Pathfinder.generate(points, config);
@@ -140,7 +143,7 @@ public class TankDrivePath {
 
 		System.out.println(outputLeft);
 		
-		//double calculated_value = pPart + leftVelocity;
+		
 
 		SmartDashboard.putNumber("left encoder distance", getDistance_ticks(lTalon));
 		SmartDashboard.putNumber("Right encoder distance", getDistance_ticks(rTalon));
@@ -148,17 +151,17 @@ public class TankDrivePath {
 		  
 		
 
-		double gyro_heading =   ahrs.getYaw();  // Assuming the gyro is giving a value in degrees
-		double desired_heading = Pathfinder.r2d(left.getHeading());  // Should also be in degrees
+		double gyro_heading =  ahrs.getYaw();  // Assuming the gyro is giving a value in degrees
+		//double desired_heading = (180/Math.PI)*(left.getHeading());  // Should also be in degrees
 
-		double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
-		double turn = 0.8 * (-1.0/80.0) * angleDifference;
+	//	double angleDifference = (desired_heading - gyro_heading);
+	//	double turn = 0.8 * (-1.0/80.0) * angleDifference;
 
-		double setLeftMotors= (outputLeft + turn);
-		double setRightMotors = outputRight - turn ;
+		//double setLeftMotors= outputLeft ;
+	//double setRightMotors = outputRight  ;
 		 
 		
-		SmartDashboard.putNumber(" vLeft", setLeftMotors);
+	//	SmartDashboard.putNumber(" vLeft", setLeftMotors);
 		
 		lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputLeft);
 		rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputRight);

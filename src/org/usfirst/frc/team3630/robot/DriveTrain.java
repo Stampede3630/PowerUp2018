@@ -8,13 +8,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import com.kauailabs.navx.frc.AHRS;
+
 
 public class DriveTrain  {
 	
 	
 	private XboxController _xBox;
-	AHRS ahrs;
+	
 	// corection angle for PID Source 
 	public double correctionAngle = 0;
 
@@ -40,8 +40,9 @@ public class DriveTrain  {
 	public DriveTrain()  {
 		//calibrate navx !!!!!
 
-		 ahrs = new AHRS(SPI.Port.kMXP); 
-		 ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
+		
+		 
+		
 		_xBox = new XboxController(Consts.xBoxComPort);
 		// srx defin
 		frontLeft = new WPI_TalonSRX(Consts.frontLeftTalon);
@@ -59,14 +60,7 @@ public class DriveTrain  {
 		//driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
 
 		
-		   turnController = new PIDController(Consts.kPA, Consts.kIA, Consts.kID,  ahrs, new NavXPIDOutput());
-	       // setting range and disable it 
-		   turnController.setInputRange(-180.0f,  180.0f);
-	        turnController.setOutputRange(-1.0, 1.0);
-	        turnController.setAbsoluteTolerance(Consts.kToleranceDegrees);
-	        turnController.setContinuous(true);
-	        turnController.disable();
-	        
+		 
 	      
 	     
 	        
@@ -87,7 +81,7 @@ public class DriveTrain  {
 	}
 	
 	public void autoInit() {
-		ahrs.reset();
+
 	}
 	// init method for navx calibaration setting 
 	
@@ -97,28 +91,23 @@ public class DriveTrain  {
 	public void driveStraight() {
 		
 		
-		turnController.enable();
-		turnController.setSetpoint(kTargetAngleDegrees);
-		
+
 	
-	//	driveTrain.arcadeDrive(.5, angle );
-		
 	}
+	/*
 	public void turnDegree(double degrees) {
 		 kTargetAngleDegrees= degrees ;
-		 turnController.setSetpoint( kTargetAngleDegrees);
+		// turnController.setSetpoint( kTargetAngleDegrees);
 	
 		
 		
 	}
+	*/
 	
 	
 	
 	
-public double ahrsYaw() {
-	double yaw = ahrs.getYaw();
-	return yaw;
-}
+
 
 	public void driveTrainPeriodic() {
 		double speed = _xBox.getY(GenericHID.Hand.kLeft)*-.5;
@@ -147,9 +136,7 @@ public double ahrsYaw() {
 
 
 	public void putData() {
-		SmartDashboard.putNumber("correctionAngle", correctionAngle);
-		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());
-
+	
 	}
 	public void stop(){
 		driveTrain.arcadeDrive(0,0);
@@ -194,12 +181,13 @@ public double ahrsYaw() {
 			return velocity_seconds;
 		}
 
-		
+		/*
 		public  class NavXPIDOutput implements PIDOutput {
 			// implements pid output
 					public void pidWrite(double output) {
 						correctionAngle=output;
 					}
 				}
+			*/
 
 }
