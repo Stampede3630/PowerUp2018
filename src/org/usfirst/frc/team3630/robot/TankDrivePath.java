@@ -162,7 +162,8 @@ public class TankDrivePath  {
 	double setRightMotors = outputRight - turn ;
 		 
 		
-		SmartDashboard.putNumber(" vLeft", );
+		SmartDashboard.putNumber(" vLeft", setLeftMotors);
+		SmartDashboard.putNumber(" vRight", setRightMotors);
 		
 		lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputLeft);
 		rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputRight);
