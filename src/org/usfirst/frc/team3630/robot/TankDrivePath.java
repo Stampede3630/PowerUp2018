@@ -53,7 +53,7 @@ public class TankDrivePath  {
 		Waypoint[] points = new Waypoint[] {
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
-				new Waypoint(1.5, 3, Pathfinder.d2r(30)), //14 feet forward should clock in 8,000 clicks way undeer 
+				new Waypoint(2, 4.5 , Pathfinder.d2r(60)), //14 feet forward should clock in 8,000 clicks way undeer 
 		//	new Waypoint(1.0 ,3  ,Pathfinder.d2r(-90.0))
 				//new Waypoint(4.2672, 0, (-90 * Consts.degtoRad))
 		};
@@ -115,6 +115,9 @@ public class TankDrivePath  {
 	right.configurePIDVA(.8, 0.0, 0.0, (1/3.3528), 0);
 		
 		System.out.print("Wheel circumfrence: ");
+	}
+	public void pathInit() {
+		ahrs.reset();
 	}
 
 	/**

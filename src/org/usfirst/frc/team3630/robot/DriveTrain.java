@@ -150,6 +150,7 @@ public class DriveTrain  {
 		// need to put in robot init for speed 
 		path.left.reset();
 		path.right.reset();
+		path.pathInit();
 	}
 	
 		public void testPeriodic() {
