@@ -27,9 +27,7 @@ public class TankDrivePath  {
 	public EncoderFollower left, right;
 	DistanceFollower leftDiagnostics, rightDiagnostics;
 	
-	public TankDrivePath(TalonSRX leftSRXSide, TalonSRX rightSRXSide) {\
-		// reseting ahrs 
-		// should add in some recalibarting 
+	public TankDrivePath(TalonSRX leftSRXSide, TalonSRX rightSRXSide) {
 		 ahrs = new AHRS(SPI.Port.kMXP); 
 		 ahrs.reset();
 		lTalon = leftSRXSide;
@@ -53,11 +51,11 @@ public class TankDrivePath  {
 
 		//Generates points for the path.
 		Waypoint[] points = new Waypoint[] {
-				  new Waypoint(4, 1, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
-				    new Waypoint(2, 2, 0),                        // Waypoint @ x=-2, y=-2, exit angle=0 radians
-				    new Waypoint(0, 0, 0)                           // Waypoint @ x=0, y=0,   exit angle=0 radians
-				};
-			
+				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
+				new Waypoint(0, 0, 0),
+				new Waypoint(2, 1, Pathfinder.d2r(-45.0)), //14 feet forward should clock in 8,000 clicks way undeer 
+		//	new Waypoint(1.0 ,3  ,Pathfinder.d2r(-90.0))
+				//new Waypoint(4.2672, 0, (-90 * Consts.degtoRad))
 		};
 
 		Trajectory trajectory = Pathfinder.generate(points, config);
@@ -79,8 +77,6 @@ public class TankDrivePath  {
 		leftDiagnostics = new DistanceFollower (leftTrajectory);
 		
 		// peramiters enc starting point, total amount ticks, wheel diamitor
-		
-		// verify
 		left.configureEncoder(0, Consts.ticksPerRotation, 0.1524);
 		right.configureEncoder(0, Consts.ticksPerRotation, 0.1524);
 		
@@ -163,18 +159,12 @@ public class TankDrivePath  {
 		double turn = 0.8 * (-1.0/80.0) * angleDifference;// dont understand 
 
 		double setLeftMotors= outputLeft+turn ;
-		double setRightMotors = outputRight - turn ;
-		// debug test 
-		// If (L>R){
-	//Sysem.out.println(	setLeftMotors);
-//	}
+	double setRightMotors = outputRight - turn ;
 		 
-		// need to graph 
+		
 		SmartDashboard.putNumber(" vLeft", setLeftMotors);
 		SmartDashboard.putNumber(" vRight", setRightMotors);
 		
-		
-		// make sure less than -1 
 		lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputLeft);
 		rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, outputRight);
 
