@@ -158,7 +158,7 @@ public class DriveTrain {
 		//leftSwitchRight();
 		//middleSwitchRight();
 		//middleSwitchLeft();
-		middleScaleRight();
+		//middleScaleRight();
 		//rightSwitchLeft();
 		SmartDashboard.putBoolean("Is right true?", right);
 	}

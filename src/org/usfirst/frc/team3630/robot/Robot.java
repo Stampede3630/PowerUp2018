@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3630.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -11,15 +12,37 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
+	public enum StartingPoints {
+		LEFT	, RIGHT, MIDDLE
+	}
+	public enum LLLResMet {
+		SWL, SCL 
+	}
+	public enum RRRResMet {
+		SWR, SCR
+	}
 	SendableChooser autoChooser;
+	SendableChooser autoLLL;
+	SendableChooser autoRRR;
 	DriveTrain _driveTrain;
 	//Timer  autoTime; 
 	
 	public void robotInit() {
 	_driveTrain = new DriveTrain();
-		autochooser = new SendableChooser();
-		autochoose.addDefault("left")
+	autoChooser = new SendableChooser();
+	autoChooser.addDefault("left", StartingPoints.LEFT);
+	autoChooser.addObject("right", StartingPoints.RIGHT);
+	autoChooser.addObject("middle", StartingPoints.MIDDLE);
+	SmartDashboard.putData("Starting Position", autoChooser);
 	//autoTime = new Timer();
+	autoLLL = new SendableChooser();
+	autoLLL.addDefault("Switch," LLLResMet.SWL);
+	autoLLL.addObject("Scale," LLLResMet.SCL);
+	SmartDashboard.putData("LLL Options", autoLLL);
+	autoRRR.addDefault("Switch," RRRResMet.SWR);
+	autoRRR.addObject("Scale," RRRResMet.SCR);
+	SmartDashboard.putData("RRR Options", autoRRR);
+	
 	}
 	
 	public void teleopPeriodic() {
@@ -32,6 +55,8 @@ public class Robot extends IterativeRobot {
 		//autoTime.start();
 		_driveTrain.testInit();
 		//_driveTrain.driveStraight();
+		SmartDashboard.putString("auto starting position", autoChooser.getSelected().toString());
+		SmartDashboard.putString("Auto LLL", autoLLL.getSelected().toString());
 	}
 	@Override
 	public void disabledPeriodic() {
@@ -73,9 +98,50 @@ public class Robot extends IterativeRobot {
 		*/
 	@Override
 	public void testPeriodic() {
+		autoLogic();
 		_driveTrain.testDriveTrainPeriodic();
 	}
-	
+	public void autoLogic() {
+		if ((autoChooser.getSelected() == StartingPoints.LEFT) && (autoLLL.getSelected() == LLLResMet.SWL)) {
+			_driveTrain.leftSwitchLeft();
+		}
+		else if((autoChooser.getSelected() == StartingPoints.LEFT) && (autoLLL.getSelected() == LLLResMet.SCL)) {
+			_driveTrain.leftScaleLeft();
+		}
+		else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoLLL.getSelected() == LLLResMet.SWL)) {
+			_driveTrain.rightSwitchLeft();
+		}
+		else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoLLL.getSelected() == LLLResMet.SCL)) {
+			_driveTrain.rightScaleLeft();
+		}
+		else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoLLL.getSelected() == LLLResMet.SWL)) {
+			_driveTrain.middleSwitchLeft();
+		}
+		else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoLLL.getSelected() == LLLResMet.SCL)) {
+			_driveTrain.middleScaleLeft();
+		}
+		else if((autoChooser.getSelected() == StartingPoints.LEFT) && (autoLLL.getSelected() == RRRResMet.SWR)) {
+			_driveTrain.leftSwitchRight();
+		}
+		else if((autoChooser.getSelected() == StartingPoints.LEFT) && (autoLLL.getSelected() == RRRResMet.SCR)) {
+			_driveTrain.leftScaleRight();
+		}
+		else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoLLL.getSelected() == RRRResMet.SWR)) {
+			_driveTrain.rightSwitchRight();
+		}
+		else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoLLL.getSelected() == RRRResMet.SCR)) {
+			_driveTrain.rightScaleRight();
+		}
+		else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoLLL.getSelected() == RRRResMet.SWR)) {
+			_driveTrain.middleSwitchRight();
+		}
+		else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoLLL.getSelected() == RRRResMet.SCR)) {
+			_driveTrain.middleScaleRight();
+		}
+		else {
+			_driveTrain.middleSwitchRight();
+		}
+	}
 
 }
 
