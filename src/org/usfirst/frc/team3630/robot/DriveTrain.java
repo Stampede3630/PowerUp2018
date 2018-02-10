@@ -80,7 +80,7 @@ public class DriveTrain {
 		positionEncoderSource = new EncoderPIDSource(frontLeft, frontRight);
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
-		posController.setOutputRange(-.75, .75);
+		posController.setOutputRange(-1, 1);
 		posController.setAbsoluteTolerance(Consts.kToleranceDistance);
 		posController.disable();
 		
