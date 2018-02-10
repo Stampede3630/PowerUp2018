@@ -54,10 +54,10 @@ public class DriveTrain  {
 
 		//////////////////////////
 	
-	//leftSpeedController = new SpeedControllerGroup (frontLeft, new SpeedController[] {backLeft});
-	///rightSpeedController = new SpeedControllerGroup (frontRight, new SpeedController[] {backRight});
+	leftSpeedController = new SpeedControllerGroup (frontLeft, new SpeedController[] {backLeft});
+	rightSpeedController = new SpeedControllerGroup (frontRight, new SpeedController[] {backRight});
 ////////////
-		//driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
+		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
 
 		
 		 
@@ -110,7 +110,7 @@ public class DriveTrain  {
 
 
 	public void driveTrainPeriodic() {
-		double speed = _xBox.getY(GenericHID.Hand.kLeft)*-.5;
+		double speed = _xBox.getY(GenericHID.Hand.kLeft)*-1;
 		double heading = _xBox.getX(GenericHID.Hand.kRight);
 
 	
