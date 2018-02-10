@@ -21,17 +21,9 @@ public class Robot extends IterativeRobot {
 	public enum RRRResMet {
 		SWR, SCR
 	}
-	public enum LRLResMet {
-		SWL, SCR
-	}
-	public enum RLRResMet {
-		SWR, SCL
-	}
 	SendableChooser autoChooser;
 	SendableChooser autoLLL;
 	SendableChooser autoRRR;
-	SendableChooser autoLRL;
-	SendableChooser autoRLR;
 	DriveTrain _driveTrain;
 	//Timer  autoTime; 
 	
@@ -47,19 +39,10 @@ public class Robot extends IterativeRobot {
 	autoLLL.addDefault("Switch," LLLResMet.SWL);
 	autoLLL.addObject("Scale," LLLResMet.SCL);
 	SmartDashboard.putData("LLL Options", autoLLL);
-	
-	autoRRR = new SendableChooser();
 	autoRRR.addDefault("Switch," RRRResMet.SWR);
 	autoRRR.addObject("Scale," RRRResMet.SCR);
 	SmartDashboard.putData("RRR Options", autoRRR);
 	
-	autoLRL = new SendableChooser();
-	autoLRL.addDefault("Switch", LRLResMet.SWL);
-	autoLRL.addObject("Scale", LRLResMet.SCR);
-	SmartDashboard.putData("LRL options", autoLRL);
-	
-	autoRLR = new SendableChooser();
-	autoRLR.addDefault("Switch", RLRResMet.);
 	}
 	
 	public void teleopPeriodic() {
@@ -157,24 +140,6 @@ public class Robot extends IterativeRobot {
 		}
 		else {
 			_driveTrain.middleSwitchRight();
-		}
-		else if ((autoChooser.getSelected() == StartingPoints.LEFT) && (autoLLL.getSelected() == LRLResMet.SWL)) {
-			_driveTrain.leftSwitchLeft();
-		}
-		else if((autoChooser.getSelected() == StartingPoints.LEFT) && (autoLLL.getSelected() == LRLResMet.SCR)) {
-			_driveTrain.leftScaleRight();
-		}
-		else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoLLL.getSelected() == LRLResMet.SWL)) {
-			_driveTrain.rightSwitchLeft();
-		}
-		else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoLLL.getSelected() == LRLResMet.SCR)) {
-			_driveTrain.rightScaleRight();
-		}
-		else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoLLL.getSelected() == LRLResMet.SWL)) {
-			_driveTrain.middleSwitchLeft();
-		}
-		else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoLLL.getSelected() == LRLResMet.SCR)) {
-			_driveTrain.middleScaleRight();
 		}
 	}
 
