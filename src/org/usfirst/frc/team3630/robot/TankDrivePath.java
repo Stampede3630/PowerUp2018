@@ -57,7 +57,7 @@ public class TankDrivePath  {
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
 				//new Waypoint(2, 4.5 , Pathfinder.d2r(60)) // getts us close to 60 
-				new Waypoint(4.2672, -1, Pathfinder.d2r(90))  // got close to 9o robot at -73.4 yow  Waypoint(1, 4, Pathfinder.d2r(90))
+				new Waypoint(4.2672, -1, Pathfinder.d2r(-90))  // got close to 9o robot at -73.4 yow  Waypoint(1, 4, Pathfinder.d2r(90))
 			//new Waypoint(0 ,4  ,Pathfinder.d2r(60))
 				//new Waypoint(4.2672, 0, (-90 * Consts.degtoRad))
 		};
@@ -158,18 +158,19 @@ public class TankDrivePath  {
 
 		double gyro_heading =  ahrs.getYaw();  // Assuming the gyro is giving a value in degrees
 
+		double Path_heading = -1*  ahrs.getYaw(); 
 		SmartDashboard.putNumber("robot yaw", gyro_heading);
 		
 		double desired_heading = (180/Math.PI)*(left.getHeading());  // Should also be in degrees
 
-		double angleDifference =  Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
-		double turn = 0.1 * (-1.0/  288) * angleDifference;  // dont understand 
+		double angleDifference =  Pathfinder.boundHalfDegrees(desired_heading - Path_heading);
+		double turn = 0.8 * (-1.0/  80) * angleDifference;  // dont understand turning radius 88
 		
 		
 // need add + turn
 		double setLeftMotors= outputLeft+ turn ;
 		// add back - turn
-	double setRightMotors = outputRight  - turn;
+	double setRightMotors = outputRight- turn  ;
 		 
 		
 		SmartDashboard.putNumber(" vLeft",   setLeftMotors);
