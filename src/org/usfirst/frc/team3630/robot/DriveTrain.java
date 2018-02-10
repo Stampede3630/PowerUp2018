@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.livewindow.*;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -151,6 +152,10 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Stage", myCurrentCase);
 		SmartDashboard.putNumber("turn controller error", turnController.getError());
 		//posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
+		if (autoChooser.get()) {
+			leftSwitchLeft();
+		}
+			
 		//leftSwitchLeft();
 		//rightSwitchRight();
 		//rightScaleRight();

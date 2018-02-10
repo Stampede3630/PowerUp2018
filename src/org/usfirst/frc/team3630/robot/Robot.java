@@ -36,18 +36,20 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData("Starting Position", autoChooser);
 	//autoTime = new Timer();
 	autoLLL = new SendableChooser();
-	autoLLL.addDefault("Switch," LLLResMet.SWL);
-	autoLLL.addObject("Scale," LLLResMet.SCL);
+	autoLLL.addDefault("Switch", LLLResMet.SWL);
+	autoLLL.addObject("Scale", LLLResMet.SCL);
 	SmartDashboard.putData("LLL Options", autoLLL);
-	autoRRR.addDefault("Switch," RRRResMet.SWR);
-	autoRRR.addObject("Scale," RRRResMet.SCR);
+	autoRRR = new SendableChooser();
+	autoRRR.addDefault("Switch", RRRResMet.SWR);
+	autoRRR.addObject("Scale", RRRResMet.SCR);
 	SmartDashboard.putData("RRR Options", autoRRR);
 	
 	}
 	
 	public void teleopPeriodic() {
 		_driveTrain.driveTrainPeriodic();
-		
+	
+			
 	}
 	@Override
 	public void testInit() {
@@ -120,22 +122,22 @@ public class Robot extends IterativeRobot {
 		else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoLLL.getSelected() == LLLResMet.SCL)) {
 			_driveTrain.middleScaleLeft();
 		}
-		else if((autoChooser.getSelected() == StartingPoints.LEFT) && (autoLLL.getSelected() == RRRResMet.SWR)) {
+		else if((autoChooser.getSelected() == StartingPoints.LEFT) && (autoRRR.getSelected() == RRRResMet.SWR)) {
 			_driveTrain.leftSwitchRight();
 		}
-		else if((autoChooser.getSelected() == StartingPoints.LEFT) && (autoLLL.getSelected() == RRRResMet.SCR)) {
+		else if((autoChooser.getSelected() == StartingPoints.LEFT) && (autoRRR.getSelected() == RRRResMet.SCR)) {
 			_driveTrain.leftScaleRight();
 		}
-		else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoLLL.getSelected() == RRRResMet.SWR)) {
+		else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoRRR.getSelected() == RRRResMet.SWR)) {
 			_driveTrain.rightSwitchRight();
 		}
-		else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoLLL.getSelected() == RRRResMet.SCR)) {
+		else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoRRR.getSelected() == RRRResMet.SCR)) {
 			_driveTrain.rightScaleRight();
 		}
-		else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoLLL.getSelected() == RRRResMet.SWR)) {
+		else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoRRR.getSelected() == RRRResMet.SWR)) {
 			_driveTrain.middleSwitchRight();
 		}
-		else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoLLL.getSelected() == RRRResMet.SCR)) {
+		else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoRRR.getSelected() == RRRResMet.SCR)) {
 			_driveTrain.middleScaleRight();
 		}
 		else {
