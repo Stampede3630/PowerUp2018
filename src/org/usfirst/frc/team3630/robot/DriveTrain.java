@@ -38,13 +38,13 @@ public class DriveTrain  {
 	 DifferentialDrive driveTrain ;
 
 	public DriveTrain()  {
-		//calibrate navx !!!!!
+
 
 		
 		 
 		
 		_xBox = new XboxController(Consts.xBoxComPort);
-		// srx defin
+	
 		frontLeft = new WPI_TalonSRX(Consts.frontLeftTalon);
 		backLeft = new WPI_TalonSRX(Consts.backLeftTalon);
 		frontRight = new WPI_TalonSRX(Consts.frontRightTalon);
@@ -52,11 +52,9 @@ public class DriveTrain  {
 		
 		path = new TankDrivePath(frontLeft,frontRight);
 
-		//////////////////////////
-	
-	leftSpeedController = new SpeedControllerGroup (frontLeft, new SpeedController[] {backLeft});
-	rightSpeedController = new SpeedControllerGroup (frontRight, new SpeedController[] {backRight});
-////////////
+		leftSpeedController = new SpeedControllerGroup (frontLeft, new SpeedController[] {backLeft});
+		rightSpeedController = new SpeedControllerGroup (frontRight, new SpeedController[] {backRight});
+
 		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
 
 		
@@ -116,7 +114,7 @@ public class DriveTrain  {
 	
 		driveTrain.arcadeDrive( speed, heading);
 	
-		//SmartDashboard.putNumber("Setpoint", 1000);
+		
 		
 	}
 	private void configureTalon(TalonSRX _talon) {
@@ -155,13 +153,6 @@ public class DriveTrain  {
 	
 		public void testPeriodic() {
 		
-			//SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
-			//SmartDashboard.putString("control mode",frontLeft.getControlMode() );
-			//frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-			//frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-	
-			//backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-			//SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
 			backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontLeft.getDeviceID());
 			backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontRight.getDeviceID());
 

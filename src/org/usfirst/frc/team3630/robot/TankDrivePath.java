@@ -72,21 +72,17 @@ public class TankDrivePath  {
 
 		leftTrajectory = _modifier.getLeftTrajectory();
 		rightTrajectory = _modifier.getRightTrajectory();
-		System.out.println("trajectories generated");
+		
 
 		rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
 		lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
 
 		left = new EncoderFollower(leftTrajectory);
-		
 		right = new EncoderFollower(rightTrajectory);
-		
-		leftDiagnostics = new DistanceFollower (leftTrajectory);
-		
 		// peramiters enc starting point, total amount ticks, wheel diamitor
 		left.configureEncoder(0, Consts.ticksPerRotation, 0.1524);
 		right.configureEncoder(0, Consts.ticksPerRotation, 0.1524);
-		
+		/*
 		  for (int i = 0; i<leftTrajectory.length(); i++){
 		 
 			  System.out.print(leftTrajectory.get(i).acceleration); System.out.print(",");
@@ -100,8 +96,8 @@ public class TankDrivePath  {
 			  System.out.print("\n");
 		  
 		  }
-		
-		// set encoders
+		*/
+	
 
 		// configure pidva
 		// The first argument is the proportional gain. Usually this will be quite high
@@ -114,10 +110,6 @@ public class TankDrivePath  {
 		// motors can read)
 		// The fifth argument is your acceleration gain. Tweak this if you want to get
 		// to a higher or lower speed quicker
-
-	
-
-		
 		  left.configurePIDVA(.8, 0.0, 0.0, (1/3.3528) , 0);
 		  right.configurePIDVA(.8, 0.0, 0.0, (1/3.3528), 0);
 		
@@ -125,6 +117,7 @@ public class TankDrivePath  {
 	}
 	public void pathInit() {
 		ahrs.reset();
+		
 	}
 
 	/**
@@ -142,44 +135,34 @@ public class TankDrivePath  {
 	 */
 	public void autoPeriodic() {
 
-		// get desired output . calucate coverts ticks to inches based on input
-
-		// output should be between -1 and 1 correct? should check output and print it
-		// out
-
-		double outputLeft = left.calculate(getDistance_ticks(lTalon));
-		double outputRight = right.calculate(getDistance_ticks(rTalon));
-		System.out.println(outputLeft);
-
-		System.out.println(outputLeft);
-		
-		
-
 		SmartDashboard.putNumber("left encoder distance", getDistance_ticks(lTalon));
 		SmartDashboard.putNumber("Right encoder distance", getDistance_ticks(rTalon));
 		
-		// init pathfinderTurning
+		//NAVX heading
+		//Since Jaci is from Australia, her compas is literally upsidedown 90 really = -90
+		//Path_heading is therefore the Pathfinder turn feedback loop
 		double gyro_heading =  ahrs.getYaw();  // Assuming the gyro is giving a value in degrees
 		double Path_heading = -1*  ahrs.getYaw(); 
-		
 		SmartDashboard.putNumber("robot yaw", gyro_heading);
-		
 		double desired_heading = (180/Math.PI)*(left.getHeading());  // Should also be in degrees
-
+		//boundHalf method makes sure we are in -180 to 180
 		double angleDifference =  Pathfinder.boundHalfDegrees(desired_heading - Path_heading);
-		double turn = Consts.turnKP * (-1.0/  80) * angleDifference;  // dont understand turning radius 88
+		double turn = Consts.turnKP * (-1.0/  80) * angleDifference;  
 		
-		
+		//calculates revised left and right output based on current ticks
+		//compares it to current trajectory (EncoderFollowers)
+		double outputLeft = left.calculate(getDistance_ticks(lTalon));
+		double outputRight = right.calculate(getDistance_ticks(rTalon));
 		double setLeftMotors= outputLeft+ turn ;
-	
 		double setRightMotors = outputRight- turn  ;
 		 
 		
 		SmartDashboard.putNumber(" vLeft",   setLeftMotors);
 		SmartDashboard.putNumber(" vRight", setRightMotors);
-		
+		//Take calculated output and set talons
+		//This output should be between -1 and 1... 
+		//but we think Phoenix does some magic
 		lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, setLeftMotors);
 		rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, setRightMotors);
-
 	}
 }
