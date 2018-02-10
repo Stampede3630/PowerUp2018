@@ -21,6 +21,7 @@ public class DriveTrain {
 	// need to test
 	double turnOutput;
 	double posOutput;
+	boolean errorGreatorThanFive = false;
 	boolean init = true;
 	boolean right = true;
 	int myCurrentCase;		
@@ -166,23 +167,25 @@ public class DriveTrain {
 	public void leftSwitchLeft() {
 		if (myCurrentCase  == 1) {
 			if(init) {
+				SmartDashboard.putBoolean("Error Greator Than 5", errorGreatorThanFive);
 				turnController.enable();
 				turnController.setSetpoint(0);
 				autoDriveFw(Consts.autoA + Consts.autoB);
 			}
-		     if(Math.abs(posController.getError()) < 1 || (posController.get() - posController.getSetpoint()) > 5 ) {
+		     if(Math.abs(posController.getError()) < 3 || (posController.get() - posController.getSetpoint()) > 5 ) {
 		     		myCurrentCase = 2;
 		     		init = true;
-		     	}
-		     			
-		}
+		     		if(Math.abs(posController.getError()) > 5) {
+		     			errorGreatorThanFive = true;
+		     		}
+		     }
 		//posController.setSetpoint(SmartDashboard.getNumber("pos Setpoint", 48))
-		
+		} //SAMV added this
 		if (myCurrentCase == 2) {
 			if(init) {
 				autoTurnDegree(90);
 			}
-			if(Math.abs(turnController.getError())<3) {
+			if(Math.abs(turnController.getError())< 2) {
 				myCurrentCase = 3;
 	     		init = true;
 			}
@@ -202,6 +205,7 @@ public class DriveTrain {
 			posController.disable();
 		}
 	}
+	
 
 	public void rightSwitchRight() {
 		
