@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	String gameData;
 	public enum StartingPoints {
-		LEFT	, RIGHT, MIDDLE
+		LEFT, RIGHT, MIDDLE
 	}
 	public enum LLLResMet {
 		SWL, SCL 

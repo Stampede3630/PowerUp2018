@@ -162,22 +162,22 @@ public class DriveTrain {
 		//middleScaleRight();
 		//rightSwitchLeft();
 		SmartDashboard.putBoolean("Is right true?", right);
+		SmartDashboard.putBoolean("PosControl ON", 	posController.isEnabled());
+		SmartDashboard.putBoolean("TurnControl On", turnController.isEnabled());
 	}
 	
 	public void leftSwitchLeft() {
-		if (myCurrentCase  == 1) {
+		if (myCurrentCase == 1) {
 			if(init) {
 				SmartDashboard.putBoolean("Error Greator Than 5", errorGreatorThanFive);
 				turnController.enable();
 				turnController.setSetpoint(0);
 				autoDriveFw(Consts.autoA + Consts.autoB);
 			}
-		     if(Math.abs(posController.getError()) < 3 || (posController.get() - posController.getSetpoint()) > 5 ) {
+		     if(Math.abs(posController.getError()) < 3  ) {
 		     		myCurrentCase = 2;
 		     		init = true;
-		     		if(Math.abs(posController.getError()) > 5) {
-		     			errorGreatorThanFive = true;
-		     		}
+		     		
 		     }
 		//posController.setSetpoint(SmartDashboard.getNumber("pos Setpoint", 48))
 		} //SAMV added this
@@ -195,7 +195,7 @@ public class DriveTrain {
 			if(init) {
 				autoDriveFw(Consts.autoE);
 			}
-			if(Math.abs(posController.getError()) < 1 || (posController.get() - posController.getSetpoint()) > 5 ) {
+			if(Math.abs(posController.getError()) < 1) {
 				myCurrentCase = 4;
 	     		init = true;
 			}
@@ -827,6 +827,7 @@ public class DriveTrain {
 		posController.enable();
 		init = false;
 		}
+	
 	public void autoTurnDegree(int degree) {
 		if (degree>0) {
 			right = false;

@@ -25,8 +25,8 @@ public class Consts {
 	public static final double  kDRotAng = 0;
 	
 
-    public static final double kToleranceDegrees = 0f;
-    public static final double kToleranceDistance = 1;
+    public static final double kToleranceDegrees = 2;
+    public static final double kToleranceDistance = 3;
 	
 	//Wheel Measurements
 	public static final int ticksPerRotation = 1000;
