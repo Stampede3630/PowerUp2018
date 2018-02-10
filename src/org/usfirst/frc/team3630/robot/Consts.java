@@ -42,7 +42,7 @@ public class Consts {
 	public static final double kIencoder = 0.0;
 	public static final double kDencoder = 0.0;
 	
-	public static final double  turnKP = .6;
+	public static final double turnKP  = .6;
 
 	
 	

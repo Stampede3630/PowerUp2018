@@ -8,14 +8,14 @@ import jaci.pathfinder.followers.EncoderFollower;
 import jaci.pathfinder.followers.DistanceFollower;
 import jaci.pathfinder.modifiers.TankModifier;
 import com.ctre.phoenix.*;
-
+import java.io.File;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
-
+// /home/lvuser/Pathfinder
 public class TankDrivePath  {
 	// Trajectory right,left
 	public AHRS ahrs;
@@ -26,12 +26,12 @@ public class TankDrivePath  {
 	private TalonSRX rTalon;
 	public EncoderFollower left, right;
 	DistanceFollower leftDiagnostics, rightDiagnostics;
-	
+	File file;
 	public TankDrivePath(TalonSRX leftSRXSide, TalonSRX rightSRXSide) {
 		 ahrs = new AHRS(SPI.Port.kMXP); 
 		 ahrs.reset();
-		lTalon = leftSRXSide;
-		rTalon = rightSRXSide;
+		 lTalon = leftSRXSide;
+		 rTalon = rightSRXSide;
 		
 		
 		// Create the Trajectory Configuration
@@ -52,19 +52,22 @@ public class TankDrivePath  {
 		//Generates points for the path.
 		Waypoint[] points = new Waypoint[] {
 				
-				// helpful note need x, y and theta to be able to use angle 
+				// + y leftHand , -Y rightHand, +x robot forward in respect of going down game feild, +angle goes counterclockiwise so invert navx yaw
 				
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
 				//new Waypoint(2, 4.5 , Pathfinder.d2r(60)) // getts us close to 60 
 				new Waypoint(4.2672, -1.524, Pathfinder.d2r(-90))  // got close to 9o robot at -73.4 yow  Waypoint(1, 4, Pathfinder.d2r(90))
-			//new Waypoint(0 ,4  ,Pathfinder.d2r(60))
-				//new Waypoint(4.2672, 0, (-90 * Consts.degtoRad))
+
 		};
 
 		Trajectory trajectory = Pathfinder.generate(points, config);
-
-		_modifier = new TankModifier(trajectory).modify(Consts.robotWidthMeters);
+		
+		File myRead = new File("/home/lvuser/Pathfinder/test.csv");
+		Pathfinder.writeToCSV(myRead, trajectory);
+		Trajectory readTrajectory = Pathfinder.readFromCSV(myRead) ;
+		
+		_modifier = new TankModifier(readTrajectory).modify(Consts.robotWidthMeters);
 
 
 		leftTrajectory = _modifier.getLeftTrajectory();
@@ -115,10 +118,10 @@ public class TankDrivePath  {
 	
 
 		
-	left.configurePIDVA(.8, 0.0, 0.0, (1/3.3528) , 0);
-	right.configurePIDVA(.8, 0.0, 0.0, (1/3.3528), 0);
+		  left.configurePIDVA(.8, 0.0, 0.0, (1/3.3528) , 0);
+		  right.configurePIDVA(.8, 0.0, 0.0, (1/3.3528), 0);
 		
-		System.out.print("Wheel circumfrence: ");
+		  System.out.print("Wheel circumfrence: ");
 	}
 	public void pathInit() {
 		ahrs.reset();
@@ -155,22 +158,21 @@ public class TankDrivePath  {
 		SmartDashboard.putNumber("left encoder distance", getDistance_ticks(lTalon));
 		SmartDashboard.putNumber("Right encoder distance", getDistance_ticks(rTalon));
 		
-
+		// init pathfinderTurning
 		double gyro_heading =  ahrs.getYaw();  // Assuming the gyro is giving a value in degrees
-
 		double Path_heading = -1*  ahrs.getYaw(); 
+		
 		SmartDashboard.putNumber("robot yaw", gyro_heading);
 		
 		double desired_heading = (180/Math.PI)*(left.getHeading());  // Should also be in degrees
 
 		double angleDifference =  Pathfinder.boundHalfDegrees(desired_heading - Path_heading);
-		double turn = 0.6 * (-1.0/  80) * angleDifference;  // dont understand turning radius 88
+		double turn = Consts.turnKP * (-1.0/  80) * angleDifference;  // dont understand turning radius 88
 		
 		
-// need add + turn
 		double setLeftMotors= outputLeft+ turn ;
-		// add back - turn
-	double setRightMotors = outputRight- turn  ;
+	
+		double setRightMotors = outputRight- turn  ;
 		 
 		
 		SmartDashboard.putNumber(" vLeft",   setLeftMotors);
