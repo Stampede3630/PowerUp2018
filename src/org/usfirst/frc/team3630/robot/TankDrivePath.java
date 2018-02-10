@@ -32,43 +32,7 @@ public class TankDrivePath  {
 		 ahrs.reset();
 		 lTalon = leftSRXSide;
 		 rTalon = rightSRXSide;
-		 makeTrajectory("/home/lvuser/Pathfinder/test.csv" );
-		 getTrajectory("/home/lvuser/Pathfinder/test.csv");
-	
 		
-
-		rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
-		lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
-
-		
-		
-		
-		
-		
-		// peramiters enc starting point, total amount ticks, wheel diamitor
-
-		/*
-		  for (int i = 0; i<leftTrajectory.length(); i++){
-		 
-			  System.out.print(leftTrajectory.get(i).acceleration); System.out.print(",");
-			  System.out.print(leftTrajectory.get(i).dt); System.out.print(",");
-			  System.out.print(leftTrajectory.get(i).heading); System.out.print(",");
-			  System.out.print(leftTrajectory.get(i).jerk); System.out.print(",");
-			  System.out.print(leftTrajectory.get(i).position); System.out.print(",");
-			  System.out.print(leftTrajectory.get(i).velocity); System.out.print(",");
-			  System.out.print(leftTrajectory.get(i).x); System.out.print(",");
-			  System.out.print(leftTrajectory.get(i).y);
-			  System.out.print("\n");
-		  
-		  }
-		*/
-	
-
-		
-		  System.out.print("Wheel circumfrence: ");
-		  
-	}
-	public void makeTrajectory(String fileName ) {
 		
 		// Create the Trajectory Configuration
 		// Arguments:
@@ -80,6 +44,7 @@ public class TankDrivePath  {
 		// Max Velocity: 45 m/sec
 		// Max Acceleration: 100 m/s/s
 		// Max Jerk: 100 m/s/s
+
 		
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,
 				Trajectory.Config.SAMPLES_HIGH, 0.05, 3.3528, .25 , .3);
@@ -97,26 +62,42 @@ public class TankDrivePath  {
 		};
 
 		Trajectory trajectory = Pathfinder.generate(points, config);
-
-		Pathfinder.writeToCSV(new File (fileName) , trajectory);
-	
-
-	}
-	public void getTrajectory(String fileName ) {
 		
-		
-		
-		Trajectory readTrajectory = Pathfinder.readFromCSV(new File(fileName)) ;
+		File myRead = new File("/home/lvuser/Pathfinder/test.csv");
+		Pathfinder.writeToCSV(myRead, trajectory);
+		Trajectory readTrajectory = Pathfinder.readFromCSV(myRead) ;
 		
 		_modifier = new TankModifier(readTrajectory).modify(Consts.robotWidthMeters);
 
 
 		leftTrajectory = _modifier.getLeftTrajectory();
 		rightTrajectory = _modifier.getRightTrajectory();
+		
+
+		rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
+		lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
+
 		left = new EncoderFollower(leftTrajectory);
 		right = new EncoderFollower(rightTrajectory);
+		// peramiters enc starting point, total amount ticks, wheel diamitor
 		left.configureEncoder(0, Consts.ticksPerRotation, 0.1524);
 		right.configureEncoder(0, Consts.ticksPerRotation, 0.1524);
+		/*
+		  for (int i = 0; i<leftTrajectory.length(); i++){
+		 
+			  System.out.print(leftTrajectory.get(i).acceleration); System.out.print(",");
+			  System.out.print(leftTrajectory.get(i).dt); System.out.print(",");
+			  System.out.print(leftTrajectory.get(i).heading); System.out.print(",");
+			  System.out.print(leftTrajectory.get(i).jerk); System.out.print(",");
+			  System.out.print(leftTrajectory.get(i).position); System.out.print(",");
+			  System.out.print(leftTrajectory.get(i).velocity); System.out.print(",");
+			  System.out.print(leftTrajectory.get(i).x); System.out.print(",");
+			  System.out.print(leftTrajectory.get(i).y);
+			  System.out.print("\n");
+		  
+		  }
+		*/
+	
 
 		// configure pidva
 		// The first argument is the proportional gain. Usually this will be quite high
@@ -129,9 +110,10 @@ public class TankDrivePath  {
 		// motors can read)
 		// The fifth argument is your acceleration gain. Tweak this if you want to get
 		// to a higher or lower speed quicker
-		
 		  left.configurePIDVA(.8, 0.0, 0.0, (1/3.3528) , 0);
 		  right.configurePIDVA(.8, 0.0, 0.0, (1/3.3528), 0);
+		
+		  System.out.print("Wheel circumfrence: ");
 	}
 	public void pathInit() {
 		ahrs.reset();
