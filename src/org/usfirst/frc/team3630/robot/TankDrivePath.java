@@ -51,10 +51,14 @@ public class TankDrivePath  {
 
 		//Generates points for the path.
 		Waypoint[] points = new Waypoint[] {
+				
+				// helpful note need x, y and theta to be able to use angle 
+				
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
-				new Waypoint(2, 4.5 , Pathfinder.d2r(60)), //14 feet forward should clock in 8,000 clicks way undeer 
-		//	new Waypoint(1.0 ,3  ,Pathfinder.d2r(-90.0))
+				//new Waypoint(2, 4.5 , Pathfinder.d2r(60)) // getts us close to 60 
+				new Waypoint(1, 4.5, Pathfinder.d2r(-90))// got close to 9o robot at -73.4 yow  Waypoint(1, 4, Pathfinder.d2r(90))
+			//new Waypoint(0 ,4  ,Pathfinder.d2r(60))
 				//new Waypoint(4.2672, 0, (-90 * Consts.degtoRad))
 		};
 
