@@ -119,7 +119,75 @@ public class TankDrivePath  {
 		ahrs.reset();
 		
 	}
+	/*
+	public void makeTrajectory(File myFile ) {
+		
+		// Create the Trajectory Configuration
+		// Arguments:
+		// Fit Method: HERMITE_CUBIC or HERMITE_QUINTIC
+		// Sample Count: SAMPLES_HIGH (100 000)
+		// SAMPLES_LOW (10 000)
+		// SAMPLES_FAST (1 000)
+		// Time Step: 0.05 Seconds
+		// Max Velocity: 45 m/sec
+		// Max Acceleration: 100 m/s/s
+		// Max Jerk: 100 m/s/s
+		
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,
+				Trajectory.Config.SAMPLES_HIGH, 0.05, 3.3528, .25 , .3);
 
+		//Generates points for the path.
+		Waypoint[] points = new Waypoint[] {
+				
+				// + y leftHand , -Y rightHand, +x robot forward in respect of going down game feild, +angle goes counterclockiwise so invert navx yaw
+				
+				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
+				new Waypoint(0, 0, 0),
+				//new Waypoint(2, 4.5 , Pathfinder.d2r(60)) // getts us close to 60 
+				new Waypoint(4.2672, -1.524, Pathfinder.d2r(-90))  // got close to 9o robot at -73.4 yow  Waypoint(1, 4, Pathfinder.d2r(90))
+
+		};
+
+		Trajectory trajectory = Pathfinder.generate(points, config);
+
+		Pathfinder.writeToCSV(myFile, trajectory);
+	
+
+	}
+	*/
+	
+	/*
+	public void getTrajectory(File myFile) {
+		
+		Trajectory readTrajectory = Pathfinder.readFromCSV(myFile) ;
+		
+		_modifier = new TankModifier(readTrajectory).modify(Consts.robotWidthMeters);
+
+
+		leftTrajectory = _modifier.getLeftTrajectory();
+		rightTrajectory = _modifier.getRightTrajectory();
+		left = new EncoderFollower(leftTrajectory);
+		right = new EncoderFollower(rightTrajectory);
+		left.configureEncoder(0, Consts.ticksPerRotation, 0.1524);
+		right.configureEncoder(0, Consts.ticksPerRotation, 0.1524);
+
+		// configure pidva
+		// The first argument is the proportional gain. Usually this will be quite high
+		// The second argument is the integral gain. This is unused for motion profiling
+		// The third argument is the derivative gain. Tweak this if you are unhappy with
+		// the tracking of the trajectory
+		// The fourth argument is the velocity ratio. This is 1 over the maximum
+		// velocity you provided in the
+		// trajectory configuration (it translates m/s to a -1 to 1 scale that your
+		// motors can read)
+		// The fifth argument is your acceleration gain. Tweak this if you want to get
+		// to a higher or lower speed quicker
+		
+		  left.configurePIDVA(.8, 0.0, 0.0, (1/3.3528) , 0);
+		  right.configurePIDVA(.8, 0.0, 0.0, (1/3.3528), 0);
+	}
+	
+	*/
 	/**
 	 * @param _talon talon for requested encoder distance
 	 * @return encoder distance in ticks
