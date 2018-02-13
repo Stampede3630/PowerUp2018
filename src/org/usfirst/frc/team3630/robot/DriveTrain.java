@@ -195,7 +195,7 @@ public class DriveTrain {
 			if(init) {
 				autoDriveFw(Consts.autoE);
 			}
-			if(Math.abs(posController.getError()) < 1) {
+			if(Math.abs(posController.getError()) < 3) {
 				myCurrentCase = 4;
 	     		init = true;
 			}
