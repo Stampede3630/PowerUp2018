@@ -15,17 +15,17 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
-// /home/lvuser/Pathfinder
+// /home/lvuser/Pathfinder csv rio file path
 public class TankDrivePath  {
-	// Trajectory right,left
+	
 	public AHRS ahrs;
 	TankModifier _modifier;
 	Trajectory leftTrajectory;
 	Trajectory rightTrajectory;
 	private TalonSRX lTalon;
 	private TalonSRX rTalon;
-	public EncoderFollower left, right;
-	DistanceFollower leftDiagnostics, rightDiagnostics;
+	public EncoderFollower lEncoderFollower, rEncoderFollower,;
+	//DistanceFollower leftDiagnostics, rightDiagnostics;
 	File file;
 	public TankDrivePath(TalonSRX leftSRXSide, TalonSRX rightSRXSide) {
 		 ahrs = new AHRS(SPI.Port.kMXP); 
@@ -77,11 +77,12 @@ public class TankDrivePath  {
 		rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
 		lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
 
-		left = new EncoderFollower(leftTrajectory);
-		right = new EncoderFollower(rightTrajectory);
+		lEncoderFollower = new EncoderFollower(leftTrajectory);
+		rEncoderFollower = new EncoderFollower(rightTrajectory);
 		// peramiters enc starting point, total amount ticks, wheel diamitor
-		left.configureEncoder(0, Consts.ticksPerRotation, 0.1524);
-		right.configureEncoder(0, Consts.ticksPerRotation, 0.1524);
+
+		lEncoderFollower.configureEncoder(0, Consts.ticksPerRotation, Consts.Weeld );
+		rEncoderFollower .configureEncoder(0, Consts.ticksPerRotation, Consts.Weeld);
 		/*
 		  for (int i = 0; i<leftTrajectory.length(); i++){
 		 
@@ -110,10 +111,11 @@ public class TankDrivePath  {
 		// motors can read)
 		// The fifth argument is your acceleration gain. Tweak this if you want to get
 		// to a higher or lower speed quicker
-		  left.configurePIDVA(.8, 0.0, 0.0, (1/3.3528) , 0);
-		  right.configurePIDVA(.8, 0.0, 0.0, (1/3.3528), 0);
+
+		lEncoderFollower.configurePIDVA(Consts.pathKP, Consts.pathKI,Consts.pathKD , Consts.pathKF , Consts.pathKA);
+		  rEncoderFollower.configurePIDVA(Consts.pathKP, Consts.pathKI,Consts.pathKD , Consts.pathKF , Consts.pathKA);
 		
-		  System.out.print("Wheel circumfrence: ");
+		
 	}
 	public void pathInit() {
 		ahrs.reset();
@@ -209,18 +211,18 @@ public class TankDrivePath  {
 		//NAVX heading
 		//Since Jaci is from Australia, her compas is literally upsidedown 90 really = -90
 		//Path_heading is therefore the Pathfinder turn feedback loop
-		double gyro_heading =  ahrs.getYaw();  // Assuming the gyro is giving a value in degrees
-		double Path_heading = -1*  ahrs.getYaw(); 
+		double gyroheading =  ahrs.getYaw();  // Assuming the gyro is giving a value in degrees
+		double pathHeading = -1*  ahrs.getYaw(); 
 		SmartDashboard.putNumber("robot yaw", gyro_heading);
 		double desired_heading = (180/Math.PI)*(left.getHeading());  // Should also be in degrees
 		//boundHalf method makes sure we are in -180 to 180
-		double angleDifference =  Pathfinder.boundHalfDegrees(desired_heading - Path_heading);
-		double turn = Consts.turnKP * (-1.0/  80) * angleDifference;  
+		double angleDifference =  Pathfinder.boundHalfDegrees(desired_heading -  pathHeading);
+		double turn = Consts.turnKP  * angleDifference;  
 		
 		//calculates revised left and right output based on current ticks
 		//compares it to current trajectory (EncoderFollowers)
-		double outputLeft = left.calculate(getDistance_ticks(lTalon));
-		double outputRight = right.calculate(getDistance_ticks(rTalon));
+		double outputLeft = lEncoderFollower .calculate(getDistance_ticks(lTalon));
+		double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
 		double setLeftMotors= outputLeft+ turn ;
 		double setRightMotors = outputRight- turn  ;
 		 
@@ -230,6 +232,11 @@ public class TankDrivePath  {
 		//Take calculated output and set talons
 		//This output should be between -1 and 1... 
 		//but we think Phoenix does some magic
+		if (outputLeft<=1 || outputLeft>=- 1 ) {
+			System.out.println("Unsanitary talon output");
+			System.out.println(outputLeft);
+		}	
+		
 		lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, setLeftMotors);
 		rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, setRightMotors);
 	}

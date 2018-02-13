@@ -11,38 +11,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class DriveTrain  {
-	
-	
 	private XboxController _xBox;
-	
-	// corection angle for PID Source 
-	public double correctionAngle = 0;
-
-	// add coment about from what perspective of robot 
-	// need to test
-	 PIDController turnController;
-	 
-	public TankDrivePath path;
-	 double rotateToAngleRate;
-	    static final double kP = 0.1 ;
+	static final double kP = 0.1 ;
     static final double kI = 0.00;
     static final double kD = 0.00;
-    static final double kF = 1;
-
-    // target angle degrees for straight on should not be a constant !
-     double kTargetAngleDegrees = 0f;
-    
+    static final double kF = 1; 
 	private  WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
-	private SpeedControllerGroup  leftSpeedController,rightSpeedController;
-	// PIDSource pidSource ;
 	 DifferentialDrive driveTrain ;
-
+	 TankDrivePath path;
 	public DriveTrain()  {
-
-
-		
-		 
-		
 		_xBox = new XboxController(Consts.xBoxComPort);
 	
 		frontLeft = new WPI_TalonSRX(Consts.frontLeftTalon);
@@ -51,71 +28,24 @@ public class DriveTrain  {
 		backRight = new WPI_TalonSRX(Consts.backRightTalon);
 		
 		path = new TankDrivePath(frontLeft,frontRight);
+		driveTrain = new DifferentialDrive(frontLeft, frontRight);
 
-		leftSpeedController = new SpeedControllerGroup (frontLeft, new SpeedController[] {backLeft});
-		rightSpeedController = new SpeedControllerGroup (frontRight, new SpeedController[] {backRight});
-
-		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
-
-		
-		 
-	      
-	     
-	        
-	    	configureTalon(frontLeft);
+	    		configureTalon(frontLeft);
 			configureTalon(frontRight);
 			configureTalon(backLeft);
 			configureTalon(backRight);
-		
-
 			frontLeft.setInverted(false);
 			backLeft.setInverted(false);
-			frontRight.setInverted(true);
-			backRight.setInverted(true);
-			
-			
-		
-			
-	}
+			frontRight.setInverted(true);		
+}
 	
-	public void autoInit() {
-
-	}
-	// init method for navx calibaration setting 
-	
-	
-	   /* This function is invoked periodically by the PID Controller, */
-
-	public void driveStraight() {
-		
-		
-
-	
-	}
-	/*
-	public void turnDegree(double degrees) {
-		 kTargetAngleDegrees= degrees ;
-		// turnController.setSetpoint( kTargetAngleDegrees);
-	
-		
-		
-	}
-	*/
-	
-	
-	
-	
-
-
 	public void driveTrainPeriodic() {
+		backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontLeft.getDeviceID());
+		backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontRight.getDeviceID());
 		double speed = _xBox.getY(GenericHID.Hand.kLeft)*-1;
 		double heading = _xBox.getX(GenericHID.Hand.kRight);
-
-	
 		driveTrain.arcadeDrive( speed, heading);
-	
-		
-		
+
 	}
 	private void configureTalon(TalonSRX _talon) {
 	
@@ -139,7 +69,7 @@ public class DriveTrain  {
 	public void stop(){
 		driveTrain.arcadeDrive(0,0);
 	}
-	public void testInit() {
+	public void autoInit() {
 		// resets encoders
 		frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		frontRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
@@ -151,11 +81,10 @@ public class DriveTrain  {
 		path.pathInit();
 	}
 	
-		public void testPeriodic() {
+		public void autoPeriodic() {
 		
 			backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontLeft.getDeviceID());
 			backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontRight.getDeviceID());
-
 			path.autoPeriodic();
 		}
 	
@@ -173,13 +102,6 @@ public class DriveTrain  {
 			return velocity_seconds;
 		}
 
-		/*
-		public  class NavXPIDOutput implements PIDOutput {
-			// implements pid output
-					public void pidWrite(double output) {
-						correctionAngle=output;
-					}
-				}
-			*/
+	
 
 }
