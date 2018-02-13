@@ -25,17 +25,17 @@ public class Consts {
 	public static final double  kDRotAng = 0;
 	
 
-    public static final double kToleranceDegrees = 2;
-    public static final double kToleranceDistance = 3;
+    public static final double ToleranceDegrees = 2;
+    public static final double ToleranceDistance = 3;
 	
 	//Wheel Measurements
 	public static final int ticksPerRotation = 1000;
 	public static final int millisecondsPerSecond = 1000;
 	public static final int timeOutMs = 10;
-	public static final double wheelRadius = 3;
+	public static final double wheelRadiusInch = 3;
 	
 	//PID encoders drive number of rotations
-	public static final double kPencoder = 0.2;
+	public static final double kPencoder = 0.4;
 	public static final double kIencoder = 0.000000000;
 	public static final double kDencoder = 0.0;
 

@@ -70,7 +70,7 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void teleopPeriodic() {
-		_driveTrain.driveTrainPeriodic();
+		_driveTrain.teleopPeriodic();
 		
 	}
 	public void autonomousInit() {
@@ -124,7 +124,7 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousPeriodic() {
 		autoLogic();
-		_driveTrain.testDriveTrainPeriodic();
+		_driveTrain.getDiagnostics();
 	}
 	public void autoLogic() {
 		if(gameData.length() > 0) {

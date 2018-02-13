@@ -1,9 +1,12 @@
 package org.usfirst.frc.team3630.robot;
 
 import com.ctre.phoenix.*;
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.StickyFaults;
+import com.ctre.phoenix.motorcontrol.Faults;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -16,7 +19,8 @@ public class DriveTrain {
 
 	private XboxController _xBox;
 	AHRS ahrs;
-
+	ErrorCode sticky;
+	ErrorCode fault;
 	// add coment about from what perspective of robot
 	// need to test
 	double turnOutput;
@@ -35,7 +39,7 @@ public class DriveTrain {
 	double kTargetDistanceInches = 1000;
 
 	private WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
-	private SpeedControllerGroup leftSpeedController, rightSpeedController;
+	//private SpeedControllerGroup leftSpeedController, rightSpeedController;
 	// PIDSource pidSource ;
 	DifferentialDrive driveTrain;
 
@@ -57,6 +61,8 @@ public class DriveTrain {
 		configureTalon(frontRight);
 		configureTalon(backLeft);
 		configureTalon(backRight);
+		backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 3);
+		backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
 		frontRight.setInverted(false);
 		backRight.setInverted(false); 
 		
@@ -64,25 +70,26 @@ public class DriveTrain {
 		//SmartDashboard.putNumber("pos Setpoint", 24);
 		//SmartDashboard.putNumber("posController kP", 0.07);
 
-		leftSpeedController = new SpeedControllerGroup(frontLeft, new SpeedController[] { backLeft });
-		rightSpeedController = new SpeedControllerGroup(frontRight, new SpeedController[] { backRight });
-		////////////
-		driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
+		//leftSpeedController = new SpeedControllerGroup(frontLeft, new SpeedController[] { backLeft });
+		//rightSpeedController = new SpeedControllerGroup(frontRight, new SpeedController[] { backRight });
+	
+		//driveTrain = new DifferentialDrive(leftSpeedController, rightSpeedController);
+		driveTrain = new DifferentialDrive(frontLeft, frontRight);
 		driveTrain.setDeadband(0);
 		turnController = new PIDController(Consts.kPRotAng, Consts.kIRotAng, Consts.kDRotAng, ahrs,new MyRotationPidOutput());
 
 		// setting range and disable it
 		turnController.setInputRange(-180.0f, 180.0f);
 		turnController.setOutputRange(-.75, .75);
-		turnController.setAbsoluteTolerance(Consts.kToleranceDegrees);
+		turnController.setAbsoluteTolerance(Consts.ToleranceDegrees);
 		turnController.setContinuous(true);
 		turnController.disable();
 
 		positionEncoderSource = new EncoderPIDSource(frontLeft, frontRight);
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
-		posController.setOutputRange(-1, 1);
-		posController.setAbsoluteTolerance(Consts.kToleranceDistance);
+		posController.setOutputRange(-.75, .75);
+		posController.setAbsoluteTolerance(Consts.ToleranceDistance);
 		posController.disable();
 		
 
@@ -91,17 +98,7 @@ public class DriveTrain {
 
 	/* This function is invoked periodically by the PID Controller, */
 
-	public void driveStraight() {
-
-		turnController.enable();
-		turnController.setSetpoint(kTargetAngleDegrees);
-
-		posController.enable();
-		posController.setSetpoint(kTargetDistanceInches);
-
-		// driveTrain.arcadeDrive(.5, angle );
-
-	}
+	
 
 	public void turnDegree(double degrees) {
 		kTargetAngleDegrees = degrees;
@@ -115,7 +112,7 @@ public class DriveTrain {
 		return yaw;
 	}
 
-	public void driveTrainPeriodic() {
+	public void teleopPeriodic() {
 		double speed = (_xBox.getY(GenericHID.Hand.kLeft))*-1;
 		double heading = _xBox.getX(GenericHID.Hand.kRight);
 		driveTrain.arcadeDrive(speed, heading);
@@ -138,7 +135,22 @@ public class DriveTrain {
 	
 	}
 
-	public void testDriveTrainPeriodic() {
+	public void getDiagnostics() {
+		SmartDashboard.putNumber("Front Right Position", getRotations(frontRight));
+		SmartDashboard.putNumber("Front Right Velocity", getVelocity(frontRight));
+		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
+		SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
+		SmartDashboard.putNumber("Back Right Position", getRotations(backRight));
+		SmartDashboard.putNumber("Back Right Velocity", getVelocity(backRight));
+		SmartDashboard.putNumber("Back Left Position", getRotations(backLeft));
+		SmartDashboard.putNumber("Back Left Velocity", getVelocity(backLeft));
+		// SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
+		// SmartDashboard.putString("control mode",frontLeft.getControlMode() );
+//		frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+//		frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+//		backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+//		backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+		SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
 		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
 	     
 		driveTrain.arcadeDrive(posOutput, turnOutput);
@@ -152,18 +164,15 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Stage", myCurrentCase);
 		SmartDashboard.putNumber("turn controller error", turnController.getError());
 		//posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
-		//leftSwitchLeft();
-		//rightSwitchRight();
-		//rightScaleRight();
-		//leftScaleLeft();
-		//leftSwitchRight();
-		//middleSwitchRight();
-		//middleSwitchLeft();
-		//middleScaleRight();
-		//rightSwitchLeft();
 		SmartDashboard.putBoolean("Is right true?", right);
 		SmartDashboard.putBoolean("PosControl ON", 	posController.isEnabled());
 		SmartDashboard.putBoolean("TurnControl On", turnController.isEnabled());
+		SmartDashboard.putBoolean("Is init true?", init);
+		SmartDashboard.putNumber("posController input", posOutput);
+		
+		fault=frontLeft.getLastError();
+		if(fault != ErrorCode.OK) System.out.println(fault);
+
 	}
 	
 	public void leftSwitchLeft() {
@@ -194,6 +203,7 @@ public class DriveTrain {
 		if (myCurrentCase == 3) {
 			if(init) {
 				autoDriveFw(Consts.autoE);
+				
 			}
 			if(Math.abs(posController.getError()) < 3) {
 				myCurrentCase = 4;
@@ -823,7 +833,10 @@ public class DriveTrain {
 
 	
 	public void autoDriveFw(double inches) {
-		posController.setSetpoint(inches + positionEncoderSource.pidGet());
+		frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		frontRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		System.out.println("autoDriveFw was called");
+		posController.setSetpoint(inches);
 		posController.enable();
 		init = false;
 		}
@@ -850,24 +863,7 @@ public class DriveTrain {
 		driveTrain.arcadeDrive(0, 0);
 	}
 
-	public void testPeriodic() {
-		
-		SmartDashboard.putNumber("Front Right Position", getRotations(frontRight));
-		SmartDashboard.putNumber("Front Right Velocity", getVelocity(frontRight));
-		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
-		SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
-		SmartDashboard.putNumber("Back Right Position", getRotations(backRight));
-		SmartDashboard.putNumber("Back Right Velocity", getVelocity(backRight));
-		SmartDashboard.putNumber("Back Left Position", getRotations(backLeft));
-		SmartDashboard.putNumber("Back Left Velocity", getVelocity(backLeft));
-		// SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
-		// SmartDashboard.putString("control mode",frontLeft.getControlMode() );
-//		frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-//		frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-//		backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-//		backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-		SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
-	}
+
 
 	public void testInit() {
 		ahrs.reset();
@@ -936,14 +932,14 @@ public class DriveTrain {
 			double positionInches;
 			//double position_raw = (fLGetSelected + fRGetSelected)/2;
 			if(right) {
-				positionInches = fRGetSelected * (double) (2 * Math.PI * Consts.wheelRadius) / (double) Consts.ticksPerRotation ;
+				positionInches = fRGetSelected * (double) (2 * Math.PI * Consts.wheelRadiusInch) / (double) Consts.ticksPerRotation ;
 				SmartDashboard.putString("Right", "Right calling");
 			}
 			else {
-				positionInches = fLGetSelected * (double) (2 * Math.PI * Consts.wheelRadius) / (double) Consts.ticksPerRotation ;
+				positionInches = fLGetSelected * (double) (2 * Math.PI * Consts.wheelRadiusInch) / (double) Consts.ticksPerRotation ;
 				SmartDashboard.putString("Left", "Left calling");
 			}
-			//double position_inches = position_raw * (double) (2 * Math.PI * Consts.wheelRadius) / (double) Consts.ticksPerRotation ;
+			//double position_inches = position_raw * (double) (2 * Math.PI * Consts.wheelRadiusInch) / (double) Consts.ticksPerRotation ;
 			//SmartDashboard.putNumber("Front Left Talon Position", fRGetSelected);
 			//SmartDashboard.putNumber("Front Right Talon Position", fRGetSelected);
 			return positionInches;
