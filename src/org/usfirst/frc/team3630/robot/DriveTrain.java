@@ -62,7 +62,7 @@ public class DriveTrain {
 		configureTalon(backLeft);
 		configureTalon(backRight);
 		backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 3);
-		backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
+		backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
 		frontRight.setInverted(false);
 		backRight.setInverted(false); 
 		
