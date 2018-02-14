@@ -39,7 +39,7 @@ public class Consts {
 	public static final double kIencoder = 0.000000000;
 	public static final double kDencoder = 0.0;
 
-	public static final double kPPos = 0.05;
+	public static final double kPPos = 0.07;
 	public static final double kIPos = 0;
 	public static final double kDPos = 0;
 	// Auto Distances

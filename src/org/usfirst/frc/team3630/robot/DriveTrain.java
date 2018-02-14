@@ -52,7 +52,7 @@ public class DriveTrain {
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 		_xBox = new XboxController(Consts.xBoxComPort);
 		// srx defin
-		frontLeft = new WPI_TalonSRX(Consts.frontLeftTalon);
+		frontLeft = new TalonTester(Consts.frontLeftTalon);
 		backLeft = new WPI_TalonSRX(Consts.backLeftTalon);
 		frontRight = new WPI_TalonSRX(Consts.frontRightTalon);
 		backRight = new WPI_TalonSRX(Consts.backRightTalon);
@@ -61,8 +61,9 @@ public class DriveTrain {
 		configureTalon(frontRight);
 		configureTalon(backLeft);
 		configureTalon(backRight);
-		backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 3);
-		backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
+		
+		frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, backRight.getDeviceID());
+		frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, backLeft.getDeviceID());
 		frontRight.setInverted(false);
 		backRight.setInverted(false); 
 		
@@ -85,7 +86,7 @@ public class DriveTrain {
 		turnController.setContinuous(true);
 		turnController.disable();
 
-		positionEncoderSource = new EncoderPIDSource(frontLeft, frontRight);
+		positionEncoderSource = new EncoderPIDSource(backLeft, backRight);
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
 		posController.setOutputRange(-.75, .75);
@@ -159,8 +160,6 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Position Setpoint", posController.getSetpoint());
 		SmartDashboard.putNumber("Position Error", posController.getError());
 		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
-		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
-		SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
 		SmartDashboard.putNumber("Stage", myCurrentCase);
 		SmartDashboard.putNumber("turn controller error", turnController.getError());
 		//posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
@@ -202,6 +201,8 @@ public class DriveTrain {
 		}
 		if (myCurrentCase == 3) {
 			if(init) {
+				backLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+				backRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 				autoDriveFw(Consts.autoE);
 				
 			}
@@ -833,8 +834,6 @@ public class DriveTrain {
 
 	
 	public void autoDriveFw(double inches) {
-		frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-		frontRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		System.out.println("autoDriveFw was called");
 		posController.setSetpoint(inches);
 		posController.enable();
