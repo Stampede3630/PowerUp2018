@@ -52,18 +52,18 @@ public class DriveTrain {
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 		_xBox = new XboxController(Consts.xBoxComPort);
 		// srx defin
-		frontLeft = new TalonTester(Consts.frontLeftTalon);
-		backLeft = new WPI_TalonSRX(Consts.backLeftTalon);
-		frontRight = new WPI_TalonSRX(Consts.frontRightTalon);
-		backRight = new WPI_TalonSRX(Consts.backRightTalon);
+		frontLeft = new TalonTester(Consts.backLeftTalon);
+		backLeft = new WPI_TalonSRX(Consts.frontLeftTalon);
+		frontRight = new WPI_TalonSRX(Consts.backRightTalon);
+		backRight = new WPI_TalonSRX(Consts.frontRightTalon);
 		//////////////////////////
 		configureTalon(frontLeft);
 		configureTalon(frontRight);
 		configureTalon(backLeft);
 		configureTalon(backRight);
 		
-		frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, backRight.getDeviceID());
-		frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, backLeft.getDeviceID());
+		backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontRight.getDeviceID());
+		backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontLeft.getDeviceID());
 		frontRight.setInverted(false);
 		backRight.setInverted(false); 
 		
@@ -86,7 +86,7 @@ public class DriveTrain {
 		turnController.setContinuous(true);
 		turnController.disable();
 
-		positionEncoderSource = new EncoderPIDSource(backLeft, backRight);
+		positionEncoderSource = new EncoderPIDSource(frontLeft, frontRight);
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
 		posController.setOutputRange(-.75, .75);
@@ -201,8 +201,8 @@ public class DriveTrain {
 		}
 		if (myCurrentCase == 3) {
 			if(init) {
-				backLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-				backRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+				frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+				frontRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 				autoDriveFw(Consts.autoE);
 				
 			}
