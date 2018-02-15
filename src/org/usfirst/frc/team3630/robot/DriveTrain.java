@@ -38,7 +38,7 @@ public class DriveTrain {
 	double kTargetAngleDegrees = 0f;
 	double kTargetDistanceInches = 1000;
 
-	private WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
+	private WPI_TalonSRX leftEncoder, rightEncoder, leftTwo, rightTwo, leftThree, rightThree;
 	//private SpeedControllerGroup leftSpeedController, rightSpeedController;
 	// PIDSource pidSource ;
 	DifferentialDrive driveTrain;
@@ -52,29 +52,36 @@ public class DriveTrain {
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 		_xBox = new XboxController(Consts.xBoxComPort);
 		// srx defin
-		frontLeft = new TalonTester(Consts.backLeftTalon);
-		backLeft = new WPI_TalonSRX(Consts.frontLeftTalon);
-		frontRight = new WPI_TalonSRX(Consts.backRightTalon);
-		backRight = new WPI_TalonSRX(Consts.frontRightTalon);
-		//////////////////////////
-		configureTalon(frontLeft);
-		configureTalon(frontRight);
-		configureTalon(backLeft);
-		configureTalon(backRight);
+		leftEncoder = new TalonTester(Consts.leftEncoder);
+		leftTwo = new WPI_TalonSRX(Consts.leftTwo);
+		leftThree = new WPI_TalonSRX(Consts.leftThree);
+		rightEncoder = new WPI_TalonSRX(Consts.rightEncoder);
+		rightTwo = new WPI_TalonSRX(Consts.rightTwo);
+		rightThree = new WPI_TalonSRX(Consts.rightThree);
 		
-		backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontRight.getDeviceID());
-		backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontLeft.getDeviceID());
-		frontRight.setInverted(false); //do we need this?
-		backRight.setInverted(false); 
-		frontRight.setSensorPhase(false);
-		backRight.setSensorPhase(false);
+		//////////////////////////
+		configureTalon(leftEncoder);
+		configureTalon(rightEncoder);
+		configureTalon(leftTwo);
+		configureTalon(rightTwo);
+		configureTalon(leftThree);
+		configureTalon(rightThree);
+		
+		rightTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
+		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
+		rightThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
+		leftThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
+		rightEncoder.setInverted(false); //do we need this?
+		rightTwo.setInverted(false); 
+		rightEncoder.setSensorPhase(false);
+		rightTwo.setSensorPhase(false);
 		
 		//SmartDashboard.putNumber("Setpoint", 1000);
 		//SmartDashboard.putNumber("pos Setpoint", 24);
 		//SmartDashboard.putNumber("posController kP", 0.07);
 
 	
-		driveTrain = new DifferentialDrive(frontLeft, frontRight);
+		driveTrain = new DifferentialDrive(leftEncoder, rightEncoder);
 		driveTrain.setDeadband(0);
 		turnController = new PIDController(Consts.kPRotAng, Consts.kIRotAng, Consts.kDRotAng, ahrs,new MyRotationPidOutput());
 
@@ -85,7 +92,7 @@ public class DriveTrain {
 		turnController.setContinuous(true);
 		turnController.disable();
 
-		positionEncoderSource = new EncoderPIDSource(frontLeft, frontRight);
+		positionEncoderSource = new EncoderPIDSource(leftEncoder, rightEncoder);
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
 		posController.setOutputRange(-1, 1);
@@ -136,21 +143,21 @@ public class DriveTrain {
 	}
 
 	public void getDiagnostics() {
-		SmartDashboard.putNumber("Front Right Position", getRotations(frontRight));
-		SmartDashboard.putNumber("Front Right Velocity", getVelocity(frontRight));
-		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
-		SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
-		SmartDashboard.putNumber("Back Right Position", getRotations(backRight));
-		SmartDashboard.putNumber("Back Right Velocity", getVelocity(backRight));
-		SmartDashboard.putNumber("Back Left Position", getRotations(backLeft));
-		SmartDashboard.putNumber("Back Left Velocity", getVelocity(backLeft));
+		SmartDashboard.putNumber("Front Right Position", getRotations(rightEncoder));
+		SmartDashboard.putNumber("Front Right Velocity", getVelocity(rightEncoder));
+		SmartDashboard.putNumber("Front Left Position", getRotations(leftEncoder));
+		SmartDashboard.putNumber("Front Left Velocity", getVelocity(leftEncoder));
+		SmartDashboard.putNumber("Back Right Position", getRotations(rightTwo));
+		SmartDashboard.putNumber("Back Right Velocity", getVelocity(rightTwo));
+		SmartDashboard.putNumber("Back Left Position", getRotations(leftTwo));
+		SmartDashboard.putNumber("Back Left Velocity", getVelocity(leftTwo));
 		// SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
 		// SmartDashboard.putString("control mode",frontLeft.getControlMode() );
 //		frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
 //		frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
 //		backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
 //		backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-		SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
+		SmartDashboard.putNumber("Front Left Error", leftEncoder.getClosedLoopError(0));
 		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
 	     
 		driveTrain.arcadeDrive(posOutput, turnOutput);
@@ -168,7 +175,7 @@ public class DriveTrain {
 		SmartDashboard.putBoolean("Is init true?", init);
 		SmartDashboard.putNumber("posController input", posOutput);
 		
-		fault=frontLeft.getLastError();
+		fault=leftEncoder.getLastError();
 		if(fault != ErrorCode.OK) System.out.println(fault);
 
 	}
@@ -200,8 +207,8 @@ public class DriveTrain {
 		}
 		if (myCurrentCase == 3) {
 			if(init) {
-				frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-				frontRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+				leftEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+				rightEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 				autoDriveFw(Consts.autoE);
 				
 			}
@@ -871,10 +878,10 @@ public class DriveTrain {
 		ahrs.reset();
 		turnController.reset();
 		posController.reset();
-		frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-		frontRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-		backLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-		backRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		leftEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		rightEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		leftTwo.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		rightTwo.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
 		myCurrentCase = 1;	
 		

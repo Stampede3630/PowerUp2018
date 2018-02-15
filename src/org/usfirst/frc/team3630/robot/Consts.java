@@ -10,10 +10,12 @@ public class Consts {
     // global assignments /
 	public static final int xBoxComPort = 0; 
 	// DriveTrain 
-	public static final int frontLeftTalon = 1;
-	public static final int backLeftTalon = 3;
-	public static final int frontRightTalon = 4; 
-	public static final int backRightTalon = 2;
+	public static final int leftTwo = 1;
+	public static final int leftThree = 2;
+	public static final int leftEncoder = 3;
+	public static final int rightTwo = 4; 
+	public static final int rightEncoder = 5;
+	public static final int rightThree = 6;
 	
 	// Manipulators 
 	
