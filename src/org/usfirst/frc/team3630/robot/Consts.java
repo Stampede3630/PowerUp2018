@@ -52,8 +52,10 @@ public class Consts {
 	public static final double autoG = 192.62;
 	public static final double autoH = 264.62;
 	public static final double autoI = 120.62;
+	public static final double autoLine = 120;
 	
-			
+	public static final double autoPosError = 3;
+	public static final double autoTurnError = 2;
 	
 	
 	
