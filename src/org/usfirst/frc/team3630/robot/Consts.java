@@ -14,8 +14,8 @@ public class Consts {
 	public static final int leftThree = 2;
 	public static final int leftEncoder = 3;
 	public static final int rightTwo = 4; 
-	public static final int rightEncoder = 5;
-	public static final int rightThree = 6;
+	public static final int rightThree = 5;
+	public static final int rightEncoder = 6;
 	
 	// Manipulators 
 	

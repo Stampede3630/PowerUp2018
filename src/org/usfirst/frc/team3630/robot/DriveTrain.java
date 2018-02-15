@@ -75,6 +75,7 @@ public class DriveTrain {
 		rightTwo.setInverted(false); 
 		rightEncoder.setSensorPhase(false);
 		rightTwo.setSensorPhase(false);
+		rightThree.setSensorPhase(false);
 		
 		//SmartDashboard.putNumber("Setpoint", 1000);
 		//SmartDashboard.putNumber("pos Setpoint", 24);
@@ -882,6 +883,8 @@ public class DriveTrain {
 		rightEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		leftTwo.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		rightTwo.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		leftThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		rightThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
 		myCurrentCase = 1;	
 		
