@@ -22,8 +22,7 @@ public class Consts {
 	public static final double  kID = 0;
     //pathfinder units all needs to be in meeters
     public static final double degtoRad = ( 3.14 /180.0);
-    public static final double robotWidthMeters = 29.5 *intoMeters;
-	//Wheel Measurements
+  	//Wheel Measurements
 	public static final int ticksPerRotation = 1000;
 	public static final int millisecondsPerSecond = 1000;
 	public static final int timeOutMs = 10;
@@ -31,7 +30,8 @@ public class Consts {
 	public static final double pathConversion  = .1;
 	public static final double intoMeters =  0.0254;
 	public static final double Weeld  = 6 *  intoMeters;
-	
+	  public static final double robotWidthMeters = 29.5 *intoMeters;
+
 	public static final double pathKP  = 0.8;
 	public static final double pathKI  = 0.0;
 	public static final double pathKD  = 0.0;

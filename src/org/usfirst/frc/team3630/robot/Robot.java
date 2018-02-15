@@ -14,12 +14,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot {
 	DriveTrain _driveTrain;
-	Timer  autoTime; 
+
 
 	public void robotInit() {
 		_driveTrain = new DriveTrain();
-		autoTime = new Timer();
-		
+	
 		
 	
 	}
@@ -29,16 +28,16 @@ public class Robot extends TimedRobot {
 	}
 
 
-	public void autoInit() {
-		_driveTrain.testInit() ;
+	public void autonomousInit() {
+		_driveTrain.autoInit() ;
 		LiveWindow.disableAllTelemetry();
 		
 	
 	
 	}
 
-	public void autoPeriodic() {
-		_driveTrain.testPeriodic();
+	public void autonomousPeriodic() {
+		_driveTrain.autoPeriodic();
 		LiveWindow.disableAllTelemetry();
 
 	}

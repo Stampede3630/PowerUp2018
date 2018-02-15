@@ -24,7 +24,7 @@ public class TankDrivePath  {
 	Trajectory rightTrajectory;
 	private TalonSRX lTalon;
 	private TalonSRX rTalon;
-	public EncoderFollower lEncoderFollower, rEncoderFollower,;
+	public EncoderFollower lEncoderFollower, rEncoderFollower;
 	//DistanceFollower leftDiagnostics, rightDiagnostics;
 	File file;
 	public TankDrivePath(TalonSRX leftSRXSide, TalonSRX rightSRXSide) {
@@ -63,11 +63,11 @@ public class TankDrivePath  {
 
 		Trajectory trajectory = Pathfinder.generate(points, config);
 		
-		File myRead = new File("/home/lvuser/Pathfinder/test.csv");
-		Pathfinder.writeToCSV(myRead, trajectory);
-		Trajectory readTrajectory = Pathfinder.readFromCSV(myRead) ;
+	//	File myRead = new File("/home/lvuser/Pathfinder/test.csv");
+	//	Pathfinder.writeToCSV(myRead, trajectory);
+	//	Trajectory readTrajectory = Pathfinder.readFromCSV(myRead) ;
 		
-		_modifier = new TankModifier(readTrajectory).modify(Consts.robotWidthMeters);
+		_modifier = new TankModifier(trajectory).modify(Consts.robotWidthMeters);
 
 
 		leftTrajectory = _modifier.getLeftTrajectory();
@@ -112,8 +112,8 @@ public class TankDrivePath  {
 		// The fifth argument is your acceleration gain. Tweak this if you want to get
 		// to a higher or lower speed quicker
 
-		lEncoderFollower.configurePIDVA(Consts.pathKP, Consts.pathKI,Consts.pathKD , Consts.pathKF , Consts.pathKA);
-		  rEncoderFollower.configurePIDVA(Consts.pathKP, Consts.pathKI,Consts.pathKD , Consts.pathKF , Consts.pathKA);
+		lEncoderFollower.configurePIDVA(Consts.pathKP, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
+		  rEncoderFollower.configurePIDVA(Consts.pathKP, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
 		
 		
 	}
@@ -211,20 +211,24 @@ public class TankDrivePath  {
 		//NAVX heading
 		//Since Jaci is from Australia, her compas is literally upsidedown 90 really = -90
 		//Path_heading is therefore the Pathfinder turn feedback loop
+		
 		double gyroheading =  ahrs.getYaw();  // Assuming the gyro is giving a value in degrees
+		
 		double pathHeading = -1*  ahrs.getYaw(); 
-		SmartDashboard.putNumber("robot yaw", gyro_heading);
-		double desired_heading = (180/Math.PI)*(left.getHeading());  // Should also be in degrees
+		SmartDashboard.putNumber("robot yaw", gyroheading);
+		double desired_heading = (180/Math.PI)*(lEncoderFollower.getHeading());  // Should also be in degrees
 		//boundHalf method makes sure we are in -180 to 180
 		double angleDifference =  Pathfinder.boundHalfDegrees(desired_heading -  pathHeading);
-		double turn = Consts.turnKP  * angleDifference;  
+		double turn = .6* (-1.0/  80) * angleDifference;  
 		
 		//calculates revised left and right output based on current ticks
 		//compares it to current trajectory (EncoderFollowers)
 		double outputLeft = lEncoderFollower .calculate(getDistance_ticks(lTalon));
 		double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
-		double setLeftMotors= outputLeft+ turn ;
-		double setRightMotors = outputRight- turn  ;
+		//+turn
+		double setLeftMotors= outputLeft +turn ;
+		//-turn
+		double setRightMotors = outputRight-turn  ;
 		 
 		
 		SmartDashboard.putNumber(" vLeft",   setLeftMotors);

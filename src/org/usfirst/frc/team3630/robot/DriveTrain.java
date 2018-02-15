@@ -27,13 +27,13 @@ public class DriveTrain  {
 		frontRight = new WPI_TalonSRX(Consts.frontRightTalon);
 		backRight = new WPI_TalonSRX(Consts.backRightTalon);
 		
-		path = new TankDrivePath(frontLeft,frontRight);
-		driveTrain = new DifferentialDrive(frontLeft, frontRight);
-
+		
+		
 	    		configureTalon(frontLeft);
 			configureTalon(frontRight);
 			configureTalon(backLeft);
 			configureTalon(backRight);
+			path = new TankDrivePath(frontLeft,frontRight);
 			frontLeft.setInverted(false);
 			backLeft.setInverted(false);
 			frontRight.setInverted(true);		
@@ -76,8 +76,8 @@ public class DriveTrain  {
 		backRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		backLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		// need to put in robot init for speed 
-		path.left.reset();
-		path.right.reset();
+		path.rEncoderFollower.reset();
+		path.lEncoderFollower.reset();
 		path.pathInit();
 	}
 	
