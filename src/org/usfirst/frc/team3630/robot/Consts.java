@@ -57,6 +57,19 @@ public class Consts {
 	public static final double autoPosError = 3;
 	public static final double autoTurnError = 2;
 	
+	//////////////////////////
+	// manipulator conts 
+	// pcma
+	public static final double solonoidLifterOpenChanal  = 0 ;// a prime
+	public static final double solonoidLifterCloseChanal  = 1 ;//b prime
+	public static final double solonoidClampOpenChanal= 2;// a3
+	public static final double solonoidClampCloseChanal= 3;// b2
+	// pcm b
+	public static final double solonoidKickOpenChanal  = 2 ;//a4
+	public static final double solonoidKickCloseChanal  = 3 ;//b4
+	public static final double pcmAChanal= 0;
+	public static final double pcmBChanal= 1;
+
 	
-	
-}
+}	
+

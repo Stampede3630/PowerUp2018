@@ -136,6 +136,7 @@ public class DriveTrain {
 	}
 
 	public void getDiagnostics() {
+		SmartDashboard.putBoolean(key, value)
 		SmartDashboard.putNumber("Front Right Position", getRotations(frontRight));
 		SmartDashboard.putNumber("Front Right Velocity", getVelocity(frontRight));
 		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
