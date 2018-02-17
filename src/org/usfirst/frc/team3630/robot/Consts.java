@@ -15,9 +15,7 @@ public class Consts {
 	public static final int frontRightTalon = 4; 
 	public static final int backRightTalon = 2;
 	
-	// Manipulators 
-	
-	
+	// Manipulators 	
 	public static final double  kPRotAng = 0.1;
 
 	public static final double  kIRotAng = 0;

@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 	String gameData;
-	 boxGraber box ;
+	BoxGrabber box ;
 	public enum StartingPoints {
 		LEFT, RIGHT, MIDDLE
 	}
@@ -32,7 +32,7 @@ public class Robot extends IterativeRobot {
 	
 	public void robotInit() {
 		_driveTrain = new DriveTrain();
-		box = new boxGraber();
+		box = new BoxGrabber();
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
 		autoChooser = new SendableChooser();
