@@ -68,7 +68,18 @@ public class Robot extends IterativeRobot {
 		autoRLR.addObject("Do Nothing", Destinations.DONO);
 		autoRLR.addObject("Auto Line", Destinations.DRFW);
 		SmartDashboard.putData("RLR Options", autoRLR);
+		
+		_driveTrain.autoInit();
 	}
+	
+	public void testInit() {
+		_driveTrain.testInit();
+	}
+	
+	public void testPeriodic() {
+		_driveTrain.testPeriodic();
+	}
+	
 	@Override
 	public void robotPeriodic() {
 		_driveTrain.getDiagnostics();
@@ -94,6 +105,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		autoLogic();
+		_driveTrain.autoPeriodic();
 		_driveTrain.getDiagnostics();
 	}
 	@Override

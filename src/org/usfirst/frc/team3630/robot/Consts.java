@@ -31,7 +31,7 @@ public class Consts {
     public static final double ToleranceDistance = 3;
 	
 	//Wheel Measurements
-	public static final int ticksPerRotation = 1000;
+	public static final int ticksPerRotation = 350;
 	public static final int millisecondsPerSecond = 1000;
 	public static final int timeOutMs = 10;
 	public static final double wheelRadiusInch = 3;
