@@ -11,14 +11,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Robot extends IterativeRobot {
 	String gameData;
 	public enum StartingPoints {
-		LEFT, RIGHT, MIDDLE
+		LEFT, RIGHT, MIDDLE, UNDEFINED
 	}
+	
 	public enum Destinations {
 		SWL, SCL, SWR, SCR, DONO, DRFW
 	}
+	
+	StartingPoints mySP;
+	Destinations myDest;
 
 	SendableChooser autoChooser;
 	SendableChooser autoLLL;
@@ -72,6 +77,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotPeriodic() {
 		_driveTrain.getDiagnostics();
+		
+		mySP = (StartingPoints) autoChooser.getSelected();
 	}
 	
 	@Override
@@ -217,15 +224,98 @@ public class Robot extends IterativeRobot {
 			}
 		}
 	}
+	
 	public void caseAutoLogic() {
+		
 		switch(gameData.substring(0, 1)) {
 		case "LL":
+			myDest = (Destinations) autoLLL.getSelected();
+			
+			switch (mySP) {
+			case LEFT:
+				switch (myDest) {
+				case SWL:
+					_driveTrain.leftSwitchLeft();
+					break;
+				case SCL:
+					_driveTrain.leftScaleLeft();
+					break;
+				case SWR:
+					_driveTrain.leftSwitchRight();
+					break;
+				case SCR:
+					_driveTrain.leftScaleRight();
+					break;
+				case DONO:
+					_driveTrain.autoDoNothing();
+					break;
+				case DRFW:
+					_driveTrain.autoDriveFw(Consts.autoLine);
+					break;
+				default:
+					_driveTrain.autoDriveFw(Consts.autoLine);
+				}
+				break;
+			case MIDDLE:
+				switch (myDest) {
+				case SWL:
+					_driveTrain.middleSwitchLeft();
+					break;
+				case SCL:
+					_driveTrain.middleScaleLeft();
+					break;
+				case SWR:
+					_driveTrain.middleSwitchRight();
+					break;
+				case SCR:
+					_driveTrain.middleScaleRight();
+					break;
+				case DONO:
+					_driveTrain.autoDoNothing();
+					break;
+				case DRFW:
+					_driveTrain.autoDriveFw(Consts.autoLine);
+					break;
+				default:
+					_driveTrain.autoDriveFw(Consts.autoLine);
+				}
+				break;
+			case RIGHT:
+				switch (myDest) {
+				case SWL:
+					_driveTrain.rightSwitchLeft();
+					break;
+				case SCL:
+					_driveTrain.rightScaleLeft();
+					break;
+				case SWR:
+					_driveTrain.rightSwitchRight();
+					break;
+				case SCR:
+					_driveTrain.rightScaleRight();
+					break;
+				case DONO:
+					_driveTrain.autoDoNothing();
+					break;
+				case DRFW:
+					_driveTrain.autoDriveFw(Consts.autoLine);
+					break;
+				default:
+					_driveTrain.autoDriveFw(Consts.autoLine);
+				}
+				break;
+			default:
+				break;
+			}
 			break;
 		case "LR":
+			myDest = (Destinations) autoLRL.getSelected();
 			break;
 		case "RR":
+			myDest = (Destinations) autoRRR.getSelected();
 			break;
 		case "RL":
+			myDest = (Destinations) autoRLR.getSelected();
 			break;
 		}
 	}
