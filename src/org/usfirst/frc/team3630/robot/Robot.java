@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 	String gameData;
+	 boxGraber box ;
 	public enum StartingPoints {
 		LEFT, RIGHT, MIDDLE
 	}
@@ -31,7 +32,7 @@ public class Robot extends IterativeRobot {
 	
 	public void robotInit() {
 		_driveTrain = new DriveTrain();
-		
+		box = new boxGraber();
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
 		autoChooser = new SendableChooser();
@@ -72,6 +73,7 @@ public class Robot extends IterativeRobot {
 	
 	public void teleopPeriodic() {
 		_driveTrain.teleopPeriodic();
+		box.boxGraberPeriodic();
 		
 	}
 	public void autonomousInit() {
