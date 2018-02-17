@@ -140,6 +140,7 @@ public class DriveTrain {
 		_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
 		_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
 		_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
+		_talon.configOpenloopRamp(1.5, Consts.timeOutMs);
 	
 	}
 
