@@ -130,8 +130,8 @@ public void slideReverse() {
 public double   compresorPSI() {
 	
 	double sensorV= pressureLevel.getVoltage();
-	double  psi = 250 (sensorV/ 5) -25 
-	return psi
+	double  psi = 250 * (sensorV/ 5) -25 ;
+	return psi;
 	// rerurn psi
 	// decide low pxi level 
 	// for details see adni mark spech sheet 
@@ -144,7 +144,7 @@ public double   compresorPSI() {
 public void manipulatorDianostics() {
 	testOn= true;
 	compresorPSI();
-	SmartDashboard.putNumber("Compresor PSI ",compresorPSI())
+	SmartDashboard.putNumber("Compresor PSI ",compresorPSI());
 	// presure switch output 
 	SmartDashboard.putBoolean("testOn", testOn);
 	SmartDashboard.putBoolean("liftgoing up", liftUpEngaged);
