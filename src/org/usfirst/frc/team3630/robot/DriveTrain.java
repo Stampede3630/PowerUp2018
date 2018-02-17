@@ -69,7 +69,6 @@ public class DriveTrain {
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
 		rightThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
 		leftThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
-		rightEncoder.setInverted(false); //do we need this?
 		rightTwo.setInverted(false); 
 		rightEncoder.setSensorPhase(false);
 		rightTwo.setSensorPhase(false);
@@ -119,12 +118,13 @@ public class DriveTrain {
 		double speed = (_xBox.getY(GenericHID.Hand.kLeft))*-1;
 		double heading = _xBox.getX(GenericHID.Hand.kRight);
 		driveTrain.arcadeDrive(speed, heading);
+		getDiagnostics();
 
 	}
 
 	private void configureTalon(TalonSRX _talon) {
 		_talon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
-
+		_talon.setInverted(false);
 		_talon.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, 0);
 		_talon.configNominalOutputForward(0, Consts.timeOutMs);
 		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
@@ -135,11 +135,16 @@ public class DriveTrain {
 		_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
 		_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
 		_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
-		_talon.configOpenloopRamp(1.5, Consts.timeOutMs);
+		_talon.configNeutralDeadband(0, Consts.timeOutMs);
+		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
+//		_talon.configOpenloopRamp(1.5, Consts.timeOutMs);
 	
 	}
 
 	public void getDiagnostics() {
+		SmartDashboard.putBoolean("TwoInverted?",leftTwo.getInverted());
+		SmartDashboard.putBoolean("ThreeInverted?",leftThree.getInverted());
+
 		SmartDashboard.putNumber("Front Right Position", getRotations(rightEncoder));
 		SmartDashboard.putNumber("Front Right Velocity", getVelocity(rightEncoder));
 		SmartDashboard.putNumber("Front Left Position", getRotations(leftEncoder));
@@ -157,7 +162,7 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Front Left Error", leftEncoder.getClosedLoopError(0));
 		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
 	     
-		driveTrain.arcadeDrive(posOutput, turnOutput);
+//		driveTrain.arcadeDrive(posOutput, turnOutput);
 		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());
 		SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
 		SmartDashboard.putNumber("Position Setpoint", posController.getSetpoint());
