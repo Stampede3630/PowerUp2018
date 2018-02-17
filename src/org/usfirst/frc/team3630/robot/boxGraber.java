@@ -1,15 +1,30 @@
 package org.usfirst.frc.team3630.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+
 public class boxGraber {
+	public enum State {
+		SLIDEF, 
+		CLAMPF, 
+		KICKF, 
+		LIFTF, 
+		LIFTR, 
+		SLIDER, 
+		KICKR
+		  
+	}
 	private XboxController _xBox;
 	DoubleSolenoid slide,clamp,kick, lift;
 	Compressor mainC;
-	Boolean  liftUpEngaged, slideUpEngaged, slideOutEngaged, kickForwardEngaged, testOn, clampEnaged, kickReverseEngaged, liftDown;
-	AnalogOutput pressureLevel;
-public boxGraber{
+	Boolean  liftUpEngaged, slideUpEngaged, slideOutEngaged, kickForwardEngaged, testOn, clampEnaged, kickReverseEngaged, liftDown, clampReverse;
+	AnalogInput pressureLevel;
+	
+public boxGraber(){
 	
 	// peramtors for double soelnoid pcm, in chanel, out chanel
 	slide = new DoubleSolenoid(0,Consts.solonoidSliodeOpenChanal, Consts.solonoidSlideCloseChanal);
@@ -21,7 +36,36 @@ public boxGraber{
 	_xBox = new XboxController(Consts.xBoxComPort);
 	
 }
-// add diagnostis method 
+
+
+public State xBox () {
+	if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==  ) {
+		return State.SLIDEF;
+	}
+	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==) {
+		return State.SLIDER;
+	}
+	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==) {
+		return State.KICKF;
+	}
+	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==) {
+		return State.KICKR;
+	}
+	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==) {
+		return State.LIFTF;
+	}
+	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==) {
+	return 	State.LIFTR;
+	}
+	else {
+		
+	}
+	
+}
+
+
+
+
 
 
 
@@ -44,6 +88,7 @@ public void liftReverse(){
 	lift.set(DoubleSolenoid.Value.kReverse);
 	liftDown= true ;
 	
+	
 }
 public void clampForward() {
 	clamp.set(DoubleSolenoid.Value.kForward);
@@ -51,7 +96,7 @@ public void clampForward() {
 }
 public void clampReverse() {
 	clamp.set(DoubleSolenoid.Value.kReverse);
-	
+	clampReverse=true
 }
 public void stop() {
 
@@ -60,8 +105,9 @@ public void stop() {
 	kick.set(DoubleSolenoid.Value.kOff);
 	
 }
+
 public void slideForward() {
-	slideOutEngaged= true;
+	slideUpEngaged= true;
 	slide.set(DoubleSolenoid.Value.kForward);
 }
 public void slideReverse() {
@@ -80,13 +126,34 @@ public void manipulatorDianostics() {
 	SmartDashboard.putBoolean("testOn", testOn);
 	SmartDashboard.putBoolean("liftgoing up", liftUpEngaged);
 	SmartDashboard.putBoolean(" Liftdown", liftDown);
-	SmartDashboard.putBoolean("kick On", kickEngaged);
+	SmartDashboard.putBoolean("kick On", kickForwardEngaged);
+	SmartDashboard.putBoolean("kick reversw", kickReverseEngaged);
 	SmartDashboard.putBoolean("slideForwardEngaged", slideUpEngaged);
+	SmartDashboard.putBoolean("slide reverse Engaged",slideOutEngaged );
+	
 	
 	
 }
 
-public void bocGraberPeriodic() {
+public void boxGraberPeriodic() {
+	xBox();
+	   switch (State) {
+       case :
+           
+           break;
+               
+       case :
+           ;
+           break;
+                    
+       case :
+           ;
+           break;
+                   
+       default:
+          
+           break;
+   }
 	
 }
 

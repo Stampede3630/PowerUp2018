@@ -67,6 +67,8 @@ public class Consts {
 	// pcm b
 	public static final double solonoidKickOpenChanal  = 2 ;//a4
 	public static final double solonoidKickCloseChanal  = 3 ;//b4
+	public static final double	solonoidSliodeOpenChanal=0;
+	public static final double	solonoidClampOpenChanal=1;
 	public static final double pcmAChanal= 0;
 	public static final double pcmBChanal= 1;
 

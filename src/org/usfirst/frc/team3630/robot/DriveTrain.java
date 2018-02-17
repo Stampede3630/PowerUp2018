@@ -114,7 +114,7 @@ public class DriveTrain {
 
 	public void teleopPeriodic() {
 		double speed = (_xBox.getY(GenericHID.Hand.kLeft))*-1;
-		double heading = _xBox.getX(GenericHID.Hand.kRight);
+		double heading = (_xBox.getX(GenericHID.Hand.kRight));
 		driveTrain.arcadeDrive(speed, heading);
 
 	}
@@ -136,7 +136,7 @@ public class DriveTrain {
 	}
 
 	public void getDiagnostics() {
-		SmartDashboard.putBoolean(key, value)
+
 		SmartDashboard.putNumber("Front Right Position", getRotations(frontRight));
 		SmartDashboard.putNumber("Front Right Velocity", getVelocity(frontRight));
 		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
