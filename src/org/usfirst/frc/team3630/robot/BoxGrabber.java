@@ -127,10 +127,11 @@ public void slideReverse() {
 }
 
 // psi method for presure sensor need to calibrate normaliesd voltage during testing 
-public void  compresorPSI() {
+public double   compresorPSI() {
 	
 	double sensorV= pressureLevel.getVoltage();
-	// psi = 250 (vout/ vn) -25 
+	double  psi = 250 (sensorV/ 5) -25 
+	return psi
 	// rerurn psi
 	// decide low pxi level 
 	// for details see adni mark spech sheet 
@@ -143,6 +144,7 @@ public void  compresorPSI() {
 public void manipulatorDianostics() {
 	testOn= true;
 	compresorPSI();
+	SmartDashboard.putNumber("Compresor PSI ",compresorPSI())
 	// presure switch output 
 	SmartDashboard.putBoolean("testOn", testOn);
 	SmartDashboard.putBoolean("liftgoing up", liftUpEngaged);
@@ -153,7 +155,7 @@ public void manipulatorDianostics() {
 	SmartDashboard.putBoolean("slide reverse Engaged",slideOutEngaged );
 	
 	SmartDashboard.putBoolean("clamp forward Engaged",clampEnaged );
-	SmartDashboard.putBoolean("clamp forward Engaged",clampReverse );
+	SmartDashboard.putBoolean("clamp reverse Engaged",clampReverse );
 	
 	
 	
