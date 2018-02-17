@@ -69,10 +69,10 @@ public class DriveTrain {
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
 		rightThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
 		leftThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
-		rightTwo.setInverted(false); 
-		rightEncoder.setSensorPhase(false);
-		rightTwo.setSensorPhase(false);
-		rightThree.setSensorPhase(false);
+	//	rightTwo.setInverted(false); 
+	//	rightEncoder.setSensorPhase(false);
+	//	rightTwo.setSensorPhase(false);
+	//	rightThree.setSensorPhase(false);
 		
 		//SmartDashboard.putNumber("Setpoint", 1000);
 		//SmartDashboard.putNumber("pos Setpoint", 24);
@@ -149,10 +149,7 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Front Right Velocity", getVelocity(rightEncoder));
 		SmartDashboard.putNumber("Front Left Position", getRotations(leftEncoder));
 		SmartDashboard.putNumber("Front Left Velocity", getVelocity(leftEncoder));
-		SmartDashboard.putNumber("Back Right Position", getRotations(rightTwo));
-		SmartDashboard.putNumber("Back Right Velocity", getVelocity(rightTwo));
-		SmartDashboard.putNumber("Back Left Position", getRotations(leftTwo));
-		SmartDashboard.putNumber("Back Left Velocity", getVelocity(leftTwo));
+		
 		// SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
 		// SmartDashboard.putString("control mode",frontLeft.getControlMode() );
 //		frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));

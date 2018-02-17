@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
 	DriveTrain _driveTrain;
 	//Timer  autoTime; 
 	
-	
+	@Override
 	public void robotInit() {
 		_driveTrain = new DriveTrain();
 		
@@ -69,11 +69,19 @@ public class Robot extends IterativeRobot {
 		autoRLR.addObject("Auto Line", Destinations.DRFW);
 		SmartDashboard.putData("RLR Options", autoRLR);
 	}
+	@Override
+	public void robotPeriodic() {
+		_driveTrain.getDiagnostics();
+	}
 	
+	@Override
+	public void teleopInit() {
+	}
+	@Override
 	public void teleopPeriodic() {
 		_driveTrain.teleopPeriodic();
-		
 	}
+	@Override
 	public void autonomousInit() {
 		//autoTime.reset();
 		//autoTime.start();
@@ -84,14 +92,19 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putString("auto starting position", autoChooser.getSelected().toString());
 	}
 	@Override
-	public void disabledPeriodic() {
-		_driveTrain.putData();
-	}
-
 	public void autonomousPeriodic() {
 		autoLogic();
 		_driveTrain.getDiagnostics();
 	}
+	@Override
+	public void disabledInit() {
+	}
+	@Override
+	public void disabledPeriodic() {
+		_driveTrain.putData();
+	}
+
+
 	public void autoLogic() {
 		if(gameData.length() > 0) {
 			
@@ -204,7 +217,16 @@ public class Robot extends IterativeRobot {
 			}
 		}
 	}
-
+	public void caseAutoLogic() {
+		switch(gameData.substring(0, 1)) {
+		case "LL":
+			break;
+		case "LR":
+			break;
+		case "RR":
+			break;
+		case "RL":
+			break;
+		}
+	}
 }
-
-
