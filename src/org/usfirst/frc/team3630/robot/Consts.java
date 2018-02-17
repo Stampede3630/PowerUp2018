@@ -69,8 +69,8 @@ public class Consts {
 	public static final int solonoidKickCloseChanal  = 3 ;//b4
 	public static final int	solonoidSliodeOpenChanal=0;
 	public static final int		solonoidSlideCloseChanal = 1;
-	public static final double pcmAChanal= 0;
-	public static final double pcmBChanal= 1;
+	public static final int pcmAChanal= 0;
+	public static final int  pcmBChanal= 1;
 
 	
 }	

@@ -29,10 +29,10 @@ public class boxGraber {
 public boxGraber(){
 	
 	// peramtors for double soelnoid pcm, in chanel, out chanel
-	slide = new DoubleSolenoid(0,Consts.solonoidSliodeOpenChanal, Consts.solonoidSlideCloseChanal);
-	clamp= new DoubleSolenoid(0,Consts.solonoidClampOpenChanal, Consts.solonoidClampCloseChanal);
-	kick= new DoubleSolenoid(0,Consts.solonoidKickOpenChanal, Consts.solonoidKickCloseChanal);
-	lift= new DoubleSolenoid(0,Consts.solonoidLifterOpenChanal, Consts.solonoidLifterCloseChanal);
+	slide = new DoubleSolenoid(Consts.pcmBChanal,Consts.solonoidSliodeOpenChanal, Consts.solonoidSlideCloseChanal);
+	clamp= new DoubleSolenoid(Consts.pcmAChanal,Consts.solonoidClampOpenChanal, Consts.solonoidClampCloseChanal);
+	kick= new DoubleSolenoid(Consts.pcmBChanal,Consts.solonoidKickOpenChanal, Consts.solonoidKickCloseChanal);
+	lift= new DoubleSolenoid(Consts.pcmAChanal,Consts.solonoidLifterOpenChanal, Consts.solonoidLifterCloseChanal);
 	mainC= new Compressor(0);
 	pressureLevel= new AnalogInput(0);
 	_xBox = new XboxController(Consts.xBoxComPort);
