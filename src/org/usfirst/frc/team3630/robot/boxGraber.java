@@ -138,6 +138,10 @@ public void manipulatorDianostics() {
 	SmartDashboard.putBoolean("slideForwardEngaged", slideUpEngaged);
 	SmartDashboard.putBoolean("slide reverse Engaged",slideOutEngaged );
 	
+	SmartDashboard.putBoolean("clamp forward Engaged",clampEnaged );
+	SmartDashboard.putBoolean("clamp forward Engaged",clampReverse );
+	
+	
 	
 	
 }
