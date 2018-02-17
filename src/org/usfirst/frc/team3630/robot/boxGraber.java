@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class boxGraber {
+	// enum difftent state= state (F, forward) (R, piston reverse)
 	public enum State {
 		SLIDEF, 
 		CLAMPF, 
@@ -21,14 +22,17 @@ public class boxGraber {
 		  
 	}
 	private XboxController _xBox;
+	// name double solonoid
 	DoubleSolenoid slide,clamp,kick, lift;
 	Compressor mainC;
+	// debug analog input
 	Boolean  liftUpEngaged, slideUpEngaged, slideOutEngaged, kickForwardEngaged, testOn, clampEnaged, kickReverseEngaged, liftDown, clampReverse;
 	AnalogInput pressureLevel;
 	
 public boxGraber(){
 	
 	// peramtors for double soelnoid pcm, in chanel, out chanel
+	// for detils on solondid asighning see output sheet i posted on slack 
 	slide = new DoubleSolenoid(Consts.pcmBChanal,Consts.solonoidSliodeOpenChanal, Consts.solonoidSlideCloseChanal);
 	clamp= new DoubleSolenoid(Consts.pcmAChanal,Consts.solonoidClampOpenChanal, Consts.solonoidClampCloseChanal);
 	kick= new DoubleSolenoid(Consts.pcmBChanal,Consts.solonoidKickOpenChanal, Consts.solonoidKickCloseChanal);
@@ -41,7 +45,7 @@ public boxGraber(){
 
 
 public State xBox () {
-	// need to confirm buttons 
+	// need to confirm buttons//  acyivates state for switch if button press is true 
 	if (_xBox.getXButton()== true ) {
 		return State.SLIDEF;
 	}
@@ -70,7 +74,8 @@ public State xBox () {
 
 
 
-
+// each method for has a forward and reverse 
+// sets a bollean to true in order to know it has ben activated 
 
 public void kickForward(){
 	kick.set(DoubleSolenoid.Value.kForward);
@@ -101,6 +106,7 @@ public void clampReverse() {
 	clamp.set(DoubleSolenoid.Value.kReverse);
 	clampReverse=true;
 }
+// stop method for saftey 
 public void stop() {
 
 	clamp.set(DoubleSolenoid.Value.kOff);
@@ -117,15 +123,21 @@ public void slideReverse() {
 	slideOutEngaged= true;
 	slide.set(DoubleSolenoid.Value.kReverse);
 }
+
+// psi method for presure sensor need to calibrate normaliesd voltage during testing 
 public void  compresorPSI() {
 	
 	double sensorV= pressureLevel.getVoltage();
 	// psi = 250 (vout/ vn) -25 
 	// rerurn psi
 	// decide low pxi level 
+	// for details see adni mark spech sheet 
 	
 	
 }
+
+
+// manip diognostics output to smart doashboard for each pnumatic subsystem 
 public void manipulatorDianostics() {
 	testOn= true;
 	compresorPSI();
@@ -147,7 +159,7 @@ public void manipulatorDianostics() {
 }
 
 public void boxGraberPeriodic() {
-	
+	// for testing 
 	manipulatorDianostics() ;
 	   switch (xBox()) {
        case SLIDEF:
@@ -173,6 +185,7 @@ public void boxGraberPeriodic() {
 		   break;
 	                                       
        default:
+    	   // default to stop for saftey reasons 
     	   stop();
           
            break;
