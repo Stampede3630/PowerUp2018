@@ -14,6 +14,7 @@ public class boxGraber {
 		KICKF, 
 		LIFTF, 
 		LIFTR, 
+		CLAMPR,
 		SLIDER, 
 		KICKR
 		  
@@ -29,32 +30,33 @@ public boxGraber(){
 	// peramtors for double soelnoid pcm, in chanel, out chanel
 	slide = new DoubleSolenoid(0,Consts.solonoidSliodeOpenChanal, Consts.solonoidSlideCloseChanal);
 	clamp= new DoubleSolenoid(0,Consts.solonoidClampOpenChanal, Consts.solonoidClampCloseChanal);
-	kick= new DoubleSolenoid(0,Consts.solonoidKickOpenChanal, Consts.solonoidKickCloseOpenChanal);
+	kick= new DoubleSolenoid(0,Consts.solonoidKickOpenChanal, Consts.solonoidKickCloseChanal);
 	lift= new DoubleSolenoid(0,Consts.solonoidLifterOpenChanal, Consts.solonoidLifterCloseChanal);
-	mainC= new Compressor(0,1, 2);
-	pressureLevel= new AnalogOutput(0);
+	mainC= new Compressor(0);
+	pressureLevel= new AnalogInput(0);
 	_xBox = new XboxController(Consts.xBoxComPort);
 	
 }
 
 
 public State xBox () {
-	if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==  ) {
+	// need to confirm buttons 
+	if (_xBox.getAButton(GenericHID.Hand.kLeft.value)== 0 ) {
 		return State.SLIDEF;
 	}
-	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==) {
+	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==1) {
 		return State.SLIDER;
 	}
-	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==) {
+	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==2) {
 		return State.KICKF;
 	}
-	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==) {
+	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==3) {
 		return State.KICKR;
 	}
-	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==) {
+	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==4) {
 		return State.LIFTF;
 	}
-	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==) {
+	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==5) {
 	return 	State.LIFTR;
 	}
 	else {
@@ -96,7 +98,7 @@ public void clampForward() {
 }
 public void clampReverse() {
 	clamp.set(DoubleSolenoid.Value.kReverse);
-	clampReverse=true
+	clampReverse=true;
 }
 public void stop() {
 
@@ -115,13 +117,17 @@ public void slideReverse() {
 	slide.set(DoubleSolenoid.Value.kReverse);
 }
 public double  compresorPSI() {
+	
 	double sensorV= pressureLevel.getVoltage();
 	// psi = 250 (vout/ vn) -25 
 	// rerurn psi
+	// decide low pxi level 
+	
 	
 }
 public void manipulatorDianostics() {
 	testOn= true;
+	compresorPSI();
 	// presure switch output 
 	SmartDashboard.putBoolean("testOn", testOn);
 	SmartDashboard.putBoolean("liftgoing up", liftUpEngaged);
@@ -136,20 +142,31 @@ public void manipulatorDianostics() {
 }
 
 public void boxGraberPeriodic() {
-	xBox();
-	   switch (State) {
-       case :
-           
+	
+	manipulatorDianostics() ;
+	   switch (xBox()) {
+       case SLIDEF:
+    	   	slideForward() ;
            break;
                
-       case :
-           ;
+       case SLIDER:
+    	   slideReverse()   ;
            break;
                     
-       case :
-           ;
+       case KICKF:
+    	   kickForward();
            break;
-                   
+           
+    	   case KICKR:
+    		   kickReverse();
+	   break;
+	   case LIFTF:
+		   liftForward();
+		   break;
+	   case LIFTR:
+		   liftReverse();
+		   break;
+	                                       
        default:
           
            break;
