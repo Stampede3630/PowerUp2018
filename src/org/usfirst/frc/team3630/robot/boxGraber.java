@@ -16,7 +16,8 @@ public class boxGraber {
 		LIFTR, 
 		CLAMPR,
 		SLIDER, 
-		KICKR
+		KICKR,
+		STOP
 		  
 	}
 	private XboxController _xBox;
@@ -41,28 +42,28 @@ public boxGraber(){
 
 public State xBox () {
 	// need to confirm buttons 
-	if (_xBox.getAButton(GenericHID.Hand.kLeft.value)== 0 ) {
+	if (_xBox.getXButton()== true ) {
 		return State.SLIDEF;
 	}
-	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==1) {
+	else if (_xBox.getAButton() == true) {
 		return State.SLIDER;
 	}
-	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==2) {
+	else if (_xBox.getXButton()== true ) {
 		return State.KICKF;
 	}
-	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==3) {
+	else if (_xBox.getXButton()== true ) {
 		return State.KICKR;
 	}
-	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==4) {
+	else if (_xBox.getStartButton()== true ) {
 		return State.LIFTF;
 	}
-	else if (_xBox.getAButton(GenericHID.Hand.kLeft.value)==5) {
+	else if (_xBox.getYButton()== true) {
 	return 	State.LIFTR;
 	}
+
 	else {
-		
+		return State.STOP;
 	}
-	
 }
 
 
@@ -116,7 +117,7 @@ public void slideReverse() {
 	slideOutEngaged= true;
 	slide.set(DoubleSolenoid.Value.kReverse);
 }
-public double  compresorPSI() {
+public void  compresorPSI() {
 	
 	double sensorV= pressureLevel.getVoltage();
 	// psi = 250 (vout/ vn) -25 
@@ -168,6 +169,7 @@ public void boxGraberPeriodic() {
 		   break;
 	                                       
        default:
+    	   stop();
           
            break;
    }
