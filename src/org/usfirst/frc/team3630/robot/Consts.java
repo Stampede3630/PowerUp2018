@@ -63,12 +63,12 @@ public class Consts {
 	public static final int solonoidClampOpenChanal= 2;// a3
 	public static final int solonoidClampCloseChanal= 3;// b2
 	// pcm b
-	public static final int solonoidKickOpenChanal  = 2 ;//a4
-	public static final int solonoidKickCloseChanal  = 3 ;//b4
-	public static final int	solonoidSliodeOpenChanal=0;
-	public static final int		solonoidSlideCloseChanal = 1;
-	public static final int pcmAChanal= 0;
-	public static final int  pcmBChanal= 1;
+	public static final int solonoidKickOpenChanal  = 0 ;//a4
+	public static final int solonoidKickCloseChanal  = 1 ;//b4
+	public static final int	solonoidSliodeOpenChanal=2;
+	public static final int		solonoidSlideCloseChanal = 3;
+	public static final int pcmChanal0= 0;
+	public static final int  pcmChanal1= 1;
 
 	
 }	
