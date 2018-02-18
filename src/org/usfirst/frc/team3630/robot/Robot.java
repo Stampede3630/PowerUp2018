@@ -1,8 +1,7 @@
 package org.usfirst.frc.team3630.robot;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -68,9 +67,7 @@ public class Robot extends IterativeRobot {
 		autoRLR.addObject("Do Nothing", Destinations.DONO);
 		autoRLR.addObject("Auto Line", Destinations.DRFW);
 		SmartDashboard.putData("RLR Options", autoRLR);
-		
-		_driveTrain.autoInit();
-	}
+		}
 	
 	public void testInit() {
 		_driveTrain.testInit();
@@ -92,7 +89,7 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		_driveTrain.teleopPeriodic();
 	}
-	@Override
+
 	public void autonomousInit() {
 		//autoTime.reset();
 		//autoTime.start();
@@ -111,6 +108,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledInit() {
 	}
+	
 	@Override
 	public void disabledPeriodic() {
 		_driveTrain.putData();
@@ -229,6 +227,7 @@ public class Robot extends IterativeRobot {
 			}
 		}
 	}
+
 	public void caseAutoLogic() {
 		switch(gameData.substring(0, 1)) {
 		case "LL":
@@ -242,3 +241,4 @@ public class Robot extends IterativeRobot {
 		}
 	}
 }
+
