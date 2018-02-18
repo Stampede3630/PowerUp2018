@@ -10,12 +10,14 @@ public class Consts {
     // global assignments /
 	public static final int xBoxComPort = 0; 
 	// DriveTrain 
+
 	public static final int leftTwo = 1;
 	public static final int leftThree = 2;
 	public static final int leftEncoder = 3;
 	public static final int rightTwo = 4; 
 	public static final int rightThree = 5;
 	public static final int rightEncoder = 6;
+
 	
 	// Manipulators 
 	
@@ -31,7 +33,9 @@ public class Consts {
     public static final double ToleranceDistance = 3;
 	
 	//Wheel Measurements
-	public static final int ticksPerRotation = 350;
+	public static final int ticksPerRotation = 80;//NEEDS TO BE 80*reduction
+	//NOTE: STILL NEEDS TO BE TESTED
+
 	public static final int millisecondsPerSecond = 1000;
 	public static final int timeOutMs = 10;
 	public static final double wheelRadiusInch = 3;
