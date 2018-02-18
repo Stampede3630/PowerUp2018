@@ -8,16 +8,19 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.StickyFaults;
 import com.ctre.phoenix.motorcontrol.Faults;
 
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.livewindow.*;
+import edu.wpi.first.wpilibj.*;
+
 
 import com.kauailabs.navx.frc.AHRS;
 
 public class DriveTrain {
 
 	private XboxController _xBox;
+	PowerDistributionPanel panel;
 	AHRS ahrs;
 	ErrorCode sticky;
 	ErrorCode fault;
@@ -47,7 +50,7 @@ public class DriveTrain {
 		// calibrate navx !!!!!
 		ahrs = new AHRS(SPI.Port.kMXP);
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
-		
+		panel = new PowerDistributionPanel();
 		_xBox = new XboxController(Consts.xBoxComPort);
 		// srx defin
 		leftEncoder = new WPI_TalonSRX(Consts.leftEncoder);
@@ -68,14 +71,23 @@ public class DriveTrain {
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
 		rightThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
 		leftThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
-		rightTwo.setInverted(false); 
 		leftEncoder.setSensorPhase(false);
-		leftTwo.setSensorPhase(false);
-		leftThree.setSensorPhase(false);
 		
 		//SmartDashboard.putNumber("Setpoint", 1000);
 		//SmartDashboard.putNumber("pos Setpoint", 24);
 		//SmartDashboard.putNumber("posController kP", 0.07);
+		
+	/*	leftEncoder.configContinuousCurrentLimit(30, Consts.timeOutMs); // Must be 5 amps or more
+		leftEncoder.configPeakCurrentLimit(0, Consts.timeOutMs); // 100 A
+		leftEncoder.enableCurrentLimit(true);
+		leftEncoder.configClosedloopRamp(2, Consts.timeOutMs);
+		rightEncoder.configContinuousCurrentLimit(30, Consts.timeOutMs); // Must be 5 amps or more
+		rightEncoder.configPeakCurrentLimit(0, Consts.timeOutMs); // 100 A
+		rightEncoder.enableCurrentLimit(true);
+		rightEncoder.configClosedloopRamp(2, Consts.timeOutMs);
+
+*/
+		
 
 	
 		driveTrain = new DifferentialDrive(leftEncoder, rightEncoder);
@@ -110,8 +122,8 @@ public class DriveTrain {
 
 		rightTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
-		rightThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
-		leftThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
+		//rightThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
+		//leftThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
 	}
 	// init method for navx calibaration setting
 
@@ -131,14 +143,44 @@ public class DriveTrain {
 	public void teleopPeriodic() {
 		double speed = (_xBox.getY(GenericHID.Hand.kLeft))*-1;
 		double heading = _xBox.getX(GenericHID.Hand.kRight);
+		SmartDashboard.putNumber("heading acrcade drive", heading);
 		driveTrain.arcadeDrive(speed, heading);
 		getDiagnostics();
 		
 		rightTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
-		rightThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
-		leftThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
-
+	//	rightThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
+		//leftThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
+		SmartDashboard.putNumber("Left encoder curent", leftEncoder.getOutputCurrent());
+		SmartDashboard.putNumber("Left encoder volt", leftEncoder.getMotorOutputVoltage());
+	//	SmartDashboard.putNumber("Left three curent", leftThree.getOutputCurrent());
+		SmartDashboard.putNumber("total voltage ", panel.getVoltage());
+		
+		SmartDashboard.putNumber("total current", panel.getTotalCurrent());
+		SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
+		/*rightTwo.enableCurrentLimit(true);
+		rightTwo.configContinuousCurrentLimit(30, Consts.timeOutMs); // Must be 5 amps or more
+		rightTwo.configPeakCurrentLimit(0, Consts.timeOutMs); // 100 A
+		rightTwo.enableCurrentLimit(true);
+		rightTwo.configContinuousCurrentLimit(30, Consts.timeOutMs); // Must be 5 amps or more
+		rightTwo.configPeakCurrentLimit(0, Consts.timeOutMs); // 100 A
+		rightThree .enableCurrentLimit(true);
+		rightThree.configContinuousCurrentLimit(30, Consts.timeOutMs); // Must be 5 amps or more
+		rightThree.configPeakCurrentLimit(0, Consts.timeOutMs); // 100 A
+		leftTwo.enableCurrentLimit(true);
+		leftTwo.configContinuousCurrentLimit(30, Consts.timeOutMs); // Must be 5 amps or more
+		leftTwo.configPeakCurrentLimit(0, Consts.timeOutMs); // 100 A
+		leftThree.enableCurrentLimit(true);
+		leftThree.configContinuousCurrentLimit(30, Consts.timeOutMs); // Must be 5 amps or more
+		leftThree.configPeakCurrentLimit(0, Consts.timeOutMs); // 100 A
+		*/
+		
+		if(panel.getTotalCurrent()>300) {
+			System.out.print("[WARNING] CURRENT DRAW IS AT ");
+			System.out.print(panel.getTotalCurrent());
+			System.out.print('\n');
+		}
+		
 	}
 
 	private void configureTalon(TalonSRX _talon) {
@@ -152,19 +194,29 @@ public class DriveTrain {
 		_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
 		_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
 		_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
-		_talon.configNeutralDeadband(0, Consts.timeOutMs);
-		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
+		_talon.configNeutralDeadband(0, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband.
+		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
 		_talon.setSensorPhase(true);
 		_talon.setInverted(false);
-		_talon.configOpenloopRamp(0, Consts.timeOutMs);
+	//	_talon.configOpenloopRamp(.1, Consts.timeOutMs);
 		
-	
+	// Peak current and duration must be exceeded before corrent limit is activated.
+	// When activated, current will be limited to continuous current.
+    // Set peak current params to 0 if desired behavior is to immediately current-limit.
+	//	_talon.enableCurrentLimit(true);
+	//	_talon.configContinuousCurrentLimit(10,0); // Must be 5 amps or more
+	//	_talon.configPeakCurrentLimit(10, 0); // 100 A
+		//_talon.configPeakCurrentDuration(200,0); // 200 ms
+		
 	}
 
 	public void getDiagnostics() {
 		//SmartDashboard.putBoolean("TwoInverted?",leftTwo.getInverted());
-		SmartDashboard.putBoolean("ThreeInverted?",leftThree.getInverted());
-
+	//	SmartDashboard.putBoolean("ThreeInverted?",leftThree.getInverted());
+		
+		SmartDashboard.putNumber("Left Current", leftEncoder.getOutputCurrent());
+		SmartDashboard.putNumber("Right Current", rightEncoder.getOutputCurrent());
+		
 		SmartDashboard.putNumber("Front Right Position", getRotations(rightEncoder));
 		SmartDashboard.putNumber("Front Right Velocity", getVelocity(rightEncoder));
 		SmartDashboard.putNumber("Front Left Position", getRotations(leftEncoder));
@@ -198,8 +250,13 @@ public class DriveTrain {
 		
 		fault=leftEncoder.getLastError();
 		if(fault != ErrorCode.OK) System.out.println(fault);
-
-	}
+		if (leftEncoder.getOutputCurrent()>35) { 
+			System.out.print("[WARNING] Talon Current is at ");
+			System.out.print(leftEncoder.getOutputCurrent());
+			System.out.print('\n');
+		}
+		}
+	
 	
 	public void autoPeriodic() {
 		driveTrain.arcadeDrive(posOutput, turnOutput);
@@ -614,7 +671,6 @@ public class DriveTrain {
 			posController.disable();
 		}
 	}
-
 	public void middleSwitchLeft() {
 		if (myCurrentCase == 1) {
 			if(init) {
@@ -874,8 +930,8 @@ public class DriveTrain {
 		rightEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		leftTwo.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		rightTwo.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-		leftThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-		rightThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+	//	leftThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		//rightThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
 		myCurrentCase = 1;	
 	}
