@@ -1,8 +1,7 @@
 package org.usfirst.frc.team3630.robot;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,7 +27,7 @@ public class Robot extends IterativeRobot {
 	DriveTrain _driveTrain;
 	//Timer  autoTime; 
 	
-	
+	@Override
 	public void robotInit() {
 		_driveTrain = new DriveTrain();
 		
@@ -68,12 +67,29 @@ public class Robot extends IterativeRobot {
 		autoRLR.addObject("Do Nothing", Destinations.DONO);
 		autoRLR.addObject("Auto Line", Destinations.DRFW);
 		SmartDashboard.putData("RLR Options", autoRLR);
+		}
+	
+	public void testInit() {
+		_driveTrain.testInit();
 	}
 	
+	public void testPeriodic() {
+		_driveTrain.testPeriodic();
+	}
+	
+	@Override
+	public void robotPeriodic() {
+		_driveTrain.getDiagnostics();
+	}
+	
+	@Override
+	public void teleopInit() {
+	}
+	@Override
 	public void teleopPeriodic() {
 		_driveTrain.teleopPeriodic();
-		
 	}
+
 	public void autonomousInit() {
 		//autoTime.reset();
 		//autoTime.start();
@@ -84,14 +100,21 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putString("auto starting position", autoChooser.getSelected().toString());
 	}
 	@Override
+	public void autonomousPeriodic() {
+		autoLogic();
+		_driveTrain.autoPeriodic();
+		_driveTrain.getDiagnostics();
+	}
+	@Override
+	public void disabledInit() {
+	}
+	
+	@Override
 	public void disabledPeriodic() {
 		_driveTrain.putData();
 	}
 
-	public void autonomousPeriodic() {
-		autoLogic();
-		_driveTrain.getDiagnostics();
-	}
+
 	public void autoLogic() {
 		if(gameData.length() > 0) {
 			
@@ -205,6 +228,17 @@ public class Robot extends IterativeRobot {
 		}
 	}
 
+	public void caseAutoLogic() {
+		switch(gameData.substring(0, 1)) {
+		case "LL":
+			break;
+		case "LR":
+			break;
+		case "RR":
+			break;
+		case "RL":
+			break;
+		}
+	}
 }
-
 
