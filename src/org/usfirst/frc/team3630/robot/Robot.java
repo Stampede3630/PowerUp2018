@@ -26,7 +26,7 @@ public class Robot extends IterativeRobot {
 	SendableChooser autoRRR;
 	SendableChooser autoLRL;
 	SendableChooser autoRLR;
-	DriveTrain _driveTrain;
+	//DriveTrain _driveTrain;
 	//Timer  autoTime; 
 	
 	
@@ -80,10 +80,10 @@ public class Robot extends IterativeRobot {
 		//autoTime.reset();
 		//autoTime.start();
 	
-		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		//gameData = DriverStation.getInstance().getGameSpecificMessage();
 
 		//_driveTrain.driveStraight();
-		SmartDashboard.putString("auto starting position", autoChooser.getSelected().toString());
+		//2SmartDashboard.putString("auto starting position", autoChooser.getSelected().toString());
 	}
 	@Override
 	public void disabledPeriodic() {

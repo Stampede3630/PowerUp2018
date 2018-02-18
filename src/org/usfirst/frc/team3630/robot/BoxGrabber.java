@@ -33,10 +33,11 @@ public BoxGrabber(){
 	
 	// peramtors for double soelnoid pcm, in chanel, out chanel
 	// for detils on solondid asighning see output sheet i posted on slack 
-	slide = new DoubleSolenoid(Consts.pcmBChanal,Consts.solonoidSliodeOpenChanal, Consts.solonoidSlideCloseChanal);
-	clamp= new DoubleSolenoid(Consts.pcmAChanal,Consts.solonoidClampOpenChanal, Consts.solonoidClampCloseChanal);
-	kick= new DoubleSolenoid(Consts.pcmBChanal,Consts.solonoidKickOpenChanal, Consts.solonoidKickCloseChanal);
-	lift= new DoubleSolenoid(Consts.pcmAChanal,Consts.solonoidLifterOpenChanal, Consts.solonoidLifterCloseChanal);
+	slide = new DoubleSolenoid(1,2,3);
+	clamp= new DoubleSolenoid(0,0, 1);
+	
+	kick= new DoubleSolenoid(0,2, 3);
+	lift= new DoubleSolenoid(1,0, 1);
 	mainC= new Compressor(0);
 	pressureLevel= new AnalogInput(0);
 	_xBox = new XboxController(Consts.xBoxComPort);
@@ -52,20 +53,21 @@ public State xBox () {
 	else if (_xBox.getAButton() == true) {
 		return State.SLIDER;
 	}
-	else if (_xBox.getBButton()== true ) {
+/*else if (_xBox.getBButton()== true ) {
 		return State.KICKF;
 	}
 	else if (_xBox.getYButton()== true ) {
 		return State.KICKR;
 	}
+	*/
 	else if (_xBox.getStartButton()== true ) {
 		return State.LIFTF;
 	}
 	
-/*	else if (_xBox()== true) {
+	else if (_xBox.getYButton()== true ) {
 	return 	State.LIFTR;
 	}
-	*/
+	
 
 	else {
 		return State.STOP;
@@ -128,7 +130,6 @@ public void slideReverse() {
 
 // psi method for presure sensor need to calibrate normaliesd voltage during testing 
 public double   compresorPSI() {
-	
 	double sensorV= pressureLevel.getVoltage();
 	double  psi = 250 * (sensorV/ 5) -25 ;
 	return psi;
