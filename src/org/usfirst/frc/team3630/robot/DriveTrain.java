@@ -919,7 +919,7 @@ public class DriveTrain {
 		posController.reset();
 		leftThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		rightSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-		// why setting ramp rate here? we aren't doing this for telop
+		// why setting ramp rate here? we aren't doing this for telop we should do this once not twice
 		leftThree.configOpenloopRamp(2, Consts.timeOutMs);
 		rightSix.configOpenloopRamp(2, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
