@@ -11,21 +11,19 @@ public class Consts {
 	public static final int xBoxComPort = 0; 
 	// DriveTrain 
 
-	public static final int leftTwo = 1;
-	public static final int leftThree = 2;
-	public static final int leftEncoder = 3;
-	public static final int rightTwo = 4; 
-	public static final int rightThree = 5;
-	public static final int rightEncoder = 6;
+	public static final int leftOne = 1;
+	public static final int leftTwo = 2;
+	public static final int leftThree = 3;
+	public static final int rightFour = 4; 
+	public static final int rightFive = 5;
+	public static final int rightSix = 6;
 
 	
 	// Manipulators 
 	
 	
-	public static final double  kPRotAng = 0.1;
-
+	public static final double  kPRotAng = 0.2;
 	public static final double  kIRotAng = 0;
-	
 	public static final double  kDRotAng = 0;
 	
 
@@ -33,7 +31,7 @@ public class Consts {
     public static final double ToleranceDistance = 3;
 	
 	//Wheel Measurements
-	public static final int ticksPerRotation = 80;//NEEDS TO BE 80*reduction
+	public static final int ticksPerRotation = 238;
 	//NOTE: STILL NEEDS TO BE TESTED
 
 	public static final int millisecondsPerSecond = 1000;

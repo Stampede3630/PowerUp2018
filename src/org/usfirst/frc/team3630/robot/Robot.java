@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3630.robot;
 
+
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
@@ -19,11 +20,11 @@ public class Robot extends IterativeRobot {
 		SWL, SCL, SWR, SCR, DONO, DRFW
 	}
 
-	SendableChooser autoChooser;
-	SendableChooser autoLLL;
-	SendableChooser autoRRR;
-	SendableChooser autoLRL;
-	SendableChooser autoRLR;
+	SendableChooser<StartingPoints> autoChooser;
+	SendableChooser<Destinations> autoLLL;
+	SendableChooser<Destinations> autoRRR;
+	SendableChooser<Destinations> autoLRL;
+	SendableChooser<Destinations> autoRLR;
 	DriveTrain _driveTrain;
 	//Timer  autoTime; 
 	
@@ -33,35 +34,35 @@ public class Robot extends IterativeRobot {
 		
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
-		autoChooser = new SendableChooser();
+		autoChooser = new SendableChooser<StartingPoints>();
 		autoChooser.addDefault("left", StartingPoints.LEFT);
 		autoChooser.addObject("right", StartingPoints.RIGHT);
 		autoChooser.addObject("middle", StartingPoints.MIDDLE);
 		SmartDashboard.putData("Starting Position", autoChooser);
 		
 		//autoTime = new Timer();
-		autoLLL = new SendableChooser();
+		autoLLL = new SendableChooser<Destinations>();
 		autoLLL.addDefault("Switch", Destinations.SWL);
 		autoLLL.addObject("Scale", Destinations.SCL);
 		autoLLL.addObject("Do Nothing", Destinations.DONO);
 		autoLLL.addObject("Auto Line", Destinations.DRFW);
 		SmartDashboard.putData("LLL Options", autoLLL);
 		
-		autoRRR = new SendableChooser();
+		autoRRR = new SendableChooser<Destinations>();
 		autoRRR.addDefault("Switch", Destinations.SWR);
 		autoRRR.addObject("Scale", Destinations.SCR);
 		autoRRR.addObject("Do Nothing", Destinations.DONO);
 		autoRRR.addObject("Auto Line", Destinations.DRFW);
 		SmartDashboard.putData("RRR Options", autoRRR);
 		
-		autoLRL = new SendableChooser();
+		autoLRL = new SendableChooser<Destinations>();
 		autoLRL.addDefault("Switch", Destinations.SWL);
 		autoLRL.addObject("Scale", Destinations.SCR);
 		autoLRL.addObject("Do Nothing", Destinations.DONO);
 		autoLRL.addObject("Auto Line", Destinations.DRFW);
 		SmartDashboard.putData("LRL Options", autoLRL);
 		
-		autoRLR = new SendableChooser();
+		autoRLR = new SendableChooser<Destinations>();
 		autoRLR.addDefault("Switch", Destinations.SWR);
 		autoRLR.addObject("Scale", Destinations.SCL);
 		autoRLR.addObject("Do Nothing", Destinations.DONO);
@@ -84,6 +85,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void teleopInit() {
+		_driveTrain.teleopInit();
 	}
 	@Override
 	public void teleopPeriodic() {
