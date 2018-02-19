@@ -35,7 +35,7 @@ public class DriveTrain {
 	
 
 	// target angle degrees for straight on should not be a constant !
-	double kTargetAngleDegrees = 0f;
+	double targetAngleDegrees = 0f;
 	double kTargetDistanceInches = 1000;
 
 	private WPI_TalonSRX leftThree, rightSix, leftTwo, rightFive, leftOne, rightFour;
@@ -50,7 +50,7 @@ public class DriveTrain {
 
 	public DriveTrain() {
 		// calibrate navx !!!!!
-		ahrs = new AHRS(SPI.Port.kMXP);
+		ahrs = new AHRS(SPI.Port.kMXP,(byte) 200);
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 		panel = new PowerDistributionPanel();
 		_xBox = new XboxController(Consts.xBoxComPort);
@@ -97,6 +97,7 @@ public class DriveTrain {
 
 		// setting range and disable it
 		turnController.setInputRange(-180.0f, 180.0f);
+		ahrs.setPIDSourceType(edu.wpi.first.wpilibj.PIDSourceType.kDisplacement);
 		turnController.setOutputRange(-.75, .75);
 		turnController.setAbsoluteTolerance(Consts.ToleranceDegrees);
 		turnController.setContinuous(true);
@@ -132,11 +133,6 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Right Encoder Ticks", rightSix.getSelectedSensorPosition(0));
 	}
 	// init method for navx calibaration setting
-
-	public void turnDegree(double degrees) {
-		kTargetAngleDegrees = degrees;
-		turnController.setSetpoint(kTargetAngleDegrees);
-	}
 
 	public double ahrsYaw() {
 		double yaw = ahrs.getYaw();
@@ -869,6 +865,8 @@ public class DriveTrain {
 	
 	
 	public void autoDriveFw(double inches) {
+		leftThree.configOpenloopRamp(2, Consts.timeOutMs);
+		rightSix.configOpenloopRamp(2, Consts.timeOutMs);
 		System.out.println("autoDriveFw was called");
 		leftThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		rightSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
@@ -878,16 +876,26 @@ public class DriveTrain {
 	}
 	
 	public void autoTurnDegree(int degree) {
-		if (degree>0) {
-			right = false;
+		leftThree.configOpenloopRamp(0, Consts.timeOutMs);
+		rightSix.configOpenloopRamp(0, Consts.timeOutMs);
+		if (degree<0) {
+			right = true;
 		}
 		else {
-			right = true;
+			right = false;
 		}
 		posController.disable();
 		turnDegree(degree);
 		init = false;
 	}
+
+	// init method for navx calibaration setting
+	
+	public void turnDegree(double degrees) {
+		targetAngleDegrees = degrees;
+		turnController.setSetpoint(targetAngleDegrees);
+	}
+
 
 	public void autoDoNothing() {
 		turnController.disable();

@@ -22,7 +22,7 @@ public class Consts {
 	// Manipulators 
 	
 	
-	public static final double  kPRotAng = 0.2;
+	public static final double  kPRotAng = 0.15;
 	public static final double  kIRotAng = 0;
 	public static final double  kDRotAng = 0;
 	

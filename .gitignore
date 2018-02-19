@@ -1,7 +1,6 @@
-
 .classpath
-/bin/
-/build/
-/dist/
+/bin/*
+/build/*
+/dist/*
 *.class
 *.jar
