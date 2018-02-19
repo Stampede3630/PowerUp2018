@@ -1,11 +1,9 @@
 package org.usfirst.frc.team3630.robot;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import com.ctre.phoenix.motorcontrol.can.TalonSRX
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class BoxGrabber {
 	// enum difftent state= state (F, forward) (R, piston reverse)
@@ -18,10 +16,12 @@ public class BoxGrabber {
 		CLAMPR,
 		SLIDER, 
 		KICKR,
-		STOP
+		STOP,
+		INTAKE 
 		  
 	}
 	private XboxController _xBox;
+	private TalonSRX leftIntake, rightIntake
 	// name double solonoid
 	DoubleSolenoid slide,clamp,kick, lift;
 	Compressor mainC;
@@ -41,7 +41,10 @@ public BoxGrabber(){
 	mainC= new Compressor(0);
 	pressureLevel= new AnalogInput(0);
 	_xBox = new XboxController(Consts.xBoxComPort);
-	
+	leftIntake = new TalonSRX(7);
+	rightIntake = new TalonSRX(8);
+	leftIntake.setInverted(true);
+	rightIntake.setInverted(true);
 }
 
 
@@ -68,7 +71,7 @@ public State xBox () {
 	return 	State.LIFTR;
 	}
 	
-
+	
 	else {
 		return State.STOP;
 	}
@@ -76,7 +79,13 @@ public State xBox () {
 
 
 
+public void intake() {
+	rightIntake.configNeutralDeadband(.1, 10);
+	leftIntake.configNeutralDeadband(.1, 10);
+	leftIntake.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightIntake.getDeviceID());
+	rightIntake.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, _xBox.getTriggerAxis(GenericHID.Hand.kLeft));
 
+}
 
 // each method for has a forward and reverse 
 // sets a bollean to true in order to know it has ben activated 
@@ -165,6 +174,7 @@ public void manipulatorDianostics() {
 
 public void boxGraberPeriodic() {
 	// for testing 
+	mainC.stop();
 	 liftUpEngaged=false;
 	 slideUpEngaged=false;
 	 slideOutEngaged=false;
@@ -174,6 +184,7 @@ public void boxGraberPeriodic() {
 	 liftDown=false;
 	 clampReverse=false;
 	manipulatorDianostics() ;
+	intake();
 	   switch (xBox()) {
        case SLIDEF:
     	   	slideForward() ;
