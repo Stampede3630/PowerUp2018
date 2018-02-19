@@ -174,7 +174,7 @@ public void manipulatorDianostics() {
 
 public void boxGraberPeriodic() {
 	// for testing 
-	mainC.stop();
+	//mainC.stop();
 	 liftUpEngaged=false;
 	 slideUpEngaged=false;
 	 slideOutEngaged=false;

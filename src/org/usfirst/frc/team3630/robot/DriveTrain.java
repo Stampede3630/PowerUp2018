@@ -98,7 +98,7 @@ public class DriveTrain {
 		// setting range and disable it
 		turnController.setInputRange(-180.0f, 180.0f);
 		ahrs.setPIDSourceType(edu.wpi.first.wpilibj.PIDSourceType.kDisplacement);
-		turnController.setOutputRange(-.75, .75); // maby should lower to .5 if to see if overcompensation
+		turnController.setOutputRange(-.5, .5); // maby should lower to .5 if to see if overcompensation
 		turnController.setAbsoluteTolerance(Consts.ToleranceDegrees);
 		turnController.setContinuous(true);
 		turnController.disable();
