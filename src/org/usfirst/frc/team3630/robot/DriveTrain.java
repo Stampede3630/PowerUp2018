@@ -54,7 +54,7 @@ public class DriveTrain {
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 		panel = new PowerDistributionPanel();
 		_xBox = new XboxController(Consts.xBoxComPort);
-		// srx define
+		// srx definitions
 		leftThree = new WPI_TalonSRX(Consts.leftThree);
 		leftTwo = new WPI_TalonSRX(Consts.leftTwo);
 		leftOne = new WPI_TalonSRX(Consts.leftOne);
@@ -108,7 +108,7 @@ public class DriveTrain {
 
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
-		posController.setOutputRange(-.5, .5);
+		posController.setOutputRange(-.5, .5); //current testing
 		posController.setAbsoluteTolerance(Consts.ToleranceDistance);
 		posController.disable();
 		
@@ -125,6 +125,7 @@ public class DriveTrain {
 	public void testPeriodic() {
 		leftThree.set(SmartDashboard.getNumber("Left Side Speed", 0));
 		rightSix.set(SmartDashboard.getNumber("Right Side Speed", 0));
+}
 
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSix.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThree.getDeviceID());
@@ -132,7 +133,6 @@ public class DriveTrain {
 		//leftThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
 		SmartDashboard.putNumber("Right Encoder Ticks", rightSix.getSelectedSensorPosition(0));
 	}
-	// init method for navx calibaration setting
 
 	public double ahrsYaw() {
 		double yaw = ahrs.getYaw();
@@ -145,7 +145,7 @@ public class DriveTrain {
 	}
 	public void teleopPeriodic() {
 		double speed = (_xBox.getY(GenericHID.Hand.kLeft))*-1;
-		double heading = _xBox.getX(GenericHID.Hand.kRight);
+		double heading = (_xBox.getX(GenericHID.Hand.kRight));
 		SmartDashboard.putNumber("heading acrcade drive", heading);
 		driveTrain.arcadeDrive(speed, heading);
 		getDiagnostics();
@@ -196,8 +196,23 @@ public class DriveTrain {
 	}
 
 	public void getDiagnostics() {
-		//SmartDashboard.putBoolean("TwoInverted?",leftTwo.getInverted());
-	//	SmartDashboard.putBoolean("ThreeInverted?",leftThree.getInverted());
+
+		SmartDashboard.putNumber("Front Right Position", getRotations(frontRight));
+		SmartDashboard.putNumber("Front Right Velocity", getVelocity(frontRight));
+		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
+		SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
+		SmartDashboard.putNumber("Back Right Position", getRotations(backRight));
+		SmartDashboard.putNumber("Back Right Velocity", getVelocity(backRight));
+		SmartDashboard.putNumber("Back Left Position", getRotations(backLeft));
+		SmartDashboard.putNumber("Back Left Velocity", getVelocity(backLeft));
+		// SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
+		// SmartDashboard.putString("control mode",frontLeft.getControlMode() );
+//		frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+//		frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+//		backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+//		backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
+		SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
+		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
 		
 		SmartDashboard.putNumber("Left Current", leftThree.getOutputCurrent());
 		SmartDashboard.putNumber("Right Current", rightSix.getOutputCurrent());

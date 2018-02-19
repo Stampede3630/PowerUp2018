@@ -20,8 +20,6 @@ public class Consts {
 
 	
 	// Manipulators 
-	
-	
 	public static final double  kPRotAng = 0.15;
 	public static final double  kIRotAng = 0;
 	public static final double  kDRotAng = 0;
@@ -32,7 +30,7 @@ public class Consts {
 	
 	//Wheel Measurements
 	public static final int ticksPerRotation = 238;
-	//NOTE: STILL NEEDS TO BE TESTED
+
 
 	public static final int millisecondsPerSecond = 1000;
 	public static final int timeOutMs = 10;
@@ -61,6 +59,21 @@ public class Consts {
 	public static final double autoPosError = 3;
 	public static final double autoTurnError = 2;
 	
+	//////////////////////////
+	// manipulator conts 
+	// pcma
+	public static final int solonoidLifterOpenChanal  = 0 ;// a prime
+	public static final int solonoidLifterCloseChanal  = 1 ;//b prime
+	public static final int solonoidClampOpenChanal= 2;// a3
+	public static final int solonoidClampCloseChanal= 3;// b2
+	// pcm b
+	public static final int solonoidKickOpenChanal  = 0 ;//a4
+	public static final int solonoidKickCloseChanal  = 1 ;//b4
+	public static final int	solonoidSliodeOpenChanal=2;
+	public static final int		solonoidSlideCloseChanal = 3;
+	public static final int pcmChanal0= 0;
+	public static final int  pcmChanal1= 1;
 	
 	
 }
+
