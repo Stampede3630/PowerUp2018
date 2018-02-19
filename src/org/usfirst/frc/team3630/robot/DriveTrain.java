@@ -98,7 +98,7 @@ public class DriveTrain {
 		// setting range and disable it
 		turnController.setInputRange(-180.0f, 180.0f);
 		ahrs.setPIDSourceType(edu.wpi.first.wpilibj.PIDSourceType.kDisplacement);
-		turnController.setOutputRange(-.75, .75);
+		turnController.setOutputRange(-.75, .75); // maby should lower to .5 if to see if overcompensation
 		turnController.setAbsoluteTolerance(Consts.ToleranceDegrees);
 		turnController.setContinuous(true);
 		turnController.disable();
@@ -125,10 +125,10 @@ public class DriveTrain {
 	public void testPeriodic() {
 		leftThree.set(SmartDashboard.getNumber("Left Side Speed", 0));
 		rightSix.set(SmartDashboard.getNumber("Right Side Speed", 0));
-}
-
+		// mising a few talons 
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSix.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThree.getDeviceID());
+		// why comment theese out names 
 		//rightThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
 		//leftThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
 		SmartDashboard.putNumber("Right Encoder Ticks", rightSix.getSelectedSensorPosition(0));
@@ -138,6 +138,8 @@ public class DriveTrain {
 		double yaw = ahrs.getYaw();
 		return yaw;
 	}
+	
+	// add ahrs  congif method to see if calibating. It could be a good saftey checlk 
 	public void teleopInit() {
 		leftThree.configOpenloopRamp(0, Consts.timeOutMs);
 		rightSix.configOpenloopRamp(0, Consts.timeOutMs);
@@ -149,20 +151,21 @@ public class DriveTrain {
 		SmartDashboard.putNumber("heading acrcade drive", heading);
 		driveTrain.arcadeDrive(speed, heading);
 		getDiagnostics();
-		
+		// three are two missing bad?
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSix.getDeviceID());
-		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThree.getDeviceID());
+		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThree.getDeviceID());	
+		// why are right three set to followers? should get rid of 
 //		rightThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
 //		//leftThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
+		//*
 //		SmartDashboard.putNumber("Left encoder curent", leftEncoder.getOutputCurrent());
 //		SmartDashboard.putNumber("Left encoder volt", leftEncoder.getMotorOutputVoltage());
-//		SmartDashboard.putNumber("Left three curent", leftThree.getOutputCurrent());
-//		SmartDashboard.putNumber("total voltage ", panel.getVoltage());
-//		
-//		SmartDashboard.putNumber("total current", panel.getTotalCurrent());
-//		SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
+	SmartDashboard.putNumber("Left three curent", leftThree.getOutputCurrent());
+	SmartDashboard.putNumber("total voltage ", panel.getVoltage());
+	SmartDashboard.putNumber("total current", panel.getTotalCurrent());
+		SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
 		
-		
+		// are we still getting curent issues 
 		if(panel.getTotalCurrent()>300) {
 			System.out.print("[WARNING] CURRENT DRAW IS AT ");
 			System.out.print(panel.getTotalCurrent());
@@ -180,10 +183,12 @@ public class DriveTrain {
 		_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
 		_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
 		_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
-		_talon.configNeutralDeadband(0, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband.
+		_talon.configNeutralDeadband(0, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband. might be worth looking at 
 		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
 		_talon.setInverted(false);
-	//	_talon.configOpenloopRamp(.1, Consts.timeOutMs);
+		// where should we set ramp rate???
+		///////////////////
+	//	_talon.configOpenloopRamp(.1, Consts.timeOutMs); 
 		
 	// Peak current and duration must be exceeded before corrent limit is activated.
 	// When activated, current will be limited to continuous current.
@@ -195,25 +200,7 @@ public class DriveTrain {
 		
 	}
 
-	public void getDiagnostics() {
-
-		SmartDashboard.putNumber("Front Right Position", getRotations(frontRight));
-		SmartDashboard.putNumber("Front Right Velocity", getVelocity(frontRight));
-		SmartDashboard.putNumber("Front Left Position", getRotations(frontLeft));
-		SmartDashboard.putNumber("Front Left Velocity", getVelocity(frontLeft));
-		SmartDashboard.putNumber("Back Right Position", getRotations(backRight));
-		SmartDashboard.putNumber("Back Right Velocity", getVelocity(backRight));
-		SmartDashboard.putNumber("Back Left Position", getRotations(backLeft));
-		SmartDashboard.putNumber("Back Left Velocity", getVelocity(backLeft));
-		// SmartDashboard.putNumber("Target", frontLeft.getClosedLoopTarget(0));
-		// SmartDashboard.putString("control mode",frontLeft.getControlMode() );
-//		frontLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-//		frontRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-//		backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-//		backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, SmartDashboard.getNumber("Setpoint", 1000));
-		SmartDashboard.putNumber("Front Left Error", frontLeft.getClosedLoopError(0));
-		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
-		
+	public void getDiagnostics() {		
 		SmartDashboard.putNumber("Left Current", leftThree.getOutputCurrent());
 		SmartDashboard.putNumber("Right Current", rightSix.getOutputCurrent());
 		
@@ -932,7 +919,7 @@ public class DriveTrain {
 		posController.reset();
 		leftThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		rightSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-	
+		// why setting ramp rate here? we aren't doing this for telop
 		leftThree.configOpenloopRamp(2, Consts.timeOutMs);
 		rightSix.configOpenloopRamp(2, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
