@@ -21,7 +21,7 @@ public class BoxGrabber {
 		  
 	}
 	private XboxController _xBox;
-	private TalonSRX leftIntake, rightIntake
+	private TalonSRX leftIntake, rightIntake;
 	// name double solonoid
 	DoubleSolenoid slide,clamp,kick, lift;
 	Compressor mainC;
