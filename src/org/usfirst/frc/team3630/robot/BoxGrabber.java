@@ -6,7 +6,11 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class BoxGrabber {
-	// enum difftent state= state (F, forward) (R, piston reverse)
+	
+	/**
+	 * 
+	 *enum difftent state= state (F, forward) (R, piston reverse)
+	 */
 	public enum State {
 		SLIDEF, 
 		CLAMPF, 
@@ -48,6 +52,9 @@ public BoxGrabber(){
 }
 
 
+/**
+ * @return state enum should go to via xbox controllwe
+ */
 public State xBox () {
 	// need to confirm buttons//  acyivates state for switch if button press is true 
 	if (_xBox.getXButton()== true ) {
@@ -145,6 +152,9 @@ public void slideReverse() {
 }
 
 // psi method for presure sensor need to calibrate normaliesd voltage during testing 
+/**
+ * @return Compreser psi in acrdence with analog presure sensor
+ */
 public double   compresorPSI() {
 	double sensorV= pressureLevel.getVoltage();
 	double  psi = 250 * (sensorV/ 5) -25 ;
@@ -157,7 +167,10 @@ public double   compresorPSI() {
 }
 
 
-// manip diognostics output to smart doashboard for each pnumatic subsystem 
+
+/**
+ * @category manipulator diognisitics which go on shufleboard
+ */
 public void manipulatorDianostics() {
 	testOn= true;
 	compresorPSI();
