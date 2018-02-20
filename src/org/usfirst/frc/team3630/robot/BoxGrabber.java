@@ -2,7 +2,7 @@ package org.usfirst.frc.team3630.robot;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class BoxGrabber {
@@ -34,9 +34,9 @@ public BoxGrabber(){
 	// peramtors for double soelnoid pcm, in chanel, out chanel
 	// for detils on solondid asighning see output sheet i posted on slack 
 	slide = new DoubleSolenoid(1,2,3);
-	clamp= new DoubleSolenoid(0,0, 1);
+	kick	= new DoubleSolenoid(0,0, 1);
 	
-	kick= new DoubleSolenoid(0,2, 3);
+	clamp = new DoubleSolenoid(0,2,3);
 	lift= new DoubleSolenoid(1,0, 1);
 	mainC= new Compressor(0);
 	pressureLevel= new AnalogInput(0);
