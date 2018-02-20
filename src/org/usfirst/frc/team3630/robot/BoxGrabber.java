@@ -2,7 +2,7 @@ package org.usfirst.frc.team3630.robot;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class BoxGrabber {
@@ -34,9 +34,9 @@ public BoxGrabber(){
 	// peramtors for double soelnoid pcm, in chanel, out chanel
 	// for detils on solondid asighning see output sheet i posted on slack 
 	slide = new DoubleSolenoid(1,2,3);
-	clamp= new DoubleSolenoid(0,0, 1);
+	kick	= new DoubleSolenoid(0,0, 1);
 	
-	kick= new DoubleSolenoid(0,2, 3);
+	clamp = new DoubleSolenoid(0,2,3);
 	lift= new DoubleSolenoid(1,0, 1);
 	mainC= new Compressor(0);
 	pressureLevel= new AnalogInput(0);
@@ -56,15 +56,22 @@ public State xBox () {
 	else if (_xBox.getAButton() == true) {
 		return State.SLIDER;
 	}
-/*else if (_xBox.getBButton()== true ) {
+else if (_xBox.getBButton()== true ) {
 		return State.KICKF;
 	}
 	else if (_xBox.getYButton()== true ) {
 		return State.KICKR;
 	}
-	*/
+	
 	else if (_xBox.getStartButton()== true ) {
 		return State.LIFTF;
+	}
+	else if (_xBox.getBackButton()== true ) {
+		return State.CLAMPF;
+	}
+	
+	else if (_xBox.getBumper(GenericHID.Hand.kLeft)== true ) {
+		return State.CLAMPR;
 	}
 	
 	else if (_xBox.getYButton()== true ) {
@@ -79,13 +86,13 @@ public State xBox () {
 
 
 
-public void intake() {
+/*public void intake() {
 	rightIntake.configNeutralDeadband(.1, 10);
 	leftIntake.configNeutralDeadband(.1, 10);
 	leftIntake.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightIntake.getDeviceID());
 	rightIntake.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, _xBox.getTriggerAxis(GenericHID.Hand.kLeft));
 
-}
+}*/
 
 // each method for has a forward and reverse 
 // sets a bollean to true in order to know it has ben activated 
@@ -184,7 +191,7 @@ public void boxGraberPeriodic() {
 	 liftDown=false;
 	 clampReverse=false;
 	manipulatorDianostics() ;
-	intake();
+	//intake();
 	   switch (xBox()) {
        case SLIDEF:
     	   	slideForward() ;
