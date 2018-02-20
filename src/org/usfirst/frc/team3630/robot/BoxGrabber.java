@@ -56,15 +56,22 @@ public State xBox () {
 	else if (_xBox.getAButton() == true) {
 		return State.SLIDER;
 	}
-/*else if (_xBox.getBButton()== true ) {
+else if (_xBox.getBButton()== true ) {
 		return State.KICKF;
 	}
 	else if (_xBox.getYButton()== true ) {
 		return State.KICKR;
 	}
-	*/
+	
 	else if (_xBox.getStartButton()== true ) {
 		return State.LIFTF;
+	}
+	else if (_xBox.getBackButton()== true ) {
+		return State.CLAMPF;
+	}
+	
+	else if (_xBox.getBumper(GenericHID.Hand.kLeft)== true ) {
+		return State.CLAMPR;
 	}
 	
 	else if (_xBox.getYButton()== true ) {
