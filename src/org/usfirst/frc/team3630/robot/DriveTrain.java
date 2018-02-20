@@ -21,8 +21,7 @@ public class DriveTrain {
 	AHRS ahrs;
 	ErrorCode sticky;
 	ErrorCode fault;
-	// add coment about from what perspective of robot
-	// need to test
+	
 	double turnOutput;
 	double posOutput;
 	boolean errorGreatorThanFive = false;
@@ -229,6 +228,9 @@ public class DriveTrain {
 		driveTrain.arcadeDrive(posOutput, turnOutput);
 	}
 	
+	/**
+	 *  auto methods for each auto combentation 
+	 */
 	public void leftSwitchLeft() {
 		if (myCurrentCase == 1) {
 			if(init) {

@@ -79,13 +79,13 @@ public State xBox () {
 
 
 
-public void intake() {
+/*public void intake() {
 	rightIntake.configNeutralDeadband(.1, 10);
 	leftIntake.configNeutralDeadband(.1, 10);
 	leftIntake.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightIntake.getDeviceID());
 	rightIntake.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, _xBox.getTriggerAxis(GenericHID.Hand.kLeft));
 
-}
+}*/
 
 // each method for has a forward and reverse 
 // sets a bollean to true in order to know it has ben activated 
@@ -184,7 +184,7 @@ public void boxGraberPeriodic() {
 	 liftDown=false;
 	 clampReverse=false;
 	manipulatorDianostics() ;
-	intake();
+	//intake();
 	   switch (xBox()) {
        case SLIDEF:
     	   	slideForward() ;

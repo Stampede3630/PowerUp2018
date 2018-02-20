@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
+//should we change to timed robot ? 
 public class Robot extends IterativeRobot {
 	String gameData;
 	BoxGrabber box ;
@@ -42,7 +43,6 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("middle", StartingPoints.MIDDLE);
 		SmartDashboard.putData("Starting Position", autoChooser);
 		
-		//autoTime = new Timer();
 		autoLLL = new SendableChooser<Destinations>();
 		autoLLL.addDefault("Switch", Destinations.SWL);
 		autoLLL.addObject("Scale", Destinations.SCL);
@@ -72,7 +72,12 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("RLR Options", autoRLR);
 		}
 	
+	/* (non-Javadoc)
+	 * @see edu.wpi.first.wpilibj.IterativeRobotBase#testInit()
+	 * init method for test modde 
+	 */
 	public void testInit() {
+		// should we empty out test if we aren't useing it anymore 
 		_driveTrain.testInit();
 	}
 	
@@ -95,8 +100,7 @@ public class Robot extends IterativeRobot {
 		box.boxGraberPeriodic();
 	}
 	public void autonomousInit() {
-		//autoTime.reset();
-		//autoTime.start();
+		
 		_driveTrain.autoInit();
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 }
