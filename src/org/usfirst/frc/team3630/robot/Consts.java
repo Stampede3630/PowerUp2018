@@ -20,9 +20,9 @@ public class Consts {
 
 	
 	// Manipulators 
-	public static final double  kPRotAng = 0.15;
-	public static final double  kIRotAng = 0;
-	public static final double  kDRotAng = 0;
+	public static final double  kPRotAng = 0.04;//0.08;
+	public static final double  kIRotAng = 0;//0.008;
+	public static final double  kDRotAng = 0.1;//0.8;
 	
 
     public static final double ToleranceDegrees = 2;
@@ -41,7 +41,7 @@ public class Consts {
 	public static final double kIencoder = 0.000000000;
 	public static final double kDencoder = 0.0;
 
-	public static final double kPPos = 0.07;
+	public static final double kPPos = 0.014;
 	public static final double kIPos = 0;
 	public static final double kDPos = 0;
 	// Auto Distances

@@ -98,7 +98,7 @@ public class DriveTrain {
 		// setting range and disable it
 		turnController.setInputRange(-180.0f, 180.0f);
 		ahrs.setPIDSourceType(edu.wpi.first.wpilibj.PIDSourceType.kDisplacement);
-		turnController.setOutputRange(-.5, .5); // maby should lower to .5 if to see if overcompensation
+		turnController.setOutputRange(-.9, .9); // maybe should lower to .5 if to see if overcompensation
 		turnController.setAbsoluteTolerance(Consts.ToleranceDegrees);
 		turnController.setContinuous(true);
 		turnController.disable();
@@ -108,7 +108,7 @@ public class DriveTrain {
 
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
-		posController.setOutputRange(-.5, .5); //current testing
+		posController.setOutputRange(-.6, .6); //current testing
 		posController.setAbsoluteTolerance(Consts.ToleranceDistance);
 		posController.disable();
 		
@@ -867,8 +867,8 @@ public class DriveTrain {
 	
 	
 	public void autoDriveFw(double inches) {
-		leftThree.configOpenloopRamp(2, Consts.timeOutMs);
-		rightSix.configOpenloopRamp(2, Consts.timeOutMs);
+		leftThree.configOpenloopRamp(.1, Consts.timeOutMs);
+		rightSix.configOpenloopRamp(.1, Consts.timeOutMs);
 		System.out.println("autoDriveFw was called");
 		leftThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		rightSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
@@ -920,8 +920,8 @@ public class DriveTrain {
 		leftThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		rightSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		// why setting ramp rate here? we aren't doing this for telop we should do this once not twice
-		leftThree.configOpenloopRamp(2, Consts.timeOutMs);
-		rightSix.configOpenloopRamp(2, Consts.timeOutMs);
+		leftThree.configOpenloopRamp(.1, Consts.timeOutMs);
+		rightSix.configOpenloopRamp(.1, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
 		myCurrentCase = 1;	
 
