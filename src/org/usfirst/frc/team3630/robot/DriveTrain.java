@@ -40,9 +40,7 @@ public class DriveTrain {
 
 	private WPI_TalonSRX leftThree, rightSix, leftTwo, rightFive, leftOne, rightFour;
 
-	//private SpeedControllerGroup leftSpeedController, rightSpeedController;
-	// PIDSource pidSource ;
-
+	
 	DifferentialDrive driveTrain;
 
 	// defining PIDSource
@@ -77,17 +75,7 @@ public class DriveTrain {
 		rightSix.setSensorPhase(true);
 
 		
-	/*	leftEncoder.configContinuousCurrentLimit(30, Consts.timeOutMs); // Must be 5 amps or more
-		leftEncoder.configPeakCurrentLimit(0, Consts.timeOutMs); // 100 A
-		leftEncoder.enableCurrentLimit(true);
-		leftEncoder.configClosedloopRamp(2, Consts.timeOutMs);
-		rightEncoder.configContinuousCurrentLimit(30, Consts.timeOutMs); // Must be 5 amps or more
-		rightEncoder.configPeakCurrentLimit(0, Consts.timeOutMs); // 100 A
-		rightEncoder.enableCurrentLimit(true);
-		rightEncoder.configClosedloopRamp(2, Consts.timeOutMs);
 
-*/
-		
 
 	
 		driveTrain = new DifferentialDrive(leftThree, rightSix);
@@ -116,6 +104,8 @@ public class DriveTrain {
 	}
 
 	
+	/**
+	 *  set up for test init  */
 	public void testInit() {
 		SmartDashboard.putNumber("Left Side Speed", 0);
 		SmartDashboard.putNumber("Right Side Speed", 0);
@@ -151,15 +141,8 @@ public class DriveTrain {
 		SmartDashboard.putNumber("heading acrcade drive", heading);
 		driveTrain.arcadeDrive(speed, heading);
 		getDiagnostics();
-		// three are two missing bad?
-		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSix.getDeviceID());
-		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThree.getDeviceID());	
-		// why are right three set to followers? should get rid of 
-//		rightThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
-//		//leftThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
-		//*
-//		SmartDashboard.putNumber("Left encoder curent", leftEncoder.getOutputCurrent());
-//		SmartDashboard.putNumber("Left encoder volt", leftEncoder.getMotorOutputVoltage());
+		// three are two missing bad? delted folowers set in constructor
+		
 	SmartDashboard.putNumber("Left three curent", leftThree.getOutputCurrent());
 	SmartDashboard.putNumber("total voltage ", panel.getVoltage());
 	SmartDashboard.putNumber("total current", panel.getTotalCurrent());
@@ -174,6 +157,10 @@ public class DriveTrain {
 
 	}
 
+	/**
+	 * @param _talon
+	 * set up  for tann initatioation
+	 */
 	private void configureTalon(TalonSRX _talon) {
 		_talon.configNominalOutputForward(0, Consts.timeOutMs);
 		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
@@ -186,9 +173,10 @@ public class DriveTrain {
 		_talon.configNeutralDeadband(0, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband. might be worth looking at 
 		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
 		_talon.setInverted(false);
+//		_talon.configOpenloopRamp(.1, Consts.timeOutMs);  figure out wheere to sert 
 		// where should we set ramp rate???
 		///////////////////
-	//	_talon.configOpenloopRamp(.1, Consts.timeOutMs); 
+	
 		
 	// Peak current and duration must be exceeded before corrent limit is activated.
 	// When activated, current will be limited to continuous current.
@@ -200,6 +188,9 @@ public class DriveTrain {
 		
 	}
 
+	/**
+	 *  diganoaric method for taon srx debuging 
+	 */
 	public void getDiagnostics() {		
 		SmartDashboard.putNumber("Left Current", leftThree.getOutputCurrent());
 		SmartDashboard.putNumber("Right Current", rightSix.getOutputCurrent());
@@ -913,6 +904,9 @@ public class DriveTrain {
 	}
 
 
+	/**
+	 * init method for auto. reset sensor position. note setting ramp rate in method
+	 */
 	public void autoInit() {
 		ahrs.reset();
 		turnController.reset();
@@ -927,6 +921,10 @@ public class DriveTrain {
 
 	}
 
+	/**
+	 * @param _talon
+	 * @return actual rrotation of talon in a rotation of the wheel 
+	 */
 	public double getRotations(TalonSRX _talon) {
 		double distance_ticks = _talon.getSelectedSensorPosition(0);
 		double distance_rotations = distance_ticks / Consts.ticksPerRotation;
@@ -939,6 +937,10 @@ public class DriveTrain {
 
 	}
 
+	/**
+	 * @param _talon
+	 * @return velocity in in/ second. from native taon units 
+	 */
 	public double getVelocity(TalonSRX _talon) {
 		double velocity_milliseconds = (double) _talon.getSelectedSensorVelocity(0) / Consts.ticksPerRotation;
 		double velocity_seconds = velocity_milliseconds * Consts.millisecondsPerSecond;
@@ -946,6 +948,11 @@ public class DriveTrain {
 	}
 
 	
+
+	/**
+	 * method for gtting pos output for pid controllor 
+	 *
+	 */
 	public  class MyPosPidOutput implements PIDOutput {
 		// implements pid output
 				public void pidWrite(double output) {
@@ -981,8 +988,7 @@ public class DriveTrain {
 				SmartDashboard.putString("Left", "Left calling");
 			}
 
-			//SmartDashboard.putNumber("Front Left Talon Position", fRGetSelected);
-			//SmartDashboard.putNumber("Front Right Talon Position", fRGetSelected);
+	
 			return positionInches;
 		}
 
