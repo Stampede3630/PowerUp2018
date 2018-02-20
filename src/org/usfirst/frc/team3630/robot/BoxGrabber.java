@@ -5,8 +5,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+/**
+ * @author deltaA380
+ * class for manipulator
+ */
 public class BoxGrabber {
-	// enum difftent state= state (F, forward) (R, piston reverse)
+	//
+	/**
+	 *  enum difftent state= state (F, forward) (R, piston reverse) 
+	 *
+	 */
 	public enum State {
 		SLIDEF, 
 		CLAMPF, 
@@ -144,7 +152,10 @@ public void slideReverse() {
 	slide.set(DoubleSolenoid.Value.kReverse);
 }
 
-// psi method for presure sensor need to calibrate normaliesd voltage during testing 
+//
+/**
+ * @return  psi method for presure sensor need to calibrate normaliesd voltage during testing 
+ */
 public double   compresorPSI() {
 	double sensorV= pressureLevel.getVoltage();
 	double  psi = 250 * (sensorV/ 5) -25 ;
