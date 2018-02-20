@@ -45,8 +45,11 @@ public class DriveTrain {
 	// defining PIDSource
 	EncoderPIDSource positionEncoderSource;
 
+	/**
+	 * leftThree , right six master motors and drive train constru
+	 */
 	public DriveTrain() {
-		// calibrate navx !!!!!
+		// why doing ahrs byte thing? // do we use update rate elswhere 
 		ahrs = new AHRS(SPI.Port.kMXP,(byte) 200);
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 		panel = new PowerDistributionPanel();
@@ -59,7 +62,7 @@ public class DriveTrain {
 		rightFive = new WPI_TalonSRX(Consts.rightFive);
 		rightFour = new WPI_TalonSRX(Consts.rightFour);
 		
-		//////////////////////////
+		// mabey rename to leftThreeMaster? nice more specific name 
 		configureTalon(leftThree);
 		configureTalon(rightSix);
 		configureTalon(leftTwo);
@@ -70,6 +73,7 @@ public class DriveTrain {
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThree.getDeviceID());
 		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSix.getDeviceID());
 		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThree.getDeviceID());
+		// why differ sensor phase diffrent would it be cosntant for both robots?
 		leftThree.setSensorPhase(false);
 		rightSix.setSensorPhase(true);
 
@@ -78,8 +82,7 @@ public class DriveTrain {
 
 	
 		driveTrain = new DifferentialDrive(leftThree, rightSix);
-		driveTrain.setDeadband(0);
-		
+		driveTrain.setDeadband(0); // why set to zero and not at default ?.02
 		turnController = new PIDController(Consts.kPRotAng, Consts.kIRotAng, Consts.kDRotAng, ahrs,new MyRotationPidOutput());
 
 		// setting range and disable it
@@ -92,9 +95,8 @@ public class DriveTrain {
 
 
 		positionEncoderSource = new EncoderPIDSource(leftThree, rightSix);
-
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
-				positionEncoderSource, new MyPosPidOutput());
+		positionEncoderSource, new MyPosPidOutput());
 		posController.setOutputRange(-.6, .6); //current testing
 		posController.setAbsoluteTolerance(Consts.ToleranceDistance);
 		posController.disable();
@@ -875,6 +877,10 @@ public class DriveTrain {
 		init = false;
 	}
 	
+	/**
+	 * @param degree
+	 * @return which motor to use for turning 
+	 */
 	public void autoTurnDegree(int degree) {
 		leftThree.configOpenloopRamp(0, Consts.timeOutMs);
 		rightSix.configOpenloopRamp(0, Consts.timeOutMs);
