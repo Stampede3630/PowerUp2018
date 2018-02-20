@@ -106,13 +106,15 @@ public class DriveTrain {
 	/**
 	 *  set up for test init  */
 	public void testInit() {
-		SmartDashboard.putNumber("Left Side Speed", 0);
+		// should delite unless someone can explain why we have it still
+	/*	SmartDashboard.putNumber("Left Side Speed", 0);
 		SmartDashboard.putNumber("Right Side Speed", 0);
-		rightSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		rightSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);*/
 	}
 	
 	public void testPeriodic() {
-		leftThree.set(SmartDashboard.getNumber("Left Side Speed", 0));
+		// should delite unless someone can explain why we have it still
+	/*	leftThree.set(SmartDashboard.getNumber("Left Side Speed", 0));
 		rightSix.set(SmartDashboard.getNumber("Right Side Speed", 0));
 		// mising a few talons 
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSix.getDeviceID());
@@ -120,9 +122,12 @@ public class DriveTrain {
 		// why comment theese out names 
 		//rightThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
 		//leftThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
-		SmartDashboard.putNumber("Right Encoder Ticks", rightSix.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Right Encoder Ticks", rightSix.getSelectedSensorPosition(0));*/
 	}
 
+	/**
+	 * @return ahrs yaw value from -180 to 180 degrees 
+	 */
 	public double ahrsYaw() {
 		double yaw = ahrs.getYaw();
 		return yaw;
