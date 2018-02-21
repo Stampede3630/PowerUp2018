@@ -17,6 +17,7 @@ import com.kauailabs.navx.frc.AHRS;
 public class DriveTrain {
 
 	private XboxController _xBox;
+	BoxGrabber _boxGrabber;
 	PowerDistributionPanel panel;
 	AHRS ahrs;
 	ErrorCode sticky;
@@ -54,6 +55,7 @@ public class DriveTrain {
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 		panel = new PowerDistributionPanel(0);
 		_xBox = new XboxController(Consts.xBoxComPort);
+		_boxGrabber = new BoxGrabber();
 		// srx definitions
 		leftThreeEncoder = new WPI_TalonSRX(Consts.leftThree);
 		leftTwo = new WPI_TalonSRX(Consts.leftTwo);
@@ -303,6 +305,9 @@ public class DriveTrain {
 				myCurrentCase = 4;
 	     		init = true;
 			}
+		}
+		if(myCurrentCase == 4) {
+			_boxGrabber.switchAuto();
 		}
 		if(myCurrentCase == 4) {
 			turnController.disable();
