@@ -50,9 +50,9 @@ public class DriveTrain {
 	 */
 	public DriveTrain() {
 		// why doing ahrs byte thing? // do we use update rate elswhere 
-		ahrs = new AHRS(SPI.Port.kMXP,(byte) 200);
+		ahrs = new AHRS(SPI.Port.kMXP);
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
-		panel = new PowerDistributionPanel();
+		panel = new PowerDistributionPanel(0);
 		_xBox = new XboxController(Consts.xBoxComPort);
 		// srx definitions
 		leftThree = new WPI_TalonSRX(Consts.leftThree);
@@ -174,9 +174,9 @@ public class DriveTrain {
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
 		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
 		_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
-		_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
-		_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
-		_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
+//		_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
+//		_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
+//		_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
 		_talon.configNeutralDeadband(0, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband. might be worth looking at 
 		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
 		_talon.setInverted(false);
@@ -1022,6 +1022,7 @@ public class DriveTrain {
 			double positionInches;
 
 			if(right) {
+				//(2 * Math.PI * Consts.wheelRadiusInch) make this a contant !!
 				positionInches = fRGetSelected * (double) (2 * Math.PI * Consts.wheelRadiusInch) / (double) Consts.ticksPerRotation ;
 				SmartDashboard.putString("Right", "Right calling");
 			}

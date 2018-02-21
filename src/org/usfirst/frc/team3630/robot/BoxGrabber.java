@@ -8,14 +8,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 public class BoxGrabber {
 	// enum difftent state= state (F, forward) (R, piston reverse)
 	public enum State {
-		SLIDEF, 
-		CLAMPF, 
-		KICKF, 
-		LIFTF, 
-		LIFTR, 
-		CLAMPR,
-		SLIDER, 
-		KICKR,
+		SLIDEFORWARD, 
+		CLAMPOPEN, 
+		KICKFORWARD, 
+		LIFTUP, 
+		LIFTDOWN, 
+		CLAMPCLOSE,
+		SLIDEBACK, 
+		KICKRETRACT,
 		STOP,
 		INTAKE 
 		  
@@ -35,13 +35,13 @@ public BoxGrabber(){
 	// for detils on solondid asighning see output sheet i posted on slack 
 	slide = new DoubleSolenoid(1,2,3);
 	kick	= new DoubleSolenoid(0,0, 1);
-	
 	clamp = new DoubleSolenoid(0,2,3);
 	lift= new DoubleSolenoid(1,0, 1);
 	mainC= new Compressor(0);
 	pressureLevel= new AnalogInput(0);
 	_xBox = new XboxController(Consts.xBoxComPort);
 	leftIntake = new TalonSRX(7);
+
 	rightIntake = new TalonSRX(8);
 	leftIntake.setInverted(true);
 	rightIntake.setInverted(true);
@@ -51,31 +51,31 @@ public BoxGrabber(){
 public State xBox () {
 	// need to confirm buttons//  acyivates state for switch if button press is true 
 	if (_xBox.getXButton()== true ) {
-		return State.SLIDEF;
+		return State.SLIDEFORWARD;
 	}
 	else if (_xBox.getAButton() == true) {
-		return State.SLIDER;
+		return State.SLIDEBACK;
 	}
 else if (_xBox.getBButton()== true ) {
-		return State.KICKF;
+		return State.KICKFORWARD;
 	}
-	else if (_xBox.getYButton()== true ) {
-		return State.KICKR;
+else if (_xBox.getBumper(GenericHID.Hand.kRight)== true  ) {
+		return State.KICKRETRACT;
 	}
-	
+
 	else if (_xBox.getStartButton()== true ) {
-		return State.LIFTF;
+		return State.LIFTUP;
 	}
 	else if (_xBox.getBackButton()== true ) {
-		return State.CLAMPF;
+		return State.CLAMPOPEN;
 	}
 	
 	else if (_xBox.getBumper(GenericHID.Hand.kLeft)== true ) {
-		return State.CLAMPR;
+		return State.CLAMPCLOSE;
 	}
 	
 	else if (_xBox.getYButton()== true ) {
-	return 	State.LIFTR;
+	return 	State.LIFTDOWN;
 	}
 	
 	
@@ -98,6 +98,7 @@ else if (_xBox.getBButton()== true ) {
 // sets a bollean to true in order to know it has ben activated 
 
 public void kickForward(){
+
 	kick.set(DoubleSolenoid.Value.kForward);
 	kickForwardEngaged= true;
 	
@@ -112,17 +113,18 @@ public void liftForward(){
 	liftUpEngaged= true ;
 	
 }
-public void liftReverse(){
+public void liftDown(){
 	lift.set(DoubleSolenoid.Value.kReverse);
 	liftDown= true ;
 	
 	
 }
-public void clampForward() {
+public void clampOpen() {
 	clamp.set(DoubleSolenoid.Value.kForward);
 	clampEnaged= true;
 }
-public void clampReverse() {
+public void clampClose()
+ {
 	clamp.set(DoubleSolenoid.Value.kReverse);
 	clampReverse=true;
 }
@@ -193,26 +195,36 @@ public void boxGraberPeriodic() {
 	manipulatorDianostics() ;
 	//intake();
 	   switch (xBox()) {
-       case SLIDEF:
-    	   	slideForward() ;
+       case SLIDEFORWARD:
+    	   slideForward() ;
            break;
                
-       case SLIDER:
+       case SLIDEBACK:
     	   slideReverse()   ;
            break;
                     
-       case KICKF:
+       case KICKFORWARD:
     	   kickForward();
            break;
            
-    	   case KICKR:
-    		   kickReverse();
-	   break;
-	   case LIFTF:
+       case KICKRETRACT:
+    	   kickReverse();
+    	   break;
+	   
+       case LIFTUP:
 		   liftForward();
 		   break;
-	   case LIFTR:
-		   liftReverse();
+		   
+	   case CLAMPCLOSE:
+		   clampClose();
+		   break;
+	   
+	   case CLAMPOPEN:
+		   clampOpen();
+		   break;
+	  
+	   case LIFTDOWN:
+		   liftDown();
 		   break;
 	                                       
        default:

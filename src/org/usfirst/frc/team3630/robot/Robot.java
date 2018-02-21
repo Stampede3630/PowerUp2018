@@ -34,7 +34,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		_driveTrain = new DriveTrain();
-	//	box = new BoxGrabber();
+		box = new BoxGrabber();
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
 		autoChooser = new SendableChooser<StartingPoints>();
@@ -97,7 +97,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		_driveTrain.teleopPeriodic();
-	//	box.boxGraberPeriodic();
+		box.boxGraberPeriodic();
 	}
 	public void autonomousInit() {
 		
