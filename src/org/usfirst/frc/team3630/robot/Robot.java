@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Robot extends IterativeRobot {
 	String gameData;
+	
 	public enum StartingPoints {
 		LEFT, RIGHT, MIDDLE, UNDEFINED
 	}
@@ -31,7 +32,7 @@ public class Robot extends IterativeRobot {
 	SendableChooser autoLRL;
 	SendableChooser autoRLR;
 	DriveTrain _driveTrain;
-	//Timer  autoTime; 
+	//Timer autoTime; 
 	
 	@Override
 	public void robotInit() {
@@ -74,6 +75,7 @@ public class Robot extends IterativeRobot {
 		autoRLR.addObject("Auto Line", Destinations.DRFW);
 		SmartDashboard.putData("RLR Options", autoRLR);
 	}
+	
 	@Override
 	public void robotPeriodic() {
 		_driveTrain.getDiagnostics();
@@ -84,10 +86,12 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {
 	}
+	
 	@Override
 	public void teleopPeriodic() {
 		_driveTrain.teleopPeriodic();
 	}
+	
 	@Override
 	public void autonomousInit() {
 		//autoTime.reset();
@@ -98,14 +102,17 @@ public class Robot extends IterativeRobot {
 		//_driveTrain.driveStraight();
 		SmartDashboard.putString("auto starting position", autoChooser.getSelected().toString());
 	}
+	
 	@Override
 	public void autonomousPeriodic() {
 		autoLogic();
 		_driveTrain.getDiagnostics();
 	}
+	
 	@Override
 	public void disabledInit() {
 	}
+	
 	@Override
 	public void disabledPeriodic() {
 		_driveTrain.putData();
@@ -254,8 +261,8 @@ public class Robot extends IterativeRobot {
 					break;
 				default:
 					_driveTrain.autoDriveFw(Consts.autoLine);
+					break;
 				}
-				break;
 			case MIDDLE:
 				switch (myDest) {
 				case SWL:
@@ -278,8 +285,8 @@ public class Robot extends IterativeRobot {
 					break;
 				default:
 					_driveTrain.autoDriveFw(Consts.autoLine);
-				}
-				break;
+					break;
+			    }
 			case RIGHT:
 				switch (myDest) {
 				case SWL:
@@ -302,21 +309,192 @@ public class Robot extends IterativeRobot {
 					break;
 				default:
 					_driveTrain.autoDriveFw(Consts.autoLine);
+					break;
 				}
+			case UNDEFINED:
+				_driveTrain.autoDoNothing(); //should it be like this?
 				break;
 			default:
+				_driveTrain.autoDriveFw(Consts.autoLine);
 				break;
 			}
-			break;
+			
 		case "LR":
 			myDest = (Destinations) autoLRL.getSelected();
-			break;
+			
+			switch (mySP) {
+			case LEFT:
+				switch (myDest) {
+				case SWL:
+					_driveTrain.leftSwitchLeft();
+					break;
+				case SCL:
+					_driveTrain.leftScaleLeft();
+					break;
+				case SWR:
+					_driveTrain.leftSwitchRight();
+					break;
+				case SCR:
+					_driveTrain.leftScaleRight();
+					break;
+				case DONO:
+					_driveTrain.autoDoNothing();
+					break;
+				case DRFW:
+					_driveTrain.autoDriveFw(Consts.autoLine);
+					break;
+				default:
+					_driveTrain.autoDoNothing();
+					break;
+				}
+			case MIDDLE:
+				switch (myDest) {
+				case SWL:
+					_driveTrain.middleSwitchLeft();
+					break;
+				case SCL:
+					_driveTrain.middleScaleLeft();
+					break;
+				case SWR:
+					_driveTrain.middleSwitchRight();
+					break;
+				case SCR:
+					_driveTrain.middleScaleRight();
+					break;
+				case DONO:
+					_driveTrain.autoDoNothing();
+					break;
+				case DRFW:
+					_driveTrain.autoDriveFw(Consts.autoLine);
+					break;
+				}
+			case RIGHT:
+				switch (myDest) {
+				case SWL:
+					_driveTrain.rightSwitchLeft();
+					break;
+				case SCL:
+					_driveTrain.rightScaleLeft();
+					break;
+				case SWR:
+					_driveTrain.rightSwitchRight();
+					break;
+				case SCR:
+					_driveTrain.rightScaleRight();
+					break;
+				case DONO:
+					_driveTrain.autoDoNothing();
+					break;
+				case DRFW:
+					_driveTrain.autoDriveFw(Consts.autoLine);
+					break;
+				}
+			case UNDEFINED:
+				_driveTrain.autoDoNothing(); //should it be like this?
+				break;
+			}
+			
 		case "RR":
 			myDest = (Destinations) autoRRR.getSelected();
-			break;
+			
+			switch (mySP) {
+			case LEFT:
+				switch (myDest) {
+				case SWL:
+					_driveTrain.rightSwitchLeft();
+					break;
+				case SCL:
+					_driveTrain.rightScaleLeft();
+					break;
+				case SWR:
+					_driveTrain.rightSwitchRight();
+					break;
+				case SCR:
+					_driveTrain.rightScaleRight();
+					break;
+				case DONO:
+					_driveTrain.autoDoNothing();
+					break;
+				case DRFW:
+					_driveTrain.autoDriveFw(Consts.autoLine);
+					break;
+				}
+			default:
+				_driveTrain.autoDoNothing(); //should it be like this?
+				break;
+			}
+			
 		case "RL":
 			myDest = (Destinations) autoRLR.getSelected();
-			break;
+			
+			switch (mySP) {
+			case LEFT:
+				switch (myDest) {
+				case SWL:
+					_driveTrain.leftSwitchLeft();
+					break;
+				case SCL:
+					_driveTrain.leftScaleLeft();
+					break;
+				case SWR:
+					_driveTrain.rightSwitchRight();
+					break;
+				case SCR:
+					_driveTrain.rightScaleRight();
+					break;
+				case DONO:
+					_driveTrain.autoDoNothing();
+					break;
+				case DRFW:
+					_driveTrain.autoDriveFw(Consts.autoLine);
+					break;
+				}
+			case MIDDLE:
+				switch (myDest) {
+				case SWL:
+					_driveTrain.middleSwitchLeft();
+					break;
+				case SCL:
+					_driveTrain.leftScaleLeft();
+					break;
+				case SWR:
+					_driveTrain.rightSwitchRight();
+					break;
+				case SCR:
+					_driveTrain.rightScaleRight();
+					break;
+				case DONO:
+					_driveTrain.autoDoNothing();
+					break;
+				case DRFW:
+					_driveTrain.autoDriveFw(Consts.autoLine);
+					break;
+				}
+			case RIGHT:
+				switch (myDest) {
+				case SWL:
+					_driveTrain.leftSwitchLeft();
+					break;
+				case SCL:
+					_driveTrain.leftScaleLeft();
+					break;
+				case SWR:
+					_driveTrain.middleSwitchRight();
+					break;
+				case SCR:
+					_driveTrain.middleScaleRight();
+					break;
+				case DONO:
+					_driveTrain.autoDoNothing();
+					break;
+				case DRFW:
+					_driveTrain.autoDriveFw(Consts.autoLine);
+					break;
+				}
+			case UNDEFINED:
+				_driveTrain.autoDoNothing(); //should it be like this?
+				break;
+			}
 		}
 	}
 }
