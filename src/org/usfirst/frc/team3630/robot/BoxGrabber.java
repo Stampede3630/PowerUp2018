@@ -1,11 +1,14 @@
 package org.usfirst.frc.team3630.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.Timer;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class BoxGrabber {
+	Timer manipTime;
 	// enum difftent state= state (F, forward) (R, piston reverse)
 	public enum State {
 		SLIDEFORWARD, 
@@ -33,6 +36,7 @@ public BoxGrabber(){
 	
 	// peramtors for double soelnoid pcm, in chanel, out chanel
 	// for detils on solondid asighning see output sheet i posted on slack 
+	manipTime= new Timer ();
 	slide = new DoubleSolenoid(1,2,3);
 	kick	= new DoubleSolenoid(0,0, 1);
 	clamp = new DoubleSolenoid(0,2,3);
@@ -158,6 +162,37 @@ public double   compresorPSI() {
 	
 }
 
+/**
+ * method for geteing a box. Add timer delay curently for saftey 
+ */
+public void kickoutBox() {
+	clampOpen(); 
+	Timer.delay(.5);
+	kickForward();
+	Timer.delay(.5);
+	kickReverse();
+	
+	
+}
+
+/**
+ * scale Auto method for lift up and dump box 
+ */
+public void scaleAuto(){
+	liftForward();
+	Timer.delay(4);
+	kickoutBox();
+	Timer.delay(2.5);
+	liftDown();
+	
+}
+
+/**
+ * swutch auto metod need to test to fully develop
+ */
+public void switchAuto() {
+	
+}
 
 // manip diognostics output to smart doashboard for each pnumatic subsystem 
 public void manipulatorDianostics() {
