@@ -24,7 +24,7 @@ public class BoxGrabber {
 		  
 	}
 	private XboxController _xBox;
-	private TalonSRX leftIntake, rightIntake;
+//	private TalonSRX leftIntake, rightIntake;
 	// name double solonoid
 	DoubleSolenoid slide,clamp,kick, lift;
 	Compressor mainC;
@@ -44,9 +44,9 @@ public BoxGrabber(){
 	mainC= new Compressor(0);
 	pressureLevel= new AnalogInput(0);
 	_xBox = new XboxController(Consts.xBoxComPort);
-	leftIntake = new TalonSRX(7);
-
-	rightIntake = new TalonSRX(8);
+//	leftIntake = new TalonSRX(7);
+//
+//	rightIntake = new TalonSRX(8);
 	leftIntake.setInverted(true);
 	rightIntake.setInverted(true);
 }
