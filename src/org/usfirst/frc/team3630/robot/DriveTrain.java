@@ -45,8 +45,11 @@ public class DriveTrain {
 	// defining PIDSource
 	EncoderPIDSource positionEncoderSource;
 
+	/**
+	 * leftThree , right six master motors and drive train constru
+	 */
 	public DriveTrain() {
-		// calibrate navx !!!!!
+		// why doing ahrs byte thing? // do we use update rate elswhere 
 		ahrs = new AHRS(SPI.Port.kMXP,(byte) 200);
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 		panel = new PowerDistributionPanel();
@@ -59,7 +62,7 @@ public class DriveTrain {
 		rightFive = new WPI_TalonSRX(Consts.rightFive);
 		rightFour = new WPI_TalonSRX(Consts.rightFour);
 		
-		//////////////////////////
+		// mabey rename to leftThreeMaster? nice more specific name 
 		configureTalon(leftThree);
 		configureTalon(rightSix);
 		configureTalon(leftTwo);
@@ -70,6 +73,7 @@ public class DriveTrain {
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThree.getDeviceID());
 		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSix.getDeviceID());
 		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThree.getDeviceID());
+		// why differ sensor phase diffrent would it be cosntant for both robots?
 		leftThree.setSensorPhase(false);
 		rightSix.setSensorPhase(true);
 
@@ -78,8 +82,7 @@ public class DriveTrain {
 
 	
 		driveTrain = new DifferentialDrive(leftThree, rightSix);
-		driveTrain.setDeadband(0);
-		
+		driveTrain.setDeadband(0); // why set to zero and not at default ?.02
 		turnController = new PIDController(Consts.kPRotAng, Consts.kIRotAng, Consts.kDRotAng, ahrs,new MyRotationPidOutput());
 
 		// setting range and disable it
@@ -92,10 +95,10 @@ public class DriveTrain {
 
 
 		positionEncoderSource = new EncoderPIDSource(leftThree, rightSix);
-
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
 		posController.setOutputRange(-1, 1); //current testing
+
 		posController.setAbsoluteTolerance(Consts.ToleranceDistance);
 		posController.disable();
 		
@@ -106,13 +109,15 @@ public class DriveTrain {
 	/**
 	 *  set up for test init  */
 	public void testInit() {
-		SmartDashboard.putNumber("Left Side Speed", 0);
+		// should delite unless someone can explain why we have it still
+	/*	SmartDashboard.putNumber("Left Side Speed", 0);
 		SmartDashboard.putNumber("Right Side Speed", 0);
-		rightSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		rightSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);*/
 	}
 	
 	public void testPeriodic() {
-		leftThree.set(SmartDashboard.getNumber("Left Side Speed", 0));
+		// should delite unless someone can explain why we have it still
+	/*	leftThree.set(SmartDashboard.getNumber("Left Side Speed", 0));
 		rightSix.set(SmartDashboard.getNumber("Right Side Speed", 0));
 		// mising a few talons 
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSix.getDeviceID());
@@ -120,9 +125,12 @@ public class DriveTrain {
 		// why comment theese out names 
 		//rightThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
 		//leftThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
-		SmartDashboard.putNumber("Right Encoder Ticks", rightSix.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Right Encoder Ticks", rightSix.getSelectedSensorPosition(0));*/
 	}
 
+	/**
+	 * @return ahrs yaw value from -180 to 180 degrees 
+	 */
 	public double ahrsYaw() {
 		double yaw = ahrs.getYaw();
 		return yaw;
@@ -879,6 +887,10 @@ public class DriveTrain {
 		init = false;
 	}
 	
+	/**
+	 * @param degree
+	 * @return which motor to use for turning 
+	 */
 	public void autoTurnDegree(int degree) {
 		turnController.setPID(Consts.kPRotAng, Consts.kIRotAng, Consts.kDRotAng);
 		leftThree.configOpenloopRamp(0.1, Consts.timeOutMs);

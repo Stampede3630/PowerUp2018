@@ -104,6 +104,10 @@ public class Robot extends IterativeRobot {
 		_driveTrain.autoInit();
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 }
+	/* (non-Javadoc)
+	 * @see edu.wpi.first.wpilibj.IterativeRobotBase#autonomousPeriodic()
+	 * irative method for auto. calls all methods during auto that are used 
+	 */
 	@Override
 	public void autonomousPeriodic() {
 		autoLogic();
@@ -119,6 +123,9 @@ public class Robot extends IterativeRobot {
 		_driveTrain.putData();
 	}
 
+	/**
+	 * deals with game data from fms which gets sent to us and set auto rutube
+	 */
 	public void autoLogic() {
 		if(gameData.length() > 0) {
 			
