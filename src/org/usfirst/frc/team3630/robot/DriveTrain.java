@@ -307,11 +307,12 @@ public class DriveTrain {
 			}
 		}
 		if(myCurrentCase == 4) {
-			_boxGrabber.switchAuto();
-		}
-		if(myCurrentCase == 4) {
-			turnController.disable();
-			posController.disable();
+			if(init) {
+				turnController.disable();
+				posController.disable();
+				_boxGrabber.switchAuto();
+				init = false;
+			}
 		}
 	}
 	
@@ -349,6 +350,8 @@ public class DriveTrain {
 		if(myCurrentCase == 4) {
 			turnController.disable();
 			posController.disable();
+			_boxGrabber.scaleAuto();
+			init = false;
 		}
 	}
 	
@@ -386,6 +389,8 @@ public class DriveTrain {
 		if(myCurrentCase == 4) {
 			turnController.disable();
 			posController.disable();
+			_boxGrabber.scaleAuto();
+			init = false;
 		}
 	}
 		
@@ -441,6 +446,8 @@ public class DriveTrain {
 		if(myCurrentCase == 6) {
 			turnController.disable();
 			posController.disable();
+			_boxGrabber.switchAuto();
+			init = false;
 		}
 	}
 
@@ -496,6 +503,8 @@ public class DriveTrain {
 		if(myCurrentCase == 6) {
 			turnController.disable();
 			posController.disable();
+			_boxGrabber.switchAuto();
+			init = false;
 		}
 	}
 		
@@ -571,6 +580,8 @@ public class DriveTrain {
 		if(myCurrentCase == 8) {
 			turnController.disable();
 			posController.disable();
+			_boxGrabber.scaleAuto();
+			init = false;
 		}
 	}
 	
@@ -646,6 +657,8 @@ public class DriveTrain {
 		if(myCurrentCase == 8) {
 			turnController.disable();
 			posController.disable();
+			_boxGrabber.scaleAuto();
+			init = false;
 		}
 	}
 
@@ -702,6 +715,8 @@ public class DriveTrain {
 		if(myCurrentCase == 6) {
 			turnController.disable();
 			posController.disable();
+			_boxGrabber.switchAuto();
+			init = false;
 		}
 	}
 	
@@ -720,6 +735,8 @@ public class DriveTrain {
 		if (myCurrentCase == 2) {
 			turnController.disable();
 			posController.disable();
+			_boxGrabber.switchAuto();
+			init = false;
 		}
 	}
 
@@ -792,6 +809,8 @@ public class DriveTrain {
 		if(myCurrentCase == 8) {
 			turnController.disable();
 			posController.disable();
+			_boxGrabber.scaleAuto();
+			init = false;
 		}
 	}
 	
@@ -864,6 +883,8 @@ public class DriveTrain {
 		if(myCurrentCase == 8) {
 			turnController.disable();
 			posController.disable();
+			_boxGrabber.scaleAuto();
+			init = false;
 		}
 	}
 	
