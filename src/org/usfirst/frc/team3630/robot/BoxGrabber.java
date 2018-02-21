@@ -17,11 +17,11 @@ public class BoxGrabber {
 	 */
 	public enum State {
 		SLIDEFORWARD, 
-		CLAMPIN, 
+		CLAMPOPEN, 
 		KICKFORWARD, 
 		LIFTUP, 
 		LIFTDOWN, 
-		CLAMPOUT,
+		CLAMPCLOSE,
 		SLIDEBACK, 
 		KICKRETRACT,
 		STOP,
@@ -75,11 +75,11 @@ else if (_xBox.getBumper(GenericHID.Hand.kRight)== true  ) {
 		return State.LIFTUP;
 	}
 	else if (_xBox.getBackButton()== true ) {
-		return State.CLAMPIN;
+		return State.CLAMPOPEN;
 	}
 	
 	else if (_xBox.getBumper(GenericHID.Hand.kLeft)== true ) {
-		return State.CLAMPOUT;
+		return State.CLAMPCLOSE;
 	}
 	
 	else if (_xBox.getYButton()== true ) {
@@ -106,6 +106,7 @@ else if (_xBox.getBumper(GenericHID.Hand.kRight)== true  ) {
 // sets a bollean to true in order to know it has ben activated 
 
 public void kickForward(){
+
 	kick.set(DoubleSolenoid.Value.kForward);
 	kickForwardEngaged= true;
 	
@@ -120,17 +121,17 @@ public void liftForward(){
 	liftUpEngaged= true ;
 	
 }
-public void liftReverse(){
+public void liftDown(){
 	lift.set(DoubleSolenoid.Value.kReverse);
 	liftDown= true ;
 	
 	
 }
-public void clampForward() {
+public void clampOpen() {
 	clamp.set(DoubleSolenoid.Value.kForward);
 	clampEnaged= true;
 }
-public void clampReverse()
+public void clampClose()
  {
 	clamp.set(DoubleSolenoid.Value.kReverse);
 	clampReverse=true;
@@ -225,16 +226,16 @@ public void boxGraberPeriodic() {
 		   liftForward();
 		   break;
 		   
-	   case CLAMPOUT:
-		   clampReverse();
+	   case CLAMPCLOSE:
+		   clampClose();
 		   break;
 	   
-	   case CLAMPIN:
-		   clampForward();
+	   case CLAMPOPEN:
+		   clampOpen();
 		   break;
 	  
 	   case LIFTDOWN:
-		   liftReverse();
+		   liftDown();
 		   break;
 	                                       
        default:
