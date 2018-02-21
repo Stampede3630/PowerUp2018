@@ -95,7 +95,7 @@ public class DriveTrain {
 
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
-		posController.setOutputRange(-.6, .6); //current testing
+		posController.setOutputRange(-1, 1); //current testing
 		posController.setAbsoluteTolerance(Consts.ToleranceDistance);
 		posController.disable();
 		
@@ -130,8 +130,8 @@ public class DriveTrain {
 	
 	// add ahrs  congif method to see if calibating. It could be a good saftey checlk 
 	public void teleopInit() {
-		leftThree.configOpenloopRamp(0, Consts.timeOutMs);
-		rightSix.configOpenloopRamp(0, Consts.timeOutMs);
+		leftThree.configOpenloopRamp(.2, Consts.timeOutMs);
+		rightSix.configOpenloopRamp(.2, Consts.timeOutMs);
 
 	}
 	public void teleopPeriodic() {
@@ -214,6 +214,14 @@ public class DriveTrain {
 		SmartDashboard.putBoolean("TurnControl On", turnController.isEnabled());
 		SmartDashboard.putBoolean("Is init true?", init);
 		SmartDashboard.putNumber("posController input", posOutput);
+		
+		SmartDashboard.putNumber("turnController kP", turnController.getP());
+		
+		if(panel.getTotalCurrent()>300) {
+			System.out.print("[WARNING] CURRENT DRAW IS AT ");
+			System.out.print(panel.getTotalCurrent());
+			System.out.print('\n');
+		}
 		
 		fault=leftThree.getLastError();
 		if(fault != ErrorCode.OK) System.out.println(fault);
@@ -860,8 +868,9 @@ public class DriveTrain {
 	
 	
 	public void autoDriveFw(double inches) {
-		leftThree.configOpenloopRamp(.1, Consts.timeOutMs);
-		rightSix.configOpenloopRamp(.1, Consts.timeOutMs);
+		turnController.setPID(Consts.kPDrAngle, Consts.kIDrAngle, Consts.kDDrAngle);
+		leftThree.configOpenloopRamp(1, Consts.timeOutMs);
+		rightSix.configOpenloopRamp(1, Consts.timeOutMs);
 		System.out.println("autoDriveFw was called");
 		leftThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		rightSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
@@ -871,8 +880,9 @@ public class DriveTrain {
 	}
 	
 	public void autoTurnDegree(int degree) {
-		leftThree.configOpenloopRamp(0, Consts.timeOutMs);
-		rightSix.configOpenloopRamp(0, Consts.timeOutMs);
+		turnController.setPID(Consts.kPRotAng, Consts.kIRotAng, Consts.kDRotAng);
+		leftThree.configOpenloopRamp(0.1, Consts.timeOutMs);
+		rightSix.configOpenloopRamp(0.1, Consts.timeOutMs);
 		if (degree<0) {
 			right = true;
 		}
@@ -897,6 +907,24 @@ public class DriveTrain {
 		posController.disable();
 	}
 	
+	public void driveAutoLine() {
+		if(myCurrentCase == 1) {
+			if(init) {
+				turnController.enable();
+				turnController.setSetpoint(0);
+				autoDriveFw(Consts.autoLine);
+			}
+			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
+				myCurrentCase = 2;
+				init = true;
+			}
+		}
+		if (myCurrentCase == 2) {
+			turnController.disable();
+			posController.disable();
+		}
+	}
+	
 	public void putData() {
 		SmartDashboard.putNumber("correctionAngle", turnOutput);
 	}
@@ -916,8 +944,8 @@ public class DriveTrain {
 		leftThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		rightSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		// why setting ramp rate here? we aren't doing this for telop we should do this once not twice
-		leftThree.configOpenloopRamp(.1, Consts.timeOutMs);
-		rightSix.configOpenloopRamp(.1, Consts.timeOutMs);
+		leftThree.configOpenloopRamp(1, Consts.timeOutMs);
+		rightSix.configOpenloopRamp(1, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
 		myCurrentCase = 1;	
 

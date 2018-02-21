@@ -145,7 +145,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.autoDoNothing();
 				}
 				else if(autoLLL.getSelected() == Destinations.DRFW) {
-					_driveTrain.autoDriveFw(Consts.autoLine);
+					_driveTrain.driveAutoLine();
 				}
 			}
 			else if((gameData.charAt(0) == 'R') && (gameData.charAt(1) == 'R')) {
@@ -171,7 +171,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.autoDoNothing();
 				}
 				else if(autoRRR.getSelected() == Destinations.DRFW) {
-					_driveTrain.autoDriveFw(Consts.autoLine);
+					_driveTrain.driveAutoLine();
 				}
 			}
 			else if((gameData.charAt(0) == 'L') && (gameData.charAt(1) == 'R')) {
@@ -197,7 +197,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.autoDoNothing();
 				}
 				else if(autoLRL.getSelected() == Destinations.DRFW) {
-					_driveTrain.autoDriveFw(Consts.autoLine);
+					_driveTrain.driveAutoLine();
 				}
 			}
 			else if((gameData.charAt(0) == 'R') && (gameData.charAt(1) == 'L')) {
@@ -223,7 +223,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.autoDoNothing();
 				}
 				else if(autoRLR.getSelected() == Destinations.DRFW) {
-					_driveTrain.autoDriveFw(Consts.autoLine);
+					_driveTrain.driveAutoLine();
 				}
 			}
 			else {
