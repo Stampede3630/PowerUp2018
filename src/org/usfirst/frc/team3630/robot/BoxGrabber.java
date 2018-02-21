@@ -187,6 +187,11 @@ public void scaleAuto(){
 	
 }
 
+
+public void boxIntakeClamp() {
+	
+}
+
 /**
  * swutch auto metod need to test to fully develop
  */

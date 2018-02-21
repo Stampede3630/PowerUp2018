@@ -37,7 +37,7 @@ public class DriveTrain {
 	double targetAngleDegrees = 0f;
 	double kTargetDistanceInches = 1000;
 
-	private WPI_TalonSRX leftThree, rightSix, leftTwo, rightFive, leftOne, rightFour;
+	private WPI_TalonSRX leftThreeEncoder, rightSixEncoder, leftTwo, rightFive, leftOne, rightFour;
 
 	
 	DifferentialDrive driveTrain;
@@ -55,33 +55,33 @@ public class DriveTrain {
 		panel = new PowerDistributionPanel(0);
 		_xBox = new XboxController(Consts.xBoxComPort);
 		// srx definitions
-		leftThree = new WPI_TalonSRX(Consts.leftThree);
+		leftThreeEncoder = new WPI_TalonSRX(Consts.leftThree);
 		leftTwo = new WPI_TalonSRX(Consts.leftTwo);
 		leftOne = new WPI_TalonSRX(Consts.leftOne);
-		rightSix = new WPI_TalonSRX(Consts.rightSix);
+		rightSixEncoder = new WPI_TalonSRX(Consts.rightSix);
 		rightFive = new WPI_TalonSRX(Consts.rightFive);
 		rightFour = new WPI_TalonSRX(Consts.rightFour);
 		
 		// mabey rename to leftThreeMaster? nice more specific name 
-		configureTalon(leftThree);
-		configureTalon(rightSix);
+		configureTalon(leftThreeEncoder);
+		configureTalon(rightSixEncoder);
 		configureTalon(leftTwo);
 		configureTalon(rightFive);
 		configureTalon(leftOne);
 		configureTalon(rightFour);
-		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSix.getDeviceID());
-		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThree.getDeviceID());
-		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSix.getDeviceID());
-		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThree.getDeviceID());
+		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
+		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
+		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
+		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		// why differ sensor phase diffrent would it be cosntant for both robots?
-		leftThree.setSensorPhase(false);
-		rightSix.setSensorPhase(true);
+		leftThreeEncoder.setSensorPhase(false);
+		rightSixEncoder.setSensorPhase(true);
 
 		
 
 
 	
-		driveTrain = new DifferentialDrive(leftThree, rightSix);
+		driveTrain = new DifferentialDrive(leftThreeEncoder, rightSixEncoder);
 		driveTrain.setDeadband(0); // why set to zero and not at default ?.02
 		turnController = new PIDController(Consts.kPRotAng, Consts.kIRotAng, Consts.kDRotAng, ahrs,new MyRotationPidOutput());
 
@@ -94,7 +94,7 @@ public class DriveTrain {
 		turnController.disable();
 
 
-		positionEncoderSource = new EncoderPIDSource(leftThree, rightSix);
+		positionEncoderSource = new EncoderPIDSource(leftThreeEncoder, rightSixEncoder);
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
 		posController.setOutputRange(-1, 1); //current testing
@@ -109,23 +109,11 @@ public class DriveTrain {
 	/**
 	 *  set up for test init  */
 	public void testInit() {
-		// should delite unless someone can explain why we have it still
-	/*	SmartDashboard.putNumber("Left Side Speed", 0);
-		SmartDashboard.putNumber("Right Side Speed", 0);
-		rightSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);*/
+
 	}
 	
 	public void testPeriodic() {
-		// should delite unless someone can explain why we have it still
-	/*	leftThree.set(SmartDashboard.getNumber("Left Side Speed", 0));
-		rightSix.set(SmartDashboard.getNumber("Right Side Speed", 0));
-		// mising a few talons 
-		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSix.getDeviceID());
-		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThree.getDeviceID());
-		// why comment theese out names 
-		//rightThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoder.getDeviceID());
-		//leftThree.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoder.getDeviceID());
-		SmartDashboard.putNumber("Right Encoder Ticks", rightSix.getSelectedSensorPosition(0));*/
+
 	}
 
 	/**
@@ -138,8 +126,8 @@ public class DriveTrain {
 	
 	// add ahrs  congif method to see if calibating. It could be a good saftey checlk 
 	public void teleopInit() {
-		leftThree.configOpenloopRamp(.2, Consts.timeOutMs);
-		rightSix.configOpenloopRamp(.2, Consts.timeOutMs);
+		leftThreeEncoder.configOpenloopRamp(.2, Consts.timeOutMs);
+		rightSixEncoder.configOpenloopRamp(.2, Consts.timeOutMs);
 
 	}
 	public void teleopPeriodic() {
@@ -150,7 +138,7 @@ public class DriveTrain {
 		getDiagnostics();
 		// three are two missing bad? delted folowers set in constructor
 		
-	SmartDashboard.putNumber("Left three curent", leftThree.getOutputCurrent());
+	SmartDashboard.putNumber("Left three curent", leftThreeEncoder.getOutputCurrent());
 	SmartDashboard.putNumber("total voltage ", panel.getVoltage());
 	SmartDashboard.putNumber("total current", panel.getTotalCurrent());
 		SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
@@ -199,15 +187,15 @@ public class DriveTrain {
 	 *  diganoaric method for taon srx debuging 
 	 */
 	public void getDiagnostics() {		
-		SmartDashboard.putNumber("Left Current", leftThree.getOutputCurrent());
-		SmartDashboard.putNumber("Right Current", rightSix.getOutputCurrent());
+		SmartDashboard.putNumber("Left Current", leftThreeEncoder.getOutputCurrent());
+		SmartDashboard.putNumber("Right Current", rightSixEncoder.getOutputCurrent());
 		
-		SmartDashboard.putNumber("Front Right Position", getRotations(rightSix));
-		SmartDashboard.putNumber("Front Right Velocity", getVelocity(rightSix));
-		SmartDashboard.putNumber("Front Left Position", getRotations(leftThree));
-		SmartDashboard.putNumber("Front Left Velocity", getVelocity(leftThree));
-		SmartDashboard.putNumber("Left position in ticks", getTicks(leftThree));
-		SmartDashboard.putNumber("Right position in ticks", getTicks(rightSix));
+		SmartDashboard.putNumber("Front Right Position", getRotations(rightSixEncoder));
+		SmartDashboard.putNumber("Front Right Velocity", getVelocity(rightSixEncoder));
+		SmartDashboard.putNumber("Front Left Position", getRotations(leftThreeEncoder));
+		SmartDashboard.putNumber("Front Left Velocity", getVelocity(leftThreeEncoder));
+		SmartDashboard.putNumber("Left position in ticks", getTicks(leftThreeEncoder));
+		SmartDashboard.putNumber("Right position in ticks", getTicks(rightSixEncoder));
 	
 		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());
 		SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
@@ -231,7 +219,7 @@ public class DriveTrain {
 			System.out.print('\n');
 		}
 		
-		fault=leftThree.getLastError();
+		fault=leftThreeEncoder.getLastError();
 		if(fault != ErrorCode.OK) System.out.println(fault);
 //		if (leftEncoder.getOutputCurrent()>35) { 
 //			System.out.print("[WARNING] Talon Current is at ");
@@ -877,11 +865,11 @@ public class DriveTrain {
 	
 	public void autoDriveFw(double inches) {
 		turnController.setPID(Consts.kPDrAngle, Consts.kIDrAngle, Consts.kDDrAngle);
-		leftThree.configOpenloopRamp(1, Consts.timeOutMs);
-		rightSix.configOpenloopRamp(1, Consts.timeOutMs);
+		leftThreeEncoder.configOpenloopRamp(1, Consts.timeOutMs);
+		rightSixEncoder.configOpenloopRamp(1, Consts.timeOutMs);
 		System.out.println("autoDriveFw was called");
-		leftThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-		rightSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		leftThreeEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		rightSixEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		posController.setSetpoint(inches);
 		posController.enable();
 		init = false;
@@ -893,8 +881,8 @@ public class DriveTrain {
 	 */
 	public void autoTurnDegree(int degree) {
 		turnController.setPID(Consts.kPRotAng, Consts.kIRotAng, Consts.kDRotAng);
-		leftThree.configOpenloopRamp(0.1, Consts.timeOutMs);
-		rightSix.configOpenloopRamp(0.1, Consts.timeOutMs);
+		leftThreeEncoder.configOpenloopRamp(0.1, Consts.timeOutMs);
+		rightSixEncoder.configOpenloopRamp(0.1, Consts.timeOutMs);
 		if (degree<0) {
 			right = true;
 		}
@@ -953,11 +941,11 @@ public class DriveTrain {
 		ahrs.reset();
 		turnController.reset();
 		posController.reset();
-		leftThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-		rightSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		leftThreeEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		rightSixEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		// why setting ramp rate here? we aren't doing this for telop we should do this once not twice
-		leftThree.configOpenloopRamp(1, Consts.timeOutMs);
-		rightSix.configOpenloopRamp(1, Consts.timeOutMs);
+		leftThreeEncoder.configOpenloopRamp(1, Consts.timeOutMs);
+		rightSixEncoder.configOpenloopRamp(1, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
 		myCurrentCase = 1;	
 
