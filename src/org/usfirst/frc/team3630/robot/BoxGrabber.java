@@ -37,6 +37,7 @@ public BoxGrabber(){
 	// peramtors for double soelnoid pcm, in chanel, out chanel
 	// for detils on solondid asighning see output sheet i posted on slack 
 	manipTime= new Timer ();
+	
 	slide = new DoubleSolenoid(1,2,3);
 	kick	= new DoubleSolenoid(0,0, 1);
 	clamp = new DoubleSolenoid(0,2,3);
@@ -47,8 +48,8 @@ public BoxGrabber(){
 //	leftIntake = new TalonSRX(7);
 //
 //	rightIntake = new TalonSRX(8);
-	leftIntake.setInverted(true);
-	rightIntake.setInverted(true);
+//	leftIntake.setInverted(true);
+//	rightIntake.setInverted(true);
 }
 
 

@@ -19,7 +19,7 @@ public class DriveTrain {
 	private XboxController _xBox;
 	BoxGrabber _boxGrabber;
 	PowerDistributionPanel panel;
-	AHRS ahrs;
+	private AHRS ahrs;
 	ErrorCode sticky;
 	ErrorCode fault;
 	
@@ -53,7 +53,7 @@ public class DriveTrain {
 		// why doing ahrs byte thing? // do we use update rate elswhere 
 		ahrs = new AHRS(SPI.Port.kMXP);
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
-		panel = new PowerDistributionPanel(0);
+//		panel = new PowerDistributionPanel(0);
 		_xBox = new XboxController(Consts.xBoxComPort);
 		_boxGrabber = new BoxGrabber();
 		// srx definitions
@@ -144,13 +144,13 @@ public class DriveTrain {
 	SmartDashboard.putNumber("total voltage ", panel.getVoltage());
 	SmartDashboard.putNumber("total current", panel.getTotalCurrent());
 		SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
-		
+		// moved over to driverStaton warnings 
 		// are we still getting curent issues 
-		if(panel.getTotalCurrent()>300) {
-			System.out.print("[WARNING] CURRENT DRAW IS AT ");
-			System.out.print(panel.getTotalCurrent());
-			System.out.print('\n');
-		}
+//		if(panel.getTotalCurrent()>300) {
+//			System.out.print("[WARNING] CURRENT DRAW IS AT ");
+//			System.out.print(panel.getTotalCurrent());
+//			System.out.print('\n');
+//		}
 
 	}
 
