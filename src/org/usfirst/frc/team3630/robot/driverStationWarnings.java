@@ -15,6 +15,7 @@ public class driverStationWarnings {
 private AHRS aHrs;
 private double pitchAngleDegree;
 private double rollAngleDegree;
+// how much of a tollerance should we set? 
 static final double xPitchTollerance = 5.0;
 static final double yPitchTollerance = 5.0;
 PowerDistributionPanel panel;
@@ -25,7 +26,11 @@ public driverStationWarnings (){
 	panel = new PowerDistributionPanel(0);
 }
 
+/**
+ *  tip based on x axis rotaiton will print out warning to driver station
+ */
 public void tipOverX(){
+	// pitch rotation around x axis 
 	pitchAngleDegree = aHrs.getPitch();
 	SmartDashboard.putNumber("AHRS ROLL IN x DIRECTION", pitchAngleDegree);
 	if(pitchAngleDegree > xPitchTollerance) {
@@ -36,6 +41,9 @@ public void tipOverX(){
 	}
 }
 
+/**
+ * check for brown out in batey based on tolal curent on power distribution board 
+ */
 public void pdpTotalCurnet() {
 	if(panel.getTotalCurrent()>300) {
 		System.out.print("[WARNING] CURRENT DRAW IS AT ");
@@ -43,6 +51,9 @@ public void pdpTotalCurnet() {
 		System.out.print('\n');
 	}
 }
+/**
+ *  *  tip based on y axis rotaiton will print out warning to driver station
+ */
 public void tipOverY(){
 	rollAngleDegree = aHrs.getRoll();
 	SmartDashboard.putNumber("AHRS ROLL IN Y DIRECTION", rollAngleDegree);
