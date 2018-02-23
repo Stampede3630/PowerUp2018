@@ -120,6 +120,9 @@ public void liftForward(){
 	
 }
 
+/**
+ * lift up for scale method to drop box  for scale will go to full hight 
+ */
 public void liftUPSCale() {
 	slideReverse();
 	Timer.delay(1.5);
@@ -200,7 +203,7 @@ public void kickoutBox() {
  * scale Auto method for lift up and dump box 
  */
 public void scaleAuto(){
-	liftForward();
+	 liftUPSCale();
 	Timer.delay(4);
 	kickoutBox();
 	Timer.delay(2.5);
