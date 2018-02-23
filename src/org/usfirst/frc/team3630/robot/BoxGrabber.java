@@ -20,7 +20,8 @@ public class BoxGrabber {
 		SLIDEBACK, 
 		KICKRETRACT,
 		STOP,
-		INTAKE 
+		INTAKE, 
+		DROPBOX
 		  
 	}
 	private XboxController _xBox;
@@ -116,6 +117,25 @@ public void kickReverse(){
 public void liftForward(){
 	lift.set(DoubleSolenoid.Value.kForward);
 	liftUpEngaged= true ;
+	
+}
+
+public void liftUPSCale() {
+	slideReverse();
+	Timer.delay(1.5);
+	liftForward();
+	Timer.delay(1.5);
+	slideForward();
+	
+}
+
+/**saftey method for lift down. ensure robot can't be in forward state when the arms go down
+ * will eventualy become driver lift down button
+ */
+public void  liftDownSaftey() {
+	slideReverse();
+	Timer.delay(1.5);
+	liftDown();
 	
 }
 public void liftDown(){
