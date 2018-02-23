@@ -53,7 +53,13 @@ public BoxGrabber(){
 //	rightIntake.setInverted(true);
 }
 
-
+// goal to test automated buttons to see as reibale and then test replace buton function going to list them out tonight
+//plan intake togle 
+// box out button
+// switch buton lift up with tip back 
+// scale buton
+// general lift up button with ti back
+// clamp on box button
 public State xBox () {
 	// need to confirm buttons//  acyivates state for switch if button press is true 
 	if (_xBox.getXButton()== true ) {
@@ -123,7 +129,7 @@ public void liftForward(){
 /**
  * lift up for scale method to drop box  for scale will go to full hight 
  */
-public void liftUPSCale() {
+public void competionLiftUpScale() {
 	slideReverse();
 	Timer.delay(1.5);
 	liftForward();
@@ -135,7 +141,7 @@ public void liftUPSCale() {
 /**saftey method for lift down. ensure robot can't be in forward state when the arms go down
  * will eventualy become driver lift down button
  */
-public void  liftDownSaftey() {
+public void  liftDownRobotCompetion() {
 	slideReverse();
 	Timer.delay(1.5);
 	liftDown();
@@ -203,7 +209,7 @@ public void kickoutBox() {
  * scale Auto method for lift up and dump box 
  */
 public void scaleAuto(){
-	 liftUPSCale();
+	 competionLiftUpScale();
 	Timer.delay(4);
 	kickoutBox();
 	Timer.delay(2.5);
