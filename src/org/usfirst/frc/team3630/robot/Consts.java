@@ -77,7 +77,7 @@ public class Consts {
 	public static final int		solonoidSlideCloseChanal = 3;
 	public static final int pcmChanal0= 0;
 	public static final int  pcmChanal1= 1;
-	
+	public static final double timeDelay =1.5;
 	
 }
 
