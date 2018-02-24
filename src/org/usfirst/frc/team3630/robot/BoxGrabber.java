@@ -1,7 +1,6 @@
 package org.usfirst.frc.team3630.robot;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.Timer;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -21,20 +20,23 @@ public class BoxGrabber {
 	// private TalonSRX leftIntake, rightIntake;
 	// name double solonoid
 	DoubleSolenoid slide, clamp, kick, lift;
+	Timer slideTimer;
+	Boolean slideFullyReversed;
 	Compressor mainC;
 	// debug analog input
 	Boolean liftUpEngaged, slideUpEngaged, slideOutEngaged, kickForwardEngaged, testOn, clampEnaged, kickReverseEngaged,
 			liftDown, clampReverse;
 	AnalogInput pressureLevel;
-	DigitalInput slideReverecheck, armsDownCheck;
+	DigitalInput slideReversecheck, armsDownCheck;
+
 
 	public BoxGrabber() {
 
 		// peramtors for double soelnoid pcm, in chanel, out chanel
 		// for detils on solondid asighning see output sheet i posted on slack
-
-		// slideReverecheck = new DigitalInput(3);
-		// armsDownCheck= new DigitalInput(2);
+		slideTimer = new Timer();
+		slideReversecheck = new DigitalInput(3);
+		 armsDownCheck= new DigitalInput(2);
 		slide = new DoubleSolenoid(1, 2, 3);
 		kick = new DoubleSolenoid(0, 0, 1);
 		clamp = new DoubleSolenoid(0, 2, 3);
@@ -49,6 +51,7 @@ public class BoxGrabber {
 		// rightIntake.setInverted(true);
 	}
 
+	
 	// goal to test automated buttons to see as reibale and then test replace buton
 	// function going to list them out tonight
 	// plan intake togle
@@ -66,9 +69,9 @@ public class BoxGrabber {
 		} else if (_xBox.getBButton() == true) {
 			return State.LIFTUPAUTOMATED;
 		}
-		// else if (_xBox.getBumper(GenericHID.Hand.kRight)== true ) {
-		// return State.KICKRETRACT;
-		// }
+		else if (_xBox.getBumper(GenericHID.Hand.kRight)== true ) {
+		return State.SLIDEFORWARD;
+		 }
 
 		else if (_xBox.getStartButton() == true) {
 			return State.DROPBOX;
@@ -132,6 +135,7 @@ public class BoxGrabber {
 	public void clampClose() {
 		clamp.set(DoubleSolenoid.Value.kReverse);
 		clampReverse = true;
+		System.out.println("ClampClose called");
 	}
 
 	// stop method for saftey
@@ -175,13 +179,12 @@ public class BoxGrabber {
 	 */
 	public void kickoutBox() {
 		clampOpen();
-		Timer.delay(Consts.timeDelay);
+		Timer.delay(.001);
 		kickForward();
-		Timer.delay(Consts.timeDelay);
+		Timer.delay(.5);
 		kickReverse();
-		Timer.delay(Consts.timeDelay);
+		Timer.delay(.5);
 		clampClose();
-
 	}
 
 	/**
@@ -193,6 +196,7 @@ public class BoxGrabber {
 		kickoutBox();
 		Timer.delay(Consts.timeDelay);
 		armsDown();
+		
 
 	}
 
@@ -200,12 +204,14 @@ public class BoxGrabber {
 	 * lift up for scale method to drop box for scale will go to full hight
 	 */
 	public void competionLiftUpScale() {
-		if (!slideReverecheck.get() && armsDownCheck.get()) {
+		
+		if (slideReversecheck.get()) {
 			slideReverse();
 
 		} else {
 			armsUp();
-
+			Timer.delay(4);
+			slideForward();
 		}
 
 	}
@@ -215,22 +221,26 @@ public class BoxGrabber {
 	 * arms go down will eventualy become driver lift down button
 	 */
 	public void liftDownRobotCompetion() {
-		if (!armsDownCheck.get()) {
+		
 			armsDown();
 
-		} else {
+	Timer.delay(2.0);
 			slideForward();
-		}
+
 
 	}
 
 	public void liftUPRobotCompetion() {
-		if (!slideReverecheck.get()) {
+		if (slideReversecheck.get()) {
 			slideReverse();
+			slideTimer.reset();
 		}
 
 		else {
 			armsUp();
+//			if(slideTimer.get() > 4.0) {
+//				slideForward();
+//			}
 
 		}
 
@@ -252,8 +262,8 @@ public class BoxGrabber {
 		testOn = true;
 		compresorPSI();
 		lowPSIWarning();
-		SmartDashboard.putBoolean("slide back ", slideReverecheck.get());
-		SmartDashboard.putBoolean("ARE ARMS DOWN", armsDownCheck.get());
+		SmartDashboard.putBoolean("slide back ", slideReversecheck.get());
+	//	SmartDashboard.putBoolean("ARE ARMS DOWN", armsDownCheck.get());
 		SmartDashboard.putNumber("Compresor PSI ", compresorPSI());
 		// presure switch output
 		SmartDashboard.putBoolean("testOn", testOn);
@@ -269,7 +279,7 @@ public class BoxGrabber {
 
 	}
 
-	public void boxGraberPeriodic() {
+	public void boxGrabberPeriodic () {
 		// for testing
 		// mainC.stop();
 		liftUpEngaged = false;
@@ -307,6 +317,9 @@ public class BoxGrabber {
 		case CLAMPOPEN:
 			clampOpen();
 			break;
+		case SLIDEFORWARD:
+			slideForward();
+			break;
 
 		default:
 			// default to stop for saftey reasons
@@ -314,7 +327,6 @@ public class BoxGrabber {
 
 			break;
 		}
-
 	}
 
 }

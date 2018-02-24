@@ -53,9 +53,9 @@ public class DriveTrain {
 		// why doing ahrs byte thing? // do we use update rate elswhere 
 		ahrs = new AHRS(SPI.Port.kMXP);
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
-//		panel = new PowerDistributionPanel(0);
+panel = new PowerDistributionPanel(0);
 		_xBox = new XboxController(Consts.xBoxComPort);
-		_boxGrabber = new BoxGrabber();
+		//_boxGrabber = new BoxGrabber();
 		// srx definitions
 		leftThreeEncoder = new WPI_TalonSRX(Consts.leftThree);
 		leftTwo = new WPI_TalonSRX(Consts.leftTwo);
@@ -178,10 +178,10 @@ public class DriveTrain {
 	// Peak current and duration must be exceeded before corrent limit is activated.
 	// When activated, current will be limited to continuous current.
     // Set peak current params to 0 if desired behavior is to immediately current-limit.
-	//	_talon.enableCurrentLimit(true);
-	//	_talon.configContinuousCurrentLimit(10,0); // Must be 5 amps or more
-	//	_talon.configPeakCurrentLimit(10, 0); // 100 A
-		//_talon.configPeakCurrentDuration(200,0); // 200 ms
+	_talon.enableCurrentLimit(true);
+	_talon.configContinuousCurrentLimit(30,0); // Must be 5 amps or more
+	_talon.configPeakCurrentLimit(30, 0); // 100 A
+		_talon.configPeakCurrentDuration(200,0); // 200 ms
 		
 	}
 
@@ -191,7 +191,7 @@ public class DriveTrain {
 	public void getDiagnostics() {		
 		SmartDashboard.putNumber("Left Current", leftThreeEncoder.getOutputCurrent());
 		SmartDashboard.putNumber("Right Current", rightSixEncoder.getOutputCurrent());
-		
+		SmartDashboard.putNumber("total Current", panel.getTotalCurrent());
 		SmartDashboard.putNumber("Front Right Position", getRotations(rightSixEncoder));
 		SmartDashboard.putNumber("Front Right Velocity", getVelocity(rightSixEncoder));
 		SmartDashboard.putNumber("Front Left Position", getRotations(leftThreeEncoder));
