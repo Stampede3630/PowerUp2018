@@ -312,7 +312,7 @@ public class Robot extends IterativeRobot {
 					break;
 				}
 			case UNDEFINED:
-				_driveTrain.autoDoNothing(); //should it be like this?
+				_driveTrain.autoDriveFw(Consts.autoLine);
 				break;
 			default:
 				_driveTrain.autoDriveFw(Consts.autoLine);
@@ -344,7 +344,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.autoDriveFw(Consts.autoLine);
 					break;
 				default:
-					_driveTrain.autoDoNothing();
+					_driveTrain.autoDriveFw(Consts.autoLine);
 					break;
 				}
 			case MIDDLE:
@@ -390,7 +390,7 @@ public class Robot extends IterativeRobot {
 					break;
 				}
 			case UNDEFINED:
-				_driveTrain.autoDoNothing(); //should it be like this?
+				_driveTrain.autoDriveFw(Consts.autoLine);
 				break;
 			}
 			
@@ -420,7 +420,7 @@ public class Robot extends IterativeRobot {
 					break;
 				}
 			default:
-				_driveTrain.autoDoNothing(); //should it be like this?
+				_driveTrain.autoDriveFw(Consts.autoLine);
 				break;
 			}
 			
@@ -492,7 +492,7 @@ public class Robot extends IterativeRobot {
 					break;
 				}
 			case UNDEFINED:
-				_driveTrain.autoDoNothing(); //should it be like this?
+				_driveTrain.autoDriveFw(Consts.autoLine);
 				break;
 			}
 		}
