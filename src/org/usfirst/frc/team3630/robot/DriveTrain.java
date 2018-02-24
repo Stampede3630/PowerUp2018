@@ -291,7 +291,7 @@ public class DriveTrain {
 			if(init) {
 				autoTurnDegree(-90);
 			}
-			if(Math.abs(turnController.getError())<3) {
+			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
 				myCurrentCase = 3;
 	     		init = true;
 			}
