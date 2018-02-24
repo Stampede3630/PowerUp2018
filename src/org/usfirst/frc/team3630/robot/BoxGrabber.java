@@ -6,9 +6,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
+import edu.wpi.first.wpilibj.DigitalInput;
 public class BoxGrabber {
 	Timer manipTime;
+	
 	// enum difftent state= state (F, forward) (R, piston reverse)
 	//  lift 
 	public enum State {
@@ -26,6 +27,7 @@ public class BoxGrabber {
 		SWITCHAUTOMATED,
 		SCALEAUTOMATED,
 		LIFTDOWNAUTOMATED,
+		LIFTUPAUTOMATED
 		
 		  
 	}
@@ -37,13 +39,15 @@ public class BoxGrabber {
 	// debug analog input
 	Boolean  liftUpEngaged, slideUpEngaged, slideOutEngaged, kickForwardEngaged, testOn, clampEnaged, kickReverseEngaged, liftDown, clampReverse;
 	AnalogInput pressureLevel;
+	DigitalInput slideReverecheck, armsDownCheck;
 	
 public BoxGrabber(){
 	
 	// peramtors for double soelnoid pcm, in chanel, out chanel
 	// for detils on solondid asighning see output sheet i posted on slack 
 	manipTime= new Timer ();
-	
+	slideReverecheck = new DigitalInput(1);
+	 armsDownCheck= new DigitalInput(2);
 	slide = new DoubleSolenoid(1,2,3);
 	kick	= new DoubleSolenoid(0,0, 1);
 	clamp = new DoubleSolenoid(0,2,3);
@@ -68,20 +72,21 @@ public BoxGrabber(){
 public State xBox () {
 	// need to confirm buttons//  acyivates state for switch if button press is true 
 	if (_xBox.getXButton()== true ) {
-		return State.SLIDEFORWARD;
+		return State.SCALEAUTOMATED;
 	}
 	else if (_xBox.getAButton() == true) {
-		return State.SLIDEBACK;
+		return State.LIFTDOWNAUTOMATED;
 	}
 else if (_xBox.getBButton()== true ) {
-		return State.KICKFORWARD;
+		return State.LIFTUPAUTOMATED
+				;
 	}
-else if (_xBox.getBumper(GenericHID.Hand.kRight)== true  ) {
-		return State.KICKRETRACT;
-	}
+//else if (_xBox.getBumper(GenericHID.Hand.kRight)== true  ) {
+//		return State.KICKRETRACT;
+//	}
 
 	else if (_xBox.getStartButton()== true ) {
-		return State.LIFTUP;
+		return State.DROPBOX;
 	}
 	else if (_xBox.getBackButton()== true ) {
 		return State.CLAMPOPEN;
@@ -91,10 +96,7 @@ else if (_xBox.getBumper(GenericHID.Hand.kRight)== true  ) {
 		return State.CLAMPCLOSE;
 	}
 	
-	else if (_xBox.getYButton()== true ) {
-	return 	State.LIFTDOWN;
-	}
-	
+
 	
 	else {
 		return State.STOP;
@@ -125,14 +127,14 @@ public void kickReverse(){
 	kickReverseEngaged= true;
 	
 }
-public void liftForward(){
+public void armsUp(){
 	lift.set(DoubleSolenoid.Value.kForward);
 	liftUpEngaged= true ;
 	
 }
 
 
-public void liftDown(){
+public void armsDown(){
 	lift.set(DoubleSolenoid.Value.kReverse);
 	liftDown= true ;
 	
@@ -191,11 +193,12 @@ public void lowPSIWarning() {
  */
 public void kickoutBox() {
 	clampOpen(); 
-	Timer.delay(.5);
+	Timer.delay(Consts.timeDelay);
 	kickForward();
-	Timer.delay(.5);
+	Timer.delay(Consts.timeDelay);
 	kickReverse();
-	
+	Timer.delay(Consts.timeDelay);
+	clampClose();
 	
 }
 
@@ -206,19 +209,23 @@ public void scaleAuto(){
 	 competionLiftUpScale();
 	Timer.delay(4);
 	kickoutBox();
-	Timer.delay(2.5);
-	liftDown();
+	Timer.delay(Consts.timeDelay);
+	armsDown();
 	
 }
 /**
  * lift up for scale method to drop box  for scale will go to full hight 
  */
 public void competionLiftUpScale() {
-	slideReverse();
-	Timer.delay(1.5);
-	liftForward();
-	Timer.delay(1.5);
-	slideForward();
+	if (!slideReverecheck.get() && armsDownCheck.get() ) {
+		slideReverse();
+	}
+	else {
+		armsUp();
+		
+	}
+	
+
 	
 }
 
@@ -226,13 +233,29 @@ public void competionLiftUpScale() {
  * will eventualy become driver lift down button
  */
 public void  liftDownRobotCompetion() {
-	slideReverse();
-	Timer.delay(1.5);
-	liftDown();
+	if (!armsDownCheck.get() ) {
+		armsDown();
 	
-}
+	}
+	else if (slideReverecheck.get() ) {
+		slideForward();
+	}
 
+}
+public void  liftUPRobotCompetion() {
+	if (!slideReverecheck.get() ) {
+		slideReverse();
+	}
+
+	else {
+		armsUp();
+	
+	}
+	
+
+}
 public void boxIntakeClamp() {
+	
 	
 }
 
@@ -280,25 +303,24 @@ public void boxGraberPeriodic() {
 	manipulatorDianostics() ;
 	//intake();
 	   switch (xBox()) {
-       case SLIDEFORWARD:
-    	   slideForward() ;
+       case SCALEAUTOMATED:
+    	   competionLiftUpScale();
+	
            break;
                
-       case SLIDEBACK:
-    	   slideReverse()   ;
+       case DROPBOX:
+    	  kickoutBox() ;
            break;
                     
-       case KICKFORWARD:
-    	   kickForward();
+       case LIFTDOWNAUTOMATED:
+    	   liftDownRobotCompetion();
            break;
            
-       case KICKRETRACT:
-    	   kickReverse();
+       case LIFTUPAUTOMATED:
+    	   liftUPRobotCompetion() ;
     	   break;
 	   
-       case LIFTUP:
-		   liftForward();
-		   break;
+    
 		   
 	   case CLAMPCLOSE:
 		   clampClose();
@@ -308,9 +330,7 @@ public void boxGraberPeriodic() {
 		   clampOpen();
 		   break;
 	  
-	   case LIFTDOWN:
-		   liftDown();
-		   break;
+	 
 	                                       
        default:
     	   // default to stop for saftey reasons 
