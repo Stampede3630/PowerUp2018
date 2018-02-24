@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 public class BoxGrabber {
 	Timer manipTime;
 	// enum difftent state= state (F, forward) (R, piston reverse)
+	//  lift 
 	public enum State {
 		SLIDEFORWARD, 
 		CLAMPOPEN, 
@@ -21,7 +22,11 @@ public class BoxGrabber {
 		KICKRETRACT,
 		STOP,
 		INTAKE, 
-		DROPBOX
+		DROPBOX,
+		SWITCHAUTOMATED,
+		SCALEAUTOMATED,
+		LIFTDOWNAUTOMATED,
+		
 		  
 	}
 	private XboxController _xBox;
@@ -126,27 +131,7 @@ public void liftForward(){
 	
 }
 
-/**
- * lift up for scale method to drop box  for scale will go to full hight 
- */
-public void competionLiftUpScale() {
-	slideReverse();
-	Timer.delay(1.5);
-	liftForward();
-	Timer.delay(1.5);
-	slideForward();
-	
-}
 
-/**saftey method for lift down. ensure robot can't be in forward state when the arms go down
- * will eventualy become driver lift down button
- */
-public void  liftDownRobotCompetion() {
-	slideReverse();
-	Timer.delay(1.5);
-	liftDown();
-	
-}
 public void liftDown(){
 	lift.set(DoubleSolenoid.Value.kReverse);
 	liftDown= true ;
@@ -184,12 +169,21 @@ public void slideReverse() {
 public double   compresorPSI() {
 	double sensorV= pressureLevel.getVoltage();
 	double  psi = 250 * (sensorV/ 5) -25 ;
+	
 	return psi;
-	// rerurn psi
-	// decide low pxi level 
-	// for details see adni mark spech sheet 
 	
 	
+	
+
+	
+	
+	
+}
+public void lowPSIWarning() {
+	if(compresorPSI() < 60.0) {
+		System.out.println("WARNING robots dont have low presure but yourse dose");
+		System.out.print('\n');
+	}
 }
 
 /**
@@ -216,7 +210,27 @@ public void scaleAuto(){
 	liftDown();
 	
 }
+/**
+ * lift up for scale method to drop box  for scale will go to full hight 
+ */
+public void competionLiftUpScale() {
+	slideReverse();
+	Timer.delay(1.5);
+	liftForward();
+	Timer.delay(1.5);
+	slideForward();
+	
+}
 
+/**saftey method for lift down. ensure robot can't be in forward state when the arms go down
+ * will eventualy become driver lift down button
+ */
+public void  liftDownRobotCompetion() {
+	slideReverse();
+	Timer.delay(1.5);
+	liftDown();
+	
+}
 
 public void boxIntakeClamp() {
 	
@@ -233,6 +247,7 @@ public void switchAuto() {
 public void manipulatorDianostics() {
 	testOn= true;
 	compresorPSI();
+	lowPSIWarning();
 	SmartDashboard.putNumber("Compresor PSI ",compresorPSI());
 	// presure switch output 
 	SmartDashboard.putBoolean("testOn", testOn);
