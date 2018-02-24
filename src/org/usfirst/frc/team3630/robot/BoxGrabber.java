@@ -237,7 +237,7 @@ public void  liftDownRobotCompetion() {
 		armsDown();
 	
 	}
-	else if (slideReverecheck.get() ) {
+	else  {
 		slideForward();
 	}
 
