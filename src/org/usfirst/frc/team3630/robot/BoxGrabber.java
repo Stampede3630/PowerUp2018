@@ -29,8 +29,10 @@ public class BoxGrabber {
 			liftDown, clampReverse;
 	AnalogInput pressureLevel;
 	DigitalInput slideReversecheck, armsDownCheck;
-	boolean isKickoutActivated;
+	boolean liftUpActivated;
+	Timer liftTimer;
 	int kickOut;
+	boolean isKickoutActivated;
 
 	public BoxGrabber() {
 
@@ -39,6 +41,8 @@ public class BoxGrabber {
 		slideTimer = new Timer();
 		kickTime = new Timer();
 		isKickoutActivated= false;
+		liftTimer = new Timer();
+		liftUpActivated = false;
 		slideReversecheck = new DigitalInput(3);
 		 armsDownCheck= new DigitalInput(2);
 		slide = new DoubleSolenoid(1, 2, 3);
@@ -249,7 +253,7 @@ public class BoxGrabber {
 	 * scale Auto method for lift up and dump box
 	 */
 	public void scaleAuto() {
-		competionLiftUpScale();
+		liftUpInit();
 		Timer.delay(4);
 
 		Timer.delay(Consts.timeDelay);
@@ -258,10 +262,11 @@ public class BoxGrabber {
 
 	}
 
+	
 	/**
 	 * lift up for scale method to drop box for scale will go to full hight
 	 */
-	public void competionLiftUpScale() {
+	/*public void competitionLiftUpScale() {
 		
 		if (slideReversecheck.get()) {
 			slideReverse();
@@ -273,7 +278,30 @@ public class BoxGrabber {
 		}
 
 	}
-
+	*/
+	public void liftUpInit () {
+		liftTimer.reset();
+		liftUpActivated = true;
+		liftTimer.start();
+		
+	}
+	
+	public void liftUpPeriodic() {
+		if (liftUpActivated == true) {
+			if (liftTimer.get() > Consts.partysOver) {
+				liftUpActivated = false;
+			}
+			else if(liftTimer.get() > Consts.stillStanding) {
+				slideForward();
+			}
+			else if(liftTimer.get() > 0) {
+				slideReverse();
+				armsUp();
+			}
+		}
+		
+		
+	}
 	/**
 	 * saftey method for lift down. ensure robot can't be in forward state when the
 	 * arms go down will eventualy become driver lift down button
@@ -351,9 +379,10 @@ public class BoxGrabber {
 		  kickoutPeriodic();
 		manipulatorDianostics();
 		// intake();
+		liftUpPeriodic();
 		switch (xBox()) {
 		case SCALEAUTOMATED:
-			competionLiftUpScale();
+			liftUpInit();
 
 			break;
 
@@ -383,7 +412,10 @@ public class BoxGrabber {
 
 		default:
 			// default to stop for saftey reasons
-			stop();
+			if(!liftUpActivated) {
+				stop();	
+			}
+			
 
 			break;
 		}
