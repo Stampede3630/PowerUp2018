@@ -28,13 +28,16 @@ public class BoxGrabber {
 			liftDown, clampReverse;
 	AnalogInput pressureLevel;
 	DigitalInput slideReversecheck, armsDownCheck;
-
+	boolean liftUpActivated;
+	Timer liftTimer;
+	
 
 	public BoxGrabber() {
 
 		// peramtors for double soelnoid pcm, in chanel, out chanel
 		// for detils on solondid asighning see output sheet i posted on slack
 		slideTimer = new Timer();
+		liftTimer = new Timer();
 		slideReversecheck = new DigitalInput(3);
 		 armsDownCheck= new DigitalInput(2);
 		slide = new DoubleSolenoid(1, 2, 3);
@@ -191,7 +194,7 @@ public class BoxGrabber {
 	 * scale Auto method for lift up and dump box
 	 */
 	public void scaleAuto() {
-		competionLiftUpScale();
+		liftUpInit();
 		Timer.delay(4);
 		kickoutBox();
 		Timer.delay(Consts.timeDelay);
@@ -200,10 +203,11 @@ public class BoxGrabber {
 
 	}
 
+	
 	/**
 	 * lift up for scale method to drop box for scale will go to full hight
 	 */
-	public void competionLiftUpScale() {
+	/*public void competitionLiftUpScale() {
 		
 		if (slideReversecheck.get()) {
 			slideReverse();
@@ -215,7 +219,30 @@ public class BoxGrabber {
 		}
 
 	}
-
+	*/
+	public void liftUpInit () {
+		liftTimer.reset();
+		liftUpActivated = true;
+		liftTimer.start();
+		
+	}
+	
+	public void liftUpPeriodic() {
+		if (liftUpActivated == true) {
+			if (liftTimer.get() > Consts.partysOver) {
+				liftUpActivated = false;
+			}
+			else if(liftTimer.get() > Consts.stillStanding) {
+				slideForward();
+			}
+			else if(liftTimer.get() > 0) {
+				slideReverse();
+				armsUp();
+			}
+		}
+		
+		
+	}
 	/**
 	 * saftey method for lift down. ensure robot can't be in forward state when the
 	 * arms go down will eventualy become driver lift down button
@@ -292,9 +319,10 @@ public class BoxGrabber {
 		clampReverse = false;
 		manipulatorDianostics();
 		// intake();
+		liftUpPeriodic();
 		switch (xBox()) {
 		case SCALEAUTOMATED:
-			competionLiftUpScale();
+			liftUpInit();
 
 			break;
 
@@ -323,7 +351,10 @@ public class BoxGrabber {
 
 		default:
 			// default to stop for saftey reasons
-			stop();
+			if(liftUpActivated == false) {
+				stop();	
+			}
+			
 
 			break;
 		}

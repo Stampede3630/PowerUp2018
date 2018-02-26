@@ -78,6 +78,7 @@ public class Consts {
 	public static final int pcmChanal0= 0;
 	public static final int  pcmChanal1= 1;
 	public static final double timeDelay =.005;
-	
+	public static final double stillStanding = 4; ///some awesome number
+	public static final double partysOver = 7; ///some other less awesome number 
 }
 
