@@ -8,7 +8,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class BoxGrabber {
-
+	Timer kickTime;
+	boolean clampOpen;
 	// enum difftent state= state (F, forward) (R, piston reverse)
 	// lift
 	public enum State {
@@ -28,13 +29,16 @@ public class BoxGrabber {
 			liftDown, clampReverse;
 	AnalogInput pressureLevel;
 	DigitalInput slideReversecheck, armsDownCheck;
-
+	boolean isKickoutActivated;
+	int kickOut;
 
 	public BoxGrabber() {
 
 		// peramtors for double soelnoid pcm, in chanel, out chanel
 		// for detils on solondid asighning see output sheet i posted on slack
 		slideTimer = new Timer();
+		kickTime = new Timer();
+		isKickoutActivated= false;
 		slideReversecheck = new DigitalInput(3);
 		 armsDownCheck= new DigitalInput(2);
 		slide = new DoubleSolenoid(1, 2, 3);
@@ -174,17 +178,71 @@ public class BoxGrabber {
 		}
 	}
 
-	/**
-	 * method for geteing a box. Add timer delay curently for saftey
-	 */
-	public void kickoutBox() {
-		clampOpen();
-		Timer.delay(.001);
-		kickForward();
-		Timer.delay(.5);
-		kickReverse();
-		Timer.delay(.5);
-		clampClose();
+	
+		
+		
+	
+	public void kickOutInitilaise(){
+		kickTime.reset();
+		
+		kickOut =1;
+		isKickoutActivated =true;
+}
+	public void  kickoutPeriodic(){
+		
+	if (isKickoutActivated){
+		switch(kickOut ){
+			case 1:
+				System.out.print("case one kick out was called");
+				kickTime.start();
+				kickOut=2;
+				break;
+			case 2:
+				clampOpen();
+				System.out.print("case two kick out was called");
+					if (kickTime.hasPeriodPassed(.001)){
+						
+						
+						kickOut=3;
+					}
+					break;
+			case 3:
+				System.out.print("case three kick out was called");
+				kickForward();
+				
+				if (kickTime.hasPeriodPassed(.002)){
+					
+					
+					kickOut=4;
+				}
+				break; 
+			case 4:
+				kickReverse();
+				System.out.print("case four kick out was called");
+				if (kickTime.hasPeriodPassed(.003)){
+					kickOut =5;
+				
+			}
+				break; 
+			case 5:
+				clampClose();
+				System.out.print("case five was called");
+	
+				if (kickTime.hasPeriodPassed(.004)){
+					kickOut =-1;
+					isKickoutActivated = false;
+					kickTime.stop();
+					System.out.print("isKickoutactivated boolean in case five");
+					System.out.print(isKickoutActivated);
+			}
+				break; 
+			default:
+				System.out.print("kickout =box weird stoping solonoids");
+				stop();
+			}
+	
+			
+}
 	}
 
 	/**
@@ -193,7 +251,7 @@ public class BoxGrabber {
 	public void scaleAuto() {
 		competionLiftUpScale();
 		Timer.delay(4);
-		kickoutBox();
+
 		Timer.delay(Consts.timeDelay);
 		armsDown();
 		
@@ -276,7 +334,7 @@ public class BoxGrabber {
 
 		SmartDashboard.putBoolean("clamp forward Engaged", clampEnaged);
 		SmartDashboard.putBoolean("clamp reverse Engaged", clampReverse);
-
+		SmartDashboard.putBoolean("isKickoutActivated", isKickoutActivated);
 	}
 
 	public void boxGrabberPeriodic () {
@@ -290,6 +348,7 @@ public class BoxGrabber {
 		kickReverseEngaged = false;
 		liftDown = false;
 		clampReverse = false;
+		  kickoutPeriodic();
 		manipulatorDianostics();
 		// intake();
 		switch (xBox()) {
@@ -299,7 +358,8 @@ public class BoxGrabber {
 			break;
 
 		case DROPBOX:
-			kickoutBox();
+			kickOutInitilaise();
+			  kickoutPeriodic();
 			break;
 
 		case LIFTDOWNAUTOMATED:
