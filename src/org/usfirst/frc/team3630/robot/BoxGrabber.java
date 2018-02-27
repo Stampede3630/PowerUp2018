@@ -70,12 +70,15 @@ public class BoxGrabber {
 	// clamp on box button
 	public State xBox() {
 		// need to confirm buttons// acyivates state for switch if button press is true
-		if (_xBox.getXButton() == true) {
+		if (_xBox.getBButton() == true) {
 			return State.SCALEAUTOMATED;
+			
 		} else if (_xBox.getAButton() == true) {
 			return State.LIFTDOWNAUTOMATED;
-		} else if (_xBox.getBButton() == true) {
+			
+		} else if (_xBox.getXButton() == true) {
 			return State.LIFTUPAUTOMATED;
+			
 		}
 		else if (_xBox.getBumper(GenericHID.Hand.kRight)== true ) {
 		return State.SLIDEFORWARD;
@@ -83,6 +86,7 @@ public class BoxGrabber {
 
 		else if (_xBox.getStartButton() == true) {
 			return State.DROPBOX;
+			
 		} else if (_xBox.getBackButton() == true) {
 			return State.CLAMPOPEN;
 		}
@@ -188,7 +192,6 @@ public class BoxGrabber {
 	
 	public void kickOutInitilaise(){
 		kickTime.reset();
-		
 		kickOut =1;
 		isKickoutActivated =true;
 }
@@ -197,24 +200,24 @@ public class BoxGrabber {
 	if (isKickoutActivated){
 		switch(kickOut ){
 			case 1:
-				System.out.print("case one kick out was called");
+				System.out.println("case one");
 				kickTime.start();
 				kickOut=2;
 				break;
 			case 2:
 				clampOpen();
-				System.out.print("case two kick out was called");
-					if (kickTime.hasPeriodPassed(.001)){
+				System.out.println("case two");
+					if (kickTime.hasPeriodPassed(.01)){
 						
 						
 						kickOut=3;
 					}
 					break;
 			case 3:
-				System.out.print("case three kick out was called");
+				System.out.println("case three");
 				kickForward();
 				
-				if (kickTime.hasPeriodPassed(.002)){
+				if (kickTime.hasPeriodPassed(.5)){
 					
 					
 					kickOut=4;
@@ -222,15 +225,15 @@ public class BoxGrabber {
 				break; 
 			case 4:
 				kickReverse();
-				System.out.print("case four kick out was called");
-				if (kickTime.hasPeriodPassed(.003)){
+				System.out.println("case four ");
+				if (kickTime.hasPeriodPassed(.6)){
 					kickOut =5;
 				
 			}
 				break; 
 			case 5:
 				clampClose();
-				System.out.print("case five was called");
+				System.out.println("case five ");
 	
 				if (kickTime.hasPeriodPassed(.004)){
 					kickOut =-1;
@@ -387,8 +390,10 @@ public class BoxGrabber {
 			break;
 
 		case DROPBOX:
-			kickOutInitilaise();
-			  kickoutPeriodic();
+			if(!isKickoutActivated) {
+				kickOutInitilaise();
+				kickoutPeriodic();
+			}
 			break;
 
 		case LIFTDOWNAUTOMATED:
@@ -396,7 +401,7 @@ public class BoxGrabber {
 			break;
 
 		case LIFTUPAUTOMATED:
-			liftUPRobotCompetion();
+			liftUpInit();
 			break;
 
 		case CLAMPCLOSE:
