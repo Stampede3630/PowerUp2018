@@ -8,8 +8,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class BoxGrabber {
-	Timer kickTime;
-	boolean clampOpen;
+
+
 	// enum difftent state= state (F, forward) (R, piston reverse)
 	// lift
 	public enum State {
@@ -21,17 +21,14 @@ public class BoxGrabber {
 	// private TalonSRX leftIntake, rightIntake;
 	// name double solonoid
 	DoubleSolenoid slide, clamp, kick, lift;
-	Timer slideTimer;
-	Boolean slideFullyReversed;
 	Compressor mainC;
 	// debug analog input
-	Boolean liftUpEngaged, slideUpEngaged, slideOutEngaged, kickForwardEngaged, testOn, clampEnaged, kickReverseEngaged,
-			liftDown, clampReverse;
+	boolean liftUpEngaged, slideUpEngaged, slideOutEngaged, kickForwardEngaged, testOn, clampEnaged, 
+	kickReverseEngaged,liftDown, clampReverse,  slideFullyReversed, clampOpen, liftUpActivated, liftDownActivated;
 	AnalogInput pressureLevel;
 	DigitalInput slideReversecheck, armsDownCheck;
-	boolean liftUpActivated , liftDownActivated;
-	Timer liftTimer;
-	int kickOut;
+	Timer liftTimer ,slideTimer, kickTime; ;
+	int kickOutSwitchStates;
 	boolean isKickoutActivated;
 
 	public BoxGrabber() {
@@ -45,6 +42,8 @@ public class BoxGrabber {
 		liftUpActivated = false;
 		slideReversecheck = new DigitalInput(3);
 		 armsDownCheck= new DigitalInput(2);
+		 
+		 // need to make theese consts 
 		slide = new DoubleSolenoid(1, 2, 3);
 		kick = new DoubleSolenoid(0, 0, 1);
 		clamp = new DoubleSolenoid(0, 2, 3);
@@ -60,16 +59,9 @@ public class BoxGrabber {
 	}
 
 	
-	// goal to test automated buttons to see as reibale and then test replace buton
-	// function going to list them out tonight
-	// plan intake togle
-	// box out button
-	// switch buton lift up with tip back
-	// scale buton
-	// general lift up button with ti back
-	// clamp on box button
+// to do make button asighnments sane
 	public State xBox() {
-		// need to confirm buttons// acyivates state for switch if button press is true
+	
 		if (_xBox.getBButton() == true) {
 			return State.SCALEAUTOMATED;
 			
@@ -114,6 +106,9 @@ public class BoxGrabber {
 	// each method for has a forward and reverse
 	// sets a bollean to true in order to know it has ben activated
 
+	
+	
+	// base class methods 
 	public void kickForward() {
 
 		kick.set(DoubleSolenoid.Value.kForward);
@@ -192,17 +187,17 @@ public class BoxGrabber {
 	
 	public void kickOutInitilaise(){
 		kickTime.reset();
-		kickOut =1;
+		kickOutSwitchStates =1;
 		isKickoutActivated =true;
 }
 	public void  kickoutPeriodic(){
 		
 	if (isKickoutActivated){
-		switch(kickOut ){
+		switch(kickOutSwitchStates ){
 			case 1:
 				System.out.println("case one");
 				kickTime.start();
-				kickOut=2;
+				kickOutSwitchStates=2;
 				break;
 			case 2:
 				clampOpen();
@@ -210,7 +205,7 @@ public class BoxGrabber {
 					if (kickTime.hasPeriodPassed(.01)){
 						
 						
-						kickOut=3;
+						kickOutSwitchStates=3;
 					}
 					break;
 			case 3:
@@ -220,14 +215,14 @@ public class BoxGrabber {
 				if (kickTime.hasPeriodPassed(.5)){
 					
 					
-					kickOut=4;
+					kickOutSwitchStates=4;
 				}
 				break; 
 			case 4:
 				kickReverse();
 				System.out.println("case four ");
 				if (kickTime.hasPeriodPassed(.6)){
-					kickOut =5;
+					kickOutSwitchStates =5;
 				
 			}
 				break; 
@@ -236,7 +231,7 @@ public class BoxGrabber {
 				System.out.println("case five ");
 	
 				if (kickTime.hasPeriodPassed(.004)){
-					kickOut =-1;
+					kickOutSwitchStates =-1;
 					isKickoutActivated = false;
 					kickTime.stop();
 					System.out.print("isKickoutactivated boolean in case five");
@@ -252,18 +247,6 @@ public class BoxGrabber {
 }
 	}
 
-	/**
-	 * scale Auto method for lift up and dump box
-	 */
-	public void scaleAuto() {
-		liftUpInit();
-		Timer.delay(4);
-
-		Timer.delay(Consts.timeDelay);
-		armsDown();
-		
-
-	}
 
 	
 	/**
@@ -366,7 +349,12 @@ public class BoxGrabber {
 //
 //	}
 
-	public void boxIntakeClamp() {
+	public void  scaleAuto() {
+		// could be a series of if else statements S
+		// switch boxintake state 
+		// case one  lift up peridoc
+		// case two kickoutinit, 
+		// case 3 kickoutPeriodic()
 
 	}
 
@@ -393,7 +381,6 @@ public class BoxGrabber {
 		SmartDashboard.putBoolean("kick reversw", kickReverseEngaged);
 		SmartDashboard.putBoolean("slideForwardEngaged", slideUpEngaged);
 		SmartDashboard.putBoolean("slide reverse Engaged", slideOutEngaged);
-
 		SmartDashboard.putBoolean("clamp forward Engaged", clampEnaged);
 		SmartDashboard.putBoolean("clamp reverse Engaged", clampReverse);
 		SmartDashboard.putBoolean("isKickoutActivated", isKickoutActivated);
