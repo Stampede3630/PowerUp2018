@@ -29,7 +29,7 @@ public class BoxGrabber {
 			liftDown, clampReverse;
 	AnalogInput pressureLevel;
 	DigitalInput slideReversecheck, armsDownCheck;
-	boolean liftUpActivated;
+	boolean liftUpActivated , liftDownActivated;
 	Timer liftTimer;
 	int kickOut;
 	boolean isKickoutActivated;
@@ -288,7 +288,36 @@ public class BoxGrabber {
 		liftTimer.start();
 		
 	}
+	public void liftDownInit () {
+		liftTimer.reset();
+		liftDownActivated = true;
+		liftTimer.start();
+		
+	}
 	
+	public void liftDownPeriodic() {
+		if ( liftDownActivated== true) {
+			if (liftTimer.get() > Consts.partysOverDown) {
+				System.out.print("set is down activated to false");
+				liftDownActivated = false;
+			}
+			
+			else if(liftTimer.get() > Consts.stillStandingDown) {
+				System.out.print("slide forwad called  in lift down periodic ");
+				slideForward();
+			}
+			else if ( liftTimer.get() > 3){
+				System.out.print("slide  reverse  called  in lift down periodic ");
+				slideReverse();
+			}
+			else if(liftTimer.get() > 0) {
+				System.out.print("arms called  in lift down periodic ");
+				armsDown();
+			}
+		}
+		
+		
+	}
 	public void liftUpPeriodic() {
 		if (liftUpActivated == true) {
 			if (liftTimer.get() > Consts.partysOver) {
@@ -309,7 +338,9 @@ public class BoxGrabber {
 	 * saftey method for lift down. ensure robot can't be in forward state when the
 	 * arms go down will eventualy become driver lift down button
 	 */
-	public void liftDownRobotCompetion() {
+/*	public void liftDownRobotCompetion() {
+ * 
+ * 
 		
 			armsDown();
 
@@ -323,17 +354,17 @@ public class BoxGrabber {
 		if (slideReversecheck.get()) {
 			slideReverse();
 			slideTimer.reset();
-		}
+		}*/
+//
+//		else {
+//			armsUp();
+////			if(slideTimer.get() > 4.0) {
+////				slideForward();
+////			}
 
-		else {
-			armsUp();
-//			if(slideTimer.get() > 4.0) {
-//				slideForward();
-//			}
-
-		}
-
-	}
+//		}
+//
+//	}
 
 	public void boxIntakeClamp() {
 
@@ -366,6 +397,7 @@ public class BoxGrabber {
 		SmartDashboard.putBoolean("clamp forward Engaged", clampEnaged);
 		SmartDashboard.putBoolean("clamp reverse Engaged", clampReverse);
 		SmartDashboard.putBoolean("isKickoutActivated", isKickoutActivated);
+		SmartDashboard.putBoolean("liftDownActivated",liftDownActivated );
 	}
 
 	public void boxGrabberPeriodic () {
@@ -379,9 +411,9 @@ public class BoxGrabber {
 		kickReverseEngaged = false;
 		liftDown = false;
 		clampReverse = false;
-		  kickoutPeriodic();
+		kickoutPeriodic();
 		manipulatorDianostics();
-		// intake();
+		liftDownPeriodic();
 		liftUpPeriodic();
 		switch (xBox()) {
 		case SCALEAUTOMATED:
@@ -397,7 +429,8 @@ public class BoxGrabber {
 			break;
 
 		case LIFTDOWNAUTOMATED:
-			liftDownRobotCompetion();
+			liftDownInit ();
+		
 			break;
 
 		case LIFTUPAUTOMATED:
@@ -417,7 +450,7 @@ public class BoxGrabber {
 
 		default:
 			// default to stop for saftey reasons
-			if(!liftUpActivated) {
+			if(!liftUpActivated && !liftDownActivated ) {
 				stop();	
 			}
 			
