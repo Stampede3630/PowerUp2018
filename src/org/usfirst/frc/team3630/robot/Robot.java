@@ -33,8 +33,9 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
-		_driveTrain = new DriveTrain();
+	
 		box = new BoxGrabber();
+		_driveTrain = new DriveTrain(box);
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
 		autoChooser = new SendableChooser<StartingPoints>();

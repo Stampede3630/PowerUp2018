@@ -17,7 +17,7 @@ import com.kauailabs.navx.frc.AHRS;
 public class DriveTrain {
 
 	private XboxController _xBox;
-	BoxGrabber _boxGrabber;
+	
 	PowerDistributionPanel panel;
 	private AHRS ahrs;
 	ErrorCode sticky;
@@ -33,7 +33,7 @@ public class DriveTrain {
 	PIDController posController;
 	double rotateToAngleRate;
 	
-
+	
 	// target angle degrees for straight on should not be a constant !
 	double targetAngleDegrees = 0f;
 	double kTargetDistanceInches = 1000;
@@ -49,7 +49,10 @@ public class DriveTrain {
 	/**
 	 * leftThree , right six master motors and drive train constru
 	 */
-	public DriveTrain() {
+	private BoxGrabber driveBox;
+	public DriveTrain(BoxGrabber _boxGrabber) {
+		
+		driveBox = _boxGrabber;
 		// why doing ahrs byte thing? // do we use update rate elswhere 
 		ahrs = new AHRS(SPI.Port.kMXP);
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
@@ -107,7 +110,7 @@ panel = new PowerDistributionPanel(0);
 
 	}
 
-	
+
 	/**
 	 *  set up for test init  */
 	public void testInit() {
@@ -310,7 +313,7 @@ panel = new PowerDistributionPanel(0);
 			if(init) {
 				turnController.disable();
 				posController.disable();
-				_boxGrabber.switchAuto();
+				driveBox.switchAuto();
 				init = false;
 			}
 		}
@@ -350,7 +353,7 @@ panel = new PowerDistributionPanel(0);
 		if(myCurrentCase == 4) {
 			turnController.disable();
 			posController.disable();
-			_boxGrabber.scaleAuto();
+			driveBox.scaleAuto();
 			init = false;
 		}
 	}
@@ -389,7 +392,7 @@ panel = new PowerDistributionPanel(0);
 		if(myCurrentCase == 4) {
 			turnController.disable();
 			posController.disable();
-			_boxGrabber.scaleAuto();
+			driveBox.scaleAuto();
 			init = false;
 		}
 	}
@@ -446,7 +449,7 @@ panel = new PowerDistributionPanel(0);
 		if(myCurrentCase == 6) {
 			turnController.disable();
 			posController.disable();
-			_boxGrabber.switchAuto();
+			driveBox.switchAuto();
 			init = false;
 		}
 	}
@@ -503,7 +506,7 @@ panel = new PowerDistributionPanel(0);
 		if(myCurrentCase == 6) {
 			turnController.disable();
 			posController.disable();
-			_boxGrabber.switchAuto();
+			driveBox.switchAuto();
 			init = false;
 		}
 	}
@@ -580,7 +583,7 @@ panel = new PowerDistributionPanel(0);
 		if(myCurrentCase == 8) {
 			turnController.disable();
 			posController.disable();
-			_boxGrabber.scaleAuto();
+			driveBox.scaleAuto();
 			init = false;
 		}
 	}
@@ -657,7 +660,7 @@ panel = new PowerDistributionPanel(0);
 		if(myCurrentCase == 8) {
 			turnController.disable();
 			posController.disable();
-			_boxGrabber.scaleAuto();
+			driveBox.scaleAuto();
 			init = false;
 		}
 	}
@@ -715,7 +718,7 @@ panel = new PowerDistributionPanel(0);
 		if(myCurrentCase == 6) {
 			turnController.disable();
 			posController.disable();
-			_boxGrabber.switchAuto();
+			driveBox.switchAuto();
 			init = false;
 		}
 	}
@@ -735,7 +738,7 @@ panel = new PowerDistributionPanel(0);
 		if (myCurrentCase == 2) {
 			turnController.disable();
 			posController.disable();
-			_boxGrabber.switchAuto();
+			driveBox.switchAuto();
 			init = false;
 		}
 	}
@@ -809,7 +812,7 @@ panel = new PowerDistributionPanel(0);
 		if(myCurrentCase == 8) {
 			turnController.disable();
 			posController.disable();
-			_boxGrabber.scaleAuto();
+			driveBox.scaleAuto();
 			init = false;
 		}
 	}
@@ -883,7 +886,7 @@ panel = new PowerDistributionPanel(0);
 		if(myCurrentCase == 8) {
 			turnController.disable();
 			posController.disable();
-			_boxGrabber.scaleAuto();
+			driveBox.scaleAuto();
 			init = false;
 		}
 	}
