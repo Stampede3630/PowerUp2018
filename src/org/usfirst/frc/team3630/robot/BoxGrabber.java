@@ -450,7 +450,7 @@ public class BoxGrabber {
 
 		default:
 			// default to stop for saftey reasons
-			if(!liftUpActivated && !liftDownActivated ) {
+			if(!liftUpActivated && !liftDownActivated && !isKickoutActivated) {
 				stop();	
 			}
 			
