@@ -344,19 +344,57 @@ panel = new PowerDistributionPanel(0);
 		if (myCurrentCase == 3) {
 			if(init) {
 				autoDriveFw(Consts.autoF);
+				
+				
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
-				myCurrentCase = 4;
-	     		init = true;
+			//	myCurrentCase = 4;
+	     		init = false ;
 			}
 		}
-		if(myCurrentCase == 4) {
-			turnController.disable();
-			posController.disable();
-			driveBox.scaleAuto();
-			init = false;
+			
 		}
-	}
+		
+		/*if(myCurrentCase == 4) {
+			if(init){
+				turnController.disable();
+				posController.disable();
+				driveBox.liftUpInit();
+				init =false;
+				
+			}
+			else if(driveBox.liftUpActivated) {
+				driveBox.liftUpPeriodic();
+				
+			}
+			else {
+				myCurrentCase = 5;
+				init = true;
+			}
+		
+			
+			
+			
+		}
+		if(myCurrentCase == 5) {
+			if (init) {
+				driveBox.kickOutInitilaise();
+				init =  false ;
+			}
+			else if(driveBox.isKickoutActivated) {
+				driveBox.kickoutPeriodic();
+			}
+				else {
+					init = false;
+				}
+				
+				
+			}
+			}
+				*/
+	
+		
+	
 	
 	public void leftScaleLeft() {
 		if (myCurrentCase  == 1) {
@@ -390,10 +428,33 @@ panel = new PowerDistributionPanel(0);
 			}
 		}
 		if(myCurrentCase == 4) {
-			turnController.disable();
-			posController.disable();
-			driveBox.scaleAuto();
-			init = false;
+			if(init){
+				turnController.disable();
+				posController.disable();
+				driveBox.liftUpInit();
+				if(driveBox.liftUpActivated) {
+					driveBox.liftUpPeriodic();
+					init =false;
+				}
+			}
+			else {
+				myCurrentCase = 5;
+				init = true;
+			}
+		
+			
+		}
+		if (myCurrentCase == 5)
+		if (init) {
+			driveBox.kickOutInitilaise();
+			if(driveBox.isKickoutActivated) {
+				driveBox.kickoutPeriodic();
+			}
+			else {
+				init = false;
+			}
+			
+			
 		}
 	}
 		
@@ -576,15 +637,51 @@ panel = new PowerDistributionPanel(0);
 				autoDriveFw(Consts.autoF);
 			}
 		     if(Math.abs(posController.getError()) < Consts.autoPosError ) {
-		     		myCurrentCase = 8;
+		     		myCurrentCase = 9; /// MADE NINE
 		     		init = true;
 		     	}
 		}
-		if(myCurrentCase == 8) {
-			turnController.disable();
-			posController.disable();
-			driveBox.scaleAuto();
-			init = false;
+//		if(myCurrentCase == 8) {
+//			turnController.disable();
+//			posController.disable();
+//					init = true;
+//					myCurrentCase = 9;
+//		}
+//		
+		if(myCurrentCase == 9) {
+			if(init){
+				turnController.disable();
+				posController.disable();
+				driveBox.liftUpInit();
+				init =false;
+				
+			}
+			else if(driveBox.liftUpActivated) {
+				driveBox.liftUpPeriodic();
+				
+			}
+			else {
+				myCurrentCase = 10;
+				init = true;
+			}
+		
+			
+		}
+		if (myCurrentCase == 10)
+		if (init) {
+			driveBox.kickOutInitilaise();
+			if(driveBox.isKickoutActivated) {
+				driveBox.kickoutPeriodic();
+				init = false;
+			}
+			else if(driveBox.isKickoutActivated) {
+				driveBox.kickoutPeriodic();
+				
+			}
+			
+			else {
+				init = false;
+			}
 		}
 	}
 	
@@ -660,7 +757,7 @@ panel = new PowerDistributionPanel(0);
 		if(myCurrentCase == 8) {
 			turnController.disable();
 			posController.disable();
-			driveBox.scaleAuto();
+			
 			init = false;
 		}
 	}
@@ -812,7 +909,7 @@ panel = new PowerDistributionPanel(0);
 		if(myCurrentCase == 8) {
 			turnController.disable();
 			posController.disable();
-			driveBox.scaleAuto();
+			
 			init = false;
 		}
 	}
@@ -886,7 +983,7 @@ panel = new PowerDistributionPanel(0);
 		if(myCurrentCase == 8) {
 			turnController.disable();
 			posController.disable();
-			driveBox.scaleAuto();
+			
 			init = false;
 		}
 	}

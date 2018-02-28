@@ -348,15 +348,7 @@ public class BoxGrabber {
 //		}
 //
 //	}
-
-	public void  scaleAuto() {
-		// could be a series of if else statements S
-		// switch boxintake state 
-		// case one  lift up peridoc
-		// case two kickoutinit, 
-		// case 3 kickoutPeriodic()
-
-	}
+	
 
 	/**
 	 * swutch auto metod need to test to fully develop
