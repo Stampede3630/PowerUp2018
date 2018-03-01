@@ -27,7 +27,7 @@ public class BoxGrabber {
 	kickReverseEngaged,liftDown, clampReverse,  slideFullyReversed, clampOpen, liftUpActivated, liftDownActivated;
 	AnalogInput pressureLevel;
 	DigitalInput slideReversecheck, armsDownCheck;
-	Timer liftTimer ,slideTimer, kickTime; ;
+	Timer liftTimer ,slideTimer, kickTime;
 	int kickOutSwitchStates;
 	boolean isKickoutActivated;
 	boolean liftUpSensorFlag, 	liftDownSensorFlag;
@@ -45,7 +45,8 @@ public class BoxGrabber {
 		liftUpActivated = false;
 		slideReversecheck = new DigitalInput(3);
 		 armsDownCheck= new DigitalInput(2);
-		 
+		 liftUpSensorFlag = false;
+		 liftDownSensorFlag=false;
 		 // need to make theese consts 
 		slide = new DoubleSolenoid(1, 2, 3);
 		kick = new DoubleSolenoid(0, 0, 1);
@@ -272,6 +273,7 @@ public class BoxGrabber {
 	public void liftUpInit () {
 		liftTimer.reset();
 		liftUpActivated = true;
+		liftUpSensorFlag=false;
 		liftTimer.start();
 		System.out.println("lift up init is being called");
 		
@@ -280,6 +282,7 @@ public class BoxGrabber {
 		liftTimer.reset();
 		liftDownActivated = true;
 		liftTimer.start();
+		liftDownSensorFlag = false;
 		System.out.println("lift down init is being called");
 	}
 	
@@ -301,7 +304,7 @@ public class BoxGrabber {
 				armsDown();
 
 				System.out.println("arms called  in lift down periodic ");
-					if (atDownLevel.getVoltage()>  4 ) {
+					if (atDownLevel.getVoltage()>  2 ) {
 						liftDownSensorFlag= true;
 						 System.out.println("liftUp sensor flag = ");
 						 System.out.println(liftUpSensorFlag);
@@ -313,7 +316,7 @@ public class BoxGrabber {
 	}
 	
 	public void liftUpPeriodic() {
-		if (liftUpActivated ) {
+		if (liftUpActivated) {
 			if (liftTimer.get() > Consts.partysOver) {
 				liftUpActivated = false;
 				liftUpSensorFlag= false;
@@ -327,7 +330,7 @@ public class BoxGrabber {
 				System.out.println(" slide revse arms up is called for  lit up ");
 				slideReverse();
 				armsUp();
-				if (scaleUpParimitor.getVoltage()>  4 ) {
+				if (scaleUpParimitor.getVoltage()>  2 ) {
 						 liftUpSensorFlag= true;
 						 System.out.println("liftUp sensor flag = ");
 						 System.out.println(liftUpSensorFlag);

@@ -313,7 +313,7 @@ panel = new PowerDistributionPanel(0);
 			if(init) {
 				turnController.disable();
 				posController.disable();
-				driveBox.switchAuto();
+				//driveBox.switchAuto();
 				init = false;
 			}
 		}
