@@ -80,7 +80,7 @@ public class Consts {
 	public static final double timeDelay =.005;
 	public static final double stillStanding = 3.5; ///some awesome number
 	public static final double stillStandingDown = 3.5;
-	public static final double partysOverDown = 15;
-	public static final double partysOver = 15; ///some other less awesome number seemms rediculously long 
+	public static final double partysOverDown = 30;
+	public static final double partysOver = 30 ; ///some other less awesome number seemms rediculously long 
 }
 

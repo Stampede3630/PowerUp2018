@@ -30,6 +30,8 @@ public class BoxGrabber {
 	Timer liftTimer ,slideTimer, kickTime; ;
 	int kickOutSwitchStates;
 	boolean isKickoutActivated;
+	boolean liftUpSensorFlag, 	liftDownSensorFlag;
+	AnalogInput scaleUpParimitor, atDownLevel;
 
 	public BoxGrabber() {
 
@@ -38,6 +40,7 @@ public class BoxGrabber {
 		slideTimer = new Timer();
 		kickTime = new Timer();
 		isKickoutActivated= false;
+		liftUpSensorFlag= false;
 		liftTimer = new Timer();
 		liftUpActivated = false;
 		slideReversecheck = new DigitalInput(3);
@@ -51,6 +54,8 @@ public class BoxGrabber {
 		mainC = new Compressor(0);
 		pressureLevel = new AnalogInput(0);
 		_xBox = new XboxController(Consts.xBoxComPort);
+		scaleUpParimitor = new AnalogInput(1);
+		atDownLevel = new AnalogInput(2);
 		// leftIntake = new TalonSRX(7);
 		//
 		// rightIntake = new TalonSRX(8);
@@ -62,31 +67,30 @@ public class BoxGrabber {
 // to do make button asighnments sane
 	public State xBox() {
 	
-		if (_xBox.getBButton() == true) {
-			return State.SCALEAUTOMATED;
-			
-		} else if (_xBox.getAButton() == true) {
+		if (_xBox.getAButton() == true) {
 			return State.LIFTDOWNAUTOMATED;
 			
 		} else if (_xBox.getXButton() == true) {
 			return State.LIFTUPAUTOMATED;
 			
 		}
-		else if (_xBox.getBumper(GenericHID.Hand.kRight)== true ) {
-		return State.SLIDEFORWARD;
-		 }
 
-		else if (_xBox.getStartButton() == true) {
+		else if (_xBox.getStartButton()== true) {
 			return State.DROPBOX;
-			
-		} else if (_xBox.getBackButton() == true) {
-			return State.CLAMPOPEN;
 		}
 
-		else if (_xBox.getBumper(GenericHID.Hand.kLeft) == true) {
+		else if (_xBox.getBumper(GenericHID.Hand.kRight) == true) {
 			return State.CLAMPCLOSE;
 		}
-
+		else if (_xBox.getBumper(GenericHID.Hand.kLeft) == true) {
+			return State.CLAMPOPEN;
+		}
+		else if (_xBox.getYButton()== true) {
+			return State.SLIDEFORWARD;
+		}
+		else if (_xBox.getBButton()== true) {
+			return State.SLIDEBACK;
+		}
 		else {
 			return State.STOP;
 		}
@@ -269,52 +273,69 @@ public class BoxGrabber {
 		liftTimer.reset();
 		liftUpActivated = true;
 		liftTimer.start();
+		System.out.println("lift up init is being called");
 		
 	}
 	public void liftDownInit () {
 		liftTimer.reset();
 		liftDownActivated = true;
 		liftTimer.start();
-		
+		System.out.println("lift down init is being called");
 	}
 	
 	public void liftDownPeriodic() {
-		if ( liftDownActivated== true) {
+		if (liftDownActivated) {
 			if (liftTimer.get() > Consts.partysOverDown) {
-				System.out.print("set is down activated to false");
+				System.out.println("set is down activated to false");
 				liftDownActivated = false;
+				liftDownSensorFlag = false;
 			}
 			
-			else if(liftTimer.get() > Consts.stillStandingDown) {
-				System.out.print("slide forwad called  in lift down periodic ");
+			else if(liftDownSensorFlag) {
+				System.out.println("slide forwad called  in lift down periodic ");
 				slideForward();
 			}
-			else if ( liftTimer.get() > 3){
-				System.out.print("slide  reverse  called  in lift down periodic ");
+		
+			else  {
 				slideReverse();
-			}
-			else if(liftTimer.get() > 0) {
-				System.out.print("arms called  in lift down periodic ");
 				armsDown();
-			}
+
+				System.out.println("arms called  in lift down periodic ");
+					if (atDownLevel.getVoltage()>  4 ) {
+						liftDownSensorFlag= true;
+						 System.out.println("liftUp sensor flag = ");
+						 System.out.println(liftUpSensorFlag);
+					}
+						}
 		}
 		
 		
 	}
+	
 	public void liftUpPeriodic() {
-		if (liftUpActivated == true) {
+		if (liftUpActivated ) {
 			if (liftTimer.get() > Consts.partysOver) {
 				liftUpActivated = false;
+				liftUpSensorFlag= false;
+				System.out.println(liftUpActivated);
 			}
-			else if(liftTimer.get() > Consts.stillStanding) {
+			else if (liftUpSensorFlag) {
+				System.out.println(" slide forward lit up is being called");
 				slideForward();
 			}
-			else if(liftTimer.get() > 0) {
+			else  {
+				System.out.println(" slide revse arms up is called for  lit up ");
 				slideReverse();
 				armsUp();
-			}
-		}
+				if (scaleUpParimitor.getVoltage()>  4 ) {
+						 liftUpSensorFlag= true;
+						 System.out.println("liftUp sensor flag = ");
+						 System.out.println(liftUpSensorFlag);
+					}
+				
 		
+		}
+		}
 		
 	}
 	/**
@@ -377,6 +398,9 @@ public class BoxGrabber {
 		SmartDashboard.putBoolean("clamp reverse Engaged", clampReverse);
 		SmartDashboard.putBoolean("isKickoutActivated", isKickoutActivated);
 		SmartDashboard.putBoolean("liftDownActivated",liftDownActivated );
+		SmartDashboard.putNumber( "test anlog soldoid sensor voltager", scaleUpParimitor.getVoltage());
+	SmartDashboard.putNumber("atSwitchLevel", atDownLevel.getVoltage());
+	
 	}
 
 	public void boxGrabberPeriodic () {
@@ -409,7 +433,6 @@ public class BoxGrabber {
 
 		case LIFTDOWNAUTOMATED:
 			liftDownInit ();
-		
 			break;
 
 		case LIFTUPAUTOMATED:
@@ -426,7 +449,9 @@ public class BoxGrabber {
 		case SLIDEFORWARD:
 			slideForward();
 			break;
-
+		case SLIDEBACK:
+			slideReverse();
+			break;
 		default:
 			// default to stop for saftey reasons
 			if(!liftUpActivated && !liftDownActivated && !isKickoutActivated) {
