@@ -13,7 +13,7 @@ public class BoxGrabber {
 	// enum difftent state= state (F, forward) (R, piston reverse)
 	// lift
 	public enum State {
-		SLIDEFORWARD, CLAMPOPEN, KICKFORWARD, LIFTUP, LIFTDOWN, CLAMPCLOSE, SLIDEBACK, KICKRETRACT, STOP, INTAKE, DROPBOX, SWITCHAUTOMATED, SCALEAUTOMATED, LIFTDOWNAUTOMATED, LIFTUPAUTOMATED
+		SLIDEFORWARD, CLAMPOPEN, KICKFORWARD, LIFTUP, LIFTDOWN, CLAMPCLOSE, SLIDEBACK, KICKRETRACT, STOP, INTAKE, DROPBOX, SWITCHDOWNAUTOMATED, SWITCHUPAUTOMATED, SCALEAUTOMATED, LIFTDOWNAUTOMATED, LIFTUPAUTOMATED
 
 	}
 
@@ -31,6 +31,9 @@ public class BoxGrabber {
 	int kickOutSwitchStates;
 	boolean isKickoutActivated;
 	boolean liftUpSensorFlag, 	liftDownSensorFlag;
+	boolean stopPneumatics;
+	boolean liftUpSwitchActivated, liftUpSwitchSensorFlag;
+	boolean liftDownSwitchActivated,liftDownSwitchSensorFlag;
 	AnalogInput scaleUpParimitor, atDownLevel;
 
 	public BoxGrabber() {
@@ -47,6 +50,10 @@ public class BoxGrabber {
 		 armsDownCheck= new DigitalInput(2);
 		 liftUpSensorFlag = false;
 		 liftDownSensorFlag=false;
+		 liftDownSwitchSensorFlag = false;
+		 liftDownSwitchActivated = false;
+		 liftUpSwitchSensorFlag = false;
+		 liftUpSwitchActivated = false;
 		 // need to make theese consts 
 		slide = new DoubleSolenoid(1, 2, 3);
 		kick = new DoubleSolenoid(0, 0, 1);
@@ -71,7 +78,7 @@ public class BoxGrabber {
 		if (_xBox.getAButton() == true) {
 			return State.LIFTDOWNAUTOMATED;
 			
-		} else if (_xBox.getXButton() == true) {
+		} else if (_xBox.getYButton() == true) {
 			return State.LIFTUPAUTOMATED;
 			
 		}
@@ -86,17 +93,47 @@ public class BoxGrabber {
 		else if (_xBox.getBumper(GenericHID.Hand.kLeft) == true) {
 			return State.CLAMPOPEN;
 		}
-		else if (_xBox.getYButton()== true) {
-			return State.SLIDEFORWARD;
+		else if (_xBox.getAButton()== true) {
+			return State.SWITCHUPAUTOMATED;
 		}
-		else if (_xBox.getBButton()== true) {
-			return State.SLIDEBACK;
-		}
+		
+//		else if (_xBox.getBButton()== true) {
+//			return State.SWITCHDOWNAUTOMATED;
+//		}
 		else {
 			return State.STOP;
 		}
 	}
 
+	public void liftController() {
+		if(_xBox.getPOV() != -1) {
+			stopPneumatics = false;
+			double angle = _xBox.getPOV()*Math.PI/180;
+			double liftControl = Math.cos(angle);
+			double slideControl = Math.sin(angle);
+			if(liftControl > 0) {
+				armsUp();
+			}
+			else if (liftControl < 0) {
+				armsDown();
+			}
+			else {
+				armsStop();
+			}
+			
+			if(slideControl > 0) {
+				slideForward();
+			}
+			else if(slideControl < 0) {
+				slideReverse();
+				
+			
+			}
+			else {
+				slideOff();
+			}
+		}	
+	}
 	/*
 	 * public void intake() { rightIntake.configNeutralDeadband(.1, 10);
 	 * leftIntake.configNeutralDeadband(.1, 10);
@@ -129,6 +166,11 @@ public class BoxGrabber {
 
 	public void armsUp() {
 		lift.set(DoubleSolenoid.Value.kForward);
+		liftUpEngaged = true;
+
+	}
+	public void armsStop() {
+		lift.set(DoubleSolenoid.Value.kOff);
 		liftUpEngaged = true;
 
 	}
@@ -169,6 +211,10 @@ public class BoxGrabber {
 		slide.set(DoubleSolenoid.Value.kReverse);
 	}
 
+	public void slideOff() {
+		slideOutEngaged = false;
+		slide.set(DoubleSolenoid.Value.kOff);
+	}
 	// psi method for presure sensor need to calibrate normaliesd voltage during
 	// testing
 	public double compresorPSI() {
@@ -290,6 +336,7 @@ public class BoxGrabber {
 		if (liftDownActivated) {
 			if (liftTimer.get() > Consts.partysOverDown) {
 				System.out.println("set is down activated to false");
+				
 				liftDownActivated = false;
 				liftDownSensorFlag = false;
 			}
@@ -298,22 +345,30 @@ public class BoxGrabber {
 				System.out.println("slide forwad called  in lift down periodic ");
 				slideForward();
 			}
-		
-			else  {
-				slideReverse();
+			else if(liftTimer.hasPeriodPassed(.5)) {
 				armsDown();
-
+			}
+			
+	
+		
+			else   {
+				slideReverse();
+			//	armsDown();
 				System.out.println("arms called  in lift down periodic ");
-					if (atDownLevel.getVoltage()>  2 ) {
-						liftDownSensorFlag= true;
-						 System.out.println("liftUp sensor flag = ");
-						 System.out.println(liftUpSensorFlag);
+				if (atDownLevel.getVoltage()>  2 ) {
+					liftDownSensorFlag= true;
+					 System.out.println("liftUp sensor flag = ");
+					 System.out.println(liftUpSensorFlag);
+				}
 					}
-						}
+				
+			}
+
+				
 		}
 		
 		
-	}
+	
 	
 	public void liftUpPeriodic() {
 		if (liftUpActivated) {
@@ -377,9 +432,66 @@ public class BoxGrabber {
 	/**
 	 * swutch auto metod need to test to fully develop
 	 */
-	public void switchAuto() {
-
+	public void switchAutoUpInit() {
+		liftTimer.reset();
+		liftUpSwitchActivated = true;
+		liftTimer.start();
+		liftDownSwitchSensorFlag = false;
 	}
+	
+	public void switchAutoUpPeriodic() {
+		if (liftUpSwitchActivated) {
+			if (liftTimer.get() > Consts.partysOver) {
+				liftUpSwitchActivated = false;
+				liftUpSwitchSensorFlag= false;
+			}
+			else if (liftUpSwitchSensorFlag) {
+				stop();
+
+			}
+			else  {
+				slideReverse();
+				armsUp();
+				if (atDownLevel.getVoltage()>  2 ) {
+						 liftUpSwitchSensorFlag= true;
+
+					}
+				
+			}
+		}
+		
+	}
+	public void switchAutoDownInit() {
+		liftTimer.reset();
+		liftDownSwitchActivated = true;
+		liftTimer.start();
+		liftUpSwitchSensorFlag = false;
+	}
+	
+	public void switchAutoDownPeriodic() {
+		if (liftDownSwitchActivated) {
+			if (liftTimer.get() > Consts.partysOver) {
+				liftDownSwitchActivated = false;
+				liftDownSwitchSensorFlag= false;
+			}
+			else if (liftUpSwitchSensorFlag) {
+				stop();
+	
+			}
+			else  {
+				slideForward();
+				armsDown();
+				if (atDownLevel.getVoltage()>  2 ) {
+						 liftDownSwitchSensorFlag= true;
+
+					}
+				
+			}
+		}
+		
+	}
+	
+	
 
 	// manip diognostics output to smart doashboard for each pnumatic subsystem
 	public void manipulatorDianostics() {
@@ -402,11 +514,12 @@ public class BoxGrabber {
 		SmartDashboard.putBoolean("isKickoutActivated", isKickoutActivated);
 		SmartDashboard.putBoolean("liftDownActivated",liftDownActivated );
 		SmartDashboard.putNumber( "test anlog soldoid sensor voltager", scaleUpParimitor.getVoltage());
-	SmartDashboard.putNumber("atSwitchLevel", atDownLevel.getVoltage());
+		SmartDashboard.putNumber("atSwitchLevel", atDownLevel.getVoltage());
 	
 	}
 
 	public void boxGrabberPeriodic () {
+		stopPneumatics = !liftUpActivated && !liftDownActivated && !isKickoutActivated && !liftUpSwitchActivated && !liftDownSwitchActivated;
 		// for testing
 		// mainC.stop();
 		liftUpEngaged = false;
@@ -421,6 +534,10 @@ public class BoxGrabber {
 		manipulatorDianostics();
 		liftDownPeriodic();
 		liftUpPeriodic();
+		liftController();
+		switchAutoDownPeriodic();
+		switchAutoUpPeriodic();
+		
 		switch (xBox()) {
 		case SCALEAUTOMATED:
 			liftUpInit();
@@ -455,9 +572,15 @@ public class BoxGrabber {
 		case SLIDEBACK:
 			slideReverse();
 			break;
+		case SWITCHDOWNAUTOMATED:
+			switchAutoDownInit();
+			break;
+		case SWITCHUPAUTOMATED:
+			switchAutoUpInit();
+			break;
 		default:
 			// default to stop for saftey reasons
-			if(!liftUpActivated && !liftDownActivated && !isKickoutActivated) {
+			if(stopPneumatics) {
 				stop();	
 			}
 			

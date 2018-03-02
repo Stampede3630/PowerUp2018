@@ -201,7 +201,6 @@ panel = new PowerDistributionPanel(0);
 		SmartDashboard.putNumber("Front Left Velocity", getVelocity(leftThreeEncoder));
 		SmartDashboard.putNumber("Left position in ticks", getTicks(leftThreeEncoder));
 		SmartDashboard.putNumber("Right position in ticks", getTicks(rightSixEncoder));
-	
 		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());
 		SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
 		SmartDashboard.putNumber("Position Setpoint", posController.getSetpoint());
@@ -245,6 +244,7 @@ panel = new PowerDistributionPanel(0);
 			if(init) {
 				turnController.enable();
 				turnController.setSetpoint(0);
+				turnController.setPID(Consts.kPDrAngle, Consts.kIDrAngle, Consts.kDDrAngle);
 				autoDriveFw(Consts.autoA + Consts.autoB);
 			}
 		    if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -510,7 +510,7 @@ panel = new PowerDistributionPanel(0);
 		if(myCurrentCase == 6) {
 			turnController.disable();
 			posController.disable();
-			driveBox.switchAuto();
+			driveBox.switchAutoUpInit();
 			init = false;
 		}
 	}
@@ -567,7 +567,7 @@ panel = new PowerDistributionPanel(0);
 		if(myCurrentCase == 6) {
 			turnController.disable();
 			posController.disable();
-			driveBox.switchAuto();
+			driveBox.switchAutoUpInit();
 			init = false;
 		}
 	}
@@ -592,6 +592,7 @@ panel = new PowerDistributionPanel(0);
 				myCurrentCase = 3;
 	     		init = true;
 			}
+			
 			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
 			}
 		if (myCurrentCase  == 3) {
@@ -815,7 +816,7 @@ panel = new PowerDistributionPanel(0);
 		if(myCurrentCase == 6) {
 			turnController.disable();
 			posController.disable();
-			driveBox.switchAuto();
+			driveBox.switchAutoUpInit();
 			init = false;
 		}
 	}
@@ -835,7 +836,7 @@ panel = new PowerDistributionPanel(0);
 		if (myCurrentCase == 2) {
 			turnController.disable();
 			posController.disable();
-			driveBox.switchAuto();
+			driveBox.switchAutoUpInit();
 			init = false;
 		}
 	}

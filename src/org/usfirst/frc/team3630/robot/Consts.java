@@ -20,13 +20,13 @@ public class Consts {
 
 	
 	// Manipulators 
-	public static final double  kPRotAng = 0.045;
-	public static final double  kIRotAng = 0.000;
-	public static final double  kDRotAng = 0.15;
+	public static final double  kPRotAng = 0.013;
+	public static final double  kIRotAng = 0.0;
+	public static final double  kDRotAng = 0;
 	
-	public static final double kPDrAngle = 0.08;
+	public static final double kPDrAngle = 0.09;
 	public static final double kIDrAngle = 0.008;
-	public static final double kDDrAngle = 0.8;
+	public static final double kDDrAngle =0.8;
 	
 
     public static final double ToleranceDegrees = 2;
@@ -45,11 +45,11 @@ public class Consts {
 	public static final double kIencoder = 0.000000000;
 	public static final double kDencoder = 0.0;
 
-	public static final double kPPos = 0.006;
+	public static final double kPPos = 0.008;
 	public static final double kIPos = 0;
 	public static final double kDPos = 0;
 	// Auto Distances
-	public static final double autoA = 67;
+	public static final double autoA = 67-32;
 	public static final double autoB = 101;
 	public static final double autoC = 156;
 	public static final double autoD = 73;
@@ -80,7 +80,7 @@ public class Consts {
 	public static final double timeDelay =.005;
 	public static final double stillStanding = 3.5; ///some awesome number
 	public static final double stillStandingDown = 3.5;
-	public static final double partysOverDown = 10;
-	public static final double partysOver = 10; ///some other less awesome number seemms rediculously long 
+	public static final double partysOverDown = 7;
+	public static final double partysOver = 7; ///some other less awesome number seemms rediculously long 
 }
 
