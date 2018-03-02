@@ -27,11 +27,13 @@ public class DriveTrain  {
 			 
 			 leftEncoderThree = new  WPI_TalonSRX(Consts.leftEncoderThree); 
 			
-			 		rightSlaveFive = new  WPI_TalonSRX(Consts.rightSlaveFive);
-			 		rightEncoderSix = new WPI_TalonSRX(Consts.rightEncoderSix);
-			 		driveTrain= new DifferentialDrive(leftEncoderThree,rightEncoderSix);
+			 rightSlaveFive = new  WPI_TalonSRX(Consts.rightSlaveFive);
+			 rightEncoderSix = new WPI_TalonSRX(Consts.rightEncoderSix);
+			 driveTrain= new DifferentialDrive(leftEncoderThree,rightEncoderSix);
 		
-		
+			 leftEncoderThree.setSensorPhase(false);
+			 rightEncoderSix.setSensorPhase(true);
+
 	    		configureTalon(leftEncoderThree);
 			configureTalon(rightEncoderSix);
 			
@@ -54,7 +56,7 @@ public class DriveTrain  {
 		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
 		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
-		_talon.setSensorPhase(true);
+		
 		//_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
 		//_talon.config_kP(0, 0, Consts.timeOutMs);
 		//_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
