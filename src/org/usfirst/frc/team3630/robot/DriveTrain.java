@@ -16,24 +16,26 @@ public class DriveTrain  {
     static final double kI = 0.00;
     static final double kD = 0.00;
     static final double kF = 1; 
-	private  WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
+	  WPI_TalonSRX SlaveTwo, leftEncoderThree, rightSlaveFour, rightSlaveFive, leftSlaveOne, rightEncoderSix;
 	 DifferentialDrive driveTrain ;
 	 TankDrivePath path;
 	public DriveTrain()  {
 		_xBox = new XboxController(Consts.xBoxComPort);
 	
-		frontLeft = new WPI_TalonSRX(Consts.frontLeftTalon);
-		backLeft = new WPI_TalonSRX(Consts.backLeftTalon);
-		frontRight = new WPI_TalonSRX(Consts.frontRightTalon);
-		backRight = new WPI_TalonSRX(Consts.backRightTalon);
+		leftSlaveOne =new   WPI_TalonSRX(1);  
+			 SlaveTwo = new   WPI_TalonSRX(2); 
+			 
+			 leftEncoderThree = new  WPI_TalonSRX(Consts.leftEncoderThree); 
+			 		rightSlaveFour =  new  WPI_TalonSRX(Consts.rightSlaveFour);
+			 		rightSlaveFive = new  WPI_TalonSRX(Consts.rightSlaveFive);
+			 		rightEncoderSix = new WPI_TalonSRX(Consts.rightEncoderSix);
+	
 		
 		
-		
-	    		configureTalon(frontLeft);
-			configureTalon(frontRight);
-			configureTalon(backLeft);
-			configureTalon(backRight);
-			path = new TankDrivePath(frontLeft,frontRight);
+	    		configureTalon(leftEncoderThree);
+			configureTalon(rightEncoderSix);
+			
+			path = new TankDrivePath(leftEncoderThree,rightEncoderSix);
 			frontLeft.setInverted(false);
 			backLeft.setInverted(false);
 			frontRight.setInverted(true);		
@@ -71,10 +73,9 @@ public class DriveTrain  {
 	}
 	public void autoInit() {
 		// resets encoders
-		frontLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-		frontRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-		backRight.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-		backLeft.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		rightEncoderSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		leftEncoderThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		
 		// need to put in robot init for speed 
 		path.rEncoderFollower.reset();
 		path.lEncoderFollower.reset();
@@ -82,9 +83,14 @@ public class DriveTrain  {
 	}
 	
 		public void autoPeriodic() {
-		
-			backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontLeft.getDeviceID());
-			backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontRight.getDeviceID());
+			leftSlaveOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoderThree.getDeviceID());  
+			 SlaveTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoderThree.getDeviceID());
+			 
+			
+			 		rightSlaveFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoderSix.getDeviceID());  
+			 		rightSlaveFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoderSix.getDeviceID());
+			
+			
 			path.autoPeriodic();
 		}
 	

@@ -46,8 +46,7 @@ public class TankDrivePath  {
 		// Max Jerk: 100 m/s/s
 
 		
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,
-				Trajectory.Config.SAMPLES_HIGH, 0.05, 3.3528, .25 , .3);
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 2.5, .25 , .3);
 
 		//Generates points for the path.
 		Waypoint[] points = new Waypoint[] {
@@ -57,7 +56,7 @@ public class TankDrivePath  {
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
 				//new Waypoint(2, 4.5 , Pathfinder.d2r(60)) // getts us close to 60 
-				new Waypoint(4.2672, -1.524, Pathfinder.d2r(-90))  // got close to 9o robot at -73.4 yow  Waypoint(1, 4, Pathfinder.d2r(90))
+				new Waypoint(4, -1.524, Pathfinder.d2r(-90))  // got close to 9o robot at -73.4 yow  Waypoint(1, 4, Pathfinder.d2r(90))
 
 		};
 
@@ -226,9 +225,9 @@ public class TankDrivePath  {
 		double outputLeft = lEncoderFollower .calculate(getDistance_ticks(lTalon));
 		double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
 		//+turn
-		double setLeftMotors= outputLeft +turn ;
+		double setLeftMotors= outputLeft  ;
 		//-turn
-		double setRightMotors = outputRight-turn  ;
+		double setRightMotors = outputRight ;
 		 
 		
 		SmartDashboard.putNumber(" vLeft",   setLeftMotors);
