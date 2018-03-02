@@ -93,7 +93,7 @@ public class BoxGrabber {
 		else if (_xBox.getBumper(GenericHID.Hand.kLeft) == true) {
 			return State.CLAMPOPEN;
 		}
-		else if (_xBox.getAButton()== true) {
+		else if (_xBox.getBButton()== true) {
 			return State.SWITCHUPAUTOMATED;
 		}
 		
