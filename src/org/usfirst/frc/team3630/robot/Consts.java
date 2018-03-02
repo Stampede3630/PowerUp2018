@@ -35,7 +35,7 @@ public class Consts {
 	public static final double Weeld  = 29 *  intoMeters;
 	  public static final double robotWidthMeters = 29.5 *intoMeters;
 
-	public static final double pathKP  = 0.8;
+	public static final double pathKP  = 0.0;
 	public static final double pathKI  = 0.0;
 	public static final double pathKD  = 0.0;
 	public static final double pathKA  = 0.0;

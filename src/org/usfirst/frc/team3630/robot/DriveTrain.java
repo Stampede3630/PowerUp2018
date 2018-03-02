@@ -22,25 +22,33 @@ public class DriveTrain  {
 	public DriveTrain()  {
 		_xBox = new XboxController(Consts.xBoxComPort);
 	
-		leftSlaveOne =new   WPI_TalonSRX(1);  
 			 SlaveTwo = new   WPI_TalonSRX(2); 
 			 
 			 leftEncoderThree = new  WPI_TalonSRX(Consts.leftEncoderThree); 
-			 		rightSlaveFour =  new  WPI_TalonSRX(Consts.rightSlaveFour);
+			
 			 		rightSlaveFive = new  WPI_TalonSRX(Consts.rightSlaveFive);
 			 		rightEncoderSix = new WPI_TalonSRX(Consts.rightEncoderSix);
-	
+			 		driveTrain= new DifferentialDrive(leftEncoderThree,rightEncoderSix);
 		
 		
 	    		configureTalon(leftEncoderThree);
 			configureTalon(rightEncoderSix);
+
+			 SlaveTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoderThree.getDeviceID());
+			 
+			
+			 		
+			 		rightSlaveFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoderSix.getDeviceID());
 			
 			path = new TankDrivePath(leftEncoderThree,rightEncoderSix);
 			
 }
 	
 	public void driveTrainPeriodic() {
-	
+		double x = _xBox.getY(GenericHID.Hand.kLeft);
+		double angle =  _xBox.getX(GenericHID.Hand.kRight);
+		driveTrain.arcadeDrive(x, angle);
+		
 
 	}
 	private void configureTalon(TalonSRX _talon) {
@@ -77,12 +85,6 @@ public class DriveTrain  {
 	}
 	
 		public void autoPeriodic() {
-			leftSlaveOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoderThree.getDeviceID());  
-			 SlaveTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoderThree.getDeviceID());
-			 
-			
-			 		rightSlaveFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoderSix.getDeviceID());  
-			 		rightSlaveFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoderSix.getDeviceID());
 			
 			
 			path.autoPeriodic();

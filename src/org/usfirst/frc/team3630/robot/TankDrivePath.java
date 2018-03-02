@@ -26,7 +26,7 @@ public class TankDrivePath  {
 	private TalonSRX rTalon;
 	public EncoderFollower lEncoderFollower, rEncoderFollower;
 	//DistanceFollower leftDiagnostics, rightDiagnostics;
-	File file;
+	//File file;
 	public TankDrivePath(TalonSRX leftSRXSide, TalonSRX rightSRXSide) {
 		 ahrs = new AHRS(SPI.Port.kMXP); 
 		 ahrs.reset();
@@ -46,7 +46,7 @@ public class TankDrivePath  {
 		// Max Jerk: 100 m/s/s
 
 		
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 2.5, .25 , .3);
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 2.5, 50 , 50);
 
 		//Generates points for the path.
 		Waypoint[] points = new Waypoint[] {
@@ -55,8 +55,9 @@ public class TankDrivePath  {
 				
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
+				new Waypoint(2, 0, 0),
 				//new Waypoint(2, 4.5 , Pathfinder.d2r(60)) // getts us close to 60 
-				new Waypoint(4, -1.524, Pathfinder.d2r(-90))  // got close to 9o robot at -73.4 yow  Waypoint(1, 4, Pathfinder.d2r(90))
+				//new Waypoint(4, -1.524, Pathfinder.d2r(-90))  // got close to 9o robot at -73.4 yow  Waypoint(1, 4, Pathfinder.d2r(90))
 
 		};
 
