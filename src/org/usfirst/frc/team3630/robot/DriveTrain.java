@@ -36,17 +36,11 @@ public class DriveTrain  {
 			configureTalon(rightEncoderSix);
 			
 			path = new TankDrivePath(leftEncoderThree,rightEncoderSix);
-			frontLeft.setInverted(false);
-			backLeft.setInverted(false);
-			frontRight.setInverted(true);		
+			
 }
 	
 	public void driveTrainPeriodic() {
-		backLeft.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontLeft.getDeviceID());
-		backRight.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, frontRight.getDeviceID());
-		double speed = _xBox.getY(GenericHID.Hand.kLeft)*-1;
-		double heading = _xBox.getX(GenericHID.Hand.kRight);
-		driveTrain.arcadeDrive( speed, heading);
+	
 
 	}
 	private void configureTalon(TalonSRX _talon) {
