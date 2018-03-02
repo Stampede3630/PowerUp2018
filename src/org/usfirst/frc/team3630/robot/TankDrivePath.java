@@ -110,9 +110,10 @@ public class TankDrivePath  {
 		// motors can read)
 		// The fifth argument is your acceleration gain. Tweak this if you want to get
 		// to a higher or lower speed quicker
+		  //(1/3.3528
 
-		lEncoderFollower.configurePIDVA(Consts.pathKP, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
-		rEncoderFollower.configurePIDVA(Consts.pathKP, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
+		lEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
+		rEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
 		
 		
 	}
