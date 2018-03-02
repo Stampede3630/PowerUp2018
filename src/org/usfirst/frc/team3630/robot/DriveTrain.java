@@ -38,7 +38,7 @@ public class DriveTrain {
 	double targetAngleDegrees = 0f;
 	double kTargetDistanceInches = 1000;
 
-	private WPI_TalonSRX leftThreeEncoder, rightSixEncoder, leftTwo, rightFive, leftOne, rightFour;
+	private WPI_TalonSRX leftThreeEncoder, rightSixEncoder, leftTwo, rightFive; //leftOne, rightFour;
 
 	
 	DifferentialDrive driveTrain;
@@ -62,22 +62,22 @@ panel = new PowerDistributionPanel(0);
 		// srx definitions
 		leftThreeEncoder = new WPI_TalonSRX(Consts.leftThree);
 		leftTwo = new WPI_TalonSRX(Consts.leftTwo);
-		leftOne = new WPI_TalonSRX(Consts.leftOne);
+		//leftOne = new WPI_TalonSRX(Consts.leftOne);
 		rightSixEncoder = new WPI_TalonSRX(Consts.rightSix);
 		rightFive = new WPI_TalonSRX(Consts.rightFive);
-		rightFour = new WPI_TalonSRX(Consts.rightFour);
+		//rightFour = new WPI_TalonSRX(Consts.rightFour);
 		
 		// mabey rename to leftThreeMaster? nice more specific name 
 		configureTalon(leftThreeEncoder);
 		configureTalon(rightSixEncoder);
 		configureTalon(leftTwo);
 		configureTalon(rightFive);
-		configureTalon(leftOne);
-		configureTalon(rightFour);
+		//configureTalon(leftOne);
+		//configureTalon(rightFour);
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
-		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
-		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
+		//rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
+		//leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		// why differ sensor phase diffrent would it be cosntant for both robots?
 		leftThreeEncoder.setSensorPhase(false);
 		rightSixEncoder.setSensorPhase(true);
@@ -446,7 +446,7 @@ panel = new PowerDistributionPanel(0);
 		}
 		if (myCurrentCase == 5)
 		if (init) {
-			driveBox.kickOutInitilaise();
+			driveBox.kickOutInitialise();
 			if(driveBox.isKickoutActivated) {
 				driveBox.kickoutPeriodic();
 			}
@@ -670,7 +670,7 @@ panel = new PowerDistributionPanel(0);
 		}
 		if (myCurrentCase == 10)
 		if (init) {
-			driveBox.kickOutInitilaise();
+			driveBox.kickOutInitialise();
 			if(driveBox.isKickoutActivated) {
 				driveBox.kickoutPeriodic();
 				init = false;
