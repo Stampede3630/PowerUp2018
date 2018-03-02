@@ -13,7 +13,7 @@ public class BoxGrabber {
 	// enum difftent state= state (F, forward) (R, piston reverse)
 	// lift
 	public enum State {
-		SLIDEFORWARD, CLAMPOPEN, KICKFORWARD, LIFTUP, LIFTDOWN, CLAMPCLOSE, SLIDEBACK, KICKRETRACT, STOP, INTAKE, DROPBOX, SWITCHDOWNAUTOMATED, SWITCHUPAUTOMATED, SCALEAUTOMATED, LIFTDOWNAUTOMATED, LIFTUPAUTOMATED
+		SLIDEFORWARD, CLAMPOPEN, KICKFORWARD, LIFTUP, LIFTDOWN, CLAMPCLOSE, SLIDEBACK, KICKRETRACT, STOP, INTAKE, DROPBOX, SWITCHDOWNAUTOMATED, SWITCHUPAUTOMATED, SCALEAUTOMATED, LIFTDOWNAUTOMATED, LIFTUPAUTOMATED, LOWSCALEUPAUTOMATED
 
 	}
 
@@ -34,6 +34,8 @@ public class BoxGrabber {
 	boolean stopPneumatics;
 	boolean liftUpSwitchActivated, liftUpSwitchSensorFlag;
 	boolean liftDownSwitchActivated,liftDownSwitchSensorFlag;
+	boolean liftUpLowScaleSensorFlag, liftUpLowScaleActivated;
+
 	AnalogInput scaleUpParimitor, atDownLevel;
 
 	public BoxGrabber() {
@@ -96,10 +98,9 @@ public class BoxGrabber {
 		else if (_xBox.getBButton()== true) {
 			return State.SWITCHUPAUTOMATED;
 		}
-		
-//		else if (_xBox.getBButton()== true) {
-//			return State.SWITCHDOWNAUTOMATED;
-//		}
+	else if (_xBox.getXButton()== true) {
+			return State.LOWSCALEUPAUTOMATED;
+		}
 		else {
 			return State.STOP;
 		}
@@ -490,6 +491,35 @@ public class BoxGrabber {
 		}
 		
 	}
+	public void lowScaleAutoUpInit() {
+		liftTimer.reset();
+		liftUpLowScaleActivated = true;
+		liftTimer.start();
+		liftUpLowScaleSensorFlag = false;
+	}
+	
+	public void lowScaleAutoUpPeriodic() {
+		if (liftUpLowScaleActivated) {
+			if (liftTimer.get() > Consts.partysOver) {
+				liftUpLowScaleActivated = false;
+				liftUpLowScaleSensorFlag= false;
+			}
+			else if (liftUpLowScaleSensorFlag) {
+				stop();
+	
+			}
+			else  {
+				slideForward();
+				armsUp();
+				if (scaleUpParimitor.getVoltage()>  2 ) {
+						 liftUpLowScaleSensorFlag= true;
+
+					}
+				
+			}
+		}
+		
+	}
 	
 	
 
@@ -508,6 +538,7 @@ public class BoxGrabber {
 		SmartDashboard.putBoolean("kick On", kickForwardEngaged);
 		SmartDashboard.putBoolean("kick reversw", kickReverseEngaged);
 		SmartDashboard.putBoolean("slideForwardEngaged", slideUpEngaged);
+
 		SmartDashboard.putBoolean("slide reverse Engaged", slideOutEngaged);
 		SmartDashboard.putBoolean("clamp forward Engaged", clampEnaged);
 		SmartDashboard.putBoolean("clamp reverse Engaged", clampReverse);
@@ -519,7 +550,7 @@ public class BoxGrabber {
 	}
 
 	public void boxGrabberPeriodic () {
-		stopPneumatics = !liftUpActivated && !liftDownActivated && !isKickoutActivated && !liftUpSwitchActivated && !liftDownSwitchActivated;
+		stopPneumatics = !liftUpActivated && !liftDownActivated && !isKickoutActivated && !liftUpSwitchActivated && !liftDownSwitchActivated && !liftUpLowScaleActivated;
 		// for testing
 		// mainC.stop();
 		liftUpEngaged = false;
@@ -537,51 +568,56 @@ public class BoxGrabber {
 		liftController();
 		switchAutoDownPeriodic();
 		switchAutoUpPeriodic();
+		lowScaleAutoUpPeriodic();
+		
 		
 		switch (xBox()) {
-		case SCALEAUTOMATED:
-			liftUpInit();
-
-			break;
-
-		case DROPBOX:
-			if(!isKickoutActivated) {
-				kickOutInitilaise();
-				kickoutPeriodic();
-			}
-			break;
-
-		case LIFTDOWNAUTOMATED:
-			liftDownInit ();
-			break;
-
-		case LIFTUPAUTOMATED:
-			liftUpInit();
-			break;
-
-		case CLAMPCLOSE:
-			clampClose();
-			break;
-
-		case CLAMPOPEN:
-			clampOpen();
-			break;
-		case SLIDEFORWARD:
-			slideForward();
-			break;
-		case SLIDEBACK:
-			slideReverse();
-			break;
-		case SWITCHDOWNAUTOMATED:
-			switchAutoDownInit();
-			break;
-		case SWITCHUPAUTOMATED:
-			switchAutoUpInit();
-			break;
-		default:
-			// default to stop for saftey reasons
-			if(stopPneumatics) {
-				stop();	
+			case SCALEAUTOMATED:
+				liftUpInit();
+	
+				break;
+	
+			case DROPBOX:
+				if(!isKickoutActivated) {
+					kickOutInitilaise();
+					kickoutPeriodic();
+				}
+				break;
+	
+			case LIFTDOWNAUTOMATED:
+				liftDownInit ();
+				break;
+	
+			case LIFTUPAUTOMATED:
+				liftUpInit();
+				break;
+	
+			case CLAMPCLOSE:
+				clampClose();
+				break;
+	
+			case CLAMPOPEN:
+				clampOpen();
+				break;
+			case SLIDEFORWARD:
+				slideForward();
+				break;
+			case SLIDEBACK:
+				slideReverse();
+				break;
+			case SWITCHDOWNAUTOMATED:
+				switchAutoDownInit();
+				break;
+			case SWITCHUPAUTOMATED:
+				switchAutoUpInit();
+				break;
+			case LOWSCALEUPAUTOMATED:
+				lowScaleAutoUpInit();
+				break;
+			default:
+				// default to stop for saftey reasons
+				if(stopPneumatics) {
+					stop();	
 			}
 			
 
