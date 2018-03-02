@@ -34,14 +34,17 @@ public class DriveTrain  {
 
 	    	configureTalon(leftEncoderThree);
 			configureTalon(rightEncoderSix);
-			
+			SlaveTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoderThree.getDeviceID());
+			 rightSlaveFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoderSix.getDeviceID());
 			path = new TankDrivePath(leftEncoderThree,rightEncoderSix);
 			
 }
 	
 	public void driveTrainPeriodic() {
-		double x = _xBox.getY(GenericHID.Hand.kLeft);
+		double x = _xBox.getY(GenericHID.Hand.kLeft) *-1;
 		double angle =  _xBox.getX(GenericHID.Hand.kRight);
+		
+		
 		driveTrain.arcadeDrive(x, angle);
 		
 
@@ -55,10 +58,7 @@ public class DriveTrain  {
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
 		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
 		
-		//_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
-		//_talon.config_kP(0, 0, Consts.timeOutMs);
-		//_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
-		//_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
+	
 	}
 
 
@@ -81,10 +81,9 @@ public class DriveTrain  {
 	
 		public void autoPeriodic() {
 			
-			 SlaveTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoderThree.getDeviceID());
-			 
-			 rightSlaveFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoderSix.getDeviceID());
-			
+		
+			//SlaveTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoderThree.getDeviceID()); 
+			//rightSlaveFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoderSix.getDeviceID());
 			
 			path.autoPeriodic();
 		}

@@ -46,8 +46,7 @@ public class TankDrivePath  {
 		// Max Jerk: 100 m/s/s
 
 		
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 3.3528, 100 , 50);
-
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 2.5, 75 , 25);
 		//Generates points for the path.
 		Waypoint[] points = new Waypoint[] {
 				
@@ -79,7 +78,7 @@ public class TankDrivePath  {
 		lEncoderFollower = new EncoderFollower(leftTrajectory);
 		rEncoderFollower = new EncoderFollower(rightTrajectory);
 		// peramiters enc starting point, total amount ticks, wheel diamitor
-
+		// check with sam d and sophie 238 rotation is new rot rate 
 		lEncoderFollower.configureEncoder(0, 238, Consts.Weeld );
 		rEncoderFollower .configureEncoder(0, 238, Consts.Weeld);
 		
@@ -112,8 +111,8 @@ public class TankDrivePath  {
 		// to a higher or lower speed quicker
 		  //(1/3.3528
 
-		lEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
-		rEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
+		lEncoderFollower.configurePIDVA(.8, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
+		rEncoderFollower.configurePIDVA(.8, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
 		
 		
 	}
