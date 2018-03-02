@@ -32,6 +32,8 @@ public class Consts {
 	public static final double rotConversion = 6* Math.PI;
 	public static final double pathConversion  = .1;
 	public static final double intoMeters =  0.0254;
+	
+	// change for other acutal robot 
 	public static final double Weeld  = 6 *  intoMeters;
 	  public static final double robotWidthMeters = 29.5 *intoMeters;
 
