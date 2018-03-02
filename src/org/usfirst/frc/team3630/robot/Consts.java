@@ -43,7 +43,7 @@ public class Consts {
 	public static final double pathKF  = (1/ (132*intoMeters ));
 	
 	//PID encoders drive number of rotations
-	public static final double kPencoder = 1.7;
+	public static final double kPencoder = 1;
 	public static final double kIencoder = 0.0;
 	public static final double kDencoder = 0.0;
 	

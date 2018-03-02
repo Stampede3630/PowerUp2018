@@ -46,7 +46,7 @@ public class TankDrivePath  {
 		// Max Jerk: 100 m/s/s
 
 		
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 2.5, 50 , 50);
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 3.3528, 100 , 50);
 
 		//Generates points for the path.
 		Waypoint[] points = new Waypoint[] {
@@ -55,7 +55,9 @@ public class TankDrivePath  {
 				
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
-				new Waypoint(2, 0, 0),
+				new Waypoint(4, 0, 0),
+				
+			
 				//new Waypoint(2, 4.5 , Pathfinder.d2r(60)) // getts us close to 60 
 				//new Waypoint(4, -1.524, Pathfinder.d2r(-90))  // got close to 9o robot at -73.4 yow  Waypoint(1, 4, Pathfinder.d2r(90))
 
@@ -63,10 +65,7 @@ public class TankDrivePath  {
 
 		Trajectory trajectory = Pathfinder.generate(points, config);
 		
-	//	File myRead = new File("/home/lvuser/Pathfinder/test.csv");
-	//	Pathfinder.writeToCSV(myRead, trajectory);
-	//	Trajectory readTrajectory = Pathfinder.readFromCSV(myRead) ;
-		
+	
 		_modifier = new TankModifier(trajectory).modify(Consts.robotWidthMeters);
 
 
@@ -81,9 +80,9 @@ public class TankDrivePath  {
 		rEncoderFollower = new EncoderFollower(rightTrajectory);
 		// peramiters enc starting point, total amount ticks, wheel diamitor
 
-		lEncoderFollower.configureEncoder(0, Consts.ticksPerRotation, Consts.Weeld );
-		rEncoderFollower .configureEncoder(0, Consts.ticksPerRotation, Consts.Weeld);
-		/*
+		lEncoderFollower.configureEncoder(0, 238, Consts.Weeld );
+		rEncoderFollower .configureEncoder(0, 238, Consts.Weeld);
+		
 		  for (int i = 0; i<leftTrajectory.length(); i++){
 		 
 			  System.out.print(leftTrajectory.get(i).acceleration); System.out.print(",");
@@ -97,7 +96,7 @@ public class TankDrivePath  {
 			  System.out.print("\n");
 		  
 		  }
-		*/
+		
 	
 
 		// configure pidva
@@ -113,7 +112,7 @@ public class TankDrivePath  {
 		// to a higher or lower speed quicker
 
 		lEncoderFollower.configurePIDVA(Consts.pathKP, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
-		  rEncoderFollower.configurePIDVA(Consts.pathKP, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
+		rEncoderFollower.configurePIDVA(Consts.pathKP, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
 		
 		
 	}
@@ -233,6 +232,8 @@ public class TankDrivePath  {
 		
 		SmartDashboard.putNumber(" vLeft",   setLeftMotors);
 		SmartDashboard.putNumber(" vRight", setRightMotors);
+		
+		System.out.println(outputLeft);
 		//Take calculated output and set talons
 		//This output should be between -1 and 1... 
 		//but we think Phoenix does some magic
