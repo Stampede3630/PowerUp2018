@@ -114,7 +114,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		autoLogic();
+		caseAutoLogic();
 		_driveTrain.autoPeriodic();
 		_driveTrain.getDiagnostics();
 		box.switchAutoUpPeriodic();
