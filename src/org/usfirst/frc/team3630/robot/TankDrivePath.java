@@ -55,7 +55,7 @@ public class TankDrivePath  {
 
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
-				new Waypoint(4, 0, 0),
+				new Waypoint(4, 1.0, 0),
 
 
 				//new Waypoint(2, 4.5 , Pathfinder.d2r(60)) // getts us close to 60 
@@ -204,35 +204,40 @@ public class TankDrivePath  {
 	 * Iterative method that runs through path. Expected that this is called each 50ms (as expected through TimedRobot) 
 	 */
 	public void autoPeriodic() {
+//
+//		SmartDashboard.putNumber("left encoder distance", getDistance_ticks(lTalon));
+//		SmartDashboard.putNumber("Right encoder distance", getDistance_ticks(rTalon));
+//
+//		//NAVX heading
+//		//Since Jaci is from Australia, her compas is literally upsidedown 90 really = -90
+//		//Path_heading is therefore the Pathfinder turn feedback loop
+//
+//		double gyroheading =  ahrs.getYaw();  // Assuming the gyro is giving a value in degrees
+//
+//		double pathHeading = -1*  ahrs.getYaw(); 
+//		SmartDashboard.putNumber("robot yaw", gyroheading);
+//		double desired_heading = (180/Math.PI)*(lEncoderFollower.getHeading());  // Should also be in degrees
+//		//boundHalf method makes sure we are in -180 to 180
+//		double angleDifference =  Pathfinder.boundHalfDegrees(desired_heading -  pathHeading);
+//		double turn = .6* (-1.0/  80) * angleDifference;  
+//
+//		//calculates revised left and right output based on current ticks
+//		//compares it to current trajectory (EncoderFollowers)
+double outputLeft = lEncoderFollower .calculate(getDistance_ticks(lTalon));
 
-		SmartDashboard.putNumber("left encoder distance", getDistance_ticks(lTalon));
-		SmartDashboard.putNumber("Right encoder distance", getDistance_ticks(rTalon));
-
-		//NAVX heading
-		//Since Jaci is from Australia, her compas is literally upsidedown 90 really = -90
-		//Path_heading is therefore the Pathfinder turn feedback loop
-
-		double gyroheading =  ahrs.getYaw();  // Assuming the gyro is giving a value in degrees
-
-		double pathHeading = -1*  ahrs.getYaw(); 
-		SmartDashboard.putNumber("robot yaw", gyroheading);
-		double desired_heading = (180/Math.PI)*(lEncoderFollower.getHeading());  // Should also be in degrees
-		//boundHalf method makes sure we are in -180 to 180
-		double angleDifference =  Pathfinder.boundHalfDegrees(desired_heading -  pathHeading);
-		double turn = .6* (-1.0/  80) * angleDifference;  
-
-		//calculates revised left and right output based on current ticks
-		//compares it to current trajectory (EncoderFollowers)
-		double outputLeft = lEncoderFollower .calculate(getDistance_ticks(lTalon));
-		double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
-		//+turn
-		double setLeftMotors= outputLeft  ;
-		//-turn
-		double setRightMotors = outputRight ;
+double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
+//		//+turn
+double setLeftMotors= outputLeft  ;
+//		//-turn
+	double setRightMotors = outputRight ;
 
 
 		SmartDashboard.putNumber(" vLeft",   setLeftMotors);
 		SmartDashboard.putNumber(" vRight", setRightMotors);
+
+
+		SmartDashboard.putNumber(" encoderRight",   getDistance_ticks(lTalon));
+		SmartDashboard.putNumber(" EncoderLeft", getDistance_ticks(rTalon));
 
 		System.out.println(outputLeft);
 		//Take calculated output and set talons
@@ -242,7 +247,10 @@ public class TankDrivePath  {
 			System.out.println("Unsanitary talon output");
 			System.out.println(outputLeft);
 		}	
-
+		else if (outputLeft<=1 || outputLeft>=-1 ){
+			System.out.println("sanitary talon output");
+			System.out.println(outputLeft);
+		}
 		lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, setLeftMotors);
 		rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, setRightMotors);
 	}

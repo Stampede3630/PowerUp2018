@@ -24,6 +24,7 @@ public class Robot extends TimedRobot {
 	}
 	public void teleopPeriodic() {
 		_driveTrain.driveTrainPeriodic();
+		_driveTrain.getDiagnostics();
 		
 	}
 
@@ -39,6 +40,7 @@ public class Robot extends TimedRobot {
 
 	public void autonomousPeriodic() {
 		_driveTrain.testPeriodic();
+		_driveTrain.getDiagnostics();
 		LiveWindow.disableAllTelemetry();
 
 	}

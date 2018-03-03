@@ -19,19 +19,8 @@ public class DriveTrain {
 
 	private XboxController _xBox;
 	
-	PowerDistributionPanel panel;
-	private AHRS ahrs;
-	ErrorCode sticky;
-	ErrorCode fault;
-	
-	double turnOutput;
-	double posOutput;
-	boolean errorGreatorThanFive = false;
-	boolean init = true;
-	boolean right = true;
-	int myCurrentCase;		
-	PIDController turnController;
-	PIDController posController;
+	boolean pathFinderPeriodicCalled;
+
 	double rotateToAngleRate;
 	
 	TankDrivePath path;
@@ -52,20 +41,20 @@ public class DriveTrain {
 	 */
 
 	public DriveTrain() {
+		pathFinderPeriodicCalled= false;
 			
 		// why doing ahrs byte thing? // do we use update rate elswhere 
 		ahrs = new AHRS(SPI.Port.kMXP);
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 panel = new PowerDistributionPanel(0);
 		_xBox = new XboxController(Consts.xBoxComPort);
-		//_boxGrabber = new BoxGrabber();
-		// srx definitions
 		
-		leftThreeEncoder = new WPI_TalonSRX(Consts.leftThree);
-		leftTwo = new WPI_TalonSRX(Consts.leftTwo);
+		
+		leftThreeEncoder = new WPI_TalonSRX(3);
+		leftTwo = new WPI_TalonSRX(2);
 		//leftOne = new WPI_TalonSRX(Consts.leftOne);
-		rightSixEncoder = new WPI_TalonSRX(Consts.rightSix);
-		rightFive = new WPI_TalonSRX(Consts.rightFive);
+		rightSixEncoder = new WPI_TalonSRX(6);
+		rightFive = new WPI_TalonSRX(5);
 		//rightFour = new WPI_TalonSRX(Consts.rightFour);
 		
 		// mabey rename to leftThreeMaster? nice more specific name 
@@ -106,7 +95,8 @@ panel = new PowerDistributionPanel(0);
 	
 	public void testPeriodic() {
 		path.autoPeriodic();
-
+		pathFinderPeriodicCalled= true; 
+		
 	}
 
 	/**
@@ -180,29 +170,16 @@ panel = new PowerDistributionPanel(0);
 	 *  diganoaric method for taon srx debuging 
 	 */
 	public void getDiagnostics() {		
-		SmartDashboard.putNumber("Left Current", leftThreeEncoder.getOutputCurrent());
-		SmartDashboard.putNumber("Right Current", rightSixEncoder.getOutputCurrent());
-		SmartDashboard.putNumber("total Current", panel.getTotalCurrent());
+	
 		SmartDashboard.putNumber("Front Right Position", getRotations(rightSixEncoder));
 		SmartDashboard.putNumber("Front Right Velocity", getVelocity(rightSixEncoder));
 		SmartDashboard.putNumber("Front Left Position", getRotations(leftThreeEncoder));
 		SmartDashboard.putNumber("Front Left Velocity", getVelocity(leftThreeEncoder));
 		SmartDashboard.putNumber("Left position in ticks", getTicks(leftThreeEncoder));
 		SmartDashboard.putNumber("Right position in ticks", getTicks(rightSixEncoder));
-		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());
-		SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
-		SmartDashboard.putNumber("Position Setpoint", posController.getSetpoint());
-		SmartDashboard.putNumber("Position Error", posController.getError());
-		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
-		SmartDashboard.putNumber("Stage", myCurrentCase);
-		SmartDashboard.putNumber("turn controller error", turnController.getError());
-		//posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
-		SmartDashboard.putBoolean("Is right true?", right);
-		SmartDashboard.putBoolean("PosControl ON", 	posController.isEnabled());
-		SmartDashboard.putBoolean("TurnControl On", turnController.isEnabled());
-		SmartDashboard.putBoolean("Is init true?", init);
-		SmartDashboard.putNumber("posController input", posOutput);
 		
+		SmartDashboard.putBoolean("pathFinderPeriodicCalled", pathFinderPeriodicCalled);
+
 		SmartDashboard.putNumber("turnController kP", turnController.getP());
 		
 		if(panel.getTotalCurrent()>300) {
@@ -249,56 +226,5 @@ panel = new PowerDistributionPanel(0);
 
 	
 
-	/**
-	 * method for gtting pos output for pid controllor 
-	 *
-	 */
-	public  class MyPosPidOutput implements PIDOutput {
-		// implements pid output
-				public void pidWrite(double output) {
-					posOutput=output;
-				}
-		}
-	public  class MyRotationPidOutput implements PIDOutput {
-		// implements pid output
-				public void pidWrite(double output) {
-					turnOutput=output;
-				}
-		}
-
-	private class EncoderPIDSource implements PIDSource {
-		private TalonSRX _frontLeft, _frontRight;
 	
-		public EncoderPIDSource(TalonSRX talon1,TalonSRX talon2) {
-			_frontLeft = talon1;
-			_frontRight = talon2;
-		}
-
-		public double pidGet() {
-			double fLGetSelected = _frontLeft.getSelectedSensorPosition(0);
-			double fRGetSelected = _frontRight.getSelectedSensorPosition(0);
-			double positionInches;
-
-			if(right) {
-				//(2 * Math.PI * Consts.wheelRadiusInch) make this a contant !!
-				positionInches = fRGetSelected * (double) (2 * Math.PI * Consts.wheelRadiusInch) / (double) Consts.ticksPerRotation ;
-				SmartDashboard.putString("Right", "Right calling");
-			}
-			else {
-				positionInches = fLGetSelected * (double) (2 * Math.PI * Consts.wheelRadiusInch) / (double) Consts.ticksPerRotation ;
-				SmartDashboard.putString("Left", "Left calling");
-			}
-
-	
-			return positionInches;
-		}
-
-		public PIDSourceType getPIDSourceType() {
-			return PIDSourceType.kDisplacement;
-		}
-
-		public void setPIDSourceType(PIDSourceType pidSource) {
-			
-		}
-	}
 }
