@@ -42,10 +42,13 @@ public class Robot extends TimedRobot {
 	}
 
 	public void autonomousPeriodic() {
-		_driveTrain.testPeriodic();
+		_driveTrain.pathDiog();
 		_driveTrain.getDiagnostics();
 		LiveWindow.disableAllTelemetry();
 
+	}
+	public void robotPeriodic(){
+		_driveTrain.getDiagnostics();
 	}
 	
 
