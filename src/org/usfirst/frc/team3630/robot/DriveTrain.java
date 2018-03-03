@@ -46,7 +46,7 @@ public class DriveTrain {
 		// why doing ahrs byte thing? // do we use update rate elswhere 
 		ahrs = new AHRS(SPI.Port.kMXP);
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
-panel = new PowerDistributionPanel(0);
+		panel = new PowerDistributionPanel(0);
 		_xBox = new XboxController(Consts.xBoxComPort);
 		
 		
@@ -121,9 +121,8 @@ panel = new PowerDistributionPanel(0);
 		getDiagnostics();
 		// three are two missing bad? delted folowers set in constructor
 		
-	SmartDashboard.putNumber("Left three curent", leftThreeEncoder.getOutputCurrent());
-	SmartDashboard.putNumber("total voltage ", panel.getVoltage());
-	SmartDashboard.putNumber("total current", panel.getTotalCurrent());
+		SmartDashboard.putNumber("Left three curent", leftThreeEncoder.getOutputCurrent());
+	
 		SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
 		// moved over to driverStaton warnings 
 		// are we still getting curent issues 
@@ -145,23 +144,16 @@ panel = new PowerDistributionPanel(0);
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
 		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
 		_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
-//		_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
-//		_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
-//		_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
+
 		_talon.configNeutralDeadband(0, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband. might be worth looking at 
 		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
 		_talon.setInverted(false);
-//		_talon.configOpenloopRamp(.1, Consts.timeOutMs);  figure out wheere to sert 
-		// where should we set ramp rate???
-		///////////////////
-	
-		
 	// Peak current and duration must be exceeded before corrent limit is activated.
 	// When activated, current will be limited to continuous current.
     // Set peak current params to 0 if desired behavior is to immediately current-limit.
-	_talon.enableCurrentLimit(true);
-	_talon.configContinuousCurrentLimit(30,0); // Must be 5 amps or more
-	_talon.configPeakCurrentLimit(30, 0); // 100 A
+		_talon.enableCurrentLimit(true);
+		_talon.configContinuousCurrentLimit(30,0); // Must be 5 amps or more
+		_talon.configPeakCurrentLimit(30, 0); // 100 A
 		_talon.configPeakCurrentDuration(200,0); // 200 ms
 		
 	}

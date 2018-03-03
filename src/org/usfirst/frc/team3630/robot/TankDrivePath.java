@@ -223,23 +223,24 @@ public class TankDrivePath  {
 //
 //		//calculates revised left and right output based on current ticks
 //		//compares it to current trajectory (EncoderFollowers)
-double outputLeft = lEncoderFollower .calculate(getDistance_ticks(lTalon));
-
-double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
-//		//+turn
-double setLeftMotors= outputLeft  ;
-//		//-turn
-	double setRightMotors = outputRight ;
+		double outputLeft = lEncoderFollower.calculate(getDistance_ticks(lTalon));
+		
+		double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
+		//		//+turn
+		double setLeftMotors= outputLeft  ;
+		//		//-turn
+		double setRightMotors = outputRight ;
 
 
 		SmartDashboard.putNumber(" vLeft",   setLeftMotors);
 		SmartDashboard.putNumber(" vRight", setRightMotors);
 
-
+		
 		SmartDashboard.putNumber(" encoderRight",   getDistance_ticks(lTalon));
 		SmartDashboard.putNumber(" EncoderLeft", getDistance_ticks(rTalon));
+		SmartDashboard.putBoolean("PathfinderComplete?", leftTrajectory.isFinished());
 
-		System.out.println(outputLeft);
+		
 		//Take calculated output and set talons
 		//This output should be between -1 and 1... 
 		//but we think Phoenix does some magic
@@ -251,6 +252,7 @@ double setLeftMotors= outputLeft  ;
 			System.out.println("sanitary talon output");
 			System.out.println(outputLeft);
 		}
+		
 		lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, setLeftMotors);
 		rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, setRightMotors);
 	}
