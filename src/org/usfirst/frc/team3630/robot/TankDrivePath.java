@@ -112,8 +112,8 @@ public class TankDrivePath  {
 		// to a higher or lower speed quicker
 		//(1/3.3528
 
-		lEncoderFollower.configurePIDVA(.08, Consts.pathKI,Consts.pathKD , (1/4) , Consts.pathKA);
-		rEncoderFollower.configurePIDVA(.08, Consts.pathKI,Consts.pathKD , (1/4) , Consts.pathKA);
+		lEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , (1/4) , Consts.pathKA);
+		rEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , (1/4) , Consts.pathKA);
 
 
 	}
@@ -238,7 +238,7 @@ public class TankDrivePath  {
 		//Take calculated output and set talons
 		//This output should be between -1 and 1... 
 		//but we think Phoenix does some magic
-		if (outputLeft<=1 || outputLeft>=- 1 ) {
+		if (outputLeft>=1 || outputLeft<=-1 ) {
 			System.out.println("Unsanitary talon output");
 			System.out.println(outputLeft);
 		}	
