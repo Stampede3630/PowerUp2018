@@ -45,11 +45,9 @@ public class Consts {
 	public static final double kIencoder = 0.000000000;
 	public static final double kDencoder = 0.0;
 
-<<<<<<< HEAD
-	public static final double kPPos = 0.01;
-=======
+
+	
 	public static final double kPPos = 0.03;
->>>>>>> 956ae94e926456639655fa4bca2ab15c9794b994
 	public static final double kIPos = 0;
 	public static final double kDPos = 0;
 	// Auto Distances

@@ -1156,6 +1156,7 @@ panel = new PowerDistributionPanel(0);
 	 */
 	public double getVelocity(TalonSRX _talon) {
 		double velocity_milliseconds = (double) _talon.getSelectedSensorVelocity(0) / Consts.ticksPerRotation;
+		double velocity_seconds = velocity_milliseconds *10* 6*Math.PI*.0254; 
 		return velocity_seconds;
 	}
 
