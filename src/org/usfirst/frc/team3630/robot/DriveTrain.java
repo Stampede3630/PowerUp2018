@@ -19,8 +19,8 @@ public class DriveTrain {
 
 	private XboxController _xBox;
 	
-	int myCurrentCase;		
-	PIDController posController;
+	boolean pathFinderPeriodicCalled;
+
 	double rotateToAngleRate;
 	
 	TankDrivePath path;
