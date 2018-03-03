@@ -533,7 +533,7 @@ public class BoxGrabber {
 		manipulatorDianostics();
 		liftDownPeriodic();
 		liftUpPeriodic();
-		liftController();
+		
 		//switchAutoDownPeriodic();
 		switchAutoUpPeriodic();
 		lowScaleAutoUpPeriodic();
