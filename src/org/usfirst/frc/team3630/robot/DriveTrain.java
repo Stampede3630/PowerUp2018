@@ -19,26 +19,26 @@ public class DriveTrain  {
 	  WPI_TalonSRX SlaveTwo, leftEncoderThree, rightSlaveFive, rightEncoderSix;
 	 DifferentialDrive driveTrain ;
 	 TankDrivePath path;
-	public DriveTrain()  {
-			_xBox = new XboxController(Consts.xBoxComPort);
-	
-		
-			 SlaveTwo = new   WPI_TalonSRX(2); 
-			 leftEncoderThree = new  WPI_TalonSRX(Consts.leftEncoderThree); 
-			 rightSlaveFive = new  WPI_TalonSRX(Consts.rightSlaveFive);
-			 rightEncoderSix = new WPI_TalonSRX(Consts.rightEncoderSix);
-			 driveTrain= new DifferentialDrive(leftEncoderThree,rightEncoderSix);
-	
-			 leftEncoderThree.setSensorPhase(false);
-			 rightEncoderSix.setSensorPhase(true);
+	 public DriveTrain()  {
+		 _xBox = new XboxController(Consts.xBoxComPort);
 
-	    	configureTalon(leftEncoderThree);
-			configureTalon(rightEncoderSix);
-			SlaveTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoderThree.getDeviceID());
-			 rightSlaveFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoderSix.getDeviceID());
-			path = new TankDrivePath(leftEncoderThree,rightEncoderSix);
-			
-}
+
+		 SlaveTwo = new   WPI_TalonSRX(2); 
+		 leftEncoderThree = new  WPI_TalonSRX(Consts.leftEncoderThree); 
+		 rightSlaveFive = new  WPI_TalonSRX(Consts.rightSlaveFive);
+		 rightEncoderSix = new WPI_TalonSRX(Consts.rightEncoderSix);
+		 driveTrain= new DifferentialDrive(leftEncoderThree,rightEncoderSix);
+
+		 leftEncoderThree.setSensorPhase(false);
+		 rightEncoderSix.setSensorPhase(true);
+
+		 configureTalon(leftEncoderThree);
+		 configureTalon(rightEncoderSix);
+		 SlaveTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftEncoderThree.getDeviceID());
+		 rightSlaveFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightEncoderSix.getDeviceID());
+		 path = new TankDrivePath(leftEncoderThree,rightEncoderSix);
+
+	 }
 	
 	public void driveTrainPeriodic() {
 		double x = _xBox.getY(GenericHID.Hand.kLeft) *-1;
@@ -73,12 +73,12 @@ public class DriveTrain  {
 		rightEncoderSix.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		leftEncoderThree.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		
-		// need to put in robot init for speed 
+		// need to put in robot init for speed purposes 
 		path.rEncoderFollower.reset();
 		path.lEncoderFollower.reset();
 		path.pathInit();
 	}
-	
+	// configure slave talons for testing puropses in constuctor 
 		public void autoPeriodic() {
 			
 		

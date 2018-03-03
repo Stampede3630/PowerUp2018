@@ -113,8 +113,8 @@ public class TankDrivePath  {
 		// to a higher or lower speed quicker
 		//(1/3.3528
 
-		lEncoderFollower.configurePIDVA(.25, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
-		rEncoderFollower.configurePIDVA(., Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
+		lEncoderFollower.configurePIDVA(.08, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
+		rEncoderFollower.configurePIDVA(.08, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
 
 
 	}
