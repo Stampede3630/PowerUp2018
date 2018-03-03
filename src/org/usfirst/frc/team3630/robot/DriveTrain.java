@@ -45,7 +45,7 @@ public class DriveTrain {
 	DifferentialDrive driveTrain;
 
 	// defining PIDSource
-	EncoderPIDSource positionEncoderSource;
+	
 
 	/**
 	 * leftThree , right six master motors and drive train constru
@@ -61,11 +61,11 @@ panel = new PowerDistributionPanel(0);
 		//_boxGrabber = new BoxGrabber();
 		// srx definitions
 		
-		leftThreeEncoder = new WPI_TalonSRX(Consts.leftThree);
-		leftTwo = new WPI_TalonSRX(Consts.leftTwo);
+		leftThreeEncoder = new WPI_TalonSRX(3);
+		leftTwo = new WPI_TalonSRX(2);
 		//leftOne = new WPI_TalonSRX(Consts.leftOne);
-		rightSixEncoder = new WPI_TalonSRX(Consts.rightSix);
-		rightFive = new WPI_TalonSRX(Consts.rightFive);
+		rightSixEncoder = new WPI_TalonSRX(6);
+		rightFive = new WPI_TalonSRX(5);
 		//rightFour = new WPI_TalonSRX(Consts.rightFour);
 		
 		// mabey rename to leftThreeMaster? nice more specific name 
@@ -253,52 +253,5 @@ panel = new PowerDistributionPanel(0);
 	 * method for gtting pos output for pid controllor 
 	 *
 	 */
-	public  class MyPosPidOutput implements PIDOutput {
-		// implements pid output
-				public void pidWrite(double output) {
-					posOutput=output;
-				}
-		}
-	public  class MyRotationPidOutput implements PIDOutput {
-		// implements pid output
-				public void pidWrite(double output) {
-					turnOutput=output;
-				}
-		}
 
-	private class EncoderPIDSource implements PIDSource {
-		private TalonSRX _frontLeft, _frontRight;
-	
-		public EncoderPIDSource(TalonSRX talon1,TalonSRX talon2) {
-			_frontLeft = talon1;
-			_frontRight = talon2;
-		}
-
-		public double pidGet() {
-			double fLGetSelected = _frontLeft.getSelectedSensorPosition(0);
-			double fRGetSelected = _frontRight.getSelectedSensorPosition(0);
-			double positionInches;
-
-			if(right) {
-				//(2 * Math.PI * Consts.wheelRadiusInch) make this a contant !!
-				positionInches = fRGetSelected * (double) (2 * Math.PI * Consts.wheelRadiusInch) / (double) Consts.ticksPerRotation ;
-				SmartDashboard.putString("Right", "Right calling");
-			}
-			else {
-				positionInches = fLGetSelected * (double) (2 * Math.PI * Consts.wheelRadiusInch) / (double) Consts.ticksPerRotation ;
-				SmartDashboard.putString("Left", "Left calling");
-			}
-
-	
-			return positionInches;
-		}
-
-		public PIDSourceType getPIDSourceType() {
-			return PIDSourceType.kDisplacement;
-		}
-
-		public void setPIDSourceType(PIDSourceType pidSource) {
-			
-		}
-	}
 }
