@@ -238,7 +238,7 @@ public class TankDrivePath  {
 		
 		SmartDashboard.putNumber(" encoderRight",   getDistance_ticks(lTalon));
 		SmartDashboard.putNumber(" EncoderLeft", getDistance_ticks(rTalon));
-		SmartDashboard.putBoolean("PathfinderComplete?", leftTrajectory.isFinished());
+	//	SmartDashboard.putBoolean("PathfinderComplete?", leftTrajectory.isFinished());
 
 		
 		//Take calculated output and set talons

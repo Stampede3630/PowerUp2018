@@ -92,14 +92,7 @@ public class DriveTrain {
 		
 	}
 
-	/**
-	 * @return ahrs yaw value from -180 to 180 degrees 
-	 */
-	public double ahrsYaw() {
-		double yaw = ahrs.getYaw();
-		return yaw;
-	}
-	
+
 	// add ahrs  congif method to see if calibating. It could be a good saftey checlk 
 	public void teleopInit() {
 		leftThreeEncoder.configOpenloopRamp(.2, Consts.timeOutMs);
@@ -116,7 +109,7 @@ public class DriveTrain {
 		
 		SmartDashboard.putNumber("Left three curent", leftThreeEncoder.getOutputCurrent());
 	
-		SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
+
 		// moved over to driverStaton warnings 
 		// are we still getting curent issues 
 //		if(panel.getTotalCurrent()>300) {
@@ -165,17 +158,7 @@ public class DriveTrain {
 		
 		SmartDashboard.putBoolean("pathFinderPeriodicCalled", pathFinderPeriodicCalled);
 
-		SmartDashboard.putNumber("turnController kP", turnController.getP());
-		
-		if(panel.getTotalCurrent()>300) {
-			System.out.print("[WARNING] CURRENT DRAW IS AT ");
-			System.out.print(panel.getTotalCurrent());
-			System.out.print('\n');
-		}
-		
-		fault=leftThreeEncoder.getLastError();
-		if(fault != ErrorCode.OK) System.out.println(fault);
-//		if (leftEncoder.getOutputCurrent()>35) { 
+
 //			System.out.print("[WARNING] Talon Current is at ");
 //			System.out.print(leftEncoder.getOutputCurrent());
 //			System.out.print('\n');
