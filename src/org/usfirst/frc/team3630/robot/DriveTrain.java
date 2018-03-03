@@ -325,22 +325,21 @@ panel = new PowerDistributionPanel(0);
 			if(init) {
 				turnController.enable();
 				turnController.setSetpoint(0);
-				autoDriveFw(120);//112.4);
+				autoDriveFw(65);//112.4);
+				driveBox.switchAutoUpInit();
+				
 			}
 		    if(Math.abs(posController.getError()) < Consts.autoPosError) {
-		     	autoDriveFw(-48);
+		    	/*autoDriveFw(-48);
 		     	backwardsTimer.start();
-		     	if (backwardsTimer.get() > .3) {
-		     		myCurrentCase = 2;
-			     	init = true;
-		     	}
-		     		
-
+		     	if (backwardsTimer.get() > .3) {*/
+		      	myCurrentCase = 2;
+			     init = true;
 		    } 			
-		/*}
+		}
 		if (myCurrentCase == 2) {
 			if(init) {
-				autoTurnDegree(-45);
+				autoTurnDegree(-40);
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
 				myCurrentCase = 3;
@@ -350,23 +349,28 @@ panel = new PowerDistributionPanel(0);
 		}
 		if (myCurrentCase == 3) {
 			if(init) {
-				autoDriveFw(78.5);
+				autoDriveFw(30);//78.5);
+						
 			}
 			if(Math.abs(posController.getError()) < Consts.autoTurnError) {
 				myCurrentCase = 4;
 	     		init = true;
 			}
-		}*/
-			if(myCurrentCase == 2) {
+		}
+			if(myCurrentCase == 4) {
 				if(init) {
 					turnController.disable();
 					posController.disable();
 					//driveBox.switchAuto();
-					init = false;
+					if(!driveBox.liftUpSwitchActivated) {
+						driveBox.kickOutInitialise();
+						init = false;
+					}
+					
 				}
 			}
 		}
-	}
+	
 	
 	public void rightScaleRight() {
 		if (myCurrentCase  == 1) {
