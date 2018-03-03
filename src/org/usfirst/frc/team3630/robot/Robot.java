@@ -29,7 +29,8 @@ public class Robot extends TimedRobot {
 
 
 	public void autonomousInit() {
-		_driveTrain.autoInit() ;
+		
+		_driveTrain.testInit();
 		LiveWindow.disableAllTelemetry();
 		
 	
@@ -37,7 +38,7 @@ public class Robot extends TimedRobot {
 	}
 
 	public void autonomousPeriodic() {
-		_driveTrain.autoPeriodic();
+		_driveTrain.testPeriodic();
 		LiveWindow.disableAllTelemetry();
 
 	}
