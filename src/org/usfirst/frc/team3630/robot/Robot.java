@@ -17,11 +17,14 @@ public class Robot extends IterativeRobot {
 	BoxGrabber box ;
 
 	public enum StartingPoints {
-		LEFT, RIGHT, MIDDLE
+		LEFT, RIGHT, MIDDLE, UNDEFINED
 	}
 	public enum Destinations {
 		SWL, SCL, SWR, SCR, DONO, DRFW
 	}
+
+	StartingPoints mySP;
+	Destinations myDest;
 
 	SendableChooser<StartingPoints> autoChooser;
 	SendableChooser<Destinations> autoLLL;
