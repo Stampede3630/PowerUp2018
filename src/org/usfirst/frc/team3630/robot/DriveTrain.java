@@ -57,7 +57,7 @@ public class DriveTrain {
 		// why doing ahrs byte thing? // do we use update rate elswhere 
 		ahrs = new AHRS(SPI.Port.kMXP);
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
-panel = new PowerDistributionPanel(0);
+		panel = new PowerDistributionPanel(0);
 		_xBox = new XboxController(Consts.xBoxComPort);
 		//_boxGrabber = new BoxGrabber();
 		// srx definitions
