@@ -25,6 +25,7 @@ public class TankDrivePath  {
 	private TalonSRX lTalon;
 	private TalonSRX rTalon;
 	public EncoderFollower lEncoderFollower, rEncoderFollower;
+	double setLeftMotors, setRightMotors;
 	//DistanceFollower leftDiagnostics, rightDiagnostics;
 	//File file;
 	public TankDrivePath(TalonSRX leftSRXSide, TalonSRX rightSRXSide) {
@@ -32,8 +33,6 @@ public class TankDrivePath  {
 		ahrs.reset();
 		lTalon = leftSRXSide;
 		rTalon = rightSRXSide;
-
-
 		// Create the Trajectory Configuration
 		// Arguments:
 		// Fit Method: HERMITE_CUBIC or HERMITE_QUINTIC
@@ -48,7 +47,7 @@ public class TankDrivePath  {
 
 		// TO DO CALCULATE NEW MAX VELOCITY IN ORDER TO  run pathfinder acurelty. we took to motors out of robot. I do not buy that the max velocity numbers are diffrent. 
 
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 3.5, 100 , 25);		//Generates points for the path
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 4, 100 , 100);		//Generates points for the path
 		Waypoint[] points = new Waypoint[] {
 
 				// + y leftHand , -Y rightHand, +x robot forward in respect of going down game feild, +angle goes counterclockiwise so invert navx yaw
@@ -73,8 +72,8 @@ public class TankDrivePath  {
 		rightTrajectory = _modifier.getRightTrajectory();
 
 
-		rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
-		lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
+		//rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
+	//	lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
 
 		lEncoderFollower = new EncoderFollower(leftTrajectory);
 		rEncoderFollower = new EncoderFollower(rightTrajectory);
@@ -112,8 +111,8 @@ public class TankDrivePath  {
 		// to a higher or lower speed quicker
 		//(1/3.3528
 
-		lEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , (1/4) , Consts.pathKA);
-		rEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , (1/4) , Consts.pathKA);
+		lEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , .25, Consts.pathKA);
+		rEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , .25 , Consts.pathKA);
 
 
 	}
@@ -199,6 +198,12 @@ public class TankDrivePath  {
 		return distance_ticks;
 	}
 
+	public void pathDiog(){
+		SmartDashboard.putNumber(" vLeft",   setLeftMotors);
+		SmartDashboard.putNumber(" vRight", setRightMotors);
+		SmartDashboard.putNumber(" encoderRight",   getDistance_ticks(lTalon));
+		SmartDashboard.putNumber(" EncoderLeft", getDistance_ticks(rTalon));
+	}
 
 	/**
 	 * Iterative method that runs through path. Expected that this is called each 50ms (as expected through TimedRobot) 
@@ -227,20 +232,13 @@ public class TankDrivePath  {
 		
 		double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
 		//		//+turn
-		double setLeftMotors= outputLeft  ;
+		 setLeftMotors= outputLeft  ;
 		//		//-turn
-		double setRightMotors = outputRight ;
+		 setRightMotors = outputRight ;
 
-
-		SmartDashboard.putNumber(" vLeft",   setLeftMotors);
-		SmartDashboard.putNumber(" vRight", setRightMotors);
 
 		
-		SmartDashboard.putNumber(" encoderRight",   getDistance_ticks(lTalon));
-		SmartDashboard.putNumber(" EncoderLeft", getDistance_ticks(rTalon));
-	//	SmartDashboard.putBoolean("PathfinderComplete?", leftTrajectory.isFinished());
-
-		
+		 //	SmartDashboard.putBoolean("PathfinderComplete?", leftTrajectory.isFinished());
 		//Take calculated output and set talons
 		//This output should be between -1 and 1... 
 		//but we think Phoenix does some magic

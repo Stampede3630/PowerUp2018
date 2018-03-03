@@ -16,45 +16,31 @@ import edu.wpi.first.wpilibj.*;
 import com.kauailabs.navx.frc.AHRS;
 
 public class DriveTrain {
-
 	private XboxController _xBox;
-	
-	boolean pathFinderPeriodicCalled;
-
+	boolean pathFinderPeriodicCalled, TalonResetCall, EncodersReset;
 	double rotateToAngleRate;
-	
 	TankDrivePath path;
-	// target angle degrees for straight on should not be a constant !
-	double targetAngleDegrees = 0f;
-	double kTargetDistanceInches = 1000;
-
 	private WPI_TalonSRX leftThreeEncoder, rightSixEncoder, leftTwo, rightFive; //leftOne, rightFour;
-
-	
 	DifferentialDrive driveTrain;
-
-	// defining PIDSource
-	
-
 	/**
 	 * leftThree , right six master motors and drive train constru
 	 */
 
 	public DriveTrain() {
 		pathFinderPeriodicCalled= false;
-
+		TalonResetCall= false
+		EncodersReset= false
 		leftThreeEncoder = new WPI_TalonSRX(3);
 		leftTwo = new WPI_TalonSRX(2);
-		//leftOne = new WPI_TalonSRX(Consts.leftOne);
+		
 		rightSixEncoder = new WPI_TalonSRX(6);
 		rightFive = new WPI_TalonSRX(5);
-		//rightFour = new WPI_TalonSRX(Consts.rightFour);
-		
+	
 		// mabey rename to leftThreeMaster? nice more specific name 
 		configureTalon(leftThreeEncoder);
 		configureTalon(rightSixEncoder);
-		configureTalon(leftTwo);
-		configureTalon(rightFive);
+		//configureTalon(leftTwo);
+	///	configureTalon(rightFive);
 		//configureTalon(leftOne);
 		//configureTalon(rightFour);
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
@@ -82,16 +68,24 @@ public class DriveTrain {
 	public void testInit() {
 		leftThreeEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
 		rightSixEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
-		
+			if(leftThreeEncoder.getSelectedSensorPosition(0) < 238 && rightSixEncoder.getSelectedSensorPosition(0) <238){
+				System.out.println("encoders were reset");
+				EncodersReset= true 
+			}
+			else{
+				System.out.println("your encoders wern't reset")
+				EncodersReset= false 
+			}
+			TalonResetCall= true
 
 	}
 	
-	public void testPeriodic() {
+	public void autoPeriodic() {
 		path.autoPeriodic();
 		pathFinderPeriodicCalled= true; 
+		path.pathDiog();
 		
 	}
-
 
 	// add ahrs  congif method to see if calibating. It could be a good saftey checlk 
 	public void teleopInit() {
@@ -108,18 +102,8 @@ public class DriveTrain {
 		// three are two missing bad? delted folowers set in constructor
 		
 		SmartDashboard.putNumber("Left three curent", leftThreeEncoder.getOutputCurrent());
-	
-
-		// moved over to driverStaton warnings 
-		// are we still getting curent issues 
-//		if(panel.getTotalCurrent()>300) {
-//			System.out.print("[WARNING] CURRENT DRAW IS AT ");
-//			System.out.print(panel.getTotalCurrent());
-//			System.out.print('\n');
-//		}
 
 	}
-
 	/**
 	 * @param _talon
 	 * set up  for tann initatioation
@@ -129,19 +113,11 @@ public class DriveTrain {
 		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
 		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
-		_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
-
+		
 		_talon.configNeutralDeadband(0, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband. might be worth looking at 
 		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
 		_talon.setInverted(false);
-	// Peak current and duration must be exceeded before corrent limit is activated.
-	// When activated, current will be limited to continuous current.
-    // Set peak current params to 0 if desired behavior is to immediately current-limit.
-		_talon.enableCurrentLimit(true);
-		_talon.configContinuousCurrentLimit(30,0); // Must be 5 amps or more
-		_talon.configPeakCurrentLimit(30, 0); // 100 A
-		_talon.configPeakCurrentDuration(200,0); // 200 ms
-		
+	
 	}
 
 	/**
@@ -155,17 +131,10 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Front Left Velocity", getVelocity(leftThreeEncoder));
 		SmartDashboard.putNumber("Left position in ticks", getTicks(leftThreeEncoder));
 		SmartDashboard.putNumber("Right position in ticks", getTicks(rightSixEncoder));
-		
+		SmartDashboard.putBoolean("talon encoder reset called?" ,TalonResetCall);
 		SmartDashboard.putBoolean("pathFinderPeriodicCalled", pathFinderPeriodicCalled);
-
-
-//			System.out.print("[WARNING] Talon Current is at ");
-//			System.out.print(leftEncoder.getOutputCurrent());
-//			System.out.print('\n');
-//		}
+		SmartDashboard.putBoolean("enoders Reset check ? ", EncodersReset);
 	}
-
-
 	/**
 	 * @param _talon
 	 * @return actual rrotation of talon in a rotation of the wheel 
@@ -191,8 +160,4 @@ public class DriveTrain {
 		double velocity_seconds = velocity_milliseconds *10* 6*Math.PI*.0254; 
 		return velocity_seconds;
 	}
-
-	
-
-
 }
