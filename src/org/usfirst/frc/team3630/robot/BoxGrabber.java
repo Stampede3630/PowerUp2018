@@ -33,10 +33,11 @@ public class BoxGrabber {
 	boolean liftDownSwitchActivated,liftDownSwitchSensorFlag;
 	boolean liftUpLowScaleSensorFlag, liftUpLowScaleActivated;
 	boolean stopPneumatics;
+	boolean atSwitch, atLowScale,atScale;
 	AnalogInput pressureLevel;
 	DigitalInput slideReversecheck, armsDownCheck;
 	Timer liftTimer,slideTimer, kickTime;
-	int kickOutSwitchStates;
+	int kickOutSwitchStates, partysOverDown;
 
 	AnalogInput scaleUpParimitor, atDownLevel;
 
@@ -66,7 +67,9 @@ public class BoxGrabber {
 		clampReverseEngaged = false;
 		kickForwardEngaged = false;
 		kickReverseEngaged = false;
-		
+		atSwitch = false;
+		atScale = false;
+		atLowScale = false;
 		testOn = false;
 		 // need to make theese consts 
 		slide = new DoubleSolenoid(1, 2, 3);
@@ -305,11 +308,15 @@ public class BoxGrabber {
 		liftUpSensorFlag=false;
 		liftTimer.start();
 		System.out.println("lift up init is being called");
+		atScale = true;
+		atLowScale = false;
+		atSwitch = false;
 	}
 	
 	public void liftUpPeriodic() {
+		
 		if (liftUpActivated) {
-			if (liftTimer.get() > Consts.partysOver) {
+			if (liftTimer.get() > Consts.partysOverScaleUp) {
 				liftUpActivated = false;
 				liftUpSensorFlag= false;
 				System.out.println("Party's over");
@@ -337,11 +344,24 @@ public class BoxGrabber {
 		liftTimer.start();
 		liftDownSensorFlag = false;
 		System.out.println("lift down init is being called");
+		
+		if (atSwitch) {
+			partysOverDown = Consts.partysOverSwitchDown;
+		}
+		else if (atLowScale) {
+			partysOverDown = Consts.partysOverLowScaleDown;
+		}
+		else {
+			partysOverDown = Consts.partysOverScaleDown;
+		}
+		System.out.println("Party's over value ");
+		System.out.print(partysOverDown);
+		
 	}
 	
 	public void liftDownPeriodic() {
 		if (liftDownActivated) {
-			if (liftTimer.get() > Consts.partysOverDown) {
+			if (liftTimer.get() > partysOverDown) {
 				liftDownActivated = false;
 				liftDownSensorFlag = false;
 				System.out.println("Party's over");
@@ -355,17 +375,18 @@ public class BoxGrabber {
 				System.out.println("arms down called for lift down");
 				armsDown();
 				
-				if (atDownLevel.getVoltage()>  2 ) {
-					liftDownSensorFlag= true;
-					 System.out.println("liftUp sensor flag = ");
-					 System.out.println(liftUpSensorFlag);
-				}
+				
 			}
 		
 			else {
 				slideReverse();
 			//	armsDown();
 				System.out.println("slide reverse called for lift down");
+				if (atDownLevel.getVoltage()>  2 ) {
+					liftDownSensorFlag= true;
+					 System.out.println("liftUp sensor flag = ");
+					 System.out.println(liftUpSensorFlag);
+				}
 			}	
 		}		
 	}
@@ -375,6 +396,9 @@ public class BoxGrabber {
 	 * switch auto method need to test to fully develop
 	 */
 	public void switchAutoUpInit() {
+		atSwitch = true;
+		atScale = false;
+		atLowScale = false;
 		liftTimer.reset();
 		liftUpSwitchActivated = true;
 		liftTimer.start();
@@ -383,7 +407,7 @@ public class BoxGrabber {
 	
 	public void switchAutoUpPeriodic() {
 		if (liftUpSwitchActivated) {
-			if (liftTimer.get() > Consts.partysOver) {
+			if (liftTimer.get() > Consts.partysOverSwitchUp) {
 				System.out.println("Party's over");
 				liftUpSwitchActivated = false;
 				liftUpSwitchSensorFlag= false;
@@ -438,6 +462,9 @@ public class BoxGrabber {
 		
 	}*/
 	public void lowScaleAutoUpInit() {
+		atLowScale = true;
+		atScale = false;
+		atSwitch = false;
 		liftTimer.reset();
 		liftUpLowScaleActivated = true;
 		liftTimer.start();
@@ -445,8 +472,9 @@ public class BoxGrabber {
 	}
 	
 	public void lowScaleAutoUpPeriodic() {
+		SmartDashboard.putNumber("Party's Over", partysOverDown);
 		if (liftUpLowScaleActivated) {
-			if (liftTimer.get() > Consts.partysOver) {
+			if (liftTimer.get() > Consts.partysOverLowScale) {
 				System.out.println("Party's over");
 				liftUpLowScaleActivated = false;
 				liftUpLowScaleSensorFlag= false;
