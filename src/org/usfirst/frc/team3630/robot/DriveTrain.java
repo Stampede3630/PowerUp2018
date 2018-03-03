@@ -19,18 +19,7 @@ public class DriveTrain {
 
 	private XboxController _xBox;
 	
-	PowerDistributionPanel panel;
-	private AHRS ahrs;
-	ErrorCode sticky;
-	ErrorCode fault;
-	
-	double turnOutput;
-	double posOutput;
-	boolean errorGreatorThanFive = false;
-	boolean init = true;
-	boolean right = true;
 	int myCurrentCase;		
-	PIDController turnController;
 	PIDController posController;
 	double rotateToAngleRate;
 	
@@ -52,15 +41,8 @@ public class DriveTrain {
 	 */
 
 	public DriveTrain() {
-			
-		// why doing ahrs byte thing? // do we use update rate elswhere 
-		ahrs = new AHRS(SPI.Port.kMXP);
-		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
-panel = new PowerDistributionPanel(0);
-		_xBox = new XboxController(Consts.xBoxComPort);
-		//_boxGrabber = new BoxGrabber();
-		// srx definitions
-		
+		pathFinderPeriodicCalled= false;
+
 		leftThreeEncoder = new WPI_TalonSRX(3);
 		leftTwo = new WPI_TalonSRX(2);
 		//leftOne = new WPI_TalonSRX(Consts.leftOne);
@@ -106,7 +88,8 @@ panel = new PowerDistributionPanel(0);
 	
 	public void testPeriodic() {
 		path.autoPeriodic();
-
+		pathFinderPeriodicCalled= true; 
+		
 	}
 
 	/**
@@ -131,9 +114,8 @@ panel = new PowerDistributionPanel(0);
 		getDiagnostics();
 		// three are two missing bad? delted folowers set in constructor
 		
-	SmartDashboard.putNumber("Left three curent", leftThreeEncoder.getOutputCurrent());
-	SmartDashboard.putNumber("total voltage ", panel.getVoltage());
-	SmartDashboard.putNumber("total current", panel.getTotalCurrent());
+		SmartDashboard.putNumber("Left three curent", leftThreeEncoder.getOutputCurrent());
+	
 		SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
 		// moved over to driverStaton warnings 
 		// are we still getting curent issues 
@@ -155,23 +137,16 @@ panel = new PowerDistributionPanel(0);
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
 		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
 		_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
-//		_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
-//		_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
-//		_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
+
 		_talon.configNeutralDeadband(0, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband. might be worth looking at 
 		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
 		_talon.setInverted(false);
-//		_talon.configOpenloopRamp(.1, Consts.timeOutMs);  figure out wheere to sert 
-		// where should we set ramp rate???
-		///////////////////
-	
-		
 	// Peak current and duration must be exceeded before corrent limit is activated.
 	// When activated, current will be limited to continuous current.
     // Set peak current params to 0 if desired behavior is to immediately current-limit.
-	_talon.enableCurrentLimit(true);
-	_talon.configContinuousCurrentLimit(30,0); // Must be 5 amps or more
-	_talon.configPeakCurrentLimit(30, 0); // 100 A
+		_talon.enableCurrentLimit(true);
+		_talon.configContinuousCurrentLimit(30,0); // Must be 5 amps or more
+		_talon.configPeakCurrentLimit(30, 0); // 100 A
 		_talon.configPeakCurrentDuration(200,0); // 200 ms
 		
 	}
@@ -180,29 +155,16 @@ panel = new PowerDistributionPanel(0);
 	 *  diganoaric method for taon srx debuging 
 	 */
 	public void getDiagnostics() {		
-		SmartDashboard.putNumber("Left Current", leftThreeEncoder.getOutputCurrent());
-		SmartDashboard.putNumber("Right Current", rightSixEncoder.getOutputCurrent());
-		SmartDashboard.putNumber("total Current", panel.getTotalCurrent());
+	
 		SmartDashboard.putNumber("Front Right Position", getRotations(rightSixEncoder));
 		SmartDashboard.putNumber("Front Right Velocity", getVelocity(rightSixEncoder));
 		SmartDashboard.putNumber("Front Left Position", getRotations(leftThreeEncoder));
 		SmartDashboard.putNumber("Front Left Velocity", getVelocity(leftThreeEncoder));
 		SmartDashboard.putNumber("Left position in ticks", getTicks(leftThreeEncoder));
 		SmartDashboard.putNumber("Right position in ticks", getTicks(rightSixEncoder));
-		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());
-		SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
-		SmartDashboard.putNumber("Position Setpoint", posController.getSetpoint());
-		SmartDashboard.putNumber("Position Error", posController.getError());
-		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
-		SmartDashboard.putNumber("Stage", myCurrentCase);
-		SmartDashboard.putNumber("turn controller error", turnController.getError());
-		//posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
-		SmartDashboard.putBoolean("Is right true?", right);
-		SmartDashboard.putBoolean("PosControl ON", 	posController.isEnabled());
-		SmartDashboard.putBoolean("TurnControl On", turnController.isEnabled());
-		SmartDashboard.putBoolean("Is init true?", init);
-		SmartDashboard.putNumber("posController input", posOutput);
 		
+		SmartDashboard.putBoolean("pathFinderPeriodicCalled", pathFinderPeriodicCalled);
+
 		SmartDashboard.putNumber("turnController kP", turnController.getP());
 		
 		if(panel.getTotalCurrent()>300) {
@@ -249,9 +211,5 @@ panel = new PowerDistributionPanel(0);
 
 	
 
-	/**
-	 * method for gtting pos output for pid controllor 
-	 *
-	 */
 
 }
