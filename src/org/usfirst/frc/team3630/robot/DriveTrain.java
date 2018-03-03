@@ -62,8 +62,8 @@ public class DriveTrain {
 		//rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		//leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		// why differ sensor phase diffrent would it be cosntant for both robots?
-		leftThreeEncoder.setSensorPhase(false);
-		rightSixEncoder.setSensorPhase(true);
+		leftThreeEncoder.setSensorPhase(true);
+		rightSixEncoder.setSensorPhase(false);
 	
 		path = new TankDrivePath (leftThreeEncoder,rightSixEncoder);
 		
