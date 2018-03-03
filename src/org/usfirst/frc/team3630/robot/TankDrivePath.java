@@ -48,8 +48,7 @@ public class TankDrivePath  {
 
 		// TO DO CALCULATE NEW MAX VELOCITY IN ORDER TO  run pathfinder acurelty. we took to motors out of robot. I do not buy that the max velocity numbers are diffrent. 
 
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 2, 75 , 25);
-		//Generates points for the path.
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 3.5, 100 , 25);		//Generates points for the path
 		Waypoint[] points = new Waypoint[] {
 
 				// + y leftHand , -Y rightHand, +x robot forward in respect of going down game feild, +angle goes counterclockiwise so invert navx yaw
@@ -113,8 +112,8 @@ public class TankDrivePath  {
 		// to a higher or lower speed quicker
 		//(1/3.3528
 
-		lEncoderFollower.configurePIDVA(.08, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
-		rEncoderFollower.configurePIDVA(.08, Consts.pathKI,Consts.pathKD , (1/3.3528) , Consts.pathKA);
+		lEncoderFollower.configurePIDVA(.08, Consts.pathKI,Consts.pathKD , (1/4) , Consts.pathKA);
+		rEncoderFollower.configurePIDVA(.08, Consts.pathKI,Consts.pathKD , (1/4) , Consts.pathKA);
 
 
 	}
