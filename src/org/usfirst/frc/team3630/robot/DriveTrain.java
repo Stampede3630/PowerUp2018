@@ -19,7 +19,7 @@ public class DriveTrain {
 
 	private XboxController _xBox;
 	
-	boolean pathFinderPeriodicCalled;
+	boolean pathFinderPeriodicCalled, TalonResetCall, EncodersReset;
 
 	double rotateToAngleRate;
 	
@@ -42,7 +42,8 @@ public class DriveTrain {
 
 	public DriveTrain() {
 		pathFinderPeriodicCalled= false;
-
+		TalonResetCall= false
+				EncodersReset= false
 		leftThreeEncoder = new WPI_TalonSRX(3);
 		leftTwo = new WPI_TalonSRX(2);
 		//leftOne = new WPI_TalonSRX(Consts.leftOne);
@@ -82,7 +83,15 @@ public class DriveTrain {
 	public void testInit() {
 		leftThreeEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
 		rightSixEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
-		
+		if(leftThreeEncoder.getSelectedSensorPosition(0) < 238 && rightSixEncoder.getSelectedSensorPosition(0) <238){
+			System.out.println("encoders were reset");
+			EncodersReset= true 
+		}
+		else{
+			System.out.println("your encoders wern't reset")
+			EncodersReset= false 
+		}
+		TalonResetCall= true
 
 	}
 	
@@ -138,8 +147,8 @@ public class DriveTrain {
 	// When activated, current will be limited to continuous current.
     // Set peak current params to 0 if desired behavior is to immediately current-limit.
 		_talon.enableCurrentLimit(true);
-		_talon.configContinuousCurrentLimit(30,0); // Must be 5 amps or more
-		_talon.configPeakCurrentLimit(30, 0); // 100 A
+		_talon.configContinuousCurrentLimit(50,0); // Must be 5 amps or more
+		_talon.configPeakCurrentLimit(50, 0); // 100 A
 		_talon.configPeakCurrentDuration(200,0); // 200 ms
 		
 	}
@@ -155,9 +164,9 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Front Left Velocity", getVelocity(leftThreeEncoder));
 		SmartDashboard.putNumber("Left position in ticks", getTicks(leftThreeEncoder));
 		SmartDashboard.putNumber("Right position in ticks", getTicks(rightSixEncoder));
-		
+		SmartDashboard.putBoolean("talon encoder reset called?" ,TalonResetCall);
 		SmartDashboard.putBoolean("pathFinderPeriodicCalled", pathFinderPeriodicCalled);
-
+		SmartDashboard.putBoolean("enoders Reset check", EncodersReset);
 
 //			System.out.print("[WARNING] Talon Current is at ");
 //			System.out.print(leftEncoder.getOutputCurrent());

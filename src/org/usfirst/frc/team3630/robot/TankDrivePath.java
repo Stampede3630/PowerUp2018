@@ -73,8 +73,8 @@ public class TankDrivePath  {
 		rightTrajectory = _modifier.getRightTrajectory();
 
 
-		rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
-		lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
+		//rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
+	//	lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
 
 		lEncoderFollower = new EncoderFollower(leftTrajectory);
 		rEncoderFollower = new EncoderFollower(rightTrajectory);
@@ -112,8 +112,8 @@ public class TankDrivePath  {
 		// to a higher or lower speed quicker
 		//(1/3.3528
 
-		lEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , (1/4) , Consts.pathKA);
-		rEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , (1/4) , Consts.pathKA);
+		lEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , .25, Consts.pathKA);
+		rEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , .25 , Consts.pathKA);
 
 
 	}
