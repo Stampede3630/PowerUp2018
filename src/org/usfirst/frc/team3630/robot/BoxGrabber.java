@@ -13,7 +13,34 @@ public class BoxGrabber {
 	// enum difftent state= state (F, forward) (R, piston reverse)
 	// lift
 	public enum State {
-		LIFTUP,LIFTDOWN,SLIDEFORWARD,SLIDEBACK,CLAMPOPEN,CLAMPCLOSE,KICKFORWARD,KICKRETRACT,INTAKE,DROPBOX,STOP,SWITCHUPAUTOMATED,LOWSCALEUPAUTOMATED,LIFTUPAUTOMATED,LIFTDOWNAUTOMATED,SWITCHDOWNAUTOMATED
+		LIFTUP,
+		LIFTDOWN,
+		
+		SLIDEFORWARD,
+		SLIDEBACK,
+		
+		CLAMPOPEN,
+		CLAMPCLOSE,
+		
+		KICKFORWARD,
+		KICKRETRACT,
+		
+		INTAKE,
+		
+		DROPBOX,
+		
+		STOP,
+		
+		SWITCHUPAUTOMATED,
+		
+		LOWSCALEUPAUTOMATED,
+		
+		LIFTUPAUTOMATED,
+		LIFTDOWNAUTOMATED,
+		
+		SWITCHDOWNAUTOMATED, 
+		
+		MANUALCONTROL
 		//SLIDEFORWARD, CLAMPOPEN, KICKFORWARD, LIFTUP, LIFTDOWN, CLAMPCLOSE, SLIDEBACK, KICKRETRACT, STOP, INTAKE, DROPBOX, SWITCHDOWNAUTOMATED, SWITCHUPAUTOMATED, SCALEAUTOMATED, LIFTDOWNAUTOMATED, LIFTUPAUTOMATED, LOWSCALEUPAUTOMATED
 		//liftup, liftdown, kickforward, kickretract never used
 	}
@@ -25,21 +52,20 @@ public class BoxGrabber {
 	Compressor mainC;
 	// debug analog input
 	boolean testOn;
-	boolean liftUpEngaged, liftDownEngaged, slideUpEngaged, slideOutEngaged, clampEngaged, clampReverseEngaged, kickForwardEngaged,kickReverseEngaged;
 	boolean isKickoutActivated;
 	boolean liftUpSensorFlag,liftUpActivated;
 	boolean liftDownSensorFlag,liftDownActivated; 
 	boolean liftUpSwitchActivated, liftUpSwitchSensorFlag;
 	boolean liftDownSwitchActivated,liftDownSwitchSensorFlag;
 	boolean liftUpLowScaleSensorFlag, liftUpLowScaleActivated;
-	boolean stopPneumatics;
+	boolean routineRunning;
 	boolean atSwitch, atLowScale,atScale;
 	AnalogInput pressureLevel;
-	DigitalInput slideReversecheck, armsDownCheck;
+	DigitalInput slideReversecheck;
 	Timer liftTimer,slideTimer, kickTime;
-	int kickOutSwitchStates, partysOverDown;
+	int kickoutState, partysOverDown;
 
-	AnalogInput scaleUpParimitor, atDownLevel;
+	AnalogInput scaleUpTrigger, atDownLevel;
 
 	public BoxGrabber() {
 
@@ -48,44 +74,39 @@ public class BoxGrabber {
 		slideTimer = new Timer();
 		kickTime = new Timer();
 		liftTimer = new Timer();
-		isKickoutActivated= false;
+		
 		slideReversecheck = new DigitalInput(3);
-		armsDownCheck= new DigitalInput(2);
+		
+		
+		isKickoutActivated= false;
+		
 		liftUpSensorFlag= false;
 		liftUpActivated = false;
 		liftDownSensorFlag=false;
 		liftDownActivated = false;
 		liftDownSwitchSensorFlag = false;
 		liftDownSwitchActivated = false;
+		
 		liftUpSwitchSensorFlag = false;
 		liftUpSwitchActivated = false;
-		liftUpEngaged = false;
-		liftDownEngaged = false;
-		slideUpEngaged = false;
-		slideOutEngaged = false;
-		clampEngaged = false;
-		clampReverseEngaged = false;
-		kickForwardEngaged = false;
-		kickReverseEngaged = false;
+		
 		atSwitch = false;
 		atScale = false;
 		atLowScale = false;
 		testOn = false;
-		 // need to make theese consts 
+
+		scaleUpTrigger = new AnalogInput(1);
+		atDownLevel = new AnalogInput(2);
+		
 		slide = new DoubleSolenoid(1, 2, 3);
 		kick = new DoubleSolenoid(0, 0, 1);
 		clamp = new DoubleSolenoid(0, 2, 3);
 		lift = new DoubleSolenoid(1, 0, 1);
+		
 		mainC = new Compressor(0);
 		pressureLevel = new AnalogInput(0);
-		scaleUpParimitor = new AnalogInput(1);
-		atDownLevel = new AnalogInput(2);
+
 		_xBox = new XboxController(Consts.xBoxComPort);
-		// leftIntake = new TalonSRX(7);
-		//
-		// rightIntake = new TalonSRX(8);
-		// leftIntake.setInverted(true);
-		// rightIntake.setInverted(true);
 	}
 
 	
@@ -112,14 +133,16 @@ public class BoxGrabber {
 		else if (_xBox.getStartButton()== true) {
 			return State.DROPBOX;
 		}
+		else if(_xBox.getPOV() != -1){
+			return State.MANUALCONTROL;
+		}
 		else {
 			return State.STOP;
-		}
+		}  
 	}
 
-	public void liftController() {
-		if(_xBox.getPOV() != -1) {
-			stopPneumatics = false;
+	public void manualControl() {
+			routineRunning = false;
 			double angle = _xBox.getPOV()*Math.PI/180;
 			double liftControl = Math.cos(angle);
 			double slideControl = Math.sin(angle);
@@ -144,7 +167,7 @@ public class BoxGrabber {
 			else {
 				slideOff();
 			}
-		}	
+		
 	}
 	/*
 	 * public void intake() { rightIntake.configNeutralDeadband(.1, 10);
@@ -165,63 +188,47 @@ public class BoxGrabber {
 	// base class methods 
 	public void kickForward() {
 		kick.set(DoubleSolenoid.Value.kForward);
-		kickForwardEngaged = true;
-
 	}
 
 	public void kickReverse() {
 		kick.set(DoubleSolenoid.Value.kReverse);
-		kickReverseEngaged = true;
-
 	}
 
 	public void armsUp() {
 		lift.set(DoubleSolenoid.Value.kForward);
-		liftUpEngaged = true;
-
 	}
 	public void armsStop() {
 		lift.set(DoubleSolenoid.Value.kOff);
-		liftUpEngaged = true;
-
 	}
 
 	public void armsDown() {
 		lift.set(DoubleSolenoid.Value.kReverse);
-		liftDownEngaged = true;
-
 	}
 
 	public void clampOpen() {
 		clamp.set(DoubleSolenoid.Value.kForward);
-		clampEngaged = true;
-	}
+		}
 
 	public void clampClose() {
 		clamp.set(DoubleSolenoid.Value.kReverse);
-		clampReverseEngaged = true;
 	}
 	
 	public void slideReverse() {
-		slideOutEngaged = true;
 		slide.set(DoubleSolenoid.Value.kReverse);
 	}
 
 	public void slideOff() {
-		slideOutEngaged = false;
 		slide.set(DoubleSolenoid.Value.kOff);
 	}
 	
 	// stop method for safety
 	public void stop() {
-
 		clamp.set(DoubleSolenoid.Value.kOff);
 		lift.set(DoubleSolenoid.Value.kOff);
 		kick.set(DoubleSolenoid.Value.kOff);
 	}
 
 	public void slideForward() {
-		slideUpEngaged = true;
 		slide.set(DoubleSolenoid.Value.kForward);
 	}
 
@@ -237,33 +244,29 @@ public class BoxGrabber {
 
 	public void lowPSIWarning() {
 		if (compresorPSI() < 60.0) {
-			System.out.println("WARNING robots dont have low presure but yours does");
-			System.out.print('\n');
+			System.out.println("WARNING robots dont have low pressure but yours does");
 		}
 	}
 
 	
-		
-		
-	
 	public void kickOutInitialise(){
 		kickTime.reset();
-		kickOutSwitchStates = 1;
+		kickoutState = 1;
 		isKickoutActivated = true;
 }
 	public void  kickoutPeriodic(){
 		if (isKickoutActivated){
-			switch(kickOutSwitchStates){
+			switch(kickoutState){
 			case 1:
 				System.out.println("case one");
 				kickTime.start();
-				kickOutSwitchStates=2;
+				kickoutState=2;
 				break;
 			case 2:
 				clampOpen();
 				System.out.println("case two");
 				if (kickTime.hasPeriodPassed(.01)){
-					kickOutSwitchStates=3;
+					kickoutState=3;
 				}
 				break;
 			case 3:
@@ -271,14 +274,14 @@ public class BoxGrabber {
 				kickForward();
 
 				if (kickTime.hasPeriodPassed(.5)){
-					kickOutSwitchStates=4;
+					kickoutState=4;
 				}
 				break; 
 			case 4:
 				kickReverse();
 				System.out.println("case four");
 				if (kickTime.hasPeriodPassed(.6)){
-					kickOutSwitchStates =5;
+					kickoutState =5;
 				}
 				break; 
 			case 5:
@@ -286,7 +289,7 @@ public class BoxGrabber {
 				System.out.println("case five ");
 
 				if (kickTime.hasPeriodPassed(.004)){
-					kickOutSwitchStates = -1;
+					kickoutState = -1;
 					isKickoutActivated = false;
 					kickTime.stop();
 					System.out.print("isKickoutactivated boolean in case five");
@@ -294,7 +297,7 @@ public class BoxGrabber {
 				}
 				break; 
 			default:
-				System.out.print("kickout box weird stoping solonoids");
+				System.out.print("WARNING kickout method caught exception");
 				stop();
 			}
 	
@@ -305,16 +308,15 @@ public class BoxGrabber {
 	public void liftUpInit () {
 		liftTimer.reset();
 		liftUpActivated = true;
-		liftUpSensorFlag=false;
+		liftUpSensorFlag = false;
 		liftTimer.start();
-		System.out.println("lift up init is being called");
+//		System.out.println("lift up init is being called");
 		atScale = true;
 		atLowScale = false;
 		atSwitch = false;
 	}
 	
 	public void liftUpPeriodic() {
-		
 		if (liftUpActivated) {
 			if (liftTimer.get() > Consts.partysOverScaleUp) {
 				liftUpActivated = false;
@@ -329,21 +331,23 @@ public class BoxGrabber {
 				System.out.println(" slide revse & arms up is called for lift up");
 				slideReverse();
 				armsUp();
-				if (scaleUpParimitor.getVoltage() > 2 ) {
+				if (scaleUpTrigger.getVoltage() > 2 ) {
 						 liftUpSensorFlag= true;
-						 System.out.println("liftUp sensor flag = ");
-						 System.out.println(liftUpSensorFlag);
+//						 System.out.println("liftUp sensor flag = ");
+//						 System.out.println(liftUpSensorFlag);
 					}
 			}
 		}
 		
 	}
 	public void liftDownInit () {
-		liftTimer.reset();
-		liftDownActivated = true;
-		liftTimer.start();
 		liftDownSensorFlag = false;
-		System.out.println("lift down init is being called");
+		liftDownActivated = true;
+		
+		liftTimer.reset();
+		liftTimer.start();
+
+//		System.out.println("lift down init is being called");
 		
 		if (atSwitch) {
 			partysOverDown = Consts.partysOverSwitchDown;
@@ -354,8 +358,8 @@ public class BoxGrabber {
 		else {
 			partysOverDown = Consts.partysOverScaleDown;
 		}
-		System.out.println("Party's over value ");
-		System.out.print(partysOverDown);
+//		System.out.println("Party's over value ");
+//		System.out.print(partysOverDown);
 		
 	}
 	
@@ -488,7 +492,7 @@ public class BoxGrabber {
 				System.out.println("slide reverse and arms up called for low scale");
 				slideReverse();
 				armsUp();
-				if (scaleUpParimitor.getVoltage()>  2 ) {
+				if (scaleUpTrigger.getVoltage()>  2 ) {
 						 liftUpLowScaleSensorFlag= true;
 						 System.out.println("liftUpLowScale sensor flag = ");
 						 System.out.println(liftUpLowScaleSensorFlag);
@@ -512,34 +516,19 @@ public class BoxGrabber {
 		SmartDashboard.putNumber("Compresor PSI ", compresorPSI());
 		// presure switch output
 		SmartDashboard.putBoolean("testOn", testOn);
-		SmartDashboard.putBoolean("liftgoing up", liftUpEngaged);
-		SmartDashboard.putBoolean(" Liftdown", liftDownEngaged);
-		SmartDashboard.putBoolean("kick On", kickForwardEngaged);
-		SmartDashboard.putBoolean("kick reversw", kickReverseEngaged);
-		SmartDashboard.putBoolean("slideForwardEngaged", slideUpEngaged);
 
-		SmartDashboard.putBoolean("slide reverse Engaged", slideOutEngaged);
-		SmartDashboard.putBoolean("clamp forward Engaged", clampEngaged);
-		SmartDashboard.putBoolean("clamp reverse Engaged", clampReverseEngaged);
 		SmartDashboard.putBoolean("isKickoutActivated", isKickoutActivated);
 		SmartDashboard.putBoolean("liftDownActivated",liftDownActivated );
-		SmartDashboard.putNumber( "test anlog soldoid sensor voltager", scaleUpParimitor.getVoltage());
+		SmartDashboard.putNumber( "test anlog soldoid sensor voltager", scaleUpTrigger.getVoltage());
 		SmartDashboard.putNumber("atSwitchLevel", atDownLevel.getVoltage());
 	
 	}
 
 	public void boxGrabberPeriodic () {
-		stopPneumatics = !liftUpActivated && !liftDownActivated && !isKickoutActivated && !liftUpSwitchActivated && !liftDownSwitchActivated && !liftUpLowScaleActivated;
+		routineRunning = liftUpActivated || liftDownActivated || isKickoutActivated || liftUpSwitchActivated || liftDownSwitchActivated || liftUpLowScaleActivated;
 		// for testing
 		// mainC.stop();
-		liftUpEngaged = false;
-		slideUpEngaged = false;
-		slideOutEngaged = false;
-		kickForwardEngaged = false;
-		clampEngaged = false;
-		kickReverseEngaged = false;
-		liftDownEngaged = false;
-		clampReverseEngaged = false;
+
 		kickoutPeriodic();
 		manipulatorDianostics();
 		liftDownPeriodic();
@@ -549,47 +538,46 @@ public class BoxGrabber {
 		switchAutoUpPeriodic();
 		lowScaleAutoUpPeriodic();
 		
-		
-		switch (xBox()) {
-			case LIFTUPAUTOMATED:
-				liftUpInit();
-			break;
-			
-			case LOWSCALEUPAUTOMATED:
-				lowScaleAutoUpInit();
-			break;
-			
-			case SWITCHUPAUTOMATED:
-				switchAutoUpInit();
-			break;
-			
-			case LIFTDOWNAUTOMATED:
-				liftDownInit();
-			break;
-			
-			case CLAMPOPEN:
-				clampOpen();
-			break;
-			
-			case CLAMPCLOSE:
-				clampClose();
-			break;
+		if(!routineRunning) {
+			switch (xBox()) {
+				case LIFTUPAUTOMATED:
+					liftUpInit();
+				break;
 				
-			case DROPBOX:
-				if(!isKickoutActivated) {
-					kickOutInitialise();
-				}
-			break;
-			
-			default:
-				// default to stop for saftey reasons
-				if(stopPneumatics) {
+				case LOWSCALEUPAUTOMATED:
+					lowScaleAutoUpInit();
+				break;
+				
+				case SWITCHUPAUTOMATED:
+					switchAutoUpInit();
+				break;
+				
+				case LIFTDOWNAUTOMATED:
+					liftDownInit();
+				break;
+				
+				case CLAMPOPEN:
+					clampOpen();
+				break;
+				
+				case CLAMPCLOSE:
+					clampClose();
+				break;
+					
+				case DROPBOX:
+					if(!isKickoutActivated) {
+						kickOutInitialise();
+					}
+				break;
+				
+				case MANUALCONTROL:
+					manualControl();
+					break;
+				default:
+					// default to stop for saftey reasons
 					stop();	
+				break;
 			}
-			
-
-			break;
 		}
 	}
-
 }
