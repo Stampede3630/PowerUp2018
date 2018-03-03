@@ -32,6 +32,7 @@ public class DriveTrain {
 	PIDController turnController;
 	PIDController posController;
 	double rotateToAngleRate;
+	Timer backwardsTimer;
 	
 	
 	// target angle degrees for straight on should not be a constant !
@@ -66,6 +67,7 @@ panel = new PowerDistributionPanel(0);
 		rightSixEncoder = new WPI_TalonSRX(Consts.rightSix);
 		rightFive = new WPI_TalonSRX(Consts.rightFive);
 		//rightFour = new WPI_TalonSRX(Consts.rightFour);
+		backwardsTimer = new Timer();
 		
 		// mabey rename to leftThreeMaster? nice more specific name 
 		configureTalon(leftThreeEncoder);
@@ -315,6 +317,53 @@ panel = new PowerDistributionPanel(0);
 				posController.disable();
 				//driveBox.switchAuto();
 				init = false;
+			}
+		}
+	}
+	public void rightSwitchRightFF() {
+		if (myCurrentCase  == 1) {
+			if(init) {
+				turnController.enable();
+				turnController.setSetpoint(0);
+				autoDriveFw(120);//112.4);
+			}
+		    if(Math.abs(posController.getError()) < Consts.autoPosError) {
+		     	autoDriveFw(-48);
+		     	backwardsTimer.start();
+		     	if (backwardsTimer.get() > .3) {
+		     		myCurrentCase = 2;
+			     	init = true;
+		     	}
+		     		
+
+		    } 			
+		/*}
+		if (myCurrentCase == 2) {
+			if(init) {
+				autoTurnDegree(-45);
+			}
+			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
+				myCurrentCase = 3;
+	     		init = true;
+			}
+			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+		}
+		if (myCurrentCase == 3) {
+			if(init) {
+				autoDriveFw(78.5);
+			}
+			if(Math.abs(posController.getError()) < Consts.autoTurnError) {
+				myCurrentCase = 4;
+	     		init = true;
+			}
+		}*/
+			if(myCurrentCase == 2) {
+				if(init) {
+					turnController.disable();
+					posController.disable();
+					//driveBox.switchAuto();
+					init = false;
+				}
 			}
 		}
 	}
@@ -827,6 +876,7 @@ panel = new PowerDistributionPanel(0);
 				turnController.enable();
 				turnController.setSetpoint(0);
 				autoDriveFw(Consts.autoA + Consts.autoD);
+				driveBox.switchAutoUpInit();
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 				myCurrentCase = 2;
@@ -834,10 +884,16 @@ panel = new PowerDistributionPanel(0);
 			}
 		}
 		if (myCurrentCase == 2) {
+			if(init) {
+				if (!driveBox.liftUpSwitchActivated) {
+					driveBox.kickOutInitialise();
+					init = false;	
+				}	
+			}
 			turnController.disable();
 			posController.disable();
-			driveBox.switchAutoUpInit();
-			init = false;
+		
+			
 		}
 	}
 

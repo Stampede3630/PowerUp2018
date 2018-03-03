@@ -114,6 +114,8 @@ public class Robot extends IterativeRobot {
 		autoLogic();
 		_driveTrain.autoPeriodic();
 		_driveTrain.getDiagnostics();
+		box.switchAutoUpPeriodic();
+		box.kickoutPeriodic();
 	}
 	@Override
 	public void disabledInit() {
@@ -164,7 +166,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.leftScaleRight();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoRRR.getSelected() == Destinations.SWR)) {
-					_driveTrain.rightSwitchRight();
+					_driveTrain.rightSwitchRightFF();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoRRR.getSelected() == Destinations.SCR)) {
 					_driveTrain.rightScaleRight();
