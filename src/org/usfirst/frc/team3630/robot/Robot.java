@@ -114,7 +114,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		caseAutoLogic();
+		autoLogic();
 		_driveTrain.autoPeriodic();
 		_driveTrain.getDiagnostics();
 		box.switchAutoUpPeriodic();
@@ -137,7 +137,7 @@ public class Robot extends IterativeRobot {
 			
 			if((gameData.charAt(0) == 'L') && (gameData.charAt(1) == 'L')) {
 				if ((autoChooser.getSelected() == StartingPoints.LEFT) && (autoLLL.getSelected() == Destinations.SWL)) {
-					_driveTrain.leftSwitchLeft();
+					_driveTrain.leftSwitchLeftFF();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.LEFT) && (autoLLL.getSelected() == Destinations.SCL)) {
 					_driveTrain.leftScaleLeft();

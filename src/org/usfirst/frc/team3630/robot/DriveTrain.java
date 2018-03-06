@@ -39,7 +39,7 @@ public class DriveTrain {
 	double targetAngleDegrees = 0f;
 	double kTargetDistanceInches = 1000;
 
-	private WPI_TalonSRX leftThreeEncoder, rightSixEncoder, leftTwo, rightFive; //leftOne, rightFour;
+	private WPI_TalonSRX leftThreeEncoder, rightSixEncoder, leftTwo, rightFive, leftOne, rightFour;
 
 	
 	DifferentialDrive driveTrain;
@@ -74,12 +74,12 @@ public class DriveTrain {
 		configureTalon(rightSixEncoder);
 		configureTalon(leftTwo);
 		configureTalon(rightFive);
-		//configureTalon(leftOne);
-		//configureTalon(rightFour);
+		configureTalon(leftOne);
+		configureTalon(rightFour);
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
-		//rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
-		//leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
+		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
+		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		// why differ sensor phase diffrent would it be cosntant for both robots?
 		leftThreeEncoder.setSensorPhase(false);
 		rightSixEncoder.setSensorPhase(true);
