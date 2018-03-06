@@ -17,7 +17,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="var" path="USERLIBS_DIR/navx_frc.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_121"/>
 	<classpathentry exported="true" kind="lib" path="/FirstSteamworks2017/Gears_Headz/build/jars/WPILib.jar" sourcepath="/Users/aronsa/wpilib/java/current/lib/WPILib/edu/wpi/first/wpilibj"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

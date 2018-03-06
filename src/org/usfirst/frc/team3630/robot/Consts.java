@@ -11,22 +11,22 @@ public class Consts {
 	public static final int xBoxComPort = 0; 
 	// DriveTrain 
 
-	public static final int leftOne = 1;
+	//public static final int leftOne = 1;
 	public static final int leftTwo = 2;
 	public static final int leftThree = 3;
-	public static final int rightFour = 4; 
+	//public static final int rightFour = 4; 
 	public static final int rightFive = 5;
 	public static final int rightSix = 6;
 
 	
 	// Manipulators 
-	public static final double  kPRotAng = 0.045;
-	public static final double  kIRotAng = 0.001;
-	public static final double  kDRotAng = 0.15;
+	public static final double  kPRotAng = 0.05;
+	public static final double  kIRotAng = 0.0;
+	public static final double  kDRotAng = 0;
 	
-	public static final double kPDrAngle = 0.08;
+	public static final double kPDrAngle = 0.09;
 	public static final double kIDrAngle = 0.008;
-	public static final double kDDrAngle = 0.8;
+	public static final double kDDrAngle =0.8;
 	
 
     public static final double ToleranceDegrees = 2;
@@ -45,11 +45,13 @@ public class Consts {
 	public static final double kIencoder = 0.000000000;
 	public static final double kDencoder = 0.0;
 
-	public static final double kPPos = 0.0075;
+
+	
+	public static final double kPPos = 0.05;
 	public static final double kIPos = 0;
 	public static final double kDPos = 0;
 	// Auto Distances
-	public static final double autoA = 67;
+	public static final double autoA = 67-32;
 	public static final double autoB = 101;
 	public static final double autoC = 156;
 	public static final double autoD = 73;
@@ -59,7 +61,10 @@ public class Consts {
 	public static final double autoH = 264.62;
 	public static final double autoI = 120.62;
 	public static final double autoLine = 120;
-	
+	public static final double firstDistanceInSwitchFFMethod = 112.4;
+	public static final double secondDistanceInSwitchFFMethod = 78.5;
+	public static final double firstDistanceInScaleFFMethod = 257.8; // needs to be changed
+	public static final double secondDistanceInScaleFFMethod = 59.2;  // needs to be changed
 	public static final double autoPosError = 3;
 	public static final double autoTurnError = 2;
 	
@@ -77,7 +82,15 @@ public class Consts {
 	public static final int		solonoidSlideCloseChanal = 3;
 	public static final int pcmChanal0= 0;
 	public static final int  pcmChanal1= 1;
-	public static final double timeDelay =1.5;
+	public static final double timeDelay =.005;
+	//public static final double stillStanding = 3.5; ///some awesome number
+	//public static final double stillStandingDown = 3.5;
+	public static final int partysOverScaleUp = 6;///some other less awesome number 
+	public static final int partysOverLowScale = 4;
+	public static final int partysOverSwitchUp = 3;
+	public static final int partysOverScaleDown = 7;
+	public static final int partysOverLowScaleDown = 4;
+	public static final int partysOverSwitchDown = 3;
 	
 }
 

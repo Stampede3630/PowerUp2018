@@ -17,11 +17,14 @@ public class Robot extends IterativeRobot {
 	BoxGrabber box ;
 
 	public enum StartingPoints {
-		LEFT, RIGHT, MIDDLE
+		LEFT, RIGHT, MIDDLE, UNDEFINED
 	}
 	public enum Destinations {
 		SWL, SCL, SWR, SCR, DONO, DRFW
 	}
+
+	StartingPoints mySP;
+	Destinations myDest;
 
 	SendableChooser<StartingPoints> autoChooser;
 	SendableChooser<Destinations> autoLLL;
@@ -33,8 +36,9 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
-		_driveTrain = new DriveTrain();
+	
 		box = new BoxGrabber();
+		_driveTrain = new DriveTrain(box);
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
 		autoChooser = new SendableChooser<StartingPoints>();
@@ -97,7 +101,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		_driveTrain.teleopPeriodic();
-		box.boxGraberPeriodic();
+		box.boxGrabberPeriodic();
 	}
 	public void autonomousInit() {
 		
@@ -113,6 +117,8 @@ public class Robot extends IterativeRobot {
 		autoLogic();
 		_driveTrain.autoPeriodic();
 		_driveTrain.getDiagnostics();
+		box.switchAutoUpPeriodic();
+		box.kickoutPeriodic();
 	}
 	@Override
 	public void disabledInit() {
@@ -131,7 +137,7 @@ public class Robot extends IterativeRobot {
 			
 			if((gameData.charAt(0) == 'L') && (gameData.charAt(1) == 'L')) {
 				if ((autoChooser.getSelected() == StartingPoints.LEFT) && (autoLLL.getSelected() == Destinations.SWL)) {
-					_driveTrain.leftSwitchLeft();
+					_driveTrain.leftSwitchLeftFF();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.LEFT) && (autoLLL.getSelected() == Destinations.SCL)) {
 					_driveTrain.leftScaleLeft();
@@ -152,7 +158,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.autoDoNothing();
 				}
 				else if(autoLLL.getSelected() == Destinations.DRFW) {
-					_driveTrain.driveAutoLine();
+					_driveTrain.autoDriveFw(Consts.autoLine);
 				}
 			}
 			else if((gameData.charAt(0) == 'R') && (gameData.charAt(1) == 'R')) {
@@ -163,7 +169,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.leftScaleRight();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoRRR.getSelected() == Destinations.SWR)) {
-					_driveTrain.rightSwitchRight();
+					_driveTrain.rightSwitchRightFF();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoRRR.getSelected() == Destinations.SCR)) {
 					_driveTrain.rightScaleRight();
@@ -178,7 +184,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.autoDoNothing();
 				}
 				else if(autoRRR.getSelected() == Destinations.DRFW) {
-					_driveTrain.driveAutoLine();
+					_driveTrain.autoDriveFw(Consts.autoLine);
 				}
 			}
 			else if((gameData.charAt(0) == 'L') && (gameData.charAt(1) == 'R')) {
@@ -204,7 +210,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.autoDoNothing();
 				}
 				else if(autoLRL.getSelected() == Destinations.DRFW) {
-					_driveTrain.driveAutoLine();
+					_driveTrain.autoDriveFw(Consts.autoLine);
 				}
 			}
 			else if((gameData.charAt(0) == 'R') && (gameData.charAt(1) == 'L')) {
@@ -230,7 +236,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.autoDoNothing();
 				}
 				else if(autoRLR.getSelected() == Destinations.DRFW) {
-					_driveTrain.driveAutoLine();
+					_driveTrain.autoDriveFw(Consts.autoLine);
 				}
 			}
 			else {
@@ -240,16 +246,269 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void caseAutoLogic() {
-		switch(gameData.substring(0, 1)) {
-		case "LL":
-			break;
-		case "LR":
-			break;
-		case "RR":
-			break;
-		case "RL":
-			break;
-		}
 		
+		switch(gameData.substring(0, 1)) {
+			case "LL":
+				myDest = (Destinations) autoLLL.getSelected();
+				
+				switch (mySP) {
+					case LEFT:
+						switch (myDest) {
+							case SWL:
+								_driveTrain.leftSwitchLeft();
+								break;
+							case SCL:
+								_driveTrain.leftScaleLeft();
+								break;
+							case SWR:
+								_driveTrain.leftSwitchRight();
+								break;
+							case SCR:
+								_driveTrain.leftScaleRight();
+								break;
+							case DONO:
+								_driveTrain.autoDoNothing();
+								break;
+							case DRFW:
+								_driveTrain.autoDriveFw(Consts.autoLine);
+								break;
+							default:
+								_driveTrain.autoDriveFw(Consts.autoLine);
+								break;
+							}
+					case MIDDLE:
+						switch (myDest) {
+							case SWL:
+								_driveTrain.middleSwitchLeft();
+								break;
+							case SCL:
+								_driveTrain.middleScaleLeft();
+								break;
+							case SWR:
+								_driveTrain.middleSwitchRight();
+								break;
+							case SCR:
+								_driveTrain.middleScaleRight();
+								break;
+							case DONO:
+								_driveTrain.autoDoNothing();
+								break;
+							case DRFW:
+								_driveTrain.autoDriveFw(Consts.autoLine);
+								break;
+							default:
+								_driveTrain.autoDriveFw(Consts.autoLine);
+								break;
+						    }
+					case RIGHT:
+						switch (myDest) {
+							case SWL:
+								_driveTrain.rightSwitchLeft();
+								break;
+							case SCL:
+								_driveTrain.rightScaleLeft();
+								break;
+							case SWR:
+								_driveTrain.rightSwitchRight();
+								break;
+							case SCR:
+								_driveTrain.rightScaleRight();
+								break;
+							case DONO:
+								_driveTrain.autoDoNothing();
+								break;
+							case DRFW:
+								_driveTrain.autoDriveFw(Consts.autoLine);
+								break;
+							default:
+								_driveTrain.autoDriveFw(Consts.autoLine);
+								break;
+							}
+					case UNDEFINED:
+						_driveTrain.autoDriveFw(Consts.autoLine);
+						break;
+					default:
+						_driveTrain.autoDriveFw(Consts.autoLine);
+						break;
+						}
+				
+			case "LR":
+				myDest = (Destinations) autoLRL.getSelected();
+				
+				switch (mySP) {
+					case LEFT:
+						switch (myDest) {
+							case SWL:
+								_driveTrain.leftSwitchLeft();
+								break;
+							case SCL:
+								_driveTrain.leftScaleLeft();
+								break;
+							case SWR:
+								_driveTrain.leftSwitchRight();
+								break;
+							case SCR:
+								_driveTrain.leftScaleRight();
+								break;
+							case DONO:
+								_driveTrain.autoDoNothing();
+								break;
+							case DRFW:
+								_driveTrain.autoDriveFw(Consts.autoLine);
+								break;
+							default:
+								_driveTrain.autoDriveFw(Consts.autoLine);
+								break;
+						}
+					case MIDDLE:
+						switch (myDest) {
+							case SWL:
+								_driveTrain.middleSwitchLeft();
+								break;
+							case SCL:
+								_driveTrain.middleScaleLeft();
+								break;
+							case SWR:
+								_driveTrain.middleSwitchRight();
+								break;
+							case SCR:
+								_driveTrain.middleScaleRight();
+								break;
+							case DONO:
+								_driveTrain.autoDoNothing();
+								break;
+							case DRFW:
+								_driveTrain.autoDriveFw(Consts.autoLine);
+								break;
+							}
+					case RIGHT:
+						switch (myDest) {
+							case SWL:
+								_driveTrain.rightSwitchLeft();
+								break;
+							case SCL:
+								_driveTrain.rightScaleLeft();
+								break;
+							case SWR:
+								_driveTrain.rightSwitchRight();
+								break;
+							case SCR:
+								_driveTrain.rightScaleRight();
+								break;
+							case DONO:
+								_driveTrain.autoDoNothing();
+								break;
+							case DRFW:
+								_driveTrain.autoDriveFw(Consts.autoLine);
+								break;
+							}
+					case UNDEFINED:
+						_driveTrain.autoDriveFw(Consts.autoLine);
+						break;
+					}
+					
+			case "RR":
+				myDest = (Destinations) autoRRR.getSelected();
+				
+				switch (mySP) {
+					case LEFT:
+						switch (myDest) {
+							case SWL:
+								_driveTrain.rightSwitchLeft();
+								break;
+							case SCL:
+								_driveTrain.rightScaleLeft();
+								break;
+							case SWR:
+								_driveTrain.rightSwitchRight();
+								break;
+							case SCR:
+								_driveTrain.rightScaleRight();
+								break;
+							case DONO:
+								_driveTrain.autoDoNothing();
+								break;
+							case DRFW:
+								_driveTrain.autoDriveFw(Consts.autoLine);
+								break;
+							}
+						default:
+							_driveTrain.autoDriveFw(Consts.autoLine);
+							break;
+					}
+				
+			case "RL":
+				myDest = (Destinations) autoRLR.getSelected();
+				
+				switch (mySP) {
+					case LEFT:
+						switch (myDest) {
+							case SWL:
+								_driveTrain.leftSwitchLeft();
+								break;
+							case SCL:
+								_driveTrain.leftScaleLeft();
+								break;
+							case SWR:
+								_driveTrain.rightSwitchRight();
+								break;
+							case SCR:
+								_driveTrain.rightScaleRight();
+								break;
+							case DONO:
+								_driveTrain.autoDoNothing();
+								break;
+							case DRFW:
+								_driveTrain.autoDriveFw(Consts.autoLine);
+								break;
+						}
+					case MIDDLE:
+						switch (myDest) {
+							case SWL:
+								_driveTrain.middleSwitchLeft();
+								break;
+							case SCL:
+								_driveTrain.leftScaleLeft();
+								break;
+							case SWR:
+								_driveTrain.rightSwitchRight();
+								break;
+							case SCR:
+								_driveTrain.rightScaleRight();
+								break;
+							case DONO:
+								_driveTrain.autoDoNothing();
+								break;
+							case DRFW:
+								_driveTrain.autoDriveFw(Consts.autoLine);
+								break;
+							}
+					case RIGHT:
+						switch (myDest) {
+							case SWL:
+								_driveTrain.leftSwitchLeft();
+								break;
+							case SCL:
+								_driveTrain.leftScaleLeft();
+								break;
+							case SWR:
+								_driveTrain.middleSwitchRight();
+								break;
+							case SCR:
+								_driveTrain.middleScaleRight();
+								break;
+							case DONO:
+								_driveTrain.autoDoNothing();
+								break;
+							case DRFW:
+								_driveTrain.autoDriveFw(Consts.autoLine);
+								break;
+							}
+					case UNDEFINED:
+						_driveTrain.autoDriveFw(Consts.autoLine);
+						break;
+				}
+		}
 	}
 }
+
