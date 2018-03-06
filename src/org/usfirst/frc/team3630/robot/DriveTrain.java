@@ -279,6 +279,49 @@ public class DriveTrain {
 			posController.disable();
 		}
 	}
+	public void leftSwitchLeftFF() {
+		if (myCurrentCase == 1) {
+			if(init) {
+				turnController.enable();
+				turnController.setSetpoint(0);
+				turnController.setPID(Consts.kPDrAngle, Consts.kIDrAngle, Consts.kDDrAngle);
+				autoDriveFw(Consts.firstDistanceInSwitchFFMethod);
+				driveBox.switchAutoUpInit();
+			}
+		    if(Math.abs(posController.getError()) < Consts.autoPosError ) {
+		     	myCurrentCase = 2;
+		     	init = true;
+		    }
+		} //SAMV added this
+		if (myCurrentCase == 2) {
+			if(init) {
+				autoTurnDegree(45);
+			}
+			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
+				myCurrentCase = 3;
+	     		init = true;
+			}
+			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+		}
+		if (myCurrentCase == 3) {
+			if(init) {
+				autoDriveFw(Consts.secondDistanceInSwitchFFMethod);
+				
+			}
+			if(Math.abs(posController.getError()) < Consts.autoPosError) {
+				myCurrentCase = 4;
+	     		init = true;
+			}
+		}
+		if(myCurrentCase == 4) {
+			turnController.disable();
+			posController.disable();
+			if(!driveBox.liftUpSwitchActivated) {
+				driveBox.kickOutInitialise();
+				init = false;
+			}
+		}
+	}
 	
 	public void rightSwitchRight() {
 		if (myCurrentCase  == 1) {
@@ -330,9 +373,6 @@ public class DriveTrain {
 				
 			}
 		    if(Math.abs(posController.getError()) < Consts.autoPosError) {
-		    	/*autoDriveFw(-48);
-		     	backwardsTimer.start();
-		     	if (backwardsTimer.get() > .3) {*/
 		      	myCurrentCase = 2;
 			     init = true;
 		    } 			
@@ -377,7 +417,8 @@ public class DriveTrain {
 			if(init) {
 				turnController.enable();
 				turnController.setSetpoint(0);
-				autoDriveFw(Consts.autoA + Consts.autoB + Consts.autoC);
+				autoDriveFw(Consts.firstDistanceInScaleFFMethod);
+				driveBox.liftUpInit();
 			}
 		    if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 		     	myCurrentCase = 2;
@@ -386,7 +427,7 @@ public class DriveTrain {
 		}
 		if (myCurrentCase == 2) {
 			if(init) {
-				autoTurnDegree(-90);
+				autoTurnDegree(-45);
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
 				myCurrentCase = 3;
@@ -396,55 +437,37 @@ public class DriveTrain {
 			}
 		if (myCurrentCase == 3) {
 			if(init) {
-				autoDriveFw(Consts.autoF);
+				autoDriveFw(Consts.secondDistanceInScaleFFMethod);
 				
 				
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
-			//	myCurrentCase = 4;
-	     		init = false ;
+				myCurrentCase = 4;
+	     		init = true;
 			}
 		}
 			
-		}
+
 		
-		/*if(myCurrentCase == 4) {
+		if(myCurrentCase == 4) {
 			if(init){
 				turnController.disable();
 				posController.disable();
-				driveBox.liftUpInit();
 				init =false;
-				
-			}
-			else if(driveBox.liftUpActivated) {
-				driveBox.liftUpPeriodic();
-				
-			}
-			else {
-				myCurrentCase = 5;
-				init = true;
-			}
-		
-			
-			
-			
-		}
-		if(myCurrentCase == 5) {
-			if (init) {
-				driveBox.kickOutInitilaise();
-				init =  false ;
-			}
-			else if(driveBox.isKickoutActivated) {
-				driveBox.kickoutPeriodic();
-			}
-				else {
+				if(!driveBox.liftUpActivated) {
+					driveBox.kickOutInitialise();
 					init = false;
 				}
 				
+			}
+		
+		}	
+			
+		}	
+		
+
+		
 				
-			}
-			}
-				*/
 	
 		
 	
@@ -454,7 +477,9 @@ public class DriveTrain {
 			if(init) {
 				turnController.enable();
 				turnController.setSetpoint(0);
-				autoDriveFw(Consts.autoA + Consts.autoB + Consts.autoC);
+				autoDriveFw(Consts.firstDistanceInScaleFFMethod);
+				driveBox.liftUpInit();
+				
 			}
 		    if(Math.abs(posController.getError()) < Consts.autoPosError) {
 		     	myCurrentCase = 2;
@@ -463,7 +488,7 @@ public class DriveTrain {
 		}
 		if (myCurrentCase == 2) {
 			if(init) {
-				autoTurnDegree(90);
+				autoTurnDegree(45);
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
 				myCurrentCase = 3;
@@ -473,7 +498,7 @@ public class DriveTrain {
 		}
 		if (myCurrentCase == 3) {
 			if(init) {
-				autoDriveFw(Consts.autoD);
+				autoDriveFw(Consts.secondDistanceInScaleFFMethod);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError) {
 				myCurrentCase = 4;
@@ -484,31 +509,13 @@ public class DriveTrain {
 			if(init){
 				turnController.disable();
 				posController.disable();
-				driveBox.liftUpInit();
-				if(driveBox.liftUpActivated) {
-					driveBox.liftUpPeriodic();
-					init =false;
-				}
-			}
-			else {
-				myCurrentCase = 5;
-				init = true;
-			}
-		
-			
+				if(!driveBox.liftUpActivated) {
+					driveBox.kickOutInitialise();
+					init = false;
+				
+			}	
 		}
-		if (myCurrentCase == 5)
-		if (init) {
-			driveBox.kickOutInitialise();
-			if(driveBox.isKickoutActivated) {
-				driveBox.kickoutPeriodic();
-			}
-			else {
-				init = false;
-			}
-			
-			
-		}
+	}
 	}
 		
 	public void leftSwitchRight() {
