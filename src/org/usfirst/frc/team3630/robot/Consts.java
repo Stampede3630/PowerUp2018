@@ -11,10 +11,10 @@ public class Consts {
 	public static final int xBoxComPort = 0; 
 	// DriveTrain 
 
-	//public static final int leftOne = 1;
+	public static final int leftOne = 1;
 	public static final int leftTwo = 2;
 	public static final int leftThree = 3;
-	//public static final int rightFour = 4; 
+	public static final int rightFour = 4; 
 	public static final int rightFive = 5;
 	public static final int rightSix = 6;
 

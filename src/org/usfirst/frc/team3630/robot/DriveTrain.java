@@ -54,22 +54,22 @@ public class DriveTrain {
 	public DriveTrain(BoxGrabber _boxGrabber) {
 		
 		driveBox = _boxGrabber;
-		// why doing ahrs byte thing? // do we use update rate elswhere 
+		
 		ahrs = new AHRS(SPI.Port.kMXP);
 		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
+		
 		panel = new PowerDistributionPanel(0);
+		
 		_xBox = new XboxController(Consts.xBoxComPort);
-		//_boxGrabber = new BoxGrabber();
 		// srx definitions
 		leftThreeEncoder = new WPI_TalonSRX(Consts.leftThree);
 		leftTwo = new WPI_TalonSRX(Consts.leftTwo);
-		//leftOne = new WPI_TalonSRX(Consts.leftOne);
+		leftOne = new WPI_TalonSRX(Consts.leftOne);
 		rightSixEncoder = new WPI_TalonSRX(Consts.rightSix);
 		rightFive = new WPI_TalonSRX(Consts.rightFive);
-		//rightFour = new WPI_TalonSRX(Consts.rightFour);
+		rightFour = new WPI_TalonSRX(Consts.rightFour);
 		backwardsTimer = new Timer();
 		
-		// mabey rename to leftThreeMaster? nice more specific name 
 		configureTalon(leftThreeEncoder);
 		configureTalon(rightSixEncoder);
 		configureTalon(leftTwo);
@@ -83,9 +83,6 @@ public class DriveTrain {
 		// why differ sensor phase diffrent would it be cosntant for both robots?
 		leftThreeEncoder.setSensorPhase(false);
 		rightSixEncoder.setSensorPhase(true);
-
-		
-
 
 	
 		driveTrain = new DifferentialDrive(leftThreeEncoder, rightSixEncoder);
