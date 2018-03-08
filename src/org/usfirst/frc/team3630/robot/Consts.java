@@ -70,13 +70,17 @@ public class Consts {
 	
 	//////////////////////////
 	// manipulator conts 
+		//pressure gauge
 	public static final int pressureLevelAnalogPin = 0;
-	// pcma
+		//reed switches
+	public static final int scaleUpAnalogPin = 1;
+	public static final int downLevelAnalogPin = 2;
+		// pcma
 	public static final int solonoidLifterOpenChanal  = 0 ;// a prime
 	public static final int solonoidLifterCloseChanal  = 1 ;//b prime
 	public static final int solonoidClampOpenChanal= 0;// a3
 	public static final int solonoidClampCloseChanal= 1;// b2
-	// pcm b
+		// pcm b
 	public static final int solonoidKickOpenChanal  = 2 ;//a4
 	public static final int solonoidKickCloseChanal  = 3 ;//b4
 	public static final int	solonoidSliodeOpenChanal=2;
@@ -84,14 +88,16 @@ public class Consts {
 	public static final int pcmChanal0= 0;
 	public static final int  pcmChanal1= 1;
 	public static final double timeDelay =.005;
-	//public static final double stillStanding = 3.5; ///some awesome number
-	//public static final double stillStandingDown = 3.5;
+		//public static final double stillStanding = 3.5; ///some awesome number
+		//public static final double stillStandingDown = 3.5;
 	public static final int partysOverScaleUp = 6;///some other less awesome number 
 	public static final int partysOverLowScale = 4;
 	public static final int partysOverSwitchUp = 3;
 	public static final int partysOverScaleDown = 7;
 	public static final int partysOverLowScaleDown = 4;
 	public static final int partysOverSwitchDown = 3;
+
+
 	
 }
 

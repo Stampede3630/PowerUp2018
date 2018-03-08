@@ -95,8 +95,8 @@ public class BoxGrabber {
 		atLowScale = false;
 		testOn = false;
 
-		scaleUpTrigger = new AnalogInput(1);
-		atDownLevel = new AnalogInput(2);
+		scaleUpTrigger = new AnalogInput(Consts.scaleUpAnalogPin);
+		atDownLevel = new AnalogInput(Consts.downLevelAnalogPin);
 		
 		slide = new DoubleSolenoid(1, 2, 3);
 		kick = new DoubleSolenoid(0, 0, 1);
@@ -156,10 +156,10 @@ public class BoxGrabber {
 				armsStop();
 			}
 			
-			if(slideControl > 0) {
+			if(slideControl < 0) {
 				slideForward();
 			}
-			else if(slideControl < 0) {
+			else if(slideControl > 0) {
 				slideReverse();
 				
 			
@@ -330,6 +330,9 @@ public class BoxGrabber {
 			else {
 				System.out.println(" slide revse & arms up is called for lift up");
 				slideReverse();
+				
+				
+				
 				armsUp();
 				if (scaleUpTrigger.getVoltage() > 2 ) {
 						 liftUpSensorFlag= true;
