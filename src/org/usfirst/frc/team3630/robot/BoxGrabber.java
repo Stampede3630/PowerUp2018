@@ -112,7 +112,10 @@ public class BoxGrabber {
 	
 // to do make button asighnments sane
 	public State xBox() {
-		if (_xBox.getXButton()== true) {
+		if(_xBox.getPOV() != -1){
+			return State.MANUALCONTROL;
+		}
+		else if (_xBox.getXButton()== true) {
 			return State.LOWSCALEUPAUTOMATED;
 		}
 		else if (_xBox.getYButton() == true) {
@@ -132,9 +135,6 @@ public class BoxGrabber {
 		}
 		else if (_xBox.getStartButton()== true) {
 			return State.DROPBOX;
-		}
-		else if(_xBox.getPOV() != -1){
-			return State.MANUALCONTROL;
 		}
 		else {
 			return State.STOP;

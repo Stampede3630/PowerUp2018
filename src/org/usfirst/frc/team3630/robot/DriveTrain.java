@@ -172,7 +172,7 @@ public class DriveTrain {
 //		_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
 //		_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
 //		_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
-		_talon.configNeutralDeadband(0, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband. might be worth looking at 
+		_talon.configNeutralDeadband(0.025, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband. might be worth looking at 
 		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
 		_talon.setInverted(false);
 //		_talon.configOpenloopRamp(.1, Consts.timeOutMs);  figure out wheere to sert 
@@ -180,13 +180,13 @@ public class DriveTrain {
 		///////////////////
 	
 		
-	// Peak current and duration must be exceeded before corrent limit is activated.
-	// When activated, current will be limited to continuous current.
-    // Set peak current params to 0 if desired behavior is to immediately current-limit.
-	_talon.enableCurrentLimit(true);
-	_talon.configContinuousCurrentLimit(30,0); // Must be 5 amps or more
-	_talon.configPeakCurrentLimit(30, 0); // 100 A
-		_talon.configPeakCurrentDuration(200,0); // 200 ms
+		// Peak current and duration must be exceeded before corrent limit is activated.
+		// When activated, current will be limited to continuous current.
+	    // Set peak current params to 0 if desired behavior is to immediately current-limit.
+		_talon.enableCurrentLimit(true);
+		_talon.configContinuousCurrentLimit(30,Consts.timeOutMs); // Must be 5 amps or more
+		_talon.configPeakCurrentLimit(30, Consts.timeOutMs); // 100 A
+		_talon.configPeakCurrentDuration(200,Consts.timeOutMs); // 200 ms
 		
 	}
 
