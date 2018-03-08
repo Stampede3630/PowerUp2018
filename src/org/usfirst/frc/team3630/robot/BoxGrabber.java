@@ -540,7 +540,7 @@ public class BoxGrabber {
 		switchAutoUpPeriodic();
 		lowScaleAutoUpPeriodic();
 		
-		if(!routineRunning || _xBox.getPOV()!=-1) {
+		if(!routineRunning || _xBox.getPOV()!=-1 || _xBox.getBumper(GenericHID.Hand.kLeft)|| _xBox.getBumper(GenericHID.Hand.kRight)) {
 			switch (xBox()) {
 				case LIFTUPAUTOMATED:
 					liftUpInit();

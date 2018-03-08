@@ -135,8 +135,11 @@ public class DriveTrain {
 
 	}
 	public void teleopPeriodic() {
-		double speed = (_xBox.getY(GenericHID.Hand.kLeft))*-1;
-		double heading = (_xBox.getX(GenericHID.Hand.kRight));
+		double speed = (_xBox.getY(GenericHID.Hand.kLeft))*-.5;
+		double heading = (_xBox.getX(GenericHID.Hand.kRight))*.5;
+		if(_xBox.getTriggerAxis(GenericHID.Hand.kLeft) == 1) {
+			speed = speed * 2;
+		}
 		SmartDashboard.putNumber("heading acrcade drive", heading);
 		driveTrain.arcadeDrive(speed, heading);
 		getDiagnostics();
