@@ -157,10 +157,10 @@ public class BoxGrabber {
 			}
 			
 			if(slideControl < 0) {
-				slideForward();
+				slideReverse();
 			}
 			else if(slideControl > 0) {
-				slideReverse();
+				slideForward();
 				
 			
 			}
