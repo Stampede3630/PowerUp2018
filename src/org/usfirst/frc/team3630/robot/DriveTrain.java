@@ -75,7 +75,7 @@ public class DriveTrain {
 		configureTalon(leftTwo);
 		configureTalon(rightFive);
 		configureTalon(leftOne);
-		configureTalon(rightFour);
+		configureTalon(rightFour);  
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
@@ -169,7 +169,7 @@ public class DriveTrain {
 //		_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
 //		_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
 //		_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
-		_talon.configNeutralDeadband(0.025, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband. might be worth looking at 
+		_talon.configNeutralDeadband(0.05, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband. might be worth looking at 
 		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
 		_talon.setInverted(false);
 //		_talon.configOpenloopRamp(.1, Consts.timeOutMs);  figure out wheere to sert 
@@ -314,7 +314,7 @@ public class DriveTrain {
 			turnController.disable();
 			posController.disable();
 			if(!driveBox.liftUpSwitchActivated) {
-				driveBox.kickOutInitialise();
+				driveBox.kickoutInit();
 				init = false;
 			}
 		}
@@ -400,7 +400,7 @@ public class DriveTrain {
 					posController.disable();
 					//driveBox.switchAuto();
 					if(!driveBox.liftUpSwitchActivated) {
-						driveBox.kickOutInitialise();
+						driveBox.kickoutInit();
 						init = false;
 					}
 					
@@ -452,7 +452,7 @@ public class DriveTrain {
 				posController.disable();
 				init =false;
 				if(!driveBox.liftUpActivated) {
-					driveBox.kickOutInitialise();
+					driveBox.kickoutInit();
 					init = false;
 				}
 				
@@ -507,7 +507,7 @@ public class DriveTrain {
 				turnController.disable();
 				posController.disable();
 				if(!driveBox.liftUpActivated) {
-					driveBox.kickOutInitialise();
+					driveBox.kickoutInit();
 					init = false;
 				
 			}	
@@ -727,7 +727,7 @@ public class DriveTrain {
 		}
 		if (myCurrentCase == 10)
 		if (init) {
-			driveBox.kickOutInitialise();
+			driveBox.kickoutInit();
 			if(driveBox.isKickoutActivated) {
 				driveBox.kickoutPeriodic();
 				init = false;
@@ -894,7 +894,7 @@ public class DriveTrain {
 		if (myCurrentCase == 2) {
 			if(init) {
 				if (!driveBox.liftUpSwitchActivated) {
-					driveBox.kickOutInitialise();
+					driveBox.kickoutInit();
 					init = false;	
 				}	
 			}

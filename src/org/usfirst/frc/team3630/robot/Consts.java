@@ -70,6 +70,7 @@ public class Consts {
 	
 	//////////////////////////
 	// manipulator conts 
+	public static final int pressureLevelAnalogPin = 0;
 	// pcma
 	public static final int solonoidLifterOpenChanal  = 0 ;// a prime
 	public static final int solonoidLifterCloseChanal  = 1 ;//b prime
@@ -79,7 +80,7 @@ public class Consts {
 	public static final int solonoidKickOpenChanal  = 2 ;//a4
 	public static final int solonoidKickCloseChanal  = 3 ;//b4
 	public static final int	solonoidSliodeOpenChanal=2;
-	public static final int		solonoidSlideCloseChanal = 3;
+	public static final int	solonoidSlideCloseChanal = 3;
 	public static final int pcmChanal0= 0;
 	public static final int  pcmChanal1= 1;
 	public static final double timeDelay =.005;

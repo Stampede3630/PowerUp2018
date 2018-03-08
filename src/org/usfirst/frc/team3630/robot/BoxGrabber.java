@@ -104,7 +104,7 @@ public class BoxGrabber {
 		lift = new DoubleSolenoid(1, 0, 1);
 		
 		mainC = new Compressor(0);
-		pressureLevel = new AnalogInput(0);
+		pressureLevel = new AnalogInput(Consts.pressureLevelAnalogPin);
 
 		_xBox = new XboxController(Consts.xBoxComPort);
 	}
@@ -249,7 +249,7 @@ public class BoxGrabber {
 	}
 
 	
-	public void kickOutInitialise(){
+	public void kickoutInit(){
 		kickTime.reset();
 		kickoutState = 1;
 		isKickoutActivated = true;
@@ -566,7 +566,7 @@ public class BoxGrabber {
 					
 				case DROPBOX:
 					if(!isKickoutActivated) {
-						kickOutInitialise();
+						kickoutInit();
 					}
 				break;
 				
