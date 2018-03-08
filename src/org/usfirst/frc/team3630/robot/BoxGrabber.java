@@ -330,18 +330,18 @@ public class BoxGrabber {
 			else {
 				System.out.println(" slide revse & arms up is called for lift up");
 				slideReverse();
-				
-				
-				
+
+
+
 				armsUp();
 				if (scaleUpTrigger.getVoltage() > 2 ) {
-						 liftUpSensorFlag= true;
-//						 System.out.println("liftUp sensor flag = ");
-//						 System.out.println(liftUpSensorFlag);
-					}
+					liftUpSensorFlag= true;
+					//						 System.out.println("liftUp sensor flag = ");
+					//						 System.out.println(liftUpSensorFlag);
+				}
 			}
 		}
-		
+
 	}
 	public void liftDownInit () {
 		liftDownSensorFlag = false;
@@ -378,13 +378,12 @@ public class BoxGrabber {
 				System.out.println("slide forwad called for lift down");
 				slideForward();
 			}
-			else if(liftTimer.hasPeriodPassed(.5)) {
+			else if(liftTimer.hasPeriodPassed(.25)) {
 				System.out.println("arms down called for lift down");
 				armsDown();
 				
 				
 			}
-		
 			else {
 				slideReverse();
 			//	armsDown();
@@ -541,7 +540,7 @@ public class BoxGrabber {
 		switchAutoUpPeriodic();
 		lowScaleAutoUpPeriodic();
 		
-		if(!routineRunning) {
+		if(!routineRunning || _xBox.getPOV()!=-1) {
 			switch (xBox()) {
 				case LIFTUPAUTOMATED:
 					liftUpInit();
