@@ -63,7 +63,8 @@ public class BoxGrabber {
 	AnalogInput pressureLevel;
 	DigitalInput slideReversecheck;
 	Timer liftTimer,slideTimer, kickTime;
-	int kickoutState, partysOverDown;
+	int kickoutState;
+	double partysOverDown;
 
 	AnalogInput scaleUpTrigger, atDownLevel;
 

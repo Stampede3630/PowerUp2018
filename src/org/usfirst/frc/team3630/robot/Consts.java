@@ -47,7 +47,7 @@ public class Consts {
 
 
 	
-	public static final double kPPos = 0.02;
+	public static final double kPPos = 0.05;
 	public static final double kIPos = 0;
 	public static final double kDPos = 0;
 	// Auto Distances
@@ -90,12 +90,12 @@ public class Consts {
 	public static final double timeDelay =.005;
 		//public static final double stillStanding = 3.5; ///some awesome number
 		//public static final double stillStandingDown = 3.5;
-	public static final int partysOverScaleUp = 12;///some other less awesome number 
-	public static final int partysOverLowScale = 4;
-	public static final int partysOverSwitchUp = 3;
-	public static final int partysOverScaleDown = 4;
-	public static final int partysOverLowScaleDown = 4;
-	public static final int partysOverSwitchDown = 3;
+	public static final double partysOverScaleUp = 6.5;///some other less awesome number 
+	public static final double partysOverLowScale = 7;
+	public static final double partysOverSwitchUp = 6;
+	public static final double partysOverScaleDown = 4;
+	public static final double partysOverLowScaleDown = 3;
+	public static final double partysOverSwitchDown = 2.5;
 
 
 	
