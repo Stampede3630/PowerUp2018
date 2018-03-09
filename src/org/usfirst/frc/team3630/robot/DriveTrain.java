@@ -101,7 +101,7 @@ public class DriveTrain {
 		positionEncoderSource = new EncoderPIDSource(leftThreeEncoder, rightSixEncoder);
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
-		posController.setOutputRange(-.5, .5); //current testing
+		posController.setOutputRange(-.6, .6); //current testing
 
 		posController.setAbsoluteTolerance(Consts.ToleranceDistance);
 		posController.disable();
@@ -235,7 +235,9 @@ public class DriveTrain {
 	}
 	
 	public void autoPeriodic() {
+		posOutput = posController.get();
 		driveTrain.arcadeDrive(posOutput, turnOutput);
+		System.out.println(posOutput);
 	}
 	
 	/**
@@ -884,10 +886,10 @@ public class DriveTrain {
 	public void middleSwitchRight() {
 		if(myCurrentCase == 1) {
 			if(init) {
+				driveBox.switchAutoUpInit();
 				turnController.enable();
 				turnController.setSetpoint(0);
 				autoDriveFw(Consts.autoA + Consts.autoD);
-				driveBox.switchAutoUpInit();
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 				myCurrentCase = 2;
@@ -1114,8 +1116,8 @@ public class DriveTrain {
 			}
 		}
 		if (myCurrentCase == 2) {
-			turnController.disable();
-			posController.disable();
+			//turnController.disable();
+			//posController.disable();
 		}
 	}
 	

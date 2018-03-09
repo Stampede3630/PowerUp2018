@@ -303,6 +303,7 @@ public class BoxGrabber {
 				break; 
 			default:
 				System.out.print("WARNING kickout method caught exception");
+				isKickoutActivated = false;
 				stop();
 			}
 	
@@ -385,6 +386,11 @@ public class BoxGrabber {
 			else if(liftTimer.hasPeriodPassed(.2)) {
 				System.out.println("arms down called for lift down");
 				armsDown();
+				if (atDownLevel.getVoltage()>  2 ) {
+					liftDownSensorFlag= true;
+					 System.out.println("liftUp sensor flag = ");
+					 System.out.println(liftUpSensorFlag);
+				}
 			}
 			else {
 				slideReverse();
@@ -542,15 +548,26 @@ public class BoxGrabber {
 		switchAutoUpPeriodic();
 		lowScaleAutoUpPeriodic();
 		
-		if(!routineRunning || _xBox.getPOV()!=-1 || _xBox.getBumper(GenericHID.Hand.kLeft)|| _xBox.getBumper(GenericHID.Hand.kRight)|| _xBox.getBackButton()) {
+		if(!routineRunning || _xBox.getPOV()!=-1 || _xBox.getBumper(GenericHID.Hand.kLeft)|| _xBox.getBumper(GenericHID.Hand.kRight)|| _xBox.getBackButton()|| _xBox.getStartButton()) {
 			switch (xBox()) {
 				case STOPOVERRIDE:
 					stop();
+					liftUpActivated = false;
+					liftDownActivated = false;
+					isKickoutActivated = false;
+					liftUpSwitchActivated = false;
+					liftDownSwitchActivated = false;
+					liftUpLowScaleActivated = false;
 				break;
 				case MANUALCONTROL:
 					manualControl();
 					break;
-					
+
+				case DROPBOX:
+					if(!isKickoutActivated) {
+						kickoutInit();
+					}
+				break;
 				case LIFTUPAUTOMATED:
 					liftUpInit();
 				break;
@@ -574,12 +591,7 @@ public class BoxGrabber {
 				case CLAMPCLOSE:
 					clampClose();
 				break;
-					
-				case DROPBOX:
-					if(!isKickoutActivated) {
-						kickoutInit();
-					}
-				break;
+
 				
 				default:
 					// default to stop for saftey reasons
