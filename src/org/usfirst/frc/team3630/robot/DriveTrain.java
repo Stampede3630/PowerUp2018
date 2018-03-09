@@ -1116,8 +1116,8 @@ public class DriveTrain {
 			}
 		}
 		if (myCurrentCase == 2) {
-			//turnController.disable();
-			//posController.disable();
+			turnController.disable();
+			posController.disable();
 		}
 	}
 	
