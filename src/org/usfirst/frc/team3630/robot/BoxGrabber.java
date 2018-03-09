@@ -418,6 +418,7 @@ public class BoxGrabber {
 				System.out.println("Party's over");
 				liftUpSwitchActivated = false;
 				liftUpSwitchSensorFlag= false;
+				lift.set(DoubleSolenoid.Value.kOff);
 			}
 			else if (liftUpSwitchSensorFlag) {
 				System.out.println("stop called for switch up");

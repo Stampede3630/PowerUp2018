@@ -101,7 +101,7 @@ public class DriveTrain {
 		positionEncoderSource = new EncoderPIDSource(leftThreeEncoder, rightSixEncoder);
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 				positionEncoderSource, new MyPosPidOutput());
-		posController.setOutputRange(-.3, .3); //current testing
+		posController.setOutputRange(-.5, .5); //current testing
 
 		posController.setAbsoluteTolerance(Consts.ToleranceDistance);
 		posController.disable();
@@ -135,10 +135,10 @@ public class DriveTrain {
 
 	}
 	public void teleopPeriodic() {
-		double speed = (_xBox.getY(GenericHID.Hand.kLeft))*-.75;
-		double heading = (_xBox.getX(GenericHID.Hand.kRight))*.7;
+		double speed = (_xBox.getY(GenericHID.Hand.kLeft))*-.6;
+		double heading = (_xBox.getX(GenericHID.Hand.kRight))*.6;
 		if(_xBox.getTriggerAxis(GenericHID.Hand.kLeft) > .85) {
-			speed = speed * 2;
+			speed = (_xBox.getY(GenericHID.Hand.kLeft))*-1;
 		}
 		SmartDashboard.putNumber("heading acrcade drive", heading);
 		driveTrain.arcadeDrive(speed, heading);
