@@ -40,7 +40,8 @@ public class BoxGrabber {
 		
 		SWITCHDOWNAUTOMATED, 
 		
-		MANUALCONTROL
+		MANUALCONTROL,
+		STOPOVERRIDE
 		//SLIDEFORWARD, CLAMPOPEN, KICKFORWARD, LIFTUP, LIFTDOWN, CLAMPCLOSE, SLIDEBACK, KICKRETRACT, STOP, INTAKE, DROPBOX, SWITCHDOWNAUTOMATED, SWITCHUPAUTOMATED, SCALEAUTOMATED, LIFTDOWNAUTOMATED, LIFTUPAUTOMATED, LOWSCALEUPAUTOMATED
 		//liftup, liftdown, kickforward, kickretract never used
 	}
@@ -116,26 +117,29 @@ public class BoxGrabber {
 		if(_xBox.getPOV() != -1){
 			return State.MANUALCONTROL;
 		}
-		else if (_xBox.getXButton()== true) {
+		else if (_xBox.getXButton()) {
 			return State.LOWSCALEUPAUTOMATED;
 		}
-		else if (_xBox.getYButton() == true) {
+		else if (_xBox.getYButton()) {
 			return State.LIFTUPAUTOMATED;	
 		}
-		else if (_xBox.getAButton() == true) {
+		else if (_xBox.getAButton()) {
 			return State.LIFTDOWNAUTOMATED;	
 		} 
-		else if (_xBox.getBButton()== true) {
+		else if (_xBox.getBButton()) {
 			return State.SWITCHUPAUTOMATED;
 		}
-		else if (_xBox.getBumper(GenericHID.Hand.kRight) == true) {
+		else if (_xBox.getBumper(GenericHID.Hand.kRight)) {
 			return State.CLAMPCLOSE;
 		}
-		else if (_xBox.getBumper(GenericHID.Hand.kLeft) == true) {
+		else if (_xBox.getBumper(GenericHID.Hand.kLeft)) {
 			return State.CLAMPOPEN;
 		}
-		else if (_xBox.getStartButton()== true) {
+		else if (_xBox.getStartButton()) {
 			return State.DROPBOX;
+		}
+		else if (_xBox.getBackButton()) {
+			return State.STOPOVERRIDE;
 		}
 		else {
 			return State.STOP;
@@ -157,18 +161,17 @@ public class BoxGrabber {
 				armsStop();
 			}
 			
+			
 			if(slideControl < 0) {
 				slideReverse();
 			}
 			else if(slideControl > 0) {
 				slideForward();
 				
-			
 			}
 			else {
 				slideOff();
 			}
-		
 	}
 	/*
 	 * public void intake() { rightIntake.configNeutralDeadband(.1, 10);
@@ -198,6 +201,7 @@ public class BoxGrabber {
 	public void armsUp() {
 		lift.set(DoubleSolenoid.Value.kForward);
 	}
+	
 	public void armsStop() {
 		lift.set(DoubleSolenoid.Value.kOff);
 	}
@@ -239,7 +243,6 @@ public class BoxGrabber {
 	public double compresorPSI() {
 		double sensorV = pressureLevel.getVoltage();
 		double psi = 250 * (sensorV / 5) - 25;
-
 		return psi;
 	}
 
@@ -255,6 +258,7 @@ public class BoxGrabber {
 		kickoutState = 1;
 		isKickoutActivated = true;
 }
+	
 	public void  kickoutPeriodic(){
 		if (isKickoutActivated){
 			switch(kickoutState){
@@ -320,6 +324,7 @@ public class BoxGrabber {
 	public void liftUpPeriodic() {
 		if (liftUpActivated) {
 			if (liftTimer.get() > Consts.partysOverScaleUp) {
+				stop();
 				liftUpActivated = false;
 				liftUpSensorFlag= false;
 				System.out.println("Party's over");
@@ -331,9 +336,6 @@ public class BoxGrabber {
 			else {
 				System.out.println(" slide revse & arms up is called for lift up");
 				slideReverse();
-
-
-
 				armsUp();
 				if (scaleUpTrigger.getVoltage() > 2 ) {
 					liftUpSensorFlag= true;
@@ -373,17 +375,16 @@ public class BoxGrabber {
 				liftDownActivated = false;
 				liftDownSensorFlag = false;
 				System.out.println("Party's over");
+				stop();
 			}
 			
 			else if(liftDownSensorFlag) {
 				System.out.println("slide forwad called for lift down");
 				slideForward();
 			}
-			else if(liftTimer.hasPeriodPassed(.25)) {
+			else if(liftTimer.hasPeriodPassed(.2)) {
 				System.out.println("arms down called for lift down");
 				armsDown();
-				
-				
 			}
 			else {
 				slideReverse();
@@ -418,12 +419,11 @@ public class BoxGrabber {
 				System.out.println("Party's over");
 				liftUpSwitchActivated = false;
 				liftUpSwitchSensorFlag= false;
-				lift.set(DoubleSolenoid.Value.kOff);
+				stop();
 			}
 			else if (liftUpSwitchSensorFlag) {
 				System.out.println("stop called for switch up");
 				stop();
-
 			}
 			else {
 				System.out.println("slide reverse and arms up called for switch up");
@@ -542,8 +542,15 @@ public class BoxGrabber {
 		switchAutoUpPeriodic();
 		lowScaleAutoUpPeriodic();
 		
-		if(!routineRunning || _xBox.getPOV()!=-1 || _xBox.getBumper(GenericHID.Hand.kLeft)|| _xBox.getBumper(GenericHID.Hand.kRight)) {
+		if(!routineRunning || _xBox.getPOV()!=-1 || _xBox.getBumper(GenericHID.Hand.kLeft)|| _xBox.getBumper(GenericHID.Hand.kRight)|| _xBox.getBackButton()) {
 			switch (xBox()) {
+				case STOPOVERRIDE:
+					stop();
+				break;
+				case MANUALCONTROL:
+					manualControl();
+					break;
+					
 				case LIFTUPAUTOMATED:
 					liftUpInit();
 				break;
@@ -574,9 +581,6 @@ public class BoxGrabber {
 					}
 				break;
 				
-				case MANUALCONTROL:
-					manualControl();
-					break;
 				default:
 					// default to stop for saftey reasons
 					stop();	
