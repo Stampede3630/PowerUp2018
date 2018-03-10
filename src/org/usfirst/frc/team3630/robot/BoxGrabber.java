@@ -107,6 +107,8 @@ public class BoxGrabber {
 		
 		mainC = new Compressor(0);
 		pressureLevel = new AnalogInput(Consts.pressureLevelAnalogPin);
+		pressureLevel.setOversampleBits(8);
+		pressureLevel.setAverageBits(13);
 
 		_xBox = new XboxController(Consts.xBoxComPort);
 	}
@@ -243,7 +245,7 @@ public class BoxGrabber {
 	public double compresorPSI() {
 		double sensorV = pressureLevel.getVoltage();
 		double psi = 250 * (sensorV / 5) - 25;
-		return psi;
+		return Math.round(psi);
 	}
 
 	public void lowPSIWarning() {

@@ -7,7 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.StickyFaults;
 import com.ctre.phoenix.motorcontrol.Faults;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
+
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.livewindow.*;
@@ -887,6 +887,8 @@ public class DriveTrain {
 		if(myCurrentCase == 1) {
 			if(init) {
 				driveBox.switchAutoUpInit();
+				driveBox.switchAutoUpPeriodic();
+				Timer.delay(1);
 				turnController.enable();
 				turnController.setSetpoint(0);
 				autoDriveFw(Consts.autoA + Consts.autoD);
@@ -1061,8 +1063,8 @@ public class DriveTrain {
 	
 	public void autoDriveFw(double inches) {
 		turnController.setPID(Consts.kPDrAngle, Consts.kIDrAngle, Consts.kDDrAngle);
-		leftThreeEncoder.configOpenloopRamp(1, Consts.timeOutMs);
-		rightSixEncoder.configOpenloopRamp(1, Consts.timeOutMs);
+		leftThreeEncoder.configOpenloopRamp(.1, Consts.timeOutMs);
+		rightSixEncoder.configOpenloopRamp(.1, Consts.timeOutMs);
 		System.out.println("autoDriveFw was called");
 		leftThreeEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		rightSixEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
@@ -1107,7 +1109,7 @@ public class DriveTrain {
 		if(myCurrentCase == 1) {
 			if(init) {
 				turnController.enable();
-				turnController.setSetpoint(0);
+				//turnController.setSetpoint(0);
 				autoDriveFw(Consts.autoLine);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -1117,7 +1119,7 @@ public class DriveTrain {
 		}
 		if (myCurrentCase == 2) {
 			turnController.disable();
-			posController.disable();
+			//posController.disable();
 		}
 	}
 	
@@ -1135,6 +1137,7 @@ public class DriveTrain {
 	 */
 	public void autoInit() {
 		ahrs.reset();
+		
 		turnController.reset();
 		posController.reset();
 		leftThreeEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);

@@ -158,7 +158,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.autoDoNothing();
 				}
 				else if(autoLLL.getSelected() == Destinations.DRFW) {
-					_driveTrain.autoDriveFw(Consts.autoLine);
+					_driveTrain.driveAutoLine();
 				}
 			}
 			else if((gameData.charAt(0) == 'R') && (gameData.charAt(1) == 'R')) {
@@ -184,7 +184,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.autoDoNothing();
 				}
 				else if(autoRRR.getSelected() == Destinations.DRFW) {
-					_driveTrain.autoDriveFw(Consts.autoLine);
+					_driveTrain.driveAutoLine();
 				}
 			}
 			else if((gameData.charAt(0) == 'L') && (gameData.charAt(1) == 'R')) {
