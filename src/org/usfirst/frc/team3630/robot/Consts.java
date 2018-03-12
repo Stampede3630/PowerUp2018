@@ -20,11 +20,11 @@ public class Consts {
 
 	
 	// Manipulators 
-	public static final double  kPRotAng = 0.005;
+	public static final double  kPRotAng = 0.02;
 	public static final double  kIRotAng = 0.0;
 	public static final double  kDRotAng = 0;
 	
-	public static final double kPDrAngle = 0.009;
+	public static final double kPDrAngle = 0.02;
 	public static final double kIDrAngle = 0.00;
 	public static final double kDDrAngle =0;
 	
@@ -60,9 +60,9 @@ public class Consts {
 	public static final double autoG = 192.62;
 	public static final double autoH = 264.62;
 	public static final double autoI = 120.62;
-	public static final double autoLine = 130;
+	public static final double autoLine = 150;
 	public static final double firstDistanceInSwitchFFMethod = 112.4;
-	public static final double secondDistanceInSwitchFFMethod = 78.5;
+	public static final double secondDistanceInSwitchFFMethod = 50;//78.5;
 	public static final double firstDistanceInScaleFFMethod = 257.8; // needs to be changed
 	public static final double secondDistanceInScaleFFMethod = 59.2;  // needs to be changed
 	public static final double autoPosError = 3;
