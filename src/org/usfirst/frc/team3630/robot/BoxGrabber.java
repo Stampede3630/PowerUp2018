@@ -350,6 +350,10 @@ public class BoxGrabber {
 
 	}
 	public void liftDownInit () {
+		atSwitch = false;
+		atScale = false;
+		atLowScale = false;
+		
 		liftDownSensorFlag = false;
 		liftDownActivated = true;
 		
@@ -571,7 +575,9 @@ public class BoxGrabber {
 					}
 				break;
 				case LIFTUPAUTOMATED:
+					if(!atSwitch) {
 					liftUpInit();
+					}
 				break;
 				
 				case LOWSCALEUPAUTOMATED:
