@@ -15,17 +15,19 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
+// csv file paths
 // /home/lvuser/Pathfinder csv rio file path
 public class TankDrivePath  {
 
 	public AHRS ahrs;
-	TankModifier _modifier;
+	private TankModifier _modifier;
 	Trajectory leftTrajectory;
 	Trajectory rightTrajectory;
 	private TalonSRX lTalon;
 	private TalonSRX rTalon;
 	public EncoderFollower lEncoderFollower, rEncoderFollower;
 	double setLeftMotors, setRightMotors;
+	boolean sanitaryMoters, unSainitaryMoters;
 	//DistanceFollower leftDiagnostics, rightDiagnostics;
 	//File file;
 	
@@ -42,9 +44,9 @@ public class TankDrivePath  {
 		lTalon = leftSRXSide;
 		rTalon = rightSRXSide;
 		
-
+		sanitaryMoters = false;
+		unSainitaryMoters = false;
 		// TO DO CALCULATE NEW MAX VELOCITY IN ORDER TO  run pathfinder acurelty. we took to motors out of robot. I do not buy that the max velocity numbers are diffrent. 
-
 		/**
 		 *
 		 * // Create the Trajectory Configuration
@@ -74,6 +76,7 @@ public class TankDrivePath  {
 		 * x and y for a angle 
 		 * + y leftHand , -Y rightHand, +x robot forward in respect of going down game feild, 
 		 * +angle goes counterclockiwise so invert navx yaw
+		 * sample leagale waypoint  === new Waypoint(4, 1.0, 0),
 		 */
 		Waypoint[] points = new Waypoint[] {
 
@@ -130,11 +133,6 @@ public class TankDrivePath  {
 
 		}
 
-
-
-		// configure pidva
-	
-
 		/**
 		 * 	// The first argument is the proportional gain. Usually this will be quite high
 		// The second argument is the integral gain. This is unused for motion profiling
@@ -154,11 +152,8 @@ public class TankDrivePath  {
 
 	}
 	public void pathInit() {
-		ahrs.reset();
-		
+		ahrs.reset();		
 	}
-	
-	
 	/**
 	 * made trajectory for file and puts to csv. Needs to run only once to put file on robo rip
 	 */
@@ -209,8 +204,6 @@ public class TankDrivePath  {
 		Trajectory readTrajectory = Pathfinder.readFromCSV(myFile) ;
 		
 		_modifier = new TankModifier(readTrajectory).modify(Consts.robotWidthMeters);
-
-
 		leftTrajectory = _modifier.getLeftTrajectory();
 		rightTrajectory = _modifier.getRightTrajectory();
 		left = new EncoderFollower(leftTrajectory);
@@ -244,57 +237,63 @@ public class TankDrivePath  {
 		return distance_ticks;
 	}
 
+	/**
+	 * diognostics for pathfinder functuions 
+	 * 
+	 */
 	public void pathDiog(){
+		//	SmartDashboard.putNumber("robot yaw", gyroheading);
 		SmartDashboard.putNumber(" vLeft",   setLeftMotors);
 		SmartDashboard.putNumber(" vRight", setRightMotors);
 		SmartDashboard.putNumber(" encoderRight",   getDistance_ticks(lTalon));
-		SmartDashboard.putNumber(" EncoderLeft", getDistance_ticks(rTalon));
+		SmartDashboard.putNumber(" encoderLeft", getDistance_ticks(rTalon));
+		SmartDashboard.putBoolean("are moter Values are sanitary", sanitaryMoters);
+		SmartDashboard.putBoolean(" are moter values not sanitary", unsanitaryMoters);
 	}
 
 	/**
 	 * Iterative method that runs through path. Expected that this is called each 50ms (as expected through TimedRobot) 
 	 */
 	public void autoPeriodic() {
-//
 //		SmartDashboard.putNumber("left encoder distance", getDistance_ticks(lTalon));
 //		SmartDashboard.putNumber("Right encoder distance", getDistance_ticks(rTalon));
-//
 //		//NAVX heading
 //		//Since Jaci is from Australia, her compas is literally upsidedown 90 really = -90
 //		//Path_heading is therefore the Pathfinder turn feedback loop
-//
 //		double gyroheading =  ahrs.getYaw();  // Assuming the gyro is giving a value in degrees
-//
 //		double pathHeading = -1*  ahrs.getYaw(); 
 //		SmartDashboard.putNumber("robot yaw", gyroheading);
 //		double desired_heading = (180/Math.PI)*(lEncoderFollower.getHeading());  // Should also be in degrees
 //		//boundHalf method makes sure we are in -180 to 180
 //		double angleDifference =  Pathfinder.boundHalfDegrees(desired_heading -  pathHeading);
 //		double turn = .6* (-1.0/  80) * angleDifference;  
-//
 //		//calculates revised left and right output based on current ticks
 //		//compares it to current trajectory (EncoderFollowers)
 		double outputLeft = lEncoderFollower.calculate(getDistance_ticks(lTalon));
-		
 		double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
-		//		//+turn
+		//	for gyro functionality add 	//+turn
 		 setLeftMotors= outputLeft  ;
-		//		//-turn
+		//	for gyro functionality 	//-turn
 		 setRightMotors = outputRight ;
 
 
 		
 		 //	SmartDashboard.putBoolean("PathfinderComplete?", leftTrajectory.isFinished());
-		//Take calculated output and set talons
+		//Take calculated output and set talons but we think Phoenix does some magic I hope for personal sanity
 		//This output should be between -1 and 1... 
-		//but we think Phoenix does some magic I hope for personal sanity
-		if (outputLeft>=1 || outputLeft<=-1 ) {
+	
+		 
+		 if (outputLeft>=1 || outputLeft<=-1 ) {
 			System.out.println("Unsanitary talon output");
 			System.out.println(outputLeft);
+			unsanitaryMoters = true;
+	
 		}	
+		
 		else if (outputLeft<=1 || outputLeft>=-1 ){
 			System.out.println("sanitary talon output");
 			System.out.println(outputLeft);
+			sanitaryMoters = true;
 		}
 		
 		lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, setLeftMotors);
