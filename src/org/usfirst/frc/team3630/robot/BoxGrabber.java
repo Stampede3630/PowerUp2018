@@ -350,9 +350,7 @@ public class BoxGrabber {
 
 	}
 	public void liftDownInit () {
-		atSwitch = false;
-		atScale = false;
-		atLowScale = false;
+		
 		
 		liftDownSensorFlag = false;
 		liftDownActivated = true;
@@ -373,6 +371,9 @@ public class BoxGrabber {
 		}
 //		System.out.println("Party's over value ");
 //		System.out.print(partysOverDown);
+		atSwitch = false;
+		atScale = false;
+		atLowScale = false;
 		
 	}
 	
