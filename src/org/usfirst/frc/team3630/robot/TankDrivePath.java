@@ -28,12 +28,26 @@ public class TankDrivePath  {
 	double setLeftMotors, setRightMotors;
 	//DistanceFollower leftDiagnostics, rightDiagnostics;
 	//File file;
+	
+	/**
+	 * 
+	 * @param leftSRXSide
+	 * @param rightSRXSide
+	 * sets up talon srx with enocoder followers and waypoints for trajectories
+	 */
+	
 	public TankDrivePath(TalonSRX leftSRXSide, TalonSRX rightSRXSide) {
 		ahrs = new AHRS(SPI.Port.kMXP); 
 		ahrs.reset();
 		lTalon = leftSRXSide;
 		rTalon = rightSRXSide;
-		// Create the Trajectory Configuration
+		
+
+		// TO DO CALCULATE NEW MAX VELOCITY IN ORDER TO  run pathfinder acurelty. we took to motors out of robot. I do not buy that the max velocity numbers are diffrent. 
+
+		/**
+		 *
+		 * // Create the Trajectory Configuration
 		// Arguments:
 		// Fit Method: HERMITE_CUBIC or HERMITE_QUINTIC
 		// Sample Count: SAMPLES_HIGH (100 000)
@@ -43,14 +57,27 @@ public class TankDrivePath  {
 		// Max Velocity: 45 m/sec
 		// Max Acceleration: 100 m/s/s
 		// Max Jerk: 100 m/s/s
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
 
-
-		// TO DO CALCULATE NEW MAX VELOCITY IN ORDER TO  run pathfinder acurelty. we took to motors out of robot. I do not buy that the max velocity numbers are diffrent. 
-
+		 */
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 4, 100 , 100);		//Generates points for the path
+		/**
+		 * waypoints are rewuired to have
+		 * x and y for a angle 
+		 * + y leftHand , -Y rightHand, +x robot forward in respect of going down game feild, 
+		 * +angle goes counterclockiwise so invert navx yaw
+		 */
 		Waypoint[] points = new Waypoint[] {
 
-				// + y leftHand , -Y rightHand, +x robot forward in respect of going down game feild, +angle goes counterclockiwise so invert navx yaw
+				
 
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
@@ -72,16 +99,23 @@ public class TankDrivePath  {
 		rightTrajectory = _modifier.getRightTrajectory();
 
 
+		// where do we need to resest feedback sensor here or driveTrain
+		
 		//rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
-	//	lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
+		//	lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
 
 		lEncoderFollower = new EncoderFollower(leftTrajectory);
 		rEncoderFollower = new EncoderFollower(rightTrajectory);
-		// peramiters enc starting point, total amount ticks, wheel diamitor
-		// check with sam d and sophie 238 rotation is new rot rate 
+	/**
+	 * peramiters enc starting point, total amount ticks, wheel diamitor
+	 */
+		
 		lEncoderFollower.configureEncoder(0, 238, Consts.Weeld );
 		rEncoderFollower .configureEncoder(0, 238, Consts.Weeld);
 
+		/**
+		 * for loop which prints out left trajectory data can add to csv
+		 */
 		for (int i = 0; i<leftTrajectory.length(); i++){
 
 			System.out.print(leftTrajectory.get(i).acceleration); System.out.print(",");
@@ -99,7 +133,10 @@ public class TankDrivePath  {
 
 
 		// configure pidva
-		// The first argument is the proportional gain. Usually this will be quite high
+	
+
+		/**
+		 * 	// The first argument is the proportional gain. Usually this will be quite high
 		// The second argument is the integral gain. This is unused for motion profiling
 		// The third argument is the derivative gain. Tweak this if you are unhappy with
 		// the tracking of the trajectory
@@ -110,7 +147,7 @@ public class TankDrivePath  {
 		// The fifth argument is your acceleration gain. Tweak this if you want to get
 		// to a higher or lower speed quicker
 		//(1/3.3528
-
+		 */
 		lEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , .25, Consts.pathKA);
 		rEncoderFollower.configurePIDVA(1, Consts.pathKI,Consts.pathKD , .25 , Consts.pathKA);
 
@@ -120,6 +157,11 @@ public class TankDrivePath  {
 		ahrs.reset();
 		
 	}
+	
+	
+	/**
+	 * made trajectory for file and puts to csv. Needs to run only once to put file on robo rip
+	 */
 	/*
 	public void makeTrajectory(File myFile ) {
 		
@@ -156,6 +198,10 @@ public class TankDrivePath  {
 
 	}
 	*/
+	
+	/**
+	 * get trajec file allows us to retrive a trajectory
+	 */
 	
 	/*
 	public void getTrajectory(File myFile) {
@@ -241,7 +287,7 @@ public class TankDrivePath  {
 		 //	SmartDashboard.putBoolean("PathfinderComplete?", leftTrajectory.isFinished());
 		//Take calculated output and set talons
 		//This output should be between -1 and 1... 
-		//but we think Phoenix does some magic
+		//but we think Phoenix does some magic I hope for personal sanity
 		if (outputLeft>=1 || outputLeft<=-1 ) {
 			System.out.println("Unsanitary talon output");
 			System.out.println(outputLeft);

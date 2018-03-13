@@ -27,27 +27,29 @@ public class DriveTrain {
 	 */
 
 	public DriveTrain() {
+		
 		pathFinderPeriodicCalled= false;
 		TalonResetCall= false
 		EncodersReset= false
 		leftThreeEncoder = new WPI_TalonSRX(3);
 		leftTwo = new WPI_TalonSRX(2);
-		
 		rightSixEncoder = new WPI_TalonSRX(6);
 		rightFive = new WPI_TalonSRX(5);
 	
 		// mabey rename to leftThreeMaster? nice more specific name 
 		configureTalon(leftThreeEncoder);
 		configureTalon(rightSixEncoder);
-		//configureTalon(leftTwo);
-	///	configureTalon(rightFive);
-		//configureTalon(leftOne);
-		//configureTalon(rightFour);
+		configureTalon(leftTwo);
+		configureTalon(rightFive);
+		configureTalon(leftOne);
+		configureTalon(rightFour);
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
-		//rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
-		//leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
+		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
+		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
+		
 		// why differ sensor phase diffrent would it be cosntant for both robots?
+		//
 		leftThreeEncoder.setSensorPhase(true);
 		rightSixEncoder.setSensorPhase(false);
 	
@@ -144,7 +146,11 @@ public class DriveTrain {
 		double distance_rotations = distance_ticks / Consts.ticksPerRotation;
 		return distance_rotations;
 	}
-	
+	/**
+	 * 
+	 * @param _talon
+	 * @return distance ticks for talon
+	 */
 	public double getTicks(TalonSRX _talon) {
 		double distance_ticks = _talon.getSelectedSensorPosition(0);
 		return distance_ticks;
@@ -153,7 +159,7 @@ public class DriveTrain {
 
 	/**
 	 * @param _talon
-	 * @return velocity in in/ second. from native taon units 
+	 * @return velocity in m/ second. from native talon units 
 	 */
 	public double getVelocity(TalonSRX _talon) {
 		double velocity_milliseconds = (double) _talon.getSelectedSensorVelocity(0) / Consts.ticksPerRotation;
