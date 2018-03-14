@@ -570,7 +570,7 @@ public class BoxGrabber {
 
 			
 				case LIFTUPAUTOMATED:
-					if(!atSwitch) {
+					if(!atSwitch && !atLowScale) {
 					liftUpInit();
 					}
 				break;
