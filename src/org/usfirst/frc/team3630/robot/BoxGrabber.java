@@ -137,9 +137,7 @@ public class BoxGrabber {
 		else if (_xBox.getBumper(GenericHID.Hand.kLeft)) {
 			return State.CLAMPOPEN;
 		}
-		else if (_xBox.getStartButton()) {
-			return State.DROPBOX;
-		}
+
 		else if (_xBox.getBackButton()) {
 			return State.STOPOVERRIDE;
 		}
@@ -261,7 +259,7 @@ public class BoxGrabber {
 		isKickoutActivated = true;
 }
 	
-	public void  kickoutPeriodic(){
+/*	public void  kickoutPeriodic(){
 		if (isKickoutActivated){
 			switch(kickoutState){
 			case 1:
@@ -311,7 +309,7 @@ public class BoxGrabber {
 	
 			
 }
-	}
+	}*/
 
 	public void liftUpInit () {
 		liftTimer.reset();
@@ -546,7 +544,7 @@ public class BoxGrabber {
 		// for testing
 		// mainC.stop();
 
-		kickoutPeriodic();
+		
 		manipulatorDianostics();
 		liftDownPeriodic();
 		liftUpPeriodic();
@@ -570,11 +568,7 @@ public class BoxGrabber {
 					manualControl();
 					break;
 
-				case DROPBOX:
-					if(!isKickoutActivated) {
-						kickoutInit();
-					}
-				break;
+			
 				case LIFTUPAUTOMATED:
 					if(!atSwitch) {
 					liftUpInit();

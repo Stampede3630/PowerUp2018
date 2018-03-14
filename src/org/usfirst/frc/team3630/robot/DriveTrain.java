@@ -81,6 +81,8 @@ public class DriveTrain {
 		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		// why differ sensor phase diffrent would it be cosntant for both robots?
+		
+	
 		leftThreeEncoder.setSensorPhase(false);
 		rightSixEncoder.setSensorPhase(true);
 
@@ -148,7 +150,7 @@ public class DriveTrain {
 	SmartDashboard.putNumber("Left three curent", leftThreeEncoder.getOutputCurrent());
 	SmartDashboard.putNumber("total voltage ", panel.getVoltage());
 	SmartDashboard.putNumber("total current", panel.getTotalCurrent());
-		SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
+	//	SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
 		// moved over to driverStaton warnings 
 		// are we still getting curent issues 
 //		if(panel.getTotalCurrent()>300) {
@@ -777,9 +779,9 @@ public class DriveTrain {
 			
 		}
 		///////////FIX FIX FIX FIX
-		if (myCurrentCase == 10)
+		if (myCurrentCase == 10) {
 			//ENTER CONDITION
-		if (init) {
+/*		if (init) {
 			driveBox.kickoutInit();
 			if(driveBox.isKickoutActivated) {
 				driveBox.kickoutPeriodic();
@@ -793,9 +795,9 @@ public class DriveTrain {
 			else {
 				init = false;
 			}
-		}
+		}*/
 	}
-	
+	}
 	public void rightScaleLeft() {
 		if (myCurrentCase  == 1) {
 			if(init) {
