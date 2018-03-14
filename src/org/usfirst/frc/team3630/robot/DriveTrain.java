@@ -17,46 +17,35 @@ import com.kauailabs.navx.frc.AHRS;
 public class DriveTrain {
 
 	private XboxController _xBox;
+	boolean pathFinderPeriodicCalled, TalonResetCall, EncodersReset;
+	double rotateToAngleRate;
 	
-	PowerDistributionPanel panel;
-	private AHRS ahrs;
-	ErrorCode sticky;
-	ErrorCode fault;
 	
 	double turnOutput;
 	double posOutput;
-	boolean errorGreatorThanFive = false;
-	boolean init = true;
-	boolean right = true;
-	int myCurrentCase;		
-	PIDController turnController;
-	PIDController posController;
-	double rotateToAngleRate;
+
+	
 	Timer backwardsTimer;
 	
 	
-	// target angle degrees for straight on should not be a constant !
-	double targetAngleDegrees = 0f;
-	double kTargetDistanceInches = 1000;
+	
 
 	private WPI_TalonSRX leftThreeEncoder, rightSixEncoder, leftTwo, rightFive, leftOne, rightFour;
 
 	
 	DifferentialDrive driveTrain;
 
-	// defining PIDSource
-	EncoderPIDSource positionEncoderSource;
 
 	/**
 	 * leftThree , right six master motors and drive train constru
 	 */
 	private BoxGrabber driveBox;
+	
+	  tankDrivePath pathTwo;
 	public DriveTrain(BoxGrabber _boxGrabber) {
-		
+		pathTwo = new tankDrivePath(leftThreeEncoder,rightSixEncoder);
 		driveBox = _boxGrabber;
 		
-		ahrs = new AHRS(SPI.Port.kMXP);
-		ahrs.setPIDSourceType(PIDSourceType.kDisplacement);
 		
 		panel = new PowerDistributionPanel(0);
 		
@@ -96,10 +85,25 @@ public class DriveTrain {
 	/**
 	 *  set up for test init  */
 	public void testInit() {
+		pathTwo.pathDiog();
+		leftThreeEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
+		rightSixEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
+			if(leftThreeEncoder.getSelectedSensorPosition(0) < 238 && rightSixEncoder.getSelectedSensorPosition(0) <238){
+				System.out.println("encoders were reset");
+				EncodersReset= true ;
+			}
+			else{
+				System.out.println("your encoders wern't reset");
+				EncodersReset= false ;
+			}
+			TalonResetCall= true;
 
 	}
 	
 	public void testPeriodic() {
+		pathTwo.autoPeriodic();
+		pathTwo.pathDiog();
+		
 
 	}
 
@@ -180,45 +184,25 @@ public class DriveTrain {
 		SmartDashboard.putNumber("Front Left Velocity", getVelocity(leftThreeEncoder));
 		SmartDashboard.putNumber("Left position in ticks", getTicks(leftThreeEncoder));
 		SmartDashboard.putNumber("Right position in ticks", getTicks(rightSixEncoder));
-		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());
-		SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
-		SmartDashboard.putNumber("Position Setpoint", posController.getSetpoint());
-		SmartDashboard.putNumber("Position Error", posController.getError());
-		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
-		SmartDashboard.putNumber("Stage", myCurrentCase);
-		SmartDashboard.putNumber("turn controller error", turnController.getError());
-		//posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
-		SmartDashboard.putBoolean("Is right true?", right);
-		SmartDashboard.putBoolean("PosControl ON", 	posController.isEnabled());
-		SmartDashboard.putBoolean("TurnControl On", turnController.isEnabled());
-		SmartDashboard.putBoolean("Is init true?", init);
-		SmartDashboard.putNumber("posController input", posOutput);
-		
-		SmartDashboard.putNumber("turnController kP", turnController.getP());
-		
+	
 		if(panel.getTotalCurrent()>300) {
 			System.out.print("[WARNING] CURRENT DRAW IS AT ");
 			System.out.print(panel.getTotalCurrent());
 			System.out.print('\n');
 		}
 		
-		fault=leftThreeEncoder.getLastError();
-		if(fault != ErrorCode.OK) System.out.println(fault);
-//		if (leftEncoder.getOutputCurrent()>35) { 
-//			System.out.print("[WARNING] Talon Current is at ");
-//			System.out.print(leftEncoder.getOutputCurrent());
-//			System.out.print('\n');
-//		}
+
 	}
 	
 	public void autoPeriodic() {
+		
 	
 	}
 	
 
 	/**
 	 * @param _talon
-	 * @return actual rrotation of talon in a rotation of the wheel 
+	 * @return actual rotation of talon in a rotation of the wheel 
 	 */
 	public double getRotations(TalonSRX _talon) {
 		double distance_ticks = _talon.getSelectedSensorPosition(0);
@@ -234,14 +218,13 @@ public class DriveTrain {
 
 	/**
 	 * @param _talon
-	 * @return velocity in in/ second. from native taon units 
+	 * @return velocity in m/ second. from native talon units 
 	 */
 	public double getVelocity(TalonSRX _talon) {
 		double velocity_milliseconds = (double) _talon.getSelectedSensorVelocity(0) / Consts.ticksPerRotation;
 		double velocity_seconds = velocity_milliseconds *10* 6*Math.PI*.0254; 
 		return velocity_seconds;
 	}
-
 	
 
 
