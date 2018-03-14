@@ -34,7 +34,7 @@ public class tankDrivePath {
 		
 		sanitaryMoters = false;
 		unSainitaryMoters = false;
-		// TO DO CALCULATE NEW MAX VELOCITY IN ORDER TO  run pathfinder acurelty. we took to motors out of robot. I do not buy that the max velocity numbers are diffrent. 
+		// TO DO CALCULATE NEW MAX VELOCITY gear ratio changed again 
 		/**
 		 *
 		 * // Create the Trajectory Configuration
@@ -82,8 +82,8 @@ public class tankDrivePath {
 
 		Trajectory trajectory = Pathfinder.generate(points, config);
 
-
-		_modifier = new TankModifier(trajectory).modify(Consts.robotWidthMeters);
+// to do confirm robot width
+		_modifier = new TankModifier(trajectory).modify( 28);
 
 
 		leftTrajectory = _modifier.getLeftTrajectory();
@@ -101,8 +101,8 @@ public class tankDrivePath {
 	 * peramiters enc starting point, total amount ticks, wheel diamitor
 	 */
 		
-		lEncoderFollower.configureEncoder(0, 238, Consts.Weeld );
-		rEncoderFollower .configureEncoder(0, 238, Consts.Weeld);
+		lEncoderFollower.configureEncoder(0, 238, 6 );
+		rEncoderFollower .configureEncoder(0, 238, 6);
 
 		/**
 		 * for loop which prints out left trajectory data can add to csv
@@ -145,7 +145,7 @@ public class tankDrivePath {
 	public void pathInit() {
 		ahrs.reset();		
 	}
-	*/
+	
 	/**
 	 * @param _talon talon for requested encoder distance
 	 * @return encoder distance in ticks
@@ -166,7 +166,7 @@ public class tankDrivePath {
 		SmartDashboard.putNumber(" encoderRight",   getDistance_ticks(lTalon));
 		SmartDashboard.putNumber(" encoderLeft", getDistance_ticks(rTalon));
 		SmartDashboard.putBoolean("are moter Values are sanitary", sanitaryMoters);
-		SmartDashboard.putBoolean(" are moter values not sanitary", unsanitaryMoters);
+		SmartDashboard.putBoolean(" are moter values not sanitary", unSainitaryMoters);
 	}
 
 	
@@ -188,7 +188,7 @@ public class tankDrivePath {
 	 if (outputLeft>=1 || outputLeft<=-1 ) {
 		System.out.println("Unsanitary talon output");
 		System.out.println(outputLeft);
-		unsanitaryMoters = true;
+		unSainitaryMoters = true;
 
 	}	
 	
