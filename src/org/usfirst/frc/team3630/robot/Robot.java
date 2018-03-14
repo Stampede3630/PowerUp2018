@@ -105,7 +105,7 @@ public class Robot extends IterativeRobot {
 	}
 	public void autonomousInit() {
 		
-		_driveTrain.autoInit();
+
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 }
 	/* (non-Javadoc)
@@ -114,7 +114,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		autoLogic();
+
 		_driveTrain.autoPeriodic();
 		_driveTrain.getDiagnostics();
 		box.switchAutoUpPeriodic();

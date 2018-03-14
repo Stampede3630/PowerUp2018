@@ -7,12 +7,15 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.StickyFaults;
 import com.ctre.phoenix.motorcontrol.Faults;
-
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.livewindow.*;
 import edu.wpi.first.wpilibj.*;
 import com.kauailabs.navx.frc.AHRS;
+import jaci.pathfinder.*;
+import jaci.pathfinder.followers.*;
+import jaci.pathfinder.modifiers.*;
 
 public class DriveTrain {
 
@@ -46,8 +49,6 @@ public class DriveTrain {
 		pathTwo = new tankDrivePath(leftThreeEncoder,rightSixEncoder);
 		driveBox = _boxGrabber;
 		
-		
-		panel = new PowerDistributionPanel(0);
 		
 		_xBox = new XboxController(Consts.xBoxComPort);
 		// srx definitions
@@ -127,8 +128,7 @@ public class DriveTrain {
 		// three are two missing bad? delted folowers set in constructor
 		
 	SmartDashboard.putNumber("Left three curent", leftThreeEncoder.getOutputCurrent());
-	SmartDashboard.putNumber("total voltage ", panel.getVoltage());
-	SmartDashboard.putNumber("total current", panel.getTotalCurrent());
+
 	//	SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
 		// moved over to driverStaton warnings 
 		// are we still getting curent issues 
@@ -177,20 +177,13 @@ public class DriveTrain {
 	public void getDiagnostics() {		
 		SmartDashboard.putNumber("Left Current", leftThreeEncoder.getOutputCurrent());
 		SmartDashboard.putNumber("Right Current", rightSixEncoder.getOutputCurrent());
-		SmartDashboard.putNumber("total Current", panel.getTotalCurrent());
 		SmartDashboard.putNumber("Front Right Position", getRotations(rightSixEncoder));
 		SmartDashboard.putNumber("Front Right Velocity", getVelocity(rightSixEncoder));
 		SmartDashboard.putNumber("Front Left Position", getRotations(leftThreeEncoder));
 		SmartDashboard.putNumber("Front Left Velocity", getVelocity(leftThreeEncoder));
 		SmartDashboard.putNumber("Left position in ticks", getTicks(leftThreeEncoder));
 		SmartDashboard.putNumber("Right position in ticks", getTicks(rightSixEncoder));
-	
-		if(panel.getTotalCurrent()>300) {
-			System.out.print("[WARNING] CURRENT DRAW IS AT ");
-			System.out.print(panel.getTotalCurrent());
-			System.out.print('\n');
-		}
-		
+
 
 	}
 	
