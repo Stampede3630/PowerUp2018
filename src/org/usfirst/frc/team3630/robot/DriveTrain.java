@@ -79,8 +79,8 @@ public class DriveTrain {
 		configureTalon(rightFour);  
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
-		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
-		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
+		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Disabled, 0);
+		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Disabled, 0);
 		// why differ sensor phase diffrent would it be cosntant for both robots?
 		leftThreeEncoder.setSensorPhase(false);
 		rightSixEncoder.setSensorPhase(true);
@@ -238,7 +238,6 @@ public class DriveTrain {
 	public void autoPeriodic() {
 		posOutput = posController.get();
 		driveTrain.arcadeDrive(posOutput, turnOutput);
-		System.out.println(posOutput);
 	}
 	
 	/**
@@ -449,7 +448,7 @@ public class DriveTrain {
 				autoTurnDegree(-35);
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
-				myCurrentCase = 4;
+				myCurrentCase = 3;
 	     		init = true;
 			}
 			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
