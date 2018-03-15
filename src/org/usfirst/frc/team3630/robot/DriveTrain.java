@@ -33,7 +33,7 @@ public class DriveTrain {
 	
 	  tankDrivePath pathTwo;
 	public DriveTrain(BoxGrabber _boxGrabber) {
-		pathTwo = new tankDrivePath(leftThreeEncoder,rightSixEncoder);
+	
 		driveBox = _boxGrabber;
 		
 		
@@ -45,22 +45,25 @@ public class DriveTrain {
 		rightSixEncoder = new WPI_TalonSRX(Consts.rightSix);
 		rightFive = new WPI_TalonSRX(Consts.rightFive);
 		rightFour = new WPI_TalonSRX(Consts.rightFour);
-		backwardsTimer = new Timer();
 		
 		configureTalon(leftThreeEncoder);
 		configureTalon(rightSixEncoder);
 		configureTalon(leftTwo);
 		configureTalon(rightFive);
-		configureTalon(leftOne);
-		configureTalon(rightFour);  
-		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
-		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
+		//configureTalon(leftOne);
+		//configureTalon(rightFour);  
+		
+	//	rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
+		//leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		
 		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Disabled, 0);
 		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Disabled, 0);
 		leftThreeEncoder.setSensorPhase(false);
 		rightSixEncoder.setSensorPhase(true);
+		//rightSixEncoder.setInverted(true);
 		driveTrain = new DifferentialDrive(leftThreeEncoder, rightSixEncoder);
+		pathTwo = new tankDrivePath(leftThreeEncoder,rightSixEncoder);
+		
 		driveTrain.setDeadband(0); // why set to zero and not at default ?.02
 		
 	}
@@ -69,9 +72,10 @@ public class DriveTrain {
 	/**
 	 *  set up for test init  */
 	public void testInit() {
-		pathTwo.pathDiog();
+		
 		leftThreeEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
 		rightSixEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
+		
 			if(leftThreeEncoder.getSelectedSensorPosition(0) < 238 && rightSixEncoder.getSelectedSensorPosition(0) <238){
 				System.out.println("encoders were reset");
 				EncodersReset= true ;
@@ -85,6 +89,10 @@ public class DriveTrain {
 	}
 	
 	public void testPeriodic() {
+		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
+		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
+		
+		
 		pathTwo.autoPeriodic();
 		pathTwo.pathDiog();
 		

@@ -30,7 +30,7 @@ public class tankDrivePath {
 		ahrs.reset();
 		lTalon = leftSRXSide;
 		rTalon = rightSRXSide;
-		
+		//rTalon.setSensorPhase(true);
 		sanitaryMoters = false;
 		unSainitaryMoters = false;
 		// TO DO CALCULATE NEW MAX VELOCITY gear ratio changed again 
@@ -52,7 +52,7 @@ public class tankDrivePath {
 		 * 
 
 		 */
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 4, 100 , 100);		//Generates points for the path
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 4, 4, 25);		//Generates points for the path
 		/**
 		 * waypoints are rewuired to have
 		 * x and y for a angle 
@@ -66,7 +66,7 @@ public class tankDrivePath {
 
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
-				new Waypoint(4, 1.0, 0),
+				new Waypoint(20, 0, 0),
 
 
 				//new Waypoint(2, 4.5 , Pathfinder.d2r(60)) // getts us close to 60 
@@ -114,7 +114,7 @@ public class tankDrivePath {
 			System.out.print("\n");
 
 		}
-		*/
+		
 
 		/**
 		 * 	// The first argument is the proportional gain. Usually this will be quite high
@@ -129,8 +129,8 @@ public class tankDrivePath {
 		// to a higher or lower speed quicker
 		//(1/3.3528
 		 */
-		lEncoderFollower.configurePIDVA(.01, 0 ,0  , (1/10), 0);
-		rEncoderFollower.configurePIDVA(.01, 0 ,0  , (1/10) , 0) ;
+		lEncoderFollower.configurePIDVA( 2, 0 ,0  , (1/10), 0);
+		rEncoderFollower.configurePIDVA(2, 0 ,0  , (1/10) , 0) ;
 
 
 	}
@@ -164,6 +164,7 @@ public class tankDrivePath {
 
 	
 	public void autoPeriodic() {
+		pathDiog();
 		double outputLeft = lEncoderFollower.calculate(getDistance_ticks(lTalon));
 		double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
 		//	for gyro functionality add 	//+turn
