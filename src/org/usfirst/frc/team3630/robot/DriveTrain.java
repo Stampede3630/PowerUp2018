@@ -68,11 +68,11 @@ public class DriveTrain {
 		configureTalon(rightFour);  
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
-		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
-		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
+		//rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
+		//leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		// why differ sensor phase diffrent would it be cosntant for both robots?
-		
-	
+		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Disabled, 0);
+		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Disabled, 0);
 		leftThreeEncoder.setSensorPhase(false);
 		rightSixEncoder.setSensorPhase(true);
 
@@ -186,6 +186,8 @@ public class DriveTrain {
 
 
 	}
+	
+	
 	
 	public void autoPeriodic() {
 		

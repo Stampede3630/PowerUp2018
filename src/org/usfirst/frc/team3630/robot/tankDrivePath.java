@@ -83,7 +83,7 @@ public class tankDrivePath {
 		Trajectory trajectory = Pathfinder.generate(points, config);
 
 // to do confirm robot width
-		_modifier = new TankModifier(trajectory).modify( 28);
+		_modifier = new TankModifier(trajectory).modify( 29);
 
 
 		leftTrajectory = _modifier.getLeftTrajectory();
@@ -136,8 +136,8 @@ public class tankDrivePath {
 		// to a higher or lower speed quicker
 		//(1/3.3528
 		 */
-		lEncoderFollower.configurePIDVA(1, 0 ,0  , .25, 0);
-		rEncoderFollower.configurePIDVA(1, 0 ,0  , .25 , 0) ;
+		lEncoderFollower.configurePIDVA(.01, 0 ,0  , (1/10), 0);
+		rEncoderFollower.configurePIDVA(.01, 0 ,0  , (1/10) , 0) ;
 
 
 	}
