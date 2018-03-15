@@ -939,8 +939,50 @@ public class DriveTrain {
 	public void middleSwitchLeftFF() { //started. No right angles. Need a lot of testing
 		if(myCurrentCase == 1) {
 			if(init) {
-				
+				driveBox.switchAutoUpInit();
+				turnController.enable();
+				autoTurnDegree(-50);
 			}
+			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
+				myCurrentCase = 2;
+	     		init = true;
+			}
+		}
+		if(myCurrentCase == 2) {
+			if(init){
+				autoDriveFw(125.3);
+			}
+			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
+				myCurrentCase = 3;
+				init = true;
+			}
+		}
+		if(myCurrentCase == 3) {
+			if(init) {
+				autoTurnDegree(0);
+			}
+			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
+				myCurrentCase = 4;
+	     		init = true;
+			}
+		}
+		if(myCurrentCase == 4) {
+			if(init) {
+				autoDriveFw(63.6);
+			}
+			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
+				myCurrentCase = 5;
+				init = true;
+			}
+		}
+		if(myCurrentCase == 5) {
+			//ENTER CONDITION
+			if(init){
+				init = false;
+				driveBox.kickoutInit();	
+			}
+			turnController.disable();
+			posController.disable();
 		}
 	}
 	
