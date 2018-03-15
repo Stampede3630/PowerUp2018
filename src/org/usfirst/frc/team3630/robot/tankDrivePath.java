@@ -25,7 +25,6 @@ public class tankDrivePath {
 	double setLeftMotors, setRightMotors;
 	boolean sanitaryMoters, unSainitaryMoters;
 	
-	
 	public tankDrivePath(TalonSRX leftSRXSide, TalonSRX rightSRXSide) {
 		ahrs = new AHRS(SPI.Port.kMXP); 
 		ahrs.reset();
@@ -49,12 +48,7 @@ public class tankDrivePath {
 		// Max Jerk: 100 m/s/s
 		 * 
 		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
+
 		 * 
 
 		 */
@@ -82,7 +76,6 @@ public class tankDrivePath {
 
 		Trajectory trajectory = Pathfinder.generate(points, config);
 
-// to do confirm robot width
 		_modifier = new TankModifier(trajectory).modify( 29);
 
 
@@ -171,12 +164,12 @@ public class tankDrivePath {
 
 	
 	public void autoPeriodic() {
-	double outputLeft = lEncoderFollower.calculate(getDistance_ticks(lTalon));
-	double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
-	//	for gyro functionality add 	//+turn
-	 setLeftMotors= outputLeft  ;
-	//	for gyro functionality 	//-turn
-	 setRightMotors = outputRight ;
+		double outputLeft = lEncoderFollower.calculate(getDistance_ticks(lTalon));
+		double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
+		//	for gyro functionality add 	//+turn
+		 setLeftMotors= outputLeft  ;
+		//	for gyro functionality 	//-turn
+		 setRightMotors = outputRight ;
 
 
 	

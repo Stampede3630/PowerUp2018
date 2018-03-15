@@ -21,23 +21,10 @@ public class DriveTrain {
 
 	private XboxController _xBox;
 	boolean pathFinderPeriodicCalled, TalonResetCall, EncodersReset;
-	double rotateToAngleRate;
-	
-	
-	double turnOutput;
-	double posOutput;
-
-	
-	Timer backwardsTimer;
-	
-	
-	
-
 	private WPI_TalonSRX leftThreeEncoder, rightSixEncoder, leftTwo, rightFive, leftOne, rightFour;
 
 	
 	DifferentialDrive driveTrain;
-
 
 	/**
 	 * leftThree , right six master motors and drive train constru
@@ -51,7 +38,7 @@ public class DriveTrain {
 		
 		
 		_xBox = new XboxController(Consts.xBoxComPort);
-		// srx definitions
+		
 		leftThreeEncoder = new WPI_TalonSRX(Consts.leftThree);
 		leftTwo = new WPI_TalonSRX(Consts.leftTwo);
 		leftOne = new WPI_TalonSRX(Consts.leftOne);
@@ -68,15 +55,11 @@ public class DriveTrain {
 		configureTalon(rightFour);  
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
-		//rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
-		//leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
-		// why differ sensor phase diffrent would it be cosntant for both robots?
+		
 		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Disabled, 0);
 		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Disabled, 0);
 		leftThreeEncoder.setSensorPhase(false);
 		rightSixEncoder.setSensorPhase(true);
-
-	
 		driveTrain = new DifferentialDrive(leftThreeEncoder, rightSixEncoder);
 		driveTrain.setDeadband(0); // why set to zero and not at default ?.02
 		
@@ -150,16 +133,12 @@ public class DriveTrain {
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
 		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
 		_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
-//		_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
-//		_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
-//		_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
+
 		_talon.configNeutralDeadband(0.05, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband. might be worth looking at 
 		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
 		_talon.setInverted(false);
-//		_talon.configOpenloopRamp(.1, Consts.timeOutMs);  figure out wheere to sert 
-		// where should we set ramp rate???
-		///////////////////
-	
+
+
 		
 		// Peak current and duration must be exceeded before corrent limit is activated.
 		// When activated, current will be limited to continuous current.
@@ -193,8 +172,6 @@ public class DriveTrain {
 		
 	
 	}
-	
-
 	/**
 	 * @param _talon
 	 * @return actual rotation of talon in a rotation of the wheel 
