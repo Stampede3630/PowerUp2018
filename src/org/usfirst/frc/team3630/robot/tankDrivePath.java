@@ -46,13 +46,8 @@ public class tankDrivePath {
 		// Max Velocity: 45 m/sec
 		// Max Acceleration: 100 m/s/s
 		// Max Jerk: 100 m/s/s
-		 * 
-		 * 
-
-		 * 
-
 		 */
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 9, 2, 2);		//Generates points for the path
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 8, 15, 5);// are theese sane		//Generates points for the path
 		/**
 		 * waypoints are rewuired to have
 		 * x and y for a angle 
@@ -66,7 +61,7 @@ public class tankDrivePath {
 
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
-				new Waypoint(20, 0, 0),
+				new Waypoint(100, 0, 0),
 
 
 				//new Waypoint(2, 4.5 , Pathfinder.d2r(60)) // getts us close to 60 
@@ -77,7 +72,7 @@ public class tankDrivePath {
 		Trajectory trajectory = Pathfinder.generate(points, config);
 
 		_modifier = new TankModifier(trajectory).modify(0.7366);
-
+		
 
 		leftTrajectory = _modifier.getLeftTrajectory();
 		rightTrajectory = _modifier.getRightTrajectory();
@@ -99,24 +94,12 @@ public class tankDrivePath {
 
 		/**
 		 * for loop which prints out left trajectory data can add to csv
-		 */
-		/*
-		for (int i = 0; i<leftTrajectory.length(); i++){
-
-			System.out.print(leftTrajectory.get(i).acceleration); System.out.print(",");
-			System.out.print(leftTrajectory.get(i).dt); System.out.print(",");
-			System.out.print(leftTrajectory.get(i).heading); System.out.print(",");
-			System.out.print(leftTrajectory.get(i).jerk); System.out.print(",");
-			System.out.print(leftTrajectory.get(i).position); System.out.print(",");
-			System.out.print(leftTrajectory.get(i).velocity); System.out.print(",");
-			System.out.print(leftTrajectory.get(i).x); System.out.print(",");
-			System.out.print(leftTrajectory.get(i).y);
-			System.out.print("\n");
-
-		}
+		 
 		
+		
+	
 
-		/**
+		
 		 * 	// The first argument is the proportional gain. Usually this will be quite high
 		// The second argument is the integral gain. This is unused for motion profiling
 		// The third argument is the derivative gain. Tweak this if you are unhappy with
@@ -129,8 +112,25 @@ public class tankDrivePath {
 		// to a higher or lower speed quicker
 		//(1/3.3528
 		 */
-		lEncoderFollower.configurePIDVA( 0, 0 ,0  , (1/10), 0);
-		rEncoderFollower.configurePIDVA(0, 0 ,0  , (1/10) , 0) ;
+		
+		
+		for (int i = 0; i<leftTrajectory.length(); i++){
+
+			System.out.print(leftTrajectory.get(i).acceleration); System.out.print(",");
+			//System.out.print(leftTrajectory.get(i).dt); System.out.print(",");
+			//System.out.print(leftTrajectory.get(i).heading); System.out.print(",");
+			//System.out.print(leftTrajectory.get(i).jerk); System.out.print(",");
+			System.out.print(leftTrajectory.get(i).position); System.out.print(",");
+			System.out.print(leftTrajectory.get(i).velocity ); System.out.print(",");
+			System.out.print(leftTrajectory.get(i).velocity * (1)); System.out.print(",");
+			//System.out.print(leftTrajectory.get(i).x); System.out.print(",");
+			//System.out.print(leftTrajectory.get(i).y);
+			System.out.print("\n");
+
+		}
+		
+		lEncoderFollower.configurePIDVA( 0, 0 ,0  , (.1), 0);
+		rEncoderFollower.configurePIDVA(0, 0 ,0  , (.1) , 0) ;
 
 
 	}
@@ -164,14 +164,14 @@ public class tankDrivePath {
 
 	
 	public void autoPeriodic() {
-		pathDiog();
+	
 		double outputLeft = lEncoderFollower.calculate(getDistance_ticks(lTalon));
 		double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
 		//	for gyro functionality add 	//+turn
 		 setLeftMotors= outputLeft  ;
 		//	for gyro functionality 	//-turn
-		 setRightMotors = outputRight ;
-
+		 setRightMotors = outputRight *-1;
+		pathDiog();
 
 	
 	 //	SmartDashboard.putBoolean("PathfinderComplete?", leftTrajectory.isFinished());

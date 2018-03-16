@@ -60,7 +60,7 @@ public class DriveTrain {
 		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Disabled, 0);
 		leftThreeEncoder.setSensorPhase(false);
 		rightSixEncoder.setSensorPhase(true);
-		//rightSixEncoder.setInverted(true);
+		rightSixEncoder.setInverted(false);
 		driveTrain = new DifferentialDrive(leftThreeEncoder, rightSixEncoder);
 		pathTwo = new tankDrivePath(leftThreeEncoder,rightSixEncoder);
 		
