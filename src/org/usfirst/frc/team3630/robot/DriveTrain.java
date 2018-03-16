@@ -47,12 +47,11 @@ public class DriveTrain {
 		
 		configureTalon(leftThreeEncoder);
 		configureTalon(rightSixEncoder);
-		//configureTalon(leftTwo);
-	//	configureTalon(rightFive);
+
 
 		
-	//	rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
-		//leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
+	rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
+	leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		
 	
 		leftThreeEncoder.setSensorPhase(false);
@@ -70,8 +69,8 @@ public class DriveTrain {
 	 *  set up for test init  */
 	public void testInit() {
 		
-		leftThreeEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
-		rightSixEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
+		//leftThreeEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
+		//rightSixEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
 		
 			if(leftThreeEncoder.getSelectedSensorPosition(0) < 238 && rightSixEncoder.getSelectedSensorPosition(0) <238){
 				System.out.println("encoders were reset");
@@ -180,9 +179,11 @@ public class DriveTrain {
 	/**
 	 * @param _talon
 	 * @return actual rotation of talon in a rotation of the wheel 
+	 * 
 	 */
 	public double getRotations(TalonSRX _talon) {
 		double distance_ticks = _talon.getSelectedSensorPosition(0);
+		// WARNING converstion seems fuzy needs to fix 
 		double distance_rotations = distance_ticks / Consts.ticksPerRotation;
 		return distance_rotations;
 	}

@@ -33,7 +33,7 @@ public class tankDrivePath {
 		//rTalon.setSensorPhase(true);
 		sanitaryMoters = false;
 		unSainitaryMoters = false;
-		// TO DO CALCULATE NEW MAX VELOCITY gear ratio changed again 
+	
 		/**
 		 *
 		 * // Create the Trajectory Configuration
@@ -47,7 +47,7 @@ public class tankDrivePath {
 		// Max Acceleration: 100 m/s/s
 		// Max Jerk: 100 m/s/s
 		 */
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 6, 50, 50);// are theese sane		//Generates points for the path
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05,5 , 100, 50);// are theese sane		//Generates points for the path
 		/**
 		 * waypoints are rewuired to have
 		 * x and y for a angle 
@@ -76,12 +76,9 @@ public class tankDrivePath {
 
 		leftTrajectory = _modifier.getLeftTrajectory();
 		rightTrajectory = _modifier.getRightTrajectory();
-
-
-		// where do we need to resest feedback sensor here or driveTrain
 		
-		//rTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
-		//	lTalon.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, Consts.timeOutMs);
+		
+		// reset encoders in driveTrain 
 
 		lEncoderFollower = new EncoderFollower(leftTrajectory);
 		rEncoderFollower = new EncoderFollower(rightTrajectory);
@@ -114,6 +111,8 @@ public class tankDrivePath {
 		 */
 		
 		
+		
+		
 		for (int i = 0; i<leftTrajectory.length(); i++){
 
 			System.out.print(leftTrajectory.get(i).acceleration); System.out.print(",");
@@ -129,12 +128,17 @@ public class tankDrivePath {
 
 		}
 		
-		lEncoderFollower.configurePIDVA( 0, 0 ,0  , (.1), .2);
-		rEncoderFollower.configurePIDVA(0, 0 ,0  , (.1) , .2) ;
+		// helpful note kv needs to be a decim no (
+		lEncoderFollower.configurePIDVA( .8, 0 ,0  , (.1), 0.0);
+		rEncoderFollower.configurePIDVA(.8, 0 ,0  , (.1) , 0.0) ;
 
 
 	}
 	
+	
+	/**
+	 * restests navx  
+	 */
 	public void pathInit() {
 		ahrs.reset();		
 	}
@@ -170,14 +174,14 @@ public class tankDrivePath {
 		//	for gyro functionality add 	//+turn
 		 setLeftMotors= outputLeft  ;
 		//	for gyro functionality 	//-turn
+		 
+		 
+		 // times by -1 to get robot wheels to move in same direction
 		 setRightMotors = outputRight *-1;
 		pathDiog();
 
 	
-	 //	SmartDashboard.putBoolean("PathfinderComplete?", leftTrajectory.isFinished());
-	//Take calculated output and set talons but we think Phoenix does some magic I hope for personal sanity
-	//This output should be between -1 and 1... 
-
+	 // checks if motor output is sanitary
 	 
 	 if (outputLeft>=1 || outputLeft<=-1 ) {
 		System.out.println("Unsanitary talon output");
