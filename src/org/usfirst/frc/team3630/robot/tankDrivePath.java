@@ -52,7 +52,7 @@ public class tankDrivePath {
 		 * 
 
 		 */
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 4, 4, 25);		//Generates points for the path
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 9, 2, 2);		//Generates points for the path
 		/**
 		 * waypoints are rewuired to have
 		 * x and y for a angle 
@@ -76,7 +76,7 @@ public class tankDrivePath {
 
 		Trajectory trajectory = Pathfinder.generate(points, config);
 
-		_modifier = new TankModifier(trajectory).modify( 29);
+		_modifier = new TankModifier(trajectory).modify(0.7366);
 
 
 		leftTrajectory = _modifier.getLeftTrajectory();
@@ -94,8 +94,8 @@ public class tankDrivePath {
 	 * peramiters enc starting point, total amount ticks, wheel diamitor
 	 */
 		
-		lEncoderFollower.configureEncoder(0, 238, 6 );
-		rEncoderFollower .configureEncoder(0, 238, 6);
+		lEncoderFollower.configureEncoder(0, 238, 0.1524 );
+		rEncoderFollower .configureEncoder(0, 238,  0.1524 );
 
 		/**
 		 * for loop which prints out left trajectory data can add to csv
@@ -129,8 +129,8 @@ public class tankDrivePath {
 		// to a higher or lower speed quicker
 		//(1/3.3528
 		 */
-		lEncoderFollower.configurePIDVA( 2, 0 ,0  , (1/10), 0);
-		rEncoderFollower.configurePIDVA(2, 0 ,0  , (1/10) , 0) ;
+		lEncoderFollower.configurePIDVA( 0, 0 ,0  , (1/10), 0);
+		rEncoderFollower.configurePIDVA(0, 0 ,0  , (1/10) , 0) ;
 
 
 	}
