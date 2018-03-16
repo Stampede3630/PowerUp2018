@@ -942,7 +942,7 @@ public class DriveTrain {
 				turnController.setPID(Consts.kPDrAngle, Consts.kIDrAngle, Consts.kDDrAngle);
 				driveBox.switchAutoUpInit();
 				turnController.enable();
-				autoTurnDegree(-50);
+				autoTurnDegree(-60);
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
 				myCurrentCase = 2;
@@ -952,7 +952,7 @@ public class DriveTrain {
 		if(myCurrentCase == 2) {
 			if(init){
 				turnController.setPID(Consts.kPRotAng, Consts.kIRotAng, Consts.kDRotAng);
-				autoDriveFw(125.3);
+				autoDriveFw(144);//162.3);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 				myCurrentCase = 3;
@@ -970,7 +970,7 @@ public class DriveTrain {
 		}
 		if(myCurrentCase == 4) {
 			if(init) {
-				autoDriveFw(63.6);
+				autoDriveFw(50);//63.6);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 				myCurrentCase = 5;
