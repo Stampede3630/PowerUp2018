@@ -939,6 +939,7 @@ public class DriveTrain {
 	public void middleSwitchLeftFF() { //started. No right angles. Need a lot of testing
 		if(myCurrentCase == 1) {
 			if(init) {
+				turnController.setPID(Consts.kPDrAngle, Consts.kIDrAngle, Consts.kDDrAngle);
 				driveBox.switchAutoUpInit();
 				turnController.enable();
 				autoTurnDegree(-50);
@@ -950,6 +951,7 @@ public class DriveTrain {
 		}
 		if(myCurrentCase == 2) {
 			if(init){
+				turnController.setPID(Consts.kPRotAng, Consts.kIRotAng, Consts.kDRotAng);
 				autoDriveFw(125.3);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -959,7 +961,7 @@ public class DriveTrain {
 		}
 		if(myCurrentCase == 3) {
 			if(init) {
-				autoTurnDegree(0);
+				autoTurnDegree(-10);
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
 				myCurrentCase = 4;
@@ -1180,7 +1182,7 @@ public class DriveTrain {
 	
 	
 	public void autoDriveFw(double inches) {
-		turnController.setPID(Consts.kPDrAngle, Consts.kIDrAngle, Consts.kDDrAngle);
+		//turnController.setPID(Consts.kPDrAngle, Consts.kIDrAngle, Consts.kDDrAngle);
 		leftThreeEncoder.configOpenloopRamp(.1, Consts.timeOutMs);
 		rightSixEncoder.configOpenloopRamp(.1, Consts.timeOutMs);
 		System.out.println("autoDriveFw was called");
@@ -1196,7 +1198,7 @@ public class DriveTrain {
 	 * @return which motor to use for turning 
 	 */
 	public void autoTurnDegree(int degree) {
-		turnController.setPID(Consts.kPRotAng, Consts.kIRotAng, Consts.kDRotAng);
+		//turnController.setPID(Consts.kPRotAng, Consts.kIRotAng, Consts.kDRotAng);
 		leftThreeEncoder.configOpenloopRamp(0.1, Consts.timeOutMs);
 		rightSixEncoder.configOpenloopRamp(0.1, Consts.timeOutMs);
 		if (degree<0) {

@@ -24,7 +24,7 @@ public class Consts {
 	public static final double  kIRotAng = 0.0;
 	public static final double  kDRotAng = 0;
 	
-	public static final double kPDrAngle = 0.03;
+	public static final double kPDrAngle = 0.03;//.02 for normal driving
 	public static final double kIDrAngle = 0.00;
 	public static final double kDDrAngle =0;
 	
