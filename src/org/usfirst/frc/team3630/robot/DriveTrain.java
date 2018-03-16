@@ -41,26 +41,23 @@ public class DriveTrain {
 		
 		leftThreeEncoder = new WPI_TalonSRX(Consts.leftThree);
 		leftTwo = new WPI_TalonSRX(Consts.leftTwo);
-		leftOne = new WPI_TalonSRX(Consts.leftOne);
+	
 		rightSixEncoder = new WPI_TalonSRX(Consts.rightSix);
 		rightFive = new WPI_TalonSRX(Consts.rightFive);
-		rightFour = new WPI_TalonSRX(Consts.rightFour);
 		
 		configureTalon(leftThreeEncoder);
 		configureTalon(rightSixEncoder);
-		configureTalon(leftTwo);
-		configureTalon(rightFive);
-		//configureTalon(leftOne);
-		//configureTalon(rightFour);  
+		//configureTalon(leftTwo);
+	//	configureTalon(rightFive);
+
 		
 	//	rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		//leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		
-		rightFour.set(com.ctre.phoenix.motorcontrol.ControlMode.Disabled, 0);
-		leftOne.set(com.ctre.phoenix.motorcontrol.ControlMode.Disabled, 0);
+	
 		leftThreeEncoder.setSensorPhase(false);
 		rightSixEncoder.setSensorPhase(true);
-		rightSixEncoder.setInverted(false);
+	//	rightSixEncoder.setInverted(false);
 		driveTrain = new DifferentialDrive(leftThreeEncoder, rightSixEncoder);
 		pathTwo = new tankDrivePath(leftThreeEncoder,rightSixEncoder);
 		

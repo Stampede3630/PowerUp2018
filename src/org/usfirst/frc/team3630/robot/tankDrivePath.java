@@ -47,7 +47,7 @@ public class tankDrivePath {
 		// Max Acceleration: 100 m/s/s
 		// Max Jerk: 100 m/s/s
 		 */
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 8, 15, 5);// are theese sane		//Generates points for the path
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05, 6, 50, 50);// are theese sane		//Generates points for the path
 		/**
 		 * waypoints are rewuired to have
 		 * x and y for a angle 
@@ -61,7 +61,7 @@ public class tankDrivePath {
 
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
-				new Waypoint(100, 0, 0),
+				new Waypoint(6.1, 0, 0),
 
 
 				//new Waypoint(2, 4.5 , Pathfinder.d2r(60)) // getts us close to 60 
@@ -129,8 +129,8 @@ public class tankDrivePath {
 
 		}
 		
-		lEncoderFollower.configurePIDVA( 0, 0 ,0  , (.1), 0);
-		rEncoderFollower.configurePIDVA(0, 0 ,0  , (.1) , 0) ;
+		lEncoderFollower.configurePIDVA( 0, 0 ,0  , (.1), .2);
+		rEncoderFollower.configurePIDVA(0, 0 ,0  , (.1) , .2) ;
 
 
 	}
