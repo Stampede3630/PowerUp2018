@@ -55,8 +55,9 @@ public class DriveTrain {
 		
 	
 		leftThreeEncoder.setSensorPhase(false);
-		rightSixEncoder.setSensorPhase(true);
-	//	rightSixEncoder.setInverted(false);
+		rightSixEncoder.setSensorPhase(false);
+		rightSixEncoder.setInverted(true);
+		rightFive.setInverted(true);
 		driveTrain = new DifferentialDrive(leftThreeEncoder, rightSixEncoder);
 		pathTwo = new tankDrivePath(leftThreeEncoder,rightSixEncoder);
 		
@@ -71,7 +72,8 @@ public class DriveTrain {
 		
 		//leftThreeEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
 		//rightSixEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
-		
+		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
+		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 			if(leftThreeEncoder.getSelectedSensorPosition(0) < 238 && rightSixEncoder.getSelectedSensorPosition(0) <238){
 				System.out.println("encoders were reset");
 				EncodersReset= true ;
@@ -85,12 +87,12 @@ public class DriveTrain {
 	}
 	
 	public void testPeriodic() {
-		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
-		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
+//		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
+//		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		
 		
 		pathTwo.autoPeriodic();
-		pathTwo.pathDiog();
+
 		
 
 	}
@@ -129,7 +131,7 @@ public class DriveTrain {
 
 	/**
 	 * @param _talon
-	 * set up  for tann initatioation
+	 * set up  for talon configuration. should be done once during initialization
 	 */
 	private void configureTalon(TalonSRX _talon) {
 		_talon.configNominalOutputForward(0, Consts.timeOutMs);
@@ -148,8 +150,8 @@ public class DriveTrain {
 		// When activated, current will be limited to continuous current.
 	    // Set peak current params to 0 if desired behavior is to immediately current-limit.
 		_talon.enableCurrentLimit(true);
-		_talon.configContinuousCurrentLimit(30,Consts.timeOutMs); // Must be 5 amps or more
-		_talon.configPeakCurrentLimit(30, Consts.timeOutMs); // 100 A
+		_talon.configContinuousCurrentLimit(50,Consts.timeOutMs); // Must be 5 amps or more
+		_talon.configPeakCurrentLimit(50, Consts.timeOutMs); // 100 A
 		_talon.configPeakCurrentDuration(200,Consts.timeOutMs); // 200 ms
 		
 	}

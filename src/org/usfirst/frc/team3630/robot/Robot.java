@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
  * directory.
  */
 //should we change to timed robot ? 
-public class Robot extends IterativeRobot {
+public class Robot extends TimedRobot {
 	String gameData;
 	BoxGrabber box ;
 
@@ -92,6 +92,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotPeriodic() {
 		_driveTrain.getDiagnostics();
+		_driveTrain.pathTwo.pathDiog();
 	}
 	
 	@Override
@@ -116,6 +117,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 
 		_driveTrain.autoPeriodic();
+		
 		_driveTrain.getDiagnostics();
 		box.switchAutoUpPeriodic();
 

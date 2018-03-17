@@ -10,8 +10,9 @@ import com.ctre.phoenix.*;
 import java.io.File;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.*;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 public class tankDrivePath {
@@ -19,13 +20,13 @@ public class tankDrivePath {
 	private TankModifier _modifier;
 	Trajectory leftTrajectory;
 	Trajectory rightTrajectory;
-	private TalonSRX lTalon;
-	private TalonSRX rTalon;
+	private WPI_TalonSRX lTalon;
+	private WPI_TalonSRX rTalon;
 	public EncoderFollower lEncoderFollower, rEncoderFollower;
 	double setLeftMotors, setRightMotors;
 	boolean sanitaryMoters, unSainitaryMoters;
 	
-	public tankDrivePath(TalonSRX leftSRXSide, TalonSRX rightSRXSide) {
+	public tankDrivePath(WPI_TalonSRX leftSRXSide, WPI_TalonSRX rightSRXSide) {
 		ahrs = new AHRS(SPI.Port.kMXP); 
 		ahrs.reset();
 		lTalon = leftSRXSide;
@@ -47,7 +48,7 @@ public class tankDrivePath {
 		// Max Acceleration: 100 m/s/s
 		// Max Jerk: 100 m/s/s
 		 */
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05,5 , 100, 50);// are theese sane		//Generates points for the path
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05,2 , .25, 50);// are theese sane		//Generates points for the path
 		/**
 		 * waypoints are rewuired to have
 		 * x and y for a angle 
@@ -61,7 +62,7 @@ public class tankDrivePath {
 
 				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
-				new Waypoint(6.1, 0, 0),
+				new Waypoint(6.1, 0, 0)
 
 
 				//new Waypoint(2, 4.5 , Pathfinder.d2r(60)) // getts us close to 60 
@@ -85,9 +86,10 @@ public class tankDrivePath {
 	/**
 	 * peramiters enc starting point, total amount ticks, wheel diamitor
 	 */
-		
-		lEncoderFollower.configureEncoder(0, 238, 0.1524 );
-		rEncoderFollower .configureEncoder(0, 238,  0.1524 );
+		lTalon.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		rTalon.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		lEncoderFollower.configureEncoder(0, 335, 0.1524 );
+		rEncoderFollower.configureEncoder(0, 335,  0.1524 );
 
 		/**
 		 * for loop which prints out left trajectory data can add to csv
@@ -129,8 +131,8 @@ public class tankDrivePath {
 		}
 		
 		// helpful note kv needs to be a decim no (
-		lEncoderFollower.configurePIDVA( .8, 0 ,0  , (.1), 0.0);
-		rEncoderFollower.configurePIDVA(.8, 0 ,0  , (.1) , 0.0) ;
+		lEncoderFollower.configurePIDVA(1, 0 ,0  , .333333, 0);
+		rEncoderFollower.configurePIDVA(1, 0 ,0  , .333333, 0) ;
 
 
 	}
@@ -147,7 +149,7 @@ public class tankDrivePath {
 	 * @param _talon talon for requested encoder distance
 	 * @return encoder distance in ticks
 	 */
-	public int getDistance_ticks(TalonSRX _talon) {
+	public int getDistance_ticks(WPI_TalonSRX _talon) {
 		int distance_ticks = _talon.getSelectedSensorPosition(0);
 		return distance_ticks;
 	}
@@ -164,12 +166,38 @@ public class tankDrivePath {
 		SmartDashboard.putNumber(" encoderLeft", getDistance_ticks(rTalon));
 		SmartDashboard.putBoolean("are moter Values are sanitary", sanitaryMoters);
 		SmartDashboard.putBoolean(" are moter values not sanitary", unSainitaryMoters);
+		SmartDashboard.putNumber("actualVelocityRight", rTalon.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("actualVelocityLeft", lTalon.getSelectedSensorVelocity(0));
+		
+		//"homebrew calculate"
+		int lDistance = getDistance_ticks(lTalon);
+		double distance_covered = (double) lDistance / 335 * .1524;
+		if(! lEncoderFollower.isFinished()) {
+			Trajectory.Segment seg = lEncoderFollower.getSegment();
+			double error = seg.position - distance_covered;
+			double proportional = error * 1;
+			double velocityCalc = seg.velocity * .33333;
+			double accelerationCalc = seg.acceleration*0;
+			double calculated_value = proportional + velocityCalc + accelerationCalc;
+			SmartDashboard.putNumber("error", error);
+			SmartDashboard.putNumber("proportional", proportional);
+			SmartDashboard.putNumber("velocitycalc", velocityCalc);
+			SmartDashboard.putNumber("accelerationCalc", accelerationCalc);
+			SmartDashboard.putNumber("calculated value", calculated_value);
+			if(setLeftMotors != calculated_value) DriverStation.reportWarning("pathfinder Values do not align", false); 
+		}
+
+
 	}
 
 	
 	public void autoPeriodic() {
+		int lDistance = getDistance_ticks(lTalon);
+		double outputLeft = lEncoderFollower.calculate(lDistance);
+		
 	
-		double outputLeft = lEncoderFollower.calculate(getDistance_ticks(lTalon));
+		
+		
 		double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
 		//	for gyro functionality add 	//+turn
 		 setLeftMotors= outputLeft  ;
@@ -177,8 +205,8 @@ public class tankDrivePath {
 		 
 		 
 		 // times by -1 to get robot wheels to move in same direction
-		 setRightMotors = outputRight *-1;
-		pathDiog();
+		 setRightMotors = outputRight;
+		 
 
 	
 	 // checks if motor output is sanitary
@@ -196,8 +224,8 @@ public class tankDrivePath {
 		sanitaryMoters = true;
 	}
 	
-	lTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, setLeftMotors);
-	rTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, setRightMotors);
+	lTalon.set(setLeftMotors);
+	rTalon.set(setRightMotors);
 }
 
 	
