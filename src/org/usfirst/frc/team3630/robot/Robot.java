@@ -89,10 +89,13 @@ public class Robot extends TimedRobot {
 		_driveTrain.testPeriodic();
 	}
 	
+	public void testDisabled() {
+		
+	}
 	@Override
 	public void robotPeriodic() {
 		_driveTrain.getDiagnostics();
-		_driveTrain.pathTwo.pathDiog();
+		_driveTrain.path.pathDiog();
 	}
 	
 	@Override

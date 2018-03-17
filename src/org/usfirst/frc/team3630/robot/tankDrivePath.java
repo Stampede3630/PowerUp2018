@@ -26,8 +26,9 @@ public class tankDrivePath {
 	double setLeftMotors, setRightMotors;
 	boolean sanitaryMoters, unSainitaryMoters;
 	
-	public tankDrivePath(WPI_TalonSRX leftSRXSide, WPI_TalonSRX rightSRXSide) {
-		ahrs = new AHRS(SPI.Port.kMXP); 
+	public tankDrivePath(WPI_TalonSRX leftSRXSide, WPI_TalonSRX rightSRXSide, AHRS myGyro) {
+	//	ahrs = new AHRS(SPI.Port.kMXP); 
+		ahrs = myGyro;
 		ahrs.reset();
 		lTalon = leftSRXSide;
 		rTalon = rightSRXSide;
@@ -48,7 +49,7 @@ public class tankDrivePath {
 		// Max Acceleration: 100 m/s/s
 		// Max Jerk: 100 m/s/s
 		 */
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05,2 , .25, 50);// are theese sane		//Generates points for the path
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05,8.5 , 1.2, 0.3);// are theese sane		//Generates points for the path
 		/**
 		 * waypoints are rewuired to have
 		 * x and y for a angle 
@@ -117,13 +118,13 @@ public class tankDrivePath {
 		
 		for (int i = 0; i<leftTrajectory.length(); i++){
 
-			System.out.print(leftTrajectory.get(i).acceleration); System.out.print(",");
+			System.out.print("acceleration = ");System.out.print(leftTrajectory.get(i).acceleration); System.out.print(",");
 			//System.out.print(leftTrajectory.get(i).dt); System.out.print(",");
 			//System.out.print(leftTrajectory.get(i).heading); System.out.print(",");
 			//System.out.print(leftTrajectory.get(i).jerk); System.out.print(",");
-			System.out.print(leftTrajectory.get(i).position); System.out.print(",");
-			System.out.print(leftTrajectory.get(i).velocity ); System.out.print(",");
-			System.out.print(leftTrajectory.get(i).velocity * (1)); System.out.print(",");
+			System.out.print("velocity = ");System.out.print(leftTrajectory.get(i).velocity ); System.out.print(",");
+			System.out.print("position = ");System.out.print(leftTrajectory.get(i).position); System.out.print(",");
+			//System.out.print(leftTrajectory.get(i).velocity * (1)); System.out.print(",");
 			//System.out.print(leftTrajectory.get(i).x); System.out.print(",");
 			//System.out.print(leftTrajectory.get(i).y);
 			System.out.print("\n");
@@ -131,8 +132,8 @@ public class tankDrivePath {
 		}
 		
 		// helpful note kv needs to be a decim no (
-		lEncoderFollower.configurePIDVA(1, 0 ,0  , .333333, 0);
-		rEncoderFollower.configurePIDVA(1, 0 ,0  , .333333, 0) ;
+		lEncoderFollower.configurePIDVA(1, 0 ,0  , 0.1176, 0);
+		rEncoderFollower.configurePIDVA(1, 0 ,0  , 0.1176, 0) ;
 
 
 	}
@@ -143,6 +144,7 @@ public class tankDrivePath {
 	 */
 	public void pathInit() {
 		ahrs.reset();		
+	
 	}
 	
 	/**
@@ -195,24 +197,27 @@ public class tankDrivePath {
 		int lDistance = getDistance_ticks(lTalon);
 		double outputLeft = lEncoderFollower.calculate(lDistance);
 		
-	
+		double australianHeading = ahrs.getYaw()*-1;
+		double desiredHeading = (180/Math.PI)*(lEncoderFollower.getHeading());
+		double angleDifference = Pathfinder.boundHalfDegrees(desiredHeading-australianHeading);
+		double angleCorrection =-1/10*angleDifference;
 		
 		
 		double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
 		//	for gyro functionality add 	//+turn
-		 setLeftMotors= outputLeft  ;
+		 setLeftMotors= outputLeft+angleCorrection  ;
 		//	for gyro functionality 	//-turn
 		 
 		 
 		 // times by -1 to get robot wheels to move in same direction
-		 setRightMotors = outputRight;
+		 setRightMotors = outputRight-angleCorrection;
 		 
 
 	
 	 // checks if motor output is sanitary
 	 
 	 if (outputLeft>=1 || outputLeft<=-1 ) {
-		System.out.println("Unsanitary talon output");
+		System.out.println("WARNING Unsanitary talon output");
 		System.out.println(outputLeft);
 		unSainitaryMoters = true;
 

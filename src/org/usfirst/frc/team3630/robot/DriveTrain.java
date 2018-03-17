@@ -21,8 +21,8 @@ public class DriveTrain {
 
 	private XboxController _xBox;
 	boolean pathFinderPeriodicCalled, TalonResetCall, EncodersReset;
-	private WPI_TalonSRX leftThreeEncoder, rightSixEncoder, leftTwo, rightFive, leftOne, rightFour;
-
+	private WPI_TalonSRX leftThreeEncoder, rightSixEncoder, leftTwo, rightFive;
+	public AHRS ahrs;
 	
 	DifferentialDrive driveTrain;
 
@@ -31,9 +31,9 @@ public class DriveTrain {
 	 */
 	private BoxGrabber driveBox;
 	
-	  tankDrivePath pathTwo;
+	  tankDrivePath path;
 	public DriveTrain(BoxGrabber _boxGrabber) {
-	
+		ahrs = new AHRS(SPI.Port.kMXP); 
 		driveBox = _boxGrabber;
 		
 		
@@ -47,19 +47,19 @@ public class DriveTrain {
 		
 		configureTalon(leftThreeEncoder);
 		configureTalon(rightSixEncoder);
-
+		configureTalon(leftTwo);
+		configureTalon(rightFive);
 
 		
-	rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
-	leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
+		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
+		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		
 	
 		leftThreeEncoder.setSensorPhase(false);
 		rightSixEncoder.setSensorPhase(false);
-		rightSixEncoder.setInverted(true);
-		rightFive.setInverted(true);
+		
 		driveTrain = new DifferentialDrive(leftThreeEncoder, rightSixEncoder);
-		pathTwo = new tankDrivePath(leftThreeEncoder,rightSixEncoder);
+		path = new tankDrivePath(leftThreeEncoder,rightSixEncoder,ahrs);
 		
 		driveTrain.setDeadband(0); // why set to zero and not at default ?.02
 		
@@ -69,9 +69,10 @@ public class DriveTrain {
 	/**
 	 *  set up for test init  */
 	public void testInit() {
-		
-		//leftThreeEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
-		//rightSixEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
+		rightFive.setInverted(true);
+		rightSixEncoder.setInverted(true);
+		leftThreeEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
+		rightSixEncoder.configSelectedFeedbackSensor(com.ctre.phoenix.motorcontrol.FeedbackDevice.QuadEncoder, 0, 10);
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 			if(leftThreeEncoder.getSelectedSensorPosition(0) < 238 && rightSixEncoder.getSelectedSensorPosition(0) <238){
@@ -86,12 +87,14 @@ public class DriveTrain {
 
 	}
 	
+	
+	
 	public void testPeriodic() {
 //		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 //		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		
 		
-		pathTwo.autoPeriodic();
+		path.autoPeriodic();
 
 		
 
@@ -103,6 +106,9 @@ public class DriveTrain {
 	public void teleopInit() {
 		leftThreeEncoder.configOpenloopRamp(.2, Consts.timeOutMs);
 		rightSixEncoder.configOpenloopRamp(.2, Consts.timeOutMs);
+		
+		rightFive.setInverted(false);
+		rightSixEncoder.setInverted(false);
 
 	}
 	public void teleopPeriodic() {
@@ -142,8 +148,6 @@ public class DriveTrain {
 
 		_talon.configNeutralDeadband(0.05, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband. might be worth looking at 
 		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
-		_talon.setInverted(false);
-
 
 		
 		// Peak current and duration must be exceeded before corrent limit is activated.
