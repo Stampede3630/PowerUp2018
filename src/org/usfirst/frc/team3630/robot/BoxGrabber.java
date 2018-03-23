@@ -220,6 +220,29 @@ public class BoxGrabber {
 	public void boxIntakePeriodic() {
 		double speed = (_xBox.getTriggerAxis(GenericHID.Hand.kRight))*-1;
 		leftMasterIntakeTalon.set(speed);
+	
+		// possible logic system for spitting out
+		/* boolean Intake = false;
+		 * boolean Spit-out = false;
+		 * double speed = 0;
+		 * if ((_xBox.getTriggerAxis(GenericHID.Hand.kRight)) > 1) {
+		 *		Intake = true;
+		 *		Spit-out = false;
+		 *		speed = (_xBox.getTriggerAxis(GenericHID.Hand.kRight))*-1;
+		 * 		leftMasterIntakeTalon.set(speed);	
+		 * }
+		 * elseif (insert unused Xbox button) > 1) {
+		 *		Intake = false;
+		 *		Spit-out = true;
+		 *		speed = (insert unused Xbox button));
+		 *		leftMasterIntakeTalon.set(speed);
+		 * }
+		 * else {
+		 * 		Intake = false;
+		 * 		Spit-out = false;
+		 * 		speed = 0;
+		 * }
+		 */
 	}
 	
 	// base class methods 
@@ -288,20 +311,27 @@ public class BoxGrabber {
 	
 	public void kickoutInit(){
 		kickTime.reset();
-		kickoutState = 1;
+		kickoutState = 2;
 		isKickoutActivated = true;
+		kickTime.start();
+		leftMasterIntakeTalon.set(1);
 }
 	
 	public void  kickoutPeriodic(){
+	/*if(isKickoutActivated) {
+		if(kickTime.hasPeriodPassed(2)) {
+			leftMasterIntakeTalon.set(0);
+			kickTime.stop();
+			isKickoutActivated = false;
+		}
+		else leftMasterIntakeTalon.set(1);
+	}
+	}*/
+		
 		if (isKickoutActivated){
 			switch(kickoutState){
-			case 1:
-				System.out.println("case one");
-				kickTime.start();
-				kickoutState=2;
-				break;
 			case 2:
-				clampOpen();
+				clampClose();
 				System.out.println("case two");
 				if (kickTime.hasPeriodPassed(.01)){
 					kickoutState=3;
@@ -309,24 +339,25 @@ public class BoxGrabber {
 				break;
 			case 3:
 				System.out.println("case three");
-				kickForward();
-
-				if (kickTime.hasPeriodPassed(.5)){
+				leftMasterIntakeTalon.set(1);
+				if (kickTime.hasPeriodPassed(.05)){
 					kickoutState=4;
 				}
 				break; 
 			case 4:
-				kickReverse();
+				clampOpen();
+				leftMasterIntakeTalon.set(1);
 				System.out.println("case four");
-				if (kickTime.hasPeriodPassed(.6)){
+				if (kickTime.hasPeriodPassed(1)){
 					kickoutState =5;
 				}
 				break; 
 			case 5:
 				//clampClose();
-				System.out.println("case five ");
+				leftMasterIntakeTalon.set(0);
+				System.out.println("case five");
 
-				if (kickTime.hasPeriodPassed(.004)){
+				if (kickTime.hasPeriodPassed(5)){
 					kickoutState = -1;
 					isKickoutActivated = false;
 					kickTime.stop();
@@ -338,11 +369,11 @@ public class BoxGrabber {
 				System.out.print("WARNING kickout method caught exception");
 				isKickoutActivated = false;
 				stop();
+				break;
 			}
-	
+		}
 			
 }
-	}
 
 	public void liftUpInit () {
 		liftTimer.reset();
@@ -635,7 +666,7 @@ public class BoxGrabber {
 
 				
 				default:
-					// default to stop for saftey reasons
+					// default to stop for safety reasons
 					stop();	
 				break;
 			}
