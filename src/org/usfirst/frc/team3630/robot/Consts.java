@@ -20,17 +20,17 @@ public class Consts {
 
 	
 	// Manipulators 
-	public static final double  kPRotAng = 0.02;
+	public static final double  kPRotAng = 0.04;
 	public static final double  kIRotAng = 0.0;
 	public static final double  kDRotAng = 0;
 	
-	public static final double kPDrAngle = 0.02;
+	public static final double kPDrAngle = .02 ;
 	public static final double kIDrAngle = 0.00;
 	public static final double kDDrAngle =0;
 	
 
     public static final double ToleranceDegrees = 2;
-    public static final double ToleranceDistance = 5;
+    public static final double ToleranceDistance = 3;
 	
 	//Wheel Measurements
 	public static final int ticksPerRotation = 238;
@@ -47,7 +47,7 @@ public class Consts {
 
 
 	
-	public static final double kPPos = 0.03;
+	public static final double kPPos = 0.04;
 	public static final double kIPos = 0;
 	public static final double kDPos = 0;
 	// Auto Distances
@@ -63,8 +63,8 @@ public class Consts {
 	public static final double autoLine = 150;
 	public static final double firstDistanceInSwitchFFMethod = 112.4;
 	public static final double secondDistanceInSwitchFFMethod = 50;//78.5;
-	public static final double firstDistanceInScaleFFMethod = 257.8; // needs to be changed
-	public static final double secondDistanceInScaleFFMethod = 59.2;  // needs to be changed
+	public static final double firstDistanceInScaleFFMethod = 257.8 +93; // needs to be changed
+	public static final double secondDistanceInScaleFFMethod = 27;  // needs to be changed
 	public static final double autoPosError = 3;
 	public static final double autoTurnError = 2;
 	

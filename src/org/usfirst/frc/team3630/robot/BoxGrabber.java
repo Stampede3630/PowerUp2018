@@ -45,7 +45,11 @@ public class BoxGrabber {
 		//SLIDEFORWARD, CLAMPOPEN, KICKFORWARD, LIFTUP, LIFTDOWN, CLAMPCLOSE, SLIDEBACK, KICKRETRACT, STOP, INTAKE, DROPBOX, SWITCHDOWNAUTOMATED, SWITCHUPAUTOMATED, SCALEAUTOMATED, LIFTDOWNAUTOMATED, LIFTUPAUTOMATED, LOWSCALEUPAUTOMATED
 		//liftup, liftdown, kickforward, kickretract never used
 	}
+	private WPI_TalonSRX leftMasterIntakeTalon, rightSlaveIntakeTalon;
 
+	
+	
+	
 	private XboxController _xBox;
 	// private TalonSRX leftIntake, rightIntake;
 	// name double solonoid
@@ -111,6 +115,18 @@ public class BoxGrabber {
 		pressureLevel.setAverageBits(13);
 
 		_xBox = new XboxController(Consts.xBoxComPort);
+		
+		leftMasterIntakeTalon = new WPI_TalonSRX(7); //change later
+		rightSlaveIntakeTalon = new WPI_TalonSRX(8);
+		configureTalon(leftMasterIntakeTalon);
+		configureTalon(rightSlaveIntakeTalon);
+		rightSlaveIntakeTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 7);
+		
+		//reverse the values below if you want opposite behavior
+		leftMasterIntakeTalon.setInverted(true);
+		rightSlaveIntakeTalon.setInverted(false);
+		
+		
 	}
 
 	
@@ -185,9 +201,24 @@ public class BoxGrabber {
 	 */
 
 	// each method for has a forward and reverse
-	// sets a bollean to true in order to know it has ben activated
+	// sets a boolean to true in order to know it has been activated
 
+	//add the below methods anywhere in the class
+	private void configureTalon(TalonSRX _talon) {
+		_talon.configNominalOutputForward(0, Consts.timeOutMs);
+		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
+		_talon.configPeakOutputForward(1, Consts.timeOutMs);
+		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
+		_talon.configNeutralDeadband(0.05, Consts.timeOutMs);
+		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
+	}
 	
+	
+	//add boxIntakePeriodic() to THIS METHOD: boxGrabberPeriodic () 
+	public void boxIntakePeriodic() {
+		double speed = (_xBox.getTriggerAxis(GenericHID.Hand.kRight))*-1;
+		leftMasterIntakeTalon.set(speed);
+	}
 	
 	// base class methods 
 	public void kickForward() {
@@ -544,7 +575,8 @@ public class BoxGrabber {
 		// for testing
 		// mainC.stop();
 
-		
+		boxIntakePeriodic();
+		kickoutPeriodic();
 		manipulatorDianostics();
 		liftDownPeriodic();
 		liftUpPeriodic();
