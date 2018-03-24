@@ -196,16 +196,6 @@ public class DriveTrain {
 	 *  diganoaric method for taon srx debuging 
 	 */
 	public void getDiagnostics() {		
-		SmartDashboard.putNumber("Left Current", leftThreeEncoder.getOutputCurrent());
-		SmartDashboard.putNumber("Right Current", rightSixEncoder.getOutputCurrent());
-		SmartDashboard.putNumber("total Current", panel.getTotalCurrent());
-		SmartDashboard.putNumber("Front Right Position", getRotations(rightSixEncoder));
-		SmartDashboard.putNumber("Front Right Velocity", getVelocity(rightSixEncoder));
-		SmartDashboard.putNumber("Front Left Position", getRotations(leftThreeEncoder));
-		SmartDashboard.putNumber("Front Left Velocity", getVelocity(leftThreeEncoder));
-		SmartDashboard.putNumber("Left position in ticks", getTicks(leftThreeEncoder));
-		SmartDashboard.putNumber("Right position in ticks", getTicks(rightSixEncoder));
-		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());
 		SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
 		SmartDashboard.putNumber("Position Setpoint", posController.getSetpoint());
 		SmartDashboard.putNumber("Position Error", posController.getError());
@@ -218,6 +208,7 @@ public class DriveTrain {
 		SmartDashboard.putBoolean("TurnControl On", turnController.isEnabled());
 		SmartDashboard.putBoolean("Is init true?", init);
 		SmartDashboard.putNumber("posController input", posOutput);
+		SmartDashboard.putData("PDP", panel);
 		
 		SmartDashboard.putNumber("turnController kP", turnController.getP());
 		
@@ -234,6 +225,19 @@ public class DriveTrain {
 //			System.out.print(leftEncoder.getOutputCurrent());
 //			System.out.print('\n');
 //		}
+	}
+	
+	public void getWheelsAndCompass() {
+		SmartDashboard.putNumber("Left Current", leftThreeEncoder.getOutputCurrent());
+		SmartDashboard.putNumber("Right Current", rightSixEncoder.getOutputCurrent());
+		SmartDashboard.putNumber("total Current", panel.getTotalCurrent());
+		SmartDashboard.putNumber("Right Wheel Position", getRotations(rightSixEncoder));
+		SmartDashboard.putNumber("Right Velocity", getVelocity(rightSixEncoder));
+		SmartDashboard.putNumber("Left Wheel Position", getRotations(leftThreeEncoder));
+		SmartDashboard.putNumber("Left Velocity", getVelocity(leftThreeEncoder));
+		SmartDashboard.putNumber("Left position in ticks", getTicks(leftThreeEncoder));
+		SmartDashboard.putNumber("Right position in ticks", getTicks(rightSixEncoder));
+		SmartDashboard.putData("ahrs headng", ahrs);
 	}
 	
 	public void autoPeriodic() {

@@ -576,8 +576,7 @@ public class BoxGrabber {
 		// mainC.stop();
 
 		boxIntakePeriodic();
-		kickoutPeriodic();
-		manipulatorDianostics();
+		//kickoutPeriodic();
 		liftDownPeriodic();
 		liftUpPeriodic();
 		
