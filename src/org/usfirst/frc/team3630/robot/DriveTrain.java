@@ -39,7 +39,7 @@ public class DriveTrain {
 	double targetAngleDegrees = 0f;
 	double kTargetDistanceInches = 1000;
 
-	private WPI_TalonSRX leftThreeEncoder, rightSixEncoder, leftTwo, rightFive, leftOne, rightFour;
+	private WPI_TalonSRX leftThreeEncoder, rightSixEncoder, leftTwo, rightFive;
 
 	
 	DifferentialDrive driveTrain;
@@ -64,22 +64,19 @@ public class DriveTrain {
 		// srx definitions
 		leftThreeEncoder = new WPI_TalonSRX(Consts.leftThree);
 		leftTwo = new WPI_TalonSRX(Consts.leftTwo);
-		leftOne = new WPI_TalonSRX(Consts.leftOne);
+//		leftOne = new WPI_TalonSRX(Consts.leftOne);
 		rightSixEncoder = new WPI_TalonSRX(Consts.rightSix);
 		rightFive = new WPI_TalonSRX(Consts.rightFive);
-		rightFour = new WPI_TalonSRX(Consts.rightFour);
+//		rightFour = new WPI_TalonSRX(Consts.rightFour);
 		backwardsTimer = new Timer();
 		
 		configureTalon(leftThreeEncoder);
 		configureTalon(rightSixEncoder);
 		configureTalon(leftTwo);
 		configureTalon(rightFive);
-		configureTalon(leftOne);
-		configureTalon(rightFour);  
+
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
-
-
 		// why differ sensor phase diffrent would it be cosntant for both robots?
 		
 	
@@ -141,6 +138,7 @@ public class DriveTrain {
 		double heading = (_xBox.getX(GenericHID.Hand.kRight))*.6;
 		if(_xBox.getTriggerAxis(GenericHID.Hand.kLeft) > .85) {
 			speed = (_xBox.getY(GenericHID.Hand.kLeft))*-1;
+			heading =  (_xBox.getX(GenericHID.Hand.kRight));
 		}
 		SmartDashboard.putNumber("heading acrcade drive", heading);
 		driveTrain.arcadeDrive(speed, heading);

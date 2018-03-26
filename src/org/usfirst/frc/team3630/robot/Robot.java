@@ -92,8 +92,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotPeriodic() {
 		_driveTrain.getDiagnostics();
-		box.manipulatorDianostics();
-		_driveTrain.getWheelsAndCompass();
 	}
 	
 	@Override
@@ -120,7 +118,7 @@ public class Robot extends IterativeRobot {
 		_driveTrain.autoPeriodic();
 		_driveTrain.getDiagnostics();
 		box.switchAutoUpPeriodic();
-
+		box.kickoutPeriodic();
 		box.liftUpPeriodic();
 	}
 	@Override
