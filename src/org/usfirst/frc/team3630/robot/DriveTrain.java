@@ -23,7 +23,7 @@ public class DriveTrain {
 	boolean pathFinderPeriodicCalled, TalonResetCall, EncodersReset;
 	private WPI_TalonSRX leftThreeEncoder, rightSixEncoder, leftTwo, rightFive;
 	public AHRS ahrs;
-	
+	PowerDistributionPanel panel;
 	DifferentialDrive driveTrain;
 
 	/**
@@ -36,7 +36,7 @@ public class DriveTrain {
 		ahrs = new AHRS(SPI.Port.kMXP); 
 		driveBox = _boxGrabber;
 		
-		
+		panel = new PowerDistributionPanel(0);
 		_xBox = new XboxController(Consts.xBoxComPort);
 		
 		leftThreeEncoder = new WPI_TalonSRX(Consts.leftThree);
@@ -120,6 +120,7 @@ public class DriveTrain {
 		SmartDashboard.putNumber("heading acrcade drive", heading);
 		driveTrain.arcadeDrive(speed, heading);
 		getDiagnostics();
+		panel.
 		// three are two missing bad? delted folowers set in constructor
 		
 	SmartDashboard.putNumber("Left three curent", leftThreeEncoder.getOutputCurrent());
@@ -127,11 +128,25 @@ public class DriveTrain {
 	//	SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
 		// moved over to driverStaton warnings 
 		// are we still getting curent issues 
-//		if(panel.getTotalCurrent()>300) {
-//			System.out.print("[WARNING] CURRENT DRAW IS AT ");
-//			System.out.print(panel.getTotalCurrent());
-//			System.out.print('\n');
-//		}
+		
+		//for graphing to get a sure sane kv, will put this in csv and graph
+		for (int i = 0; i<200; i++){
+
+		
+			System.out.print(leftThreeEncoder.getOutputVoltage());System.out.print(",");
+			
+			System.out.print(leftThreeEncoder.getVelocity(leftThreeEncoder);System.out.print(",");
+			
+			
+		
+			System.out.print("\n");
+
+		}
+	if(panel.getTotalCurrent()>300) {
+		System.out.print("[WARNING] CURRENT DRAW IS AT ");
+		System.out.print(panel.getTotalCurrent());
+		System.out.print('\n');
+	}
 
 	}
 
@@ -164,7 +179,7 @@ public class DriveTrain {
 	 *  diganoaric method for taon srx debuging 
 	 */
 	public void getDiagnostics() {		
-		SmartDashboard.putNumber("Left Current", leftThreeEncoder.getOutputCurrent());
+		SmartDashboard.putNumber("Left Current", leftThreeEncoder.getOutputVoltage());
 		SmartDashboard.putNumber("Right Current", rightSixEncoder.getOutputCurrent());
 		SmartDashboard.putNumber("Front Right Position", getRotations(rightSixEncoder));
 		SmartDashboard.putNumber("Front Right Velocity", getVelocity(rightSixEncoder));

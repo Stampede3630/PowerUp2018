@@ -49,6 +49,8 @@ public class tankDrivePath {
 		// Max Acceleration: 100 m/s/s
 		// Max Jerk: 100 m/s/s
 		 */
+		
+		
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05,8.5 , 1.2, 0.3);// are theese sane		//Generates points for the path
 		/**
 		 * waypoints are rewuired to have
@@ -186,7 +188,9 @@ public class tankDrivePath {
 			SmartDashboard.putNumber("velocitycalc", velocityCalc);
 			SmartDashboard.putNumber("accelerationCalc", accelerationCalc);
 			SmartDashboard.putNumber("calculated value", calculated_value);
-			if(setLeftMotors != calculated_value) DriverStation.reportWarning("pathfinder Values do not align", false); 
+			
+			if(setLeftMotors != calculated_value ) DriverStation.reportWarning("pathfinder Values do not align", false); 
+			
 		}
 
 
@@ -200,6 +204,7 @@ public class tankDrivePath {
 		double australianHeading = ahrs.getYaw()*-1;
 		double desiredHeading = (180/Math.PI)*(lEncoderFollower.getHeading());
 		double angleDifference = Pathfinder.boundHalfDegrees(desiredHeading-australianHeading);
+		// is this value sane?
 		double angleCorrection =-1/10*angleDifference;
 		
 		
@@ -214,7 +219,7 @@ public class tankDrivePath {
 		 
 
 	
-	 // checks if motor output is sanitary
+	 // checks if motor output is sanitary acroding to sam V pathfinder goes over one need to check why and double confirm
 	 
 	 if (outputLeft>=1 || outputLeft<=-1 ) {
 		System.out.println("WARNING Unsanitary talon output");
