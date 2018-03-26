@@ -46,7 +46,7 @@ public class BoxGrabber {
 		//liftup, liftdown, kickforward, kickretract never used
 	}
 	private WPI_TalonSRX leftMasterIntakeTalon, rightSlaveIntakeTalon;
-		
+
 	
 	
 	
@@ -153,9 +153,7 @@ public class BoxGrabber {
 		else if (_xBox.getBumper(GenericHID.Hand.kLeft)) {
 			return State.CLAMPOPEN;
 		}
-		else if (_xBox.getStartButton()) {
-			return State.DROPBOX;
-		}
+
 		else if (_xBox.getBackButton()) {
 			return State.STOPOVERRIDE;
 		}
@@ -214,8 +212,8 @@ public class BoxGrabber {
 		_talon.configNeutralDeadband(0.05, Consts.timeOutMs);
 		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
 	}
-
-
+	
+	
 	//add boxIntakePeriodic() to THIS METHOD: boxGrabberPeriodic () 
 	public void boxIntakePeriodic() {
 		double speed = (_xBox.getTriggerAxis(GenericHID.Hand.kRight))*-1;
@@ -317,6 +315,7 @@ public class BoxGrabber {
 		leftMasterIntakeTalon.set(1);
 }
 	
+
 	public void  kickoutPeriodic(){
 	/*if(isKickoutActivated) {
 		if(kickTime.hasPeriodPassed(2)) {
@@ -328,6 +327,8 @@ public class BoxGrabber {
 	}
 	}*/
 		
+
+
 		if (isKickoutActivated){
 			switch(kickoutState){
 			case 2:
@@ -374,6 +375,8 @@ public class BoxGrabber {
 		}
 			
 }
+	
+	
 
 	public void liftUpInit () {
 		liftTimer.reset();
@@ -609,8 +612,7 @@ public class BoxGrabber {
 		// mainC.stop();
 
 		boxIntakePeriodic();
-		kickoutPeriodic();
-		manipulatorDianostics();
+		//kickoutPeriodic();
 		liftDownPeriodic();
 		liftUpPeriodic();
 		
@@ -633,13 +635,9 @@ public class BoxGrabber {
 					manualControl();
 					break;
 
-				case DROPBOX:
-					if(!isKickoutActivated) {
-						kickoutInit();
-					}
-				break;
+			
 				case LIFTUPAUTOMATED:
-					if(!atSwitch) {
+					if(!atSwitch && !atLowScale) {
 					liftUpInit();
 					}
 				break;

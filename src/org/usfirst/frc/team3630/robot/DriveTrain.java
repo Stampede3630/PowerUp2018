@@ -10,7 +10,6 @@ import com.ctre.phoenix.motorcontrol.Faults;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import javafx.scene.shape.Box;
 import edu.wpi.first.wpilibj.livewindow.*;
 import edu.wpi.first.wpilibj.*;
 import com.kauailabs.navx.frc.AHRS;
@@ -79,6 +78,8 @@ public class DriveTrain {
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		// why differ sensor phase diffrent would it be cosntant for both robots?
+		
+	
 		leftThreeEncoder.setSensorPhase(false);
 		rightSixEncoder.setSensorPhase(true);
 
@@ -147,7 +148,7 @@ public class DriveTrain {
 	SmartDashboard.putNumber("Left three curent", leftThreeEncoder.getOutputCurrent());
 	SmartDashboard.putNumber("total voltage ", panel.getVoltage());
 	SmartDashboard.putNumber("total current", panel.getTotalCurrent());
-		SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
+	//	SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
 		// moved over to driverStaton warnings 
 		// are we still getting curent issues 
 //		if(panel.getTotalCurrent()>300) {
@@ -193,16 +194,6 @@ public class DriveTrain {
 	 *  diganoaric method for taon srx debuging 
 	 */
 	public void getDiagnostics() {		
-		SmartDashboard.putNumber("Left Current", leftThreeEncoder.getOutputCurrent());
-		SmartDashboard.putNumber("Right Current", rightSixEncoder.getOutputCurrent());
-		SmartDashboard.putNumber("total Current", panel.getTotalCurrent());
-		SmartDashboard.putNumber("Front Right Position", getRotations(rightSixEncoder));
-		SmartDashboard.putNumber("Front Right Velocity", getVelocity(rightSixEncoder));
-		SmartDashboard.putNumber("Front Left Position", getRotations(leftThreeEncoder));
-		SmartDashboard.putNumber("Front Left Velocity", getVelocity(leftThreeEncoder));
-		SmartDashboard.putNumber("Left position in ticks", getTicks(leftThreeEncoder));
-		SmartDashboard.putNumber("Right position in ticks", getTicks(rightSixEncoder));
-		SmartDashboard.putNumber("ahrs headng", ahrs.getAngle());
 		SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
 		SmartDashboard.putNumber("Position Setpoint", posController.getSetpoint());
 		SmartDashboard.putNumber("Position Error", posController.getError());
@@ -215,6 +206,7 @@ public class DriveTrain {
 		SmartDashboard.putBoolean("TurnControl On", turnController.isEnabled());
 		SmartDashboard.putBoolean("Is init true?", init);
 		SmartDashboard.putNumber("posController input", posOutput);
+		SmartDashboard.putData("PDP", panel);
 		
 		SmartDashboard.putNumber("turnController kP", turnController.getP());
 		
@@ -231,6 +223,19 @@ public class DriveTrain {
 //			System.out.print(leftEncoder.getOutputCurrent());
 //			System.out.print('\n');
 //		}
+	}
+	
+	public void getWheelsAndCompass() {
+		SmartDashboard.putNumber("Left Current", leftThreeEncoder.getOutputCurrent());
+		SmartDashboard.putNumber("Right Current", rightSixEncoder.getOutputCurrent());
+		SmartDashboard.putNumber("total Current", panel.getTotalCurrent());
+		SmartDashboard.putNumber("Right Wheel Position", getRotations(rightSixEncoder));
+		SmartDashboard.putNumber("Right Velocity", getVelocity(rightSixEncoder));
+		SmartDashboard.putNumber("Left Wheel Position", getRotations(leftThreeEncoder));
+		SmartDashboard.putNumber("Left Velocity", getVelocity(leftThreeEncoder));
+		SmartDashboard.putNumber("Left position in ticks", getTicks(leftThreeEncoder));
+		SmartDashboard.putNumber("Right position in ticks", getTicks(rightSixEncoder));
+		SmartDashboard.putData("ahrs headng", ahrs);
 	}
 	
 	public void autoPeriodic() {
@@ -325,8 +330,8 @@ public class DriveTrain {
 				driveBox.kickoutInit();
 				System.out.println("Case four called");
 			}
-			turnController.disable();
-			posController.disable();
+				turnController.disable();
+				posController.disable();
 		}
 	}
 
@@ -419,8 +424,8 @@ public class DriveTrain {
 					init = false;
 					driveBox.kickoutInit();
 				}
-				turnController.disable();
-				posController.disable();
+					turnController.disable();
+					posController.disable();
 			}
 		}
 	
@@ -469,13 +474,13 @@ public class DriveTrain {
 			//ENTER CONDITION
 			if(init){
 				init =false;
-				driveBox.kickoutInit();				
+				driveBox.kickoutInit();
 			}
 			turnController.disable();
 			posController.disable();
 		}	
 			
-	}	
+		}	
 		
 	public void leftScaleLeft() {
 		if (myCurrentCase  == 1) {
@@ -518,11 +523,11 @@ public class DriveTrain {
 			//ENTER CONDITION
 			if(init){
 				init = false;
-				driveBox.kickoutInit();	
-			}
+				driveBox.kickoutInit();
+		}
 			turnController.disable();
 			posController.disable();
-		}
+	}
 	}
 		
 	public void leftSwitchRight() {
@@ -681,7 +686,7 @@ public class DriveTrain {
 			}
 			
 			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
-		}
+			}
 		if (myCurrentCase  == 3) {
 			//ENTER CONDITION
 			if(init) {
@@ -763,9 +768,9 @@ public class DriveTrain {
 			
 		}
 		///////////FIX FIX FIX FIX
-		if (myCurrentCase == 10)
+		if (myCurrentCase == 10) {
 			//ENTER CONDITION
-		if (init) {
+/*		if (init) {
 			driveBox.kickoutInit();
 			if(driveBox.isKickoutActivated) {
 				driveBox.kickoutPeriodic();
@@ -781,7 +786,6 @@ public class DriveTrain {
 			}
 		}*/
 	}
-	
 	public void rightScaleLeft() {
 		if (myCurrentCase  == 1) {
 			if(init) {
@@ -794,7 +798,7 @@ public class DriveTrain {
 		    if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 		     	myCurrentCase = 2;
 		     	init = true;
-		    }
+		     }
 		}
 		if (myCurrentCase == 2) {
 			//ENTER CONDITION
@@ -938,7 +942,7 @@ public class DriveTrain {
 		if(myCurrentCase == 1) {
 			if(init) {
 				turnController.setPID(.03, Consts.kIDrAngle, Consts.kDDrAngle);
-				driveBox.switchAutoUpInit();
+			driveBox.switchAutoUpInit();
 				turnController.enable();
 				autoTurnDegree(-60);
 			}
@@ -978,12 +982,12 @@ public class DriveTrain {
 		if(myCurrentCase == 5) {
 			//ENTER CONDITION
 			if(init){
-				init = false;
+			init = false;
 				driveBox.kickoutInit();	
-			}
+		}
 			turnController.disable();
 			posController.disable();
-		}
+	}
 	}
 	
 	public void middleSwitchRight() {
