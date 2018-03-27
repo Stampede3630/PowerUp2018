@@ -11,7 +11,7 @@ public class BoxGrabber {
 
 
 	// enum difftent state= state (F, forward) (R, piston reverse)
-	// lift
+
 	public enum State {
 		LIFTUP,
 		LIFTDOWN,
@@ -51,11 +51,10 @@ public class BoxGrabber {
 	
 	
 	private XboxController _xBox;
-	// private TalonSRX leftIntake, rightIntake;
-	// name double solonoid
+
 	DoubleSolenoid slide, clamp, kick, lift;
 	Compressor mainC;
-	// debug analog input
+	
 	boolean testOn;
 	boolean isKickoutActivated;
 	boolean liftUpSensorFlag,liftUpActivated;
@@ -130,7 +129,7 @@ public class BoxGrabber {
 	}
 
 	
-// to do make button asighnments sane
+
 	public State xBox() {
 		if(_xBox.getPOV() != -1){
 			return State.MANUALCONTROL;
@@ -189,6 +188,10 @@ public class BoxGrabber {
 				slideOff();
 			}
 	}
+	
+	// should delte ? seems a bit redundeant to me 
+	
+	
 	/*
 	 * public void intake() { rightIntake.configNeutralDeadband(.1, 10);
 	 * leftIntake.configNeutralDeadband(.1, 10);
@@ -219,6 +222,9 @@ public class BoxGrabber {
 		double speed = (_xBox.getTriggerAxis(GenericHID.Hand.kRight))*-1;
 		leftMasterIntakeTalon.set(speed);
 	
+		// is this reduntant?? do we still need this why is it commented out? 
+		
+		
 		// possible logic system for spitting out
 		/* boolean Intake = false;
 		 * boolean Spit-out = false;
@@ -292,14 +298,19 @@ public class BoxGrabber {
 	}
 
 	
-	// psi method for pressure sensor need to calibrate normalized voltage during
-	// testing
+	
+	/**
+	 * @return rouned compreser psi 
+	 */
 	public double compresorPSI() {
 		double sensorV = pressureLevel.getVoltage();
 		double psi = 250 * (sensorV / 5) - 25;
 		return Math.round(psi);
 	}
 
+	/**
+	 * low psi warning when sensor registers bellow 60 psi
+	 */
 	public void lowPSIWarning() {
 		if (compresorPSI() < 60.0) {
 			System.out.println("WARNING robots dont have low pressure but yours does");
@@ -596,7 +607,7 @@ public class BoxGrabber {
 		SmartDashboard.putBoolean("slide back ", slideReversecheck.get());
 	//	SmartDashboard.putBoolean("ARE ARMS DOWN", armsDownCheck.get());
 		SmartDashboard.putNumber("Compresor PSI ", compresorPSI());
-		// presure switch output
+	
 		SmartDashboard.putBoolean("testOn", testOn);
 
 		SmartDashboard.putBoolean("isKickoutActivated", isKickoutActivated);
