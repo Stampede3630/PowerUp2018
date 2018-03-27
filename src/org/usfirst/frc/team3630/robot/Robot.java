@@ -112,6 +112,10 @@ public class Robot extends IterativeRobot {
 	 * @see edu.wpi.first.wpilibj.IterativeRobotBase#autonomousPeriodic()
 	 * irative method for auto. calls all methods during auto that are used 
 	 */
+	/* (non-Javadoc)
+	 * @see edu.wpi.first.wpilibj.IterativeRobotBase#autonomousPeriodic()u
+	 * calls periodic methods used during auto
+	 */
 	@Override
 	public void autonomousPeriodic() {
 		autoLogic();
