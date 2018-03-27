@@ -24,7 +24,7 @@ public class Consts {
 	public static final double  kIRotAng = 0.0;
 	public static final double  kDRotAng = 0;
 	
-	public static final double kPDrAngle = .12 ;
+	public static final double kPDrAngle = .1;//.12 ;
 	public static final double kIDrAngle = 0.00;
 	public static final double kDDrAngle =0.09;
 	
@@ -61,8 +61,8 @@ public class Consts {
 	public static final double autoH = 264.62;
 	public static final double autoI = 120.62;
 	public static final double autoLine = 150;
-	public static final double firstDistanceInSwitchFFMethod = 75;//112.4;
-	public static final double secondDistanceInSwitchFFMethod = 50;//78.5;
+	public static final double firstDistanceInSwitchFFMethod = 67;//75;//112.4;
+	public static final double secondDistanceInSwitchFFMethod = 33;//50;//78.5;60;
 	public static final double firstDistanceInScaleFFMethod = 246; // needs to be changed
 	public static final double secondDistanceInScaleFFMethod = 24;  // needs to be changed
 	public static final double autoPosError = 3;
