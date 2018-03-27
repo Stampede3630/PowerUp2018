@@ -448,7 +448,7 @@ public class DriveTrain {
 		if (myCurrentCase == 2) {
 			//ENTER CONDITION
 			if(init) {
-				autoTurnDegree(-35);
+				autoTurnDegree(-45);
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
 				myCurrentCase = 3;
@@ -468,7 +468,6 @@ public class DriveTrain {
 			}
 		}
 			
-
 		
 		if(myCurrentCase == 4) {
 			//ENTER CONDITION
