@@ -364,7 +364,8 @@ public class DriveTrain {
 				myCurrentCase = 3;
 	     		init = true;
 			}
-			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+			SmartDashboard.putBoolean("Hit Turn"
+					+ " Target", posController.onTarget());
 		}
 		if (myCurrentCase == 3) {
 			//ENTER CONDITION
@@ -894,49 +895,62 @@ public class DriveTrain {
 				init = true;
 				}			
 		}
-		if(myCurrentCase == 2) {
+		
+		if (myCurrentCase == 2) {
+			//ENTER CONDITION
+			if(init) {
+				autoDriveFw(12);
+			}
+		
+			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
+				myCurrentCase = 3;
+				init = true;
+			}
+		}
+		
+		if(myCurrentCase == 3) {
 			//ENTER CONDITION
 			if(init) {
 				autoTurnDegree(-90);
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
-				myCurrentCase = 3;
+				myCurrentCase = 4;
 				init = true;
 			}
 		}
-		if (myCurrentCase == 3) {
+		if (myCurrentCase == 4) {
 			//ENTER CONDITION
 			if(init) {
 				autoDriveFw(Consts.autoI);
 			}
 		
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
-				myCurrentCase = 4;
+				myCurrentCase = 5;
 				init = true;
 			}
 		}
-		if(myCurrentCase == 4) {
+		if(myCurrentCase == 5) {
 			//ENTER CONDITION
 			if(init) {
 				autoTurnDegree(0);
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
-				myCurrentCase = 5;
-				init = true;
-			}
-		}
-		if (myCurrentCase == 5) {
-			//ENTER CONDITION
-			if(init) {
-				autoDriveFw(Consts.autoD);
-			}
-		
-			if(Math.abs(posController.getError()) < Consts.autoPosError) {
 				myCurrentCase = 6;
 				init = true;
 			}
+		}
+		if (myCurrentCase == 6) {
+			//ENTER CONDITION
+			if(init) {
+				autoDriveFw(Consts.autoD-12);
+			}
+		
+			if(Math.abs(posController.getError()) < Consts.autoPosError) {
+				myCurrentCase = 7;
+				init = true;
+			}
 		}	
-		if(myCurrentCase == 6) {
+		if(myCurrentCase == 7) {
 			if(init) {
 				init = false;
 				driveBox.kickoutInit();
@@ -946,7 +960,19 @@ public class DriveTrain {
 		}
 	}
 	public void middleSwitchLeftFF() { //started. No right angles. Need a lot of testing
-		if(myCurrentCase == 1) {
+		
+		if(myCurrentCase == 1 || myCurrentCase == 2) {
+//
+	//		if(init) {
+				System.out.println("Case 1/2 callled");
+				autoDriveFw(36);
+	//	}
+			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
+				myCurrentCase = 3;
+	     		init = true;
+			}
+		}
+		if(myCurrentCase == 3) {
 			if(init) {
 				turnController.setPID(.03, Consts.kIDrAngle, Consts.kDDrAngle);
 			driveBox.switchAutoUpInit();
@@ -954,32 +980,14 @@ public class DriveTrain {
 				autoTurnDegree(-60);
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
-				myCurrentCase = 2;
-	     		init = true;
-			}
-		}
-		if(myCurrentCase == 2) {
-			if(init){
-				turnController.setPID(.02, Consts.kIRotAng, Consts.kDRotAng);
-				autoDriveFw(144);//162.3);
-			}
-			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
-				myCurrentCase = 3;
-				init = true;
-			}
-		}
-		if(myCurrentCase == 3) {
-			if(init) {
-				autoTurnDegree(-10);
-			}
-			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
 				myCurrentCase = 4;
 	     		init = true;
 			}
 		}
 		if(myCurrentCase == 4) {
-			if(init) {
-				autoDriveFw(50);//63.6);
+			if(init){
+				turnController.setPID(.02, Consts.kIRotAng, Consts.kDRotAng);
+				autoDriveFw(110);//162.3);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 				myCurrentCase = 5;
@@ -987,6 +995,24 @@ public class DriveTrain {
 			}
 		}
 		if(myCurrentCase == 5) {
+			if(init) {
+				autoTurnDegree(10);
+			}
+			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
+				myCurrentCase = 6;
+	     		init = true;
+			}
+		}
+		if(myCurrentCase == 6) {
+			if(init) {
+				autoDriveFw(30);//63.6);
+			}
+			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
+				myCurrentCase = 7;
+				init = true;
+			}
+		}
+		if(myCurrentCase == 7) {
 			//ENTER CONDITION
 			if(init){
 			init = false;
@@ -994,7 +1020,8 @@ public class DriveTrain {
 		}
 			turnController.disable();
 			posController.disable();
-	}
+		}
+		
 	}
 	
 	public void middleSwitchRight() {

@@ -346,6 +346,7 @@ public class BoxGrabber {
 
 		if (isKickoutActivated){
 			switch(kickoutState){
+			
 			case 2:
 				clampClose();
 				///System.out.println("case two");
@@ -572,34 +573,34 @@ public class BoxGrabber {
 		liftUpLowScaleSensorFlag = false;
 	}
 	
-	public void lowScaleAutoUpPeriodic() {
-		SmartDashboard.putNumber("Party's Over", partysOverDown);
-		if (liftUpLowScaleActivated) {
-			if (liftTimer.get() > Consts.partysOverLowScale) {
-				System.out.println("Party's over");
-				liftUpLowScaleActivated = false;
-				liftUpLowScaleSensorFlag= false;
-			}
-			else if (liftUpLowScaleSensorFlag) {
-				System.out.println("stop called for low scale");
-				stop();
-	
-			}
-			else  {
-				System.out.println("slide reverse and arms up called for low scale");
-				slideReverse();
-				armsUp();
-				if (scaleUpTrigger.getVoltage()>  2 ) {
-						 liftUpLowScaleSensorFlag= true;
-						 System.out.println("liftUpLowScale sensor flag = ");
-						 System.out.println(liftUpLowScaleSensorFlag);
-
-					}
-				
-			}
-		}
-		
-	}
+//	public void lowScaleAutoUpPeriodic() {
+//		SmartDashboard.putNumber("Party's Over", partysOverDown);
+//		if (liftUpLowScaleActivated) {
+//			if (liftTimer.get() > Consts.partysOverLowScale) {
+//				System.out.println("Party's over");
+//				liftUpLowScaleActivated = false;
+//				liftUpLowScaleSensorFlag= false;
+//			}
+//			else if (liftUpLowScaleSensorFlag) {
+//				System.out.println("stop called for low scale");
+//				stop();
+//	
+//			}
+//			else  {
+//				System.out.println("slide reverse and arms up called for low scale");
+//				slideReverse();
+//				armsUp();
+//				if (scaleUpTrigger.getVoltage()>  2 ) {
+//						 liftUpLowScaleSensorFlag= true;
+//						 System.out.println("liftUpLowScale sensor flag = ");
+//						 System.out.println(liftUpLowScaleSensorFlag);
+//
+//					}
+//				
+//			}
+//		}
+//		
+//	}
 	
 	
 
@@ -633,7 +634,7 @@ public class BoxGrabber {
 		
 		//switchAutoDownPeriodic();
 		switchAutoUpPeriodic();
-		lowScaleAutoUpPeriodic();
+//		lowScaleAutoUpPeriodic();
 		
 		if(!routineRunning || _xBox.getPOV()!=-1 || _xBox.getBumper(GenericHID.Hand.kLeft)|| _xBox.getBumper(GenericHID.Hand.kRight)|| _xBox.getBackButton()|| _xBox.getStartButton()) {
 			switch (xBox()) {
