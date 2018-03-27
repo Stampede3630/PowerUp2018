@@ -51,6 +51,11 @@ public class DriveTrain {
 	 * leftThree , right six master motors and drive train constru
 	 */
 	private BoxGrabber driveBox;
+	/**
+	 * constructer for auto where objects in drie train are constructed
+	 * @param _boxGrabber for auto programing 
+	 * 
+	 */
 	public DriveTrain(BoxGrabber _boxGrabber) {
 		
 		driveBox = _boxGrabber;
@@ -64,10 +69,10 @@ public class DriveTrain {
 		// srx definitions
 		leftThreeEncoder = new WPI_TalonSRX(Consts.leftThree);
 		leftTwo = new WPI_TalonSRX(Consts.leftTwo);
-//		leftOne = new WPI_TalonSRX(Consts.leftOne);
+
 		rightSixEncoder = new WPI_TalonSRX(Consts.rightSix);
 		rightFive = new WPI_TalonSRX(Consts.rightFive);
-//		rightFour = new WPI_TalonSRX(Consts.rightFour);
+
 		backwardsTimer = new Timer();
 		
 		configureTalon(leftThreeEncoder);
@@ -99,7 +104,7 @@ public class DriveTrain {
 
 		positionEncoderSource = new EncoderPIDSource(leftThreeEncoder, rightSixEncoder);
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
-				positionEncoderSource, new MyPosPidOutput());
+		positionEncoderSource, new MyPosPidOutput());
 		posController.setOutputRange(-.6, .6); //current testing
 
 		posController.setAbsoluteTolerance(Consts.ToleranceDistance);
