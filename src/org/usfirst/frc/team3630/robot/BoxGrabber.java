@@ -138,6 +138,10 @@ public class BoxGrabber {
 		else if (_xBox.getXButton()) {
 			return State.LOWSCALEUPAUTOMATED;
 		}
+		else if (_xBox.getStartButton()) {
+			return State.KICKFORWARD;
+		}
+		
 		else if (_xBox.getYButton()) {
 			return State.LIFTUPAUTOMATED;	
 		}
@@ -333,13 +337,13 @@ public class BoxGrabber {
 			switch(kickoutState){
 			case 2:
 				clampClose();
-				System.out.println("case two");
+				///System.out.println("case two");
 				if (kickTime.hasPeriodPassed(.01)){
 					kickoutState=3;
 				}
 				break;
 			case 3:
-				System.out.println("case three");
+				System.out.println("case three was called");
 				leftMasterIntakeTalon.set(1);
 				if (kickTime.hasPeriodPassed(.05)){
 					kickoutState=4;
@@ -348,7 +352,7 @@ public class BoxGrabber {
 			case 4:
 				clampOpen();
 				leftMasterIntakeTalon.set(1);
-				System.out.println("case four");
+				//System.out.println("case four");
 				if (kickTime.hasPeriodPassed(1)){
 					kickoutState =5;
 				}
@@ -612,7 +616,7 @@ public class BoxGrabber {
 		// mainC.stop();
 
 		boxIntakePeriodic();
-		//kickoutPeriodic();
+		kickoutPeriodic();
 		liftDownPeriodic();
 		liftUpPeriodic();
 		
@@ -657,7 +661,8 @@ public class BoxGrabber {
 				case CLAMPOPEN:
 					clampOpen();
 				break;
-				
+				case KICKFORWARD:
+					 kickoutInit();
 				case CLAMPCLOSE:
 					clampClose();
 				break;
