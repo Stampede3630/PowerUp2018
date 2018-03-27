@@ -530,6 +530,9 @@ public class DriveTrain {
 	}
 	}
 		
+	/**
+	 * dose this method work seems to have comented out unfinshed pices of code? just want to double chack if something needs to be finished? or is missing
+	 */
 	public void leftSwitchRight() {
 		if (myCurrentCase  == 1) {
 			//ENTER CONDITION

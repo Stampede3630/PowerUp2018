@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-//should we change to timed robot ? 
+
 public class Robot extends IterativeRobot {
 	String gameData;
 	BoxGrabber box ;
@@ -132,7 +132,11 @@ public class Robot extends IterativeRobot {
 
 	/**
 	 * deals with game data from fms which gets sent to us and set auto rutube
+	 * 
+	 * 
 	 */
+	
+	// are we useing case logic or auto logic I am confudsed to why we have both here are they still working? it just seems somewhat redunant
 	public void autoLogic() {
 		if(gameData.length() > 0) {
 			
