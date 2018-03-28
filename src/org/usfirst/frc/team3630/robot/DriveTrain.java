@@ -1247,70 +1247,71 @@ public class DriveTrain {
 		
 		
 				
-		if (myCurrentCase == 5) {
+		if (myCurrentCase == 6) {
 			//ENTER CONDITION
 			if(init) {
 				driveBox.liftDownInit();
+				init = false;
 			}
 			if(!driveBox.liftDownActivated) {
-				myCurrentCase = 6;
+				myCurrentCase = 7;
 	     		init = true;
 			}
 			
 			}
-		if (myCurrentCase == 6) {
+		if (myCurrentCase == 7) {
 			//ENTER CONDITION
 			if(init) {
 				autoTurnDegree(-90);
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
-				myCurrentCase = 7;
+				myCurrentCase = 8;
 	     		init = true;
 			}
 			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
 			}
-		if (myCurrentCase == 7) {
+		if (myCurrentCase == 8) {
 			//ENTER CONDITION
 			if(init) {
 				autoDriveFw(Consts.toCube);				
 				
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
-				myCurrentCase = 8;
+				myCurrentCase = 9;
 	     		init = true;
 			}
 		}
-		if(myCurrentCase == 8) {
+		if(myCurrentCase == 9) {
 			//ENTER CONDITION
 			if(init){
 				driveBox.boxAutoIntakeInit();
 			}
 			if(!driveBox.isIntakeActivated) {
-				myCurrentCase = 9;
+				myCurrentCase = 10;
 				init = true;
 				}
 			}
-		if(myCurrentCase == 9) {
+		if(myCurrentCase == 10) {
 			if(init) {
 				autoDriveFw(-16);
 				driveBox.switchAutoUpInit();
 			}
 			if(!driveBox.liftUpSwitchActivated) {
 				init = true;
-				myCurrentCase = 10;
+				myCurrentCase = 11;
 			}
 				
 		}
-		if(myCurrentCase == 10) {
+		if(myCurrentCase == 11) {
 			if(init) {
 				autoDriveFw(Consts.toSwitch);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
-				myCurrentCase = 11;
+				myCurrentCase = 12;
 	     		init = true;
 		}
 		}
-		if(myCurrentCase == 11) {
+		if(myCurrentCase == 12) {
 			//ENTER CONDITION
 			if(init){
 				init = false;
@@ -1320,11 +1321,11 @@ public class DriveTrain {
 				
 			}
 			if(BoxGrabber.kickoutDone) {
-				myCurrentCase = 12;
+				myCurrentCase = 13;
 	     		init = true;
 			}
 		}	
-		if(myCurrentCase == 12) {
+		if(myCurrentCase == 13) {
 			//ENTER CONDITION
 			if(init){
 				init =false;
