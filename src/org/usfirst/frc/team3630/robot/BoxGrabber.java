@@ -234,7 +234,7 @@ public class BoxGrabber {
 	public void boxAutoIntakePeriodic() {
 		if(isIntakeActivated) {
 			autoIntakeTimer.start();
-			if(autoIntakeTimer.get()< .5) {
+			if(autoIntakeTimer.get()< .3) {
 				leftMasterIntakeTalon.set(1);
 			}
 			else {
