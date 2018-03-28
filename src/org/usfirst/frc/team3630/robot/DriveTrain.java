@@ -803,8 +803,8 @@ public class DriveTrain {
 				//ENTER CONDITION
 				turnController.enable();
 				turnController.setSetpoint(0);
-				autoDriveFw(Consts.autoA * 2 + Consts.autoB);
-				driveBox.liftUpInit();
+				autoDriveFw(195);
+				
 			}
 		    if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 		     	myCurrentCase = 2;
@@ -825,7 +825,8 @@ public class DriveTrain {
 		if (myCurrentCase  == 3) {
 			//ENTER CONDITION
 			if(init) {
-				autoDriveFw(Consts.autoH);
+				autoDriveFw(155);
+				driveBox.liftUpInit();
 			}
 		     if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 		     	myCurrentCase = 4;
@@ -835,7 +836,7 @@ public class DriveTrain {
 		if (myCurrentCase == 4) {
 			//ENTER CONDITION
 			if(init) {
-				autoTurnDegree(0);
+				autoTurnDegree(35);
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
 				myCurrentCase = 5;
@@ -846,14 +847,14 @@ public class DriveTrain {
 		if (myCurrentCase  == 5) {
 			//ENTER CONDITION
 			if(init) {
-				autoDriveFw(Consts.autoC - Consts.autoA);
+				autoDriveFw(26);
 			}
 		    if(Math.abs(posController.getError()) < Consts.autoPosError) {
 		     	myCurrentCase = 6;
 		     	init = true;
 		    }
 		}
-		if (myCurrentCase == 6) {
+		/*if (myCurrentCase == 6) {
 			//ENTER CONDITION
 			if(init) {
 				autoTurnDegree(90);
@@ -871,9 +872,9 @@ public class DriveTrain {
 		    if(Math.abs(posController.getError()) < Consts.autoPosError) {
 		     	myCurrentCase = 8;
 		     	init = true;
-		    }
-		}
-		if(myCurrentCase == 8) {
+		    }*/
+		//}
+		if(myCurrentCase == 6) {
 			//ENTER CONDITION
 			if(init) {
 				init = false;
