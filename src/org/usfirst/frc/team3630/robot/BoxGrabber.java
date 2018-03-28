@@ -196,16 +196,7 @@ public class BoxGrabber {
 	// should delte ? seems a bit redundeant to me 
 	
 	
-	/*
-	 * public void intake() { rightIntake.configNeutralDeadband(.1, 10);
-	 * leftIntake.configNeutralDeadband(.1, 10);
-	 * leftIntake.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower,
-	 * rightIntake.getDeviceID());
-	 * rightIntake.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput,
-	 * _xBox.getTriggerAxis(GenericHID.Hand.kLeft));
-	 * 
-	 * }
-	 */
+	
 
 	// each method for has a forward and reverse
 	// sets a boolean to true in order to know it has been activated
@@ -226,31 +217,7 @@ public class BoxGrabber {
 		double speed = (_xBox.getTriggerAxis(GenericHID.Hand.kRight))*-1;
 		leftMasterIntakeTalon.set(speed);
 	
-		// is this reduntant?? do we still need this why is it commented out? 
 		
-		
-		// possible logic system for spitting out
-		/* boolean Intake = false;
-		 * boolean Spit-out = false;
-		 * double speed = 0;
-		 * if ((_xBox.getTriggerAxis(GenericHID.Hand.kRight)) > 1) {
-		 *		Intake = true;
-		 *		Spit-out = false;
-		 *		speed = (_xBox.getTriggerAxis(GenericHID.Hand.kRight))*-1;
-		 * 		leftMasterIntakeTalon.set(speed);	
-		 * }
-		 * elseif (insert unused Xbox button) > 1) {
-		 *		Intake = false;
-		 *		Spit-out = true;
-		 *		speed = (insert unused Xbox button));
-		 *		leftMasterIntakeTalon.set(speed);
-		 * }
-		 * else {
-		 * 		Intake = false;
-		 * 		Spit-out = false;
-		 * 		speed = 0;
-		 * }
-		 */
 	}
 	
 	// base class methods 
@@ -332,17 +299,7 @@ public class BoxGrabber {
 	
 
 	public void  kickoutPeriodic(){
-	/*if(isKickoutActivated) {
-		if(kickTime.hasPeriodPassed(2)) {
-			leftMasterIntakeTalon.set(0);
-			kickTime.stop();
-			isKickoutActivated = false;
-		}
-		else leftMasterIntakeTalon.set(1);
-	}
-	}*/
-		
-
+	
 
 		if (isKickoutActivated){
 			switch(kickoutState){
