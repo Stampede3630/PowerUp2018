@@ -70,7 +70,6 @@ public class DriveTrain {
 		rightFive = new WPI_TalonSRX(Consts.rightFive);
 //		rightFour = new WPI_TalonSRX(Consts.rightFour);
 		backwardsTimer = new Timer();
-		
 		configureTalon(leftThreeEncoder);
 		configureTalon(rightSixEncoder);
 		configureTalon(leftTwo);
@@ -1177,6 +1176,165 @@ public class DriveTrain {
 			init = false;
 		}
 	}
+	
+	public void twoCubeAutoRight() {
+		if (myCurrentCase  == 1) {
+			//ENTER CONDITION
+			if(init) {
+				turnController.enable();
+				turnController.setSetpoint(0);
+				autoDriveFw(Consts.firstDistanceInScaleFFMethod);
+				driveBox.liftUpInit();
+			
+			}
+		    if(Math.abs(posController.getError()) < Consts.autoPosError ) {
+		     	myCurrentCase = 2;
+		     	init = true;
+		    }		
+		}
+		if (myCurrentCase == 2) {
+			//ENTER CONDITION
+			if(init) {
+				autoTurnDegree(-35);
+			}
+			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
+				myCurrentCase = 3;
+	     		init = true;
+			}
+			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+			}
+		if (myCurrentCase == 3) {
+			//ENTER CONDITION
+			if(init) {
+				autoDriveFw(Consts.secondDistanceInScaleFFMethod);				
+				
+			}
+			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
+				myCurrentCase = 4;
+	     		init = true;
+			}
+		}
+		
+		if(myCurrentCase == 4) {
+			//ENTER CONDITION
+			if(init){
+				init = false;
+				driveBox.kickoutInit();
+				turnController.disable();
+				posController.disable();
+				
+			}
+			if(BoxGrabber.kickoutDone) {
+				myCurrentCase = 5;
+	     		init = true;
+			}
+		}
+		
+		if (myCurrentCase == 5) {
+			//ENTER CONDITION
+			if(init) {
+				turnController.enable();
+				turnController.setSetpoint(0);
+				posController.enable();
+				autoDriveFw(Consts.secondDistanceInScaleFFMethod * -1);				
+				
+			}
+			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
+				myCurrentCase = 6;
+	     		init = true;
+			}
+		}
+		
+		
+				
+		if (myCurrentCase == 5) {
+			//ENTER CONDITION
+			if(init) {
+				driveBox.liftDownInit();
+			}
+			if(!driveBox.liftDownActivated) {
+				myCurrentCase = 6;
+	     		init = true;
+			}
+			
+			}
+		if (myCurrentCase == 6) {
+			//ENTER CONDITION
+			if(init) {
+				autoTurnDegree(-90);
+			}
+			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
+				myCurrentCase = 7;
+	     		init = true;
+			}
+			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
+			}
+		if (myCurrentCase == 7) {
+			//ENTER CONDITION
+			if(init) {
+				autoDriveFw(Consts.toCube);				
+				
+			}
+			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
+				myCurrentCase = 8;
+	     		init = true;
+			}
+		}
+		if(myCurrentCase == 8) {
+			//ENTER CONDITION
+			if(init){
+				driveBox.boxAutoIntakeInit();
+			}
+			if(!driveBox.isIntakeActivated) {
+				myCurrentCase = 9;
+				init = true;
+				}
+			}
+		if(myCurrentCase == 9) {
+			if(init) {
+				autoDriveFw(-16);
+				driveBox.switchAutoUpInit();
+			}
+			if(!driveBox.liftUpSwitchActivated) {
+				init = true;
+				myCurrentCase = 10;
+			}
+				
+		}
+		if(myCurrentCase == 10) {
+			if(init) {
+				autoDriveFw(Consts.toSwitch);
+			}
+			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
+				myCurrentCase = 11;
+	     		init = true;
+		}
+		}
+		if(myCurrentCase == 11) {
+			//ENTER CONDITION
+			if(init){
+				init = false;
+				driveBox.kickoutInit();
+				turnController.disable();
+				posController.disable();
+				
+			}
+			if(BoxGrabber.kickoutDone) {
+				myCurrentCase = 12;
+	     		init = true;
+			}
+		}	
+		if(myCurrentCase == 12) {
+			//ENTER CONDITION
+			if(init){
+				init =false;
+				//driveBox.kickoutInit();
+			}
+			turnController.disable();
+			posController.disable();
+		}
+		}
+				
 	
 	
 	public void autoDriveFw(double inches) {

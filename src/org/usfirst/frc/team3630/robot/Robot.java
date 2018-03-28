@@ -120,6 +120,7 @@ public class Robot extends IterativeRobot {
 		box.switchAutoUpPeriodic();
 		box.kickoutPeriodic();
 		box.liftUpPeriodic();
+		box.boxAutoIntakePeriodic();
 	}
 	@Override
 	public void disabledInit() {
@@ -173,7 +174,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.rightSwitchRightFF();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoRRR.getSelected() == Destinations.SCR)) {
-					_driveTrain.rightScaleRight();
+					_driveTrain.twoCubeAutoRight();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoRRR.getSelected() == Destinations.SWR)) {
 					_driveTrain.middleSwitchRight();
@@ -199,7 +200,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.rightSwitchLeft();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoLRL.getSelected() == Destinations.SCR)) {
-					_driveTrain.rightScaleRight();
+					_driveTrain.twoCubeAutoRight();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoLRL.getSelected() == Destinations.SWL)) {
 					_driveTrain.middleSwitchLeftFF();

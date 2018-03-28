@@ -65,9 +65,11 @@ public class BoxGrabber {
 	boolean liftUpLowScaleSensorFlag, liftUpLowScaleActivated;
 	boolean routineRunning;
 	boolean atSwitch, atLowScale,atScale;
+	public static boolean kickoutDone;
+	boolean isIntakeActivated;
 	AnalogInput pressureLevel;
 	DigitalInput slideReversecheck;
-	Timer liftTimer,slideTimer, kickTime;
+	Timer liftTimer,slideTimer, kickTime, autoIntakeTimer;
 	int kickoutState;
 	double partysOverDown;
 
@@ -80,11 +82,13 @@ public class BoxGrabber {
 		slideTimer = new Timer();
 		kickTime = new Timer();
 		liftTimer = new Timer();
+		autoIntakeTimer = new Timer();
 		
 		slideReversecheck = new DigitalInput(3);
 		
 		
 		isKickoutActivated= false;
+		isIntakeActivated = false;
 		
 		liftUpSensorFlag= false;
 		liftUpActivated = false;
@@ -100,6 +104,8 @@ public class BoxGrabber {
 		atScale = false;
 		atLowScale = false;
 		testOn = false;
+		
+		kickoutDone = false;
 
 		scaleUpTrigger = new AnalogInput(Consts.scaleUpAnalogPin);
 		atDownLevel = new AnalogInput(Consts.downLevelAnalogPin);
@@ -220,30 +226,27 @@ public class BoxGrabber {
 	public void boxIntakePeriodic() {
 		double speed = (_xBox.getTriggerAxis(GenericHID.Hand.kRight))*-1;
 		leftMasterIntakeTalon.set(speed);
-	
-		// possible logic system for spitting out
-		/* boolean Intake = false;
-		 * boolean Spit-out = false;
-		 * double speed = 0;
-		 * if ((_xBox.getTriggerAxis(GenericHID.Hand.kRight)) > 1) {
-		 *		Intake = true;
-		 *		Spit-out = false;
-		 *		speed = (_xBox.getTriggerAxis(GenericHID.Hand.kRight))*-1;
-		 * 		leftMasterIntakeTalon.set(speed);	
-		 * }
-		 * elseif (insert unused Xbox button) > 1) {
-		 *		Intake = false;
-		 *		Spit-out = true;
-		 *		speed = (insert unused Xbox button));
-		 *		leftMasterIntakeTalon.set(speed);
-		 * }
-		 * else {
-		 * 		Intake = false;
-		 * 		Spit-out = false;
-		 * 		speed = 0;
-		 * }
-		 */
 	}
+	public void boxAutoIntakeInit() {
+		isIntakeActivated = true;
+		autoIntakeTimer.reset();
+	}
+	public void boxAutoIntakePeriodic() {
+		if(isIntakeActivated) {
+			autoIntakeTimer.start();
+			if(autoIntakeTimer.get()< .5) {
+				leftMasterIntakeTalon.set(1);
+			}
+			else {
+				leftMasterIntakeTalon.set(0);
+				clampClose();
+				autoIntakeTimer.stop();
+				isIntakeActivated = false;
+			}
+		}
+	}
+		
+	
 	
 	// base class methods 
 	public void kickForward() {
@@ -315,6 +318,7 @@ public class BoxGrabber {
 		isKickoutActivated = true;
 		kickTime.start();
 		leftMasterIntakeTalon.set(1);
+		kickoutDone = false;
 }
 	
 	public void  kickoutPeriodic(){
@@ -363,6 +367,8 @@ public class BoxGrabber {
 					kickTime.stop();
 					System.out.print("isKickoutactivated boolean in case five");
 					System.out.print(isKickoutActivated);
+					kickoutDone = true;
+					
 				}
 				break; 
 			default:
