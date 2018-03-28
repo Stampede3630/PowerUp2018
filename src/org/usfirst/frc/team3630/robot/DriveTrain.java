@@ -212,6 +212,7 @@ public class DriveTrain {
 		SmartDashboard.putBoolean("Is init true?", init);
 		SmartDashboard.putNumber("posController input", posOutput);
 		SmartDashboard.putData("PDP", panel);
+		SmartDashboard.putNumber("TurnController Setpoint", turnController.getSetpoint());
 		
 		SmartDashboard.putNumber("turnController kP", turnController.getP());
 		
@@ -416,7 +417,9 @@ public class DriveTrain {
 		if (myCurrentCase == 3) {
 			//ENTER CONDITION
 			if(init) {
+				//turnController.setSetpoint(turnController.get());
 				autoDriveFw(Consts.secondDistanceInSwitchFFMethod);
+				
 						
 			}
 			if(Math.abs(posController.getError()) < Consts.autoTurnError) {
@@ -961,18 +964,18 @@ public class DriveTrain {
 	}
 	public void middleSwitchLeftFF() { //started. No right angles. Need a lot of testing
 		
-		if(myCurrentCase == 1 || myCurrentCase == 2) {
-//
-	//		if(init) {
+		/*if(myCurrentCase == 1 || myCurrentCase == 2) {
+
+			if(init) {
 				System.out.println("Case 1/2 callled");
 				autoDriveFw(36);
-	//	}
+		}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
 				myCurrentCase = 3;
 	     		init = true;
 			}
-		}
-		if(myCurrentCase == 3) {
+		}*/
+		if(myCurrentCase == 1) {
 			if(init) {
 				turnController.setPID(.03, Consts.kIDrAngle, Consts.kDDrAngle);
 			driveBox.switchAutoUpInit();
@@ -1005,7 +1008,7 @@ public class DriveTrain {
 		}
 		if(myCurrentCase == 6) {
 			if(init) {
-				autoDriveFw(30);//63.6);
+				autoDriveFw(25);//63.6);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 				myCurrentCase = 7;
@@ -1304,7 +1307,8 @@ public class DriveTrain {
 		leftThreeEncoder.configOpenloopRamp(1, Consts.timeOutMs);
 		rightSixEncoder.configOpenloopRamp(1, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
-		myCurrentCase = 1;	
+		myCurrentCase = 1;
+		init = true;
 
 	}
 
