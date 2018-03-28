@@ -120,7 +120,7 @@ public class DriveTrain {
 		SmartDashboard.putNumber("heading acrcade drive", heading);
 		driveTrain.arcadeDrive(speed, heading);
 		getDiagnostics();
-		panel.
+
 		// three are two missing bad? delted folowers set in constructor
 		
 	SmartDashboard.putNumber("Left three curent", leftThreeEncoder.getOutputCurrent());
@@ -130,18 +130,18 @@ public class DriveTrain {
 		// are we still getting curent issues 
 		
 		//for graphing to get a sure sane kv, will put this in csv and graph
-		for (int i = 0; i<200; i++){
+		System.out.print(leftThreeEncoder.getMotorOutputVoltage());
+		System.out.print(",");
+		
+		System.out.print(getVelocity(leftThreeEncoder));System.out.print(",");
+		
+		
+	
+		System.out.print("\n");
 
 		
-			System.out.print(leftThreeEncoder.getOutputVoltage());System.out.print(",");
-			
-			System.out.print(leftThreeEncoder.getVelocity(leftThreeEncoder);System.out.print(",");
-			
 			
 		
-			System.out.print("\n");
-
-		}
 	if(panel.getTotalCurrent()>300) {
 		System.out.print("[WARNING] CURRENT DRAW IS AT ");
 		System.out.print(panel.getTotalCurrent());
@@ -179,7 +179,7 @@ public class DriveTrain {
 	 *  diganoaric method for taon srx debuging 
 	 */
 	public void getDiagnostics() {		
-		SmartDashboard.putNumber("Left Current", leftThreeEncoder.getOutputVoltage());
+
 		SmartDashboard.putNumber("Right Current", rightSixEncoder.getOutputCurrent());
 		SmartDashboard.putNumber("Front Right Position", getRotations(rightSixEncoder));
 		SmartDashboard.putNumber("Front Right Velocity", getVelocity(rightSixEncoder));

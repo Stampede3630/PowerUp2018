@@ -120,16 +120,16 @@ public class tankDrivePath {
 		
 		for (int i = 0; i<leftTrajectory.length(); i++){
 
-			System.out.print("acceleration = ");System.out.print(leftTrajectory.get(i).acceleration); System.out.print(",");
+			//System.out.print("acceleration = ");System.out.print(leftTrajectory.get(i).acceleration); System.out.print(",");
 			//System.out.print(leftTrajectory.get(i).dt); System.out.print(",");
 			//System.out.print(leftTrajectory.get(i).heading); System.out.print(",");
 			//System.out.print(leftTrajectory.get(i).jerk); System.out.print(",");
-			System.out.print("velocity = ");System.out.print(leftTrajectory.get(i).velocity ); System.out.print(",");
-			System.out.print("position = ");System.out.print(leftTrajectory.get(i).position); System.out.print(",");
+			//System.out.print("velocity = ");System.out.print(leftTrajectory.get(i).velocity ); System.out.print(",");
+			//System.out.print("position = ");System.out.print(leftTrajectory.get(i).position); System.out.print(",");
 			//System.out.print(leftTrajectory.get(i).velocity * (1)); System.out.print(",");
 			//System.out.print(leftTrajectory.get(i).x); System.out.print(",");
 			//System.out.print(leftTrajectory.get(i).y);
-			System.out.print("\n");
+			//System.out.print("\n");
 
 		}
 		
@@ -189,7 +189,7 @@ public class tankDrivePath {
 			SmartDashboard.putNumber("accelerationCalc", accelerationCalc);
 			SmartDashboard.putNumber("calculated value", calculated_value);
 			
-			if(setLeftMotors != calculated_value ) DriverStation.reportWarning("pathfinder Values do not align", false); 
+		//	if(setLeftMotors != calculated_value ) DriverStation.reportWarning("pathfinder Values do not align", false); 
 			
 		}
 
