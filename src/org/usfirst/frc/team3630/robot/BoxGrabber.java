@@ -258,6 +258,7 @@ public class BoxGrabber {
 	}
 	
 	// stop method for safety
+	
 	public void stop() {
 		clamp.set(DoubleSolenoid.Value.kOff);
 		lift.set(DoubleSolenoid.Value.kOff);
@@ -331,7 +332,7 @@ public class BoxGrabber {
 				leftMasterIntakeTalon.set(0);
 				System.out.println("case five");
 
-				if (kickTime.hasPeriodPassed(3){
+				if (kickTime.hasPeriodPassed(2.5)){
 					kickoutState = -1;
 					isKickoutActivated = false;
 					kickTime.stop();
