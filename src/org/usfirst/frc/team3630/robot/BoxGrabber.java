@@ -331,7 +331,7 @@ public class BoxGrabber {
 				leftMasterIntakeTalon.set(0);
 				System.out.println("case five");
 
-				if (kickTime.hasPeriodPassed(5)){
+				if (kickTime.hasPeriodPassed(3){
 					kickoutState = -1;
 					isKickoutActivated = false;
 					kickTime.stop();
