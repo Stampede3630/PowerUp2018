@@ -255,7 +255,7 @@ public class Robot extends IterativeRobot {
 			}
 		}
 	}
-
+// not called beacuse dosn't work as far as i know. use auto logic instead.m 
 	public void caseAutoLogic() {
 		
 		switch(gameData.substring(0, 1)) {
