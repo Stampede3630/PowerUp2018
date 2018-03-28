@@ -1008,7 +1008,7 @@ public class DriveTrain {
 		}
 		if(myCurrentCase == 6) {
 			if(init) {
-				autoDriveFw(25);//63.6);
+				autoDriveFw(20);//63.6);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 				myCurrentCase = 7;
