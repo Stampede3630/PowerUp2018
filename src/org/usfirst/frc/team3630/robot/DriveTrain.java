@@ -134,17 +134,19 @@ public class DriveTrain {
 	
 	// add ahrs  congif method to see if calibating. It could be a good saftey checlk 
 	public void teleopInit() {
-		leftThreeEncoder.configOpenloopRamp(.2, Consts.timeOutMs);
-		rightSixEncoder.configOpenloopRamp(.2, Consts.timeOutMs);
+		leftThreeEncoder.configOpenloopRamp(.1, Consts.timeOutMs);
+		rightSixEncoder.configOpenloopRamp(.1, Consts.timeOutMs);
 
 	}
 	public void teleopPeriodic() {
 		double speed = (_xBox.getY(GenericHID.Hand.kLeft))*-.6;
-		double heading = (_xBox.getX(GenericHID.Hand.kRight))*.6;
+		double heading = (_xBox.getX(GenericHID.Hand.kRight))*.5;
+		
 		if(_xBox.getTriggerAxis(GenericHID.Hand.kLeft) > .85) {
 			speed = (_xBox.getY(GenericHID.Hand.kLeft))*-1;
-			heading =  (_xBox.getX(GenericHID.Hand.kRight));
+			heading =  (_xBox.getX(GenericHID.Hand.kRight)*.5);
 		}
+		
 		SmartDashboard.putNumber("heading acrcade drive", heading);
 		driveTrain.arcadeDrive(speed, heading);
 		getDiagnostics();
