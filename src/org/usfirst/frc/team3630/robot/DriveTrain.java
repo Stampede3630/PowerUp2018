@@ -780,8 +780,9 @@ public class DriveTrain {
 			else {
 				init = false;
 			}
+			
 		}*/
-	}
+
 	public void rightScaleLeft() {
 		if (myCurrentCase  == 1) {
 			if(init) {

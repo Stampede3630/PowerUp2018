@@ -122,8 +122,8 @@ public class BoxGrabber {
 		rightSlaveIntakeTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 7);
 		
 		//reverse the values below if you want opposite behavior
-		leftMasterIntakeTalon.setInverted(true);
-		rightSlaveIntakeTalon.setInverted(false);
+		leftMasterIntakeTalon.setInverted(false);
+		rightSlaveIntakeTalon.setInverted(true);
 		
 		
 	}
