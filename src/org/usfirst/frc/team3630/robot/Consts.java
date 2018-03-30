@@ -63,7 +63,7 @@ public class Consts {
 	public static final double autoLine = 150;
 	public static final double firstDistanceInSwitchFFMethod = 67;//75;//112.4;
 	public static final double secondDistanceInSwitchFFMethod = 33;//50;//78.5;60;
-	public static final double firstDistanceInScaleFFMethod = 240; // needs to be changed
+	public static final double firstDistanceInScaleFFMethod = 235; // needs to be changed
 	public static final double secondDistanceInScaleFFMethod = 24;  // needs to be changed
 	public static final double autoPosError = 3;
 	public static final double autoTurnError = 2;
