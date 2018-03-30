@@ -25,6 +25,7 @@ public class DriveTrain {
 	public AHRS ahrs;
 	PowerDistributionPanel panel;
 	DifferentialDrive driveTrain;
+	Timer testTime;
 
 	/**
 	 * leftThree , right six master motors and drive train constru
@@ -35,7 +36,7 @@ public class DriveTrain {
 	public DriveTrain(BoxGrabber _boxGrabber) {
 		ahrs = new AHRS(SPI.Port.kMXP); 
 		driveBox = _boxGrabber;
-		
+		testTime = new Timer();
 		panel = new PowerDistributionPanel(0);
 		_xBox = new XboxController(Consts.xBoxComPort);
 		
@@ -101,19 +102,24 @@ public class DriveTrain {
 	}
 
 
-	
-	// add ahrs  congif method to see if calibating. It could be a good saftey checlk 
+	// might need higher ramp rate for testing purposes ....
+	// will do more reaserch into that
 	public void teleopInit() {
 		leftThreeEncoder.configOpenloopRamp(.2, Consts.timeOutMs);
 		rightSixEncoder.configOpenloopRamp(.2, Consts.timeOutMs);
 		
 		rightFive.setInverted(false);
 		rightSixEncoder.setInverted(false);
+		testTime.reset();
+		testTime.start();
+
 
 	}
 	public void teleopPeriodic() {
-		double speed = (_xBox.getY(GenericHID.Hand.kLeft))*-.6;
-		double heading = (_xBox.getX(GenericHID.Hand.kRight))*.6;
+		double speed = .6;
+	//	double speed = (_xBox.getY(GenericHID.Hand.kLeft))*-.6;
+		double heading = 0;
+		//double heading = (_xBox.getX(GenericHID.Hand.kRight))*.6;
 		if(_xBox.getTriggerAxis(GenericHID.Hand.kLeft) > .85) {
 			speed = (_xBox.getY(GenericHID.Hand.kLeft))*-1;
 		}
@@ -121,32 +127,26 @@ public class DriveTrain {
 		driveTrain.arcadeDrive(speed, heading);
 		getDiagnostics();
 
-		// three are two missing bad? delted folowers set in constructor
-		
-	SmartDashboard.putNumber("Left three curent", leftThreeEncoder.getOutputCurrent());
-
-	//	SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
-		// moved over to driverStaton warnings 
-		// are we still getting curent issues 
+		// note timer than left then right side of robot data 
 		
 		//for graphing to get a sure sane kv, will put this in csv and graph
-		System.out.print(leftThreeEncoder.getMotorOutputVoltage());
-		System.out.print(",");
+		System.out.print(testTime.get()); System.out.print(",");
+		System.out.print(leftThreeEncoder.getMotorOutputVoltage());System.out.print(",");
 		
 		System.out.print(getVelocity(leftThreeEncoder));System.out.print(",");
+		System.out.print(rightSixEncoder.getMotorOutputVoltage());System.out.print(",");
 		
-		
-	
+		System.out.print(getVelocity(rightSixEncoder));System.out.print(",");
 		System.out.print("\n");
 
 		
 			
-		
+/*		
 	if(panel.getTotalCurrent()>300) {
 		System.out.print("[WARNING] CURRENT DRAW IS AT ");
 		System.out.print(panel.getTotalCurrent());
 		System.out.print('\n');
-	}
+	}*/
 
 	}
 
