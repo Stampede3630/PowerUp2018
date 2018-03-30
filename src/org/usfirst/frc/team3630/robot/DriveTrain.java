@@ -32,7 +32,9 @@ public class DriveTrain {
 	PIDController turnController;
 	PIDController posController;
 	double rotateToAngleRate;
-	Timer backwardsTimer;
+	Timer backwardsTimer, middleSwitchRightTimer;
+	
+	
 	
 	
 	// target angle degrees for straight on should not be a constant !
@@ -74,6 +76,7 @@ public class DriveTrain {
 		rightFive = new WPI_TalonSRX(Consts.rightFive);
 
 		backwardsTimer = new Timer();
+		middleSwitchRightTimer = new Timer();
 		
 		configureTalon(leftThreeEncoder);
 		configureTalon(rightSixEncoder);
@@ -134,17 +137,17 @@ public class DriveTrain {
 	
 	// add ahrs  congif method to see if calibating. It could be a good saftey checlk 
 	public void teleopInit() {
-		leftThreeEncoder.configOpenloopRamp(.1, Consts.timeOutMs);
-		rightSixEncoder.configOpenloopRamp(.1, Consts.timeOutMs);
+		leftThreeEncoder.configOpenloopRamp(0, Consts.timeOutMs);
+		rightSixEncoder.configOpenloopRamp(0, Consts.timeOutMs);
 
 	}
 	public void teleopPeriodic() {
 		double speed = (_xBox.getY(GenericHID.Hand.kLeft))*-.6;
-		double heading = (_xBox.getX(GenericHID.Hand.kRight))*.5;
+		double heading = (_xBox.getX(GenericHID.Hand.kRight))*.6;
 		
 		if(_xBox.getTriggerAxis(GenericHID.Hand.kLeft) > .85) {
 			speed = (_xBox.getY(GenericHID.Hand.kLeft))*-1;
-			heading =  (_xBox.getX(GenericHID.Hand.kRight)*.5);
+			heading =  (_xBox.getX(GenericHID.Hand.kRight)*.75);
 		}
 		
 		SmartDashboard.putNumber("heading acrcade drive", heading);
@@ -260,6 +263,7 @@ public class DriveTrain {
 				turnController.enable();
 				turnController.setSetpoint(0);
 				turnController.setPID(Consts.kPDrAngle, Consts.kIDrAngle, Consts.kDDrAngle);
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoA + Consts.autoB);
 			}
 		    if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -279,6 +283,7 @@ public class DriveTrain {
 		}
 		if (myCurrentCase == 3) {
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoE);
 				
 			}
@@ -299,6 +304,7 @@ public class DriveTrain {
 				turnController.enable();
 				turnController.setSetpoint(0);
 				turnController.setPID(Consts.kPDrAngle, Consts.kIDrAngle, Consts.kDDrAngle);
+				resetAutoDriveFw();
 				autoDriveFw(Consts.firstDistanceInSwitchFFMethod);
 				driveBox.switchAutoUpInit();
 			}
@@ -322,6 +328,7 @@ public class DriveTrain {
 		if (myCurrentCase == 3) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.secondDistanceInSwitchFFMethod);
 				
 			}
@@ -351,6 +358,7 @@ public class DriveTrain {
 			if(init) {
 				turnController.enable();
 				turnController.setSetpoint(0);
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoA + Consts.autoB);
 			}
 		    if(Math.abs(posController.getError()) < Consts.autoPosError) {
@@ -373,6 +381,7 @@ public class DriveTrain {
 		if (myCurrentCase == 3) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoE);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoTurnError) {
@@ -396,6 +405,7 @@ public class DriveTrain {
 			if(init) {
 				turnController.enable();
 				turnController.setSetpoint(0);
+				resetAutoDriveFw();
 				autoDriveFw(Consts.firstDistanceInSwitchFFMethod);
 				driveBox.switchAutoUpInit();
 				
@@ -420,6 +430,7 @@ public class DriveTrain {
 			//ENTER CONDITION
 			if(init) {
 				//turnController.setSetpoint(turnController.get());
+				resetAutoDriveFw();
 				autoDriveFw(Consts.secondDistanceInSwitchFFMethod);
 				
 						
@@ -447,6 +458,7 @@ public class DriveTrain {
 			if(init) {
 				turnController.enable();
 				turnController.setSetpoint(0);
+				resetAutoDriveFw();
 				autoDriveFw(Consts.firstDistanceInScaleFFMethod);
 				driveBox.liftUpInit();
 			
@@ -470,6 +482,7 @@ public class DriveTrain {
 		if (myCurrentCase == 3) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.secondDistanceInScaleFFMethod);				
 				
 			}
@@ -498,6 +511,7 @@ public class DriveTrain {
 			if(init) {
 				turnController.enable();
 				turnController.setSetpoint(0);
+				resetAutoDriveFw();
 				autoDriveFw(Consts.firstDistanceInScaleFFMethod);
 				driveBox.liftUpInit();
 				
@@ -522,6 +536,7 @@ public class DriveTrain {
 		if (myCurrentCase == 3) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.secondDistanceInScaleFFMethod);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError) {
@@ -549,6 +564,7 @@ public class DriveTrain {
 			if(init) {
 				turnController.enable();
 				turnController.setSetpoint(0);
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoA);
 				driveBox.switchAutoUpInit();
 			}
@@ -571,6 +587,7 @@ public class DriveTrain {
 		if (myCurrentCase == 3) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoG);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -591,6 +608,7 @@ public class DriveTrain {
 		if(myCurrentCase == 5) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoD);
 			}
 			if(Math.abs(posController.getError())< Consts.autoPosError) {
@@ -614,6 +632,7 @@ public class DriveTrain {
 			if(init) {
 				turnController.enable();
 				turnController.setSetpoint(0);
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoA);
 				driveBox.switchAutoUpInit();
 			}
@@ -636,6 +655,7 @@ public class DriveTrain {
 		if (myCurrentCase == 3) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoG);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -656,6 +676,7 @@ public class DriveTrain {
 		if(myCurrentCase == 5) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoD);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError) {
@@ -682,6 +703,7 @@ public class DriveTrain {
 				//ENTER CONDITION
 				turnController.enable();
 				turnController.setSetpoint(0);
+				resetAutoDriveFw();
 				autoDriveFw(195);
 				
 			}
@@ -704,6 +726,7 @@ public class DriveTrain {
 		if (myCurrentCase  == 3) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(161);
 				driveBox.liftUpInit();
 			}
@@ -726,6 +749,7 @@ public class DriveTrain {
 		if (myCurrentCase  == 5) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(26);
 			}
 		    if(Math.abs(posController.getError()) < Consts.autoPosError) {
@@ -791,6 +815,7 @@ public class DriveTrain {
 				//ENTER CONDITION
 				turnController.enable();
 				turnController.setSetpoint(0);
+				resetAutoDriveFw();
 				autoDriveFw(195);
 				
 			}
@@ -813,6 +838,7 @@ public class DriveTrain {
 		if (myCurrentCase  == 3) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(161);
 				driveBox.liftUpInit();
 			}
@@ -835,6 +861,7 @@ public class DriveTrain {
 		if (myCurrentCase  == 5) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(26);
 			}
 		    if(Math.abs(posController.getError()) < Consts.autoPosError) {
@@ -879,6 +906,7 @@ public class DriveTrain {
 			if(init) {
 				turnController.enable();
 				turnController.setSetpoint(0);
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoA);
 				driveBox.switchAutoUpInit();
 			}
@@ -891,6 +919,7 @@ public class DriveTrain {
 		if (myCurrentCase == 2) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(12);
 			}
 		
@@ -913,6 +942,7 @@ public class DriveTrain {
 		if (myCurrentCase == 4) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoI);
 			}
 		
@@ -934,6 +964,7 @@ public class DriveTrain {
 		if (myCurrentCase == 6) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoD-12);
 			}
 		
@@ -979,6 +1010,7 @@ public class DriveTrain {
 		if(myCurrentCase == 4) {
 			if(init){
 				turnController.setPID(.02, Consts.kIRotAng, Consts.kDRotAng);
+				resetAutoDriveFw();
 				autoDriveFw(110);//162.3);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -997,6 +1029,7 @@ public class DriveTrain {
 		}
 		if(myCurrentCase == 6) {
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(20);//63.6);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -1017,22 +1050,38 @@ public class DriveTrain {
 	}
 	
 	public void middleSwitchRight() {
+		SmartDashboard.putNumber("My Stage MSwR", myCurrentCase);
 		if(myCurrentCase == 1) {
 			//ENTER CONDITION
+			
 			if(init) {
+				ahrs.reset();
 				driveBox.switchAutoUpInit();
 				driveBox.switchAutoUpPeriodic();
-				Timer.delay(1);
-				turnController.enable();
-				turnController.setSetpoint(0);
-				autoDriveFw(Consts.autoA + Consts.autoD);
+				init = false;
+				middleSwitchRightTimer.reset();
+				middleSwitchRightTimer.start();
+				resetAutoDriveFw();
 			}
-			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
+			if(middleSwitchRightTimer.hasPeriodPassed(1)) {
 				myCurrentCase = 2;
 				init = true;
 			}
+
 		}
 		if (myCurrentCase == 2) {
+			if (init) {
+				turnController.enable();
+				turnController.setSetpoint(0);
+				autoDriveFw(Consts.autoA + Consts.autoD -2);
+				init = false;
+			}
+			if((Math.abs(posController.getError()) < Consts.autoPosError) ) {
+				myCurrentCase = 3;
+				init = true;
+			}
+		}
+		if (myCurrentCase == 3) {
 			//ENTER CONDITION
 			if(init) {
 				if (!driveBox.liftUpSwitchActivated) {
@@ -1051,6 +1100,7 @@ public class DriveTrain {
 			if(init) {
 				turnController.enable();
 				turnController.setSetpoint(0);
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoA);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError) {
@@ -1071,6 +1121,7 @@ public class DriveTrain {
 		if (myCurrentCase == 3) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoG);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError) {
@@ -1091,6 +1142,7 @@ public class DriveTrain {
 		if(myCurrentCase == 5) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoB + Consts.autoC);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -1111,6 +1163,7 @@ public class DriveTrain {
 		if(myCurrentCase == 7) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoF);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError) {
@@ -1133,6 +1186,7 @@ public class DriveTrain {
 			if(init) {
 				turnController.enable();
 				turnController.setSetpoint(0);
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoA);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -1153,6 +1207,7 @@ public class DriveTrain {
 		if (myCurrentCase == 3) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoG - Consts.autoI);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -1173,6 +1228,7 @@ public class DriveTrain {
 		if(myCurrentCase == 5) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoB + Consts.autoC);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -1193,6 +1249,7 @@ public class DriveTrain {
 		if(myCurrentCase == 7) {
 			//ENTER CONDITION
 			if(init) {
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoF);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError) {
@@ -1214,11 +1271,13 @@ public class DriveTrain {
 		leftThreeEncoder.configOpenloopRamp(.1, Consts.timeOutMs);
 		rightSixEncoder.configOpenloopRamp(.1, Consts.timeOutMs);
 		System.out.println("autoDriveFw was called");
-		leftThreeEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-		rightSixEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		posController.setSetpoint(inches);
 		posController.enable();
 		init = false;
+	}
+	public void resetAutoDriveFw() {
+		leftThreeEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
+		rightSixEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 	}
 	
 	/**
@@ -1259,6 +1318,7 @@ public class DriveTrain {
 			if(init) {
 				turnController.enable();
 				//turnController.setSetpoint(0);
+				resetAutoDriveFw();
 				autoDriveFw(Consts.autoLine);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {

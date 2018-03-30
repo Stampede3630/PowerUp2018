@@ -285,33 +285,26 @@ public class BoxGrabber {
 	 */
 	public void lowPSIWarning() {
 		if (compresorPSI() < 60.0) {
-			System.out.println("WARNING robots dont have low pressure but yours does");
+			//System.out.println("WARNING robots dont have low pressure but yours does");
 		}
 	}
 
 	
 	public void kickoutInit(){
-		kickTime.reset();
-		kickoutState = 2;
-		isKickoutActivated = true;
-		kickTime.start();
-		leftMasterIntakeTalon.set(1);
+		if (!isKickoutActivated){
+			kickTime.reset();
+			kickoutState = 3;
+			isKickoutActivated = true;
+			kickTime.start();
+			leftMasterIntakeTalon.set(1);
+			System.out.println("kickoutInit Activated");
+		}
 }
 	
 
 	public void  kickoutPeriodic(){
-	
-
 		if (isKickoutActivated){
 			switch(kickoutState){
-			
-			case 2:
-				clampClose();
-				///System.out.println("case two");
-				if (kickTime.hasPeriodPassed(.01)){
-					kickoutState=3;
-				}
-				break;
 			case 3:
 				System.out.println("case three was called");
 				leftMasterIntakeTalon.set(1);
@@ -633,6 +626,8 @@ public class BoxGrabber {
 				break;
 				case KICKFORWARD:
 					 kickoutInit();
+				break;
+				
 				case CLAMPCLOSE:
 					clampClose();
 				break;
