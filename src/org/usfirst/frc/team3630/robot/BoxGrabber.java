@@ -167,6 +167,12 @@ public class BoxGrabber {
 
 	public void manualControl() {
 			routineRunning = false;
+			liftUpActivated = false;
+			liftDownActivated = false;
+			isKickoutActivated = false;
+			liftUpSwitchActivated = false;
+			liftDownSwitchActivated = false;
+			liftUpLowScaleActivated = false;
 			double angle = _xBox.getPOV()*Math.PI/180;
 			double liftControl = Math.cos(angle);
 			double slideControl = Math.sin(angle);
@@ -462,13 +468,14 @@ public class BoxGrabber {
 		if (liftUpSwitchActivated) {
 			if (liftTimer.get() > Consts.partysOverSwitchUp) {
 				System.out.println("Party's over");
-				liftUpSwitchActivated = false;
+				
 				liftUpSwitchSensorFlag= false;
 				stop();
 			}
 			else if (liftUpSwitchSensorFlag) {
 				System.out.println("stop called for switch up");
 				stop();
+				liftUpSwitchActivated = false;
 			}
 			else {
 				System.out.println("slide reverse and arms up called for switch up");
@@ -600,6 +607,7 @@ public class BoxGrabber {
 				break;
 				case MANUALCONTROL:
 					manualControl();
+					
 					break;
 
 			
