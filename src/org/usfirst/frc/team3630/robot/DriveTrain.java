@@ -62,7 +62,7 @@ public class DriveTrain {
 		driveTrain = new DifferentialDrive(leftThreeEncoder, rightSixEncoder);
 		path = new tankDrivePath(leftThreeEncoder,rightSixEncoder,ahrs);
 		
-		driveTrain.setDeadband(0); // why set to zero and not at default ?.02
+		driveTrain.setDeadband(0);
 		
 	}
 
@@ -91,10 +91,7 @@ public class DriveTrain {
 	
 	
 	public void testPeriodic() {
-//		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
-//		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
-		
-		
+
 		path.autoPeriodic();
 
 		
@@ -102,8 +99,7 @@ public class DriveTrain {
 	}
 
 
-	// might need higher ramp rate for testing purposes ....
-	// will do more reaserch into that
+	// might need higher ramp rate for testing purposes .... for future of pathfinder
 	public void teleopInit() {
 		leftThreeEncoder.configOpenloopRamp(.2, Consts.timeOutMs);
 		rightSixEncoder.configOpenloopRamp(.2, Consts.timeOutMs);
@@ -128,8 +124,7 @@ public class DriveTrain {
 		getDiagnostics();
 
 		// note timer than left then right side of robot data 
-		
-		//for graphing to get a sure sane kv, will put this in csv and graph
+		// left voltage, velociyy, right velocity / voltage
 		System.out.print(testTime.get()); System.out.print(",");
 		System.out.print(leftThreeEncoder.getMotorOutputVoltage());System.out.print(",");
 		
@@ -141,12 +136,7 @@ public class DriveTrain {
 
 		
 			
-/*		
-	if(panel.getTotalCurrent()>300) {
-		System.out.print("[WARNING] CURRENT DRAW IS AT ");
-		System.out.print(panel.getTotalCurrent());
-		System.out.print('\n');
-	}*/
+
 
 	}
 
