@@ -27,7 +27,7 @@ public class tankDrivePath {
 	boolean sanitaryMoters, unSainitaryMoters;
 	
 	public tankDrivePath(WPI_TalonSRX leftSRXSide, WPI_TalonSRX rightSRXSide, AHRS myGyro) {
-	//	ahrs = new AHRS(SPI.Port.kMXP); 
+	
 		ahrs = myGyro;
 		ahrs.reset();
 		lTalon = leftSRXSide;
@@ -63,7 +63,6 @@ public class tankDrivePath {
 
 				
 
-				// new Waypoint(-4, -1, Pathfinder.d2r(-45)),
 				new Waypoint(0, 0, 0),
 				new Waypoint(6.1, 0, 0)
 
@@ -82,7 +81,6 @@ public class tankDrivePath {
 		rightTrajectory = _modifier.getRightTrajectory();
 		
 		
-		// reset encoders in driveTrain 
 
 		lEncoderFollower = new EncoderFollower(leftTrajectory);
 		rEncoderFollower = new EncoderFollower(rightTrajectory);
@@ -219,8 +217,7 @@ public class tankDrivePath {
 		 
 
 	
-	 // checks if motor output is sanitary acroding to sam V pathfinder goes over one need to check why and double confirm
-	 
+		 
 	 if (outputLeft>=1 || outputLeft<=-1 ) {
 		System.out.println("WARNING Unsanitary talon output");
 		System.out.println(outputLeft);
