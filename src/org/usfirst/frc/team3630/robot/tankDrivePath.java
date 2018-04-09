@@ -263,15 +263,14 @@ public class tankDrivePath {
 	
 	public void autoPeriodic() {
 		int lDistance = getDistance_ticks(lTalon);
-		double outputLeft = lEncoderFollower.calculate(lDistance);
-		
+	
 		double australianHeading = ahrs.getYaw()*-1;
 		double desiredHeading = (180/Math.PI)*(lEncoderFollower.getHeading());
 		double angleDifference = Pathfinder.boundHalfDegrees(desiredHeading-australianHeading);
-		// is this value sane?
+		// kp for angle correction will need testing bypasting it now till pvida controllers are good
 		double angleCorrection =-1/10*angleDifference;
 		
-		
+		double outputLeft = lEncoderFollower.calculate(lDistance);
 		double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
 		//	for gyro functionality add 	//+turn
 		 setLeftMotors= outputLeft+angleCorrection  ;
@@ -297,8 +296,8 @@ public class tankDrivePath {
 		sanitaryMoters = true;
 	}
 	
-	lTalon.set(setLeftMotors);
-	rTalon.set(setRightMotors);
+	lTalon.set(outputLeft);
+	rTalon.set(outputRight);
 }
 
 	
