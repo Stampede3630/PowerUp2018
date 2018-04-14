@@ -1285,6 +1285,7 @@ public class DriveTrain {
 			//ENTER CONDITION
 			if(init){
 				driveBox.boxAutoIntakeInit();
+				init = false;
 			}
 			if(!driveBox.isIntakeActivated) {
 				myCurrentCase = 10;
@@ -1293,10 +1294,10 @@ public class DriveTrain {
 			}
 		if(myCurrentCase == 10) {
 			if(init) {
-				autoDriveFw(-16);
+				autoDriveFw(Consts.toSwitch * -1);
 				driveBox.switchAutoUpInit();
 			}
-			if(!driveBox.liftUpSwitchActivated) {
+			if(!driveBox.liftUpSwitchActivated && (Math.abs(posController.getError()) < Consts.autoPosError) ) {
 				init = true;
 				myCurrentCase = 11;
 			}
@@ -1316,24 +1317,11 @@ public class DriveTrain {
 			if(init){
 				init = false;
 				driveBox.kickoutInit();
+			}
 				turnController.disable();
 				posController.disable();
 				
-			}
-			if(BoxGrabber.kickoutDone) {
-				myCurrentCase = 13;
-	     		init = true;
-			}
 		}	
-		if(myCurrentCase == 13) {
-			//ENTER CONDITION
-			if(init){
-				init =false;
-				//driveBox.kickoutInit();
-			}
-			turnController.disable();
-			posController.disable();
-		}
 		}
 				
 	
