@@ -153,19 +153,14 @@ public class DriveTrain {
 		SmartDashboard.putNumber("heading acrcade drive", heading);
 		driveTrain.arcadeDrive(speed, heading);
 		getDiagnostics();
-		// three are two missing bad? delted folowers set in constructor
-		
+				
 	SmartDashboard.putNumber("Left three curent", leftThreeEncoder.getOutputCurrent());
 	SmartDashboard.putNumber("total voltage ", panel.getVoltage());
 	SmartDashboard.putNumber("total current", panel.getTotalCurrent());
-	//	SmartDashboard.putNumber("talon left two ", panel.getCurrent(1));
+	
 		// moved over to driverStaton warnings 
 		// are we still getting curent issues 
-//		if(panel.getTotalCurrent()>300) {
-//			System.out.print("[WARNING] CURRENT DRAW IS AT ");
-//			System.out.print(panel.getTotalCurrent());
-//			System.out.print('\n');
-//		}
+
 
 	}
 
@@ -179,15 +174,10 @@ public class DriveTrain {
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
 		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
 		_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
-//		_talon.config_kP(0, Consts.kPencoder, Consts.timeOutMs);
-//		_talon.config_kI(0, Consts.kIencoder, Consts.timeOutMs);
-//		_talon.config_kD(0, Consts.kDencoder, Consts.timeOutMs);
 		_talon.configNeutralDeadband(0.05, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband. might be worth looking at 
 		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
 		_talon.setInverted(false);
-//		_talon.configOpenloopRamp(.1, Consts.timeOutMs);  figure out wheere to sert 
-		// where should we set ramp rate???
-		///////////////////
+
 	
 		
 		// Peak current and duration must be exceeded before corrent limit is activated.
@@ -232,8 +222,14 @@ public class DriveTrain {
 //		if (leftEncoder.getOutputCurrent()>35) { 
 //			System.out.print("[WARNING] Talon Current is at ");
 //			System.out.print(leftEncoder.getOutputCurrent());
-//			System.out.print('\n');
-//		}
+	//	System.out.print('\n');
+	//}
+	
+		if(panel.getTotalCurrent()>300) {
+			System.out.print("[WARNING] CURRENT DRAW IS AT ");
+			System.out.print(panel.getTotalCurrent());
+			System.out.print('\n');
+		}
 	}
 	
 	public void getWheelsAndCompass() {

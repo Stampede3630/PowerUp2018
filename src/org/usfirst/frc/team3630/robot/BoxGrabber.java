@@ -42,8 +42,8 @@ public class BoxGrabber {
 		
 		MANUALCONTROL,
 		STOPOVERRIDE
-		//SLIDEFORWARD, CLAMPOPEN, KICKFORWARD, LIFTUP, LIFTDOWN, CLAMPCLOSE, SLIDEBACK, KICKRETRACT, STOP, INTAKE, DROPBOX, SWITCHDOWNAUTOMATED, SWITCHUPAUTOMATED, SCALEAUTOMATED, LIFTDOWNAUTOMATED, LIFTUPAUTOMATED, LOWSCALEUPAUTOMATED
-		//liftup, liftdown, kickforward, kickretract never used
+		
+	
 	}
 	private WPI_TalonSRX leftMasterIntakeTalon, rightSlaveIntakeTalon;
 
@@ -67,15 +67,15 @@ public class BoxGrabber {
 	AnalogInput pressureLevel;
 	DigitalInput slideReversecheck;
 	Timer liftTimer,slideTimer, kickTime;
-	int kickoutState;
+	int kickoutBoxState;
 	double partysOverDown;
 
 	AnalogInput scaleUpTrigger, atDownLevel;
 
 	public BoxGrabber() {
 
-		// peramtors for double soelnoid pcm, in chanel, out chanel
-		// for detils on solondid asighning see output sheet i posted on slack
+		
+		
 		slideTimer = new Timer();
 		kickTime = new Timer();
 		liftTimer = new Timer();
@@ -101,7 +101,8 @@ public class BoxGrabber {
 
 		scaleUpTrigger = new AnalogInput(Consts.scaleUpAnalogPin);
 		atDownLevel = new AnalogInput(Consts.downLevelAnalogPin);
-		
+		// to do for later and to conts class
+		// peramtors for double soelnoid pcm, in chanel, out chanel
 		slide = new DoubleSolenoid(1, 2, 3);
 		kick = new DoubleSolenoid(0, 0, 1);
 		clamp = new DoubleSolenoid(0, 2, 3);
@@ -114,7 +115,7 @@ public class BoxGrabber {
 
 		_xBox = new XboxController(Consts.xBoxComPort);
 		
-		leftMasterIntakeTalon = new WPI_TalonSRX(7); //change later
+		leftMasterIntakeTalon = new WPI_TalonSRX(7); 
 		rightSlaveIntakeTalon = new WPI_TalonSRX(8);
 		configureTalon(leftMasterIntakeTalon);
 		configureTalon(rightSlaveIntakeTalon);
@@ -198,15 +199,13 @@ public class BoxGrabber {
 			}
 	}
 	
-	// should delte ? seems a bit redundeant to me 
+
 	
 	
 	
 
-	// each method for has a forward and reverse
-	// sets a boolean to true in order to know it has been activated
+	
 
-	//add the below methods anywhere in the class
 	private void configureTalon(TalonSRX _talon) {
 		_talon.configNominalOutputForward(0, Consts.timeOutMs);
 		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
@@ -217,7 +216,7 @@ public class BoxGrabber {
 	}
 	
 	
-	//add boxIntakePeriodic() to THIS METHOD: boxGrabberPeriodic () 
+
 	public void boxIntakePeriodic() {
 		double speed = (_xBox.getTriggerAxis(GenericHID.Hand.kRight))*-1;
 		leftMasterIntakeTalon.set(speed);
@@ -298,7 +297,7 @@ public class BoxGrabber {
 	public void kickoutInit(){
 		if (!isKickoutActivated){
 			kickTime.reset();
-			kickoutState = 3;
+			kickoutBoxState = 3;
 			isKickoutActivated = true;
 			kickTime.start();
 			leftMasterIntakeTalon.set(1);
@@ -309,12 +308,12 @@ public class BoxGrabber {
 
 	public void  kickoutPeriodic(){
 		if (isKickoutActivated){
-			switch(kickoutState){
+			switch(kickoutBoxState){
 			case 3:
 				System.out.println("case three was called");
 				leftMasterIntakeTalon.set(1);
 				if (kickTime.hasPeriodPassed(.05)){
-					kickoutState=4;
+					kickoutBoxState=4;
 				}
 				break; 
 			case 4:
@@ -322,7 +321,7 @@ public class BoxGrabber {
 				leftMasterIntakeTalon.set(1);
 				//System.out.println("case four");
 				if (kickTime.hasPeriodPassed(1)){
-					kickoutState =5;
+					kickoutBoxState =5;
 				}
 				break; 
 			case 5:
@@ -331,7 +330,7 @@ public class BoxGrabber {
 				System.out.println("case five");
 
 				if (kickTime.hasPeriodPassed(2)){
-					kickoutState = -1;
+					kickoutBoxState = -1;
 					isKickoutActivated = false;
 					kickTime.stop();
 					System.out.print("isKickoutactivated boolean in case five");
@@ -494,35 +493,7 @@ public class BoxGrabber {
 		}
 		
 	}
-	/*public void switchAutoDownInit() {
-		liftTimer.reset();
-		liftDownSwitchActivated = true;
-		liftTimer.start();
-		liftUpSwitchSensorFlag = false;
-	}
-	
-	public void switchAutoDownPeriodic() {
-		if (liftDownSwitchActivated) {
-			if (liftTimer.get() > Consts.partysOver) {
-				liftDownSwitchActivated = false;
-				liftDownSwitchSensorFlag= false;
-			}
-			else if (liftUpSwitchSensorFlag) {
-				stop();
-	
-			}
-			else  {
-				slideForward();
-				armsDown();
-				if (atDownLevel.getVoltage()>  2 ) {
-						 liftDownSwitchSensorFlag= true;
 
-					}
-				
-			}
-		}
-		
-	}*/
 	public void lowScaleAutoUpInit() {
 		atLowScale = true;
 		atScale = false;
@@ -585,14 +556,14 @@ public class BoxGrabber {
 	public void boxGrabberPeriodic () {
 		routineRunning = liftUpActivated || liftDownActivated || isKickoutActivated || liftUpSwitchActivated || liftDownSwitchActivated || liftUpLowScaleActivated;
 		// for testing
-		// mainC.stop();
+	
 
 		boxIntakePeriodic();
 		kickoutPeriodic();
 		liftDownPeriodic();
 		liftUpPeriodic();
 		
-		//switchAutoDownPeriodic();
+	
 		switchAutoUpPeriodic();
 //		lowScaleAutoUpPeriodic();
 		
