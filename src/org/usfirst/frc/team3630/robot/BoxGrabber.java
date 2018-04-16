@@ -60,7 +60,7 @@ public class BoxGrabber {
 	boolean liftUpSensorFlag,liftUpActivated;
 	boolean liftDownSensorFlag,liftDownActivated; 
 	boolean liftUpSwitchActivated, liftUpSwitchSensorFlag;
-	boolean liftDownSwitchActivated,liftDownSwitchSensorFlag;
+	boolean liftDownSwitchActivated/*,liftDownSwitchSensorFlag*/;
 	boolean liftUpLowScaleSensorFlag, liftUpLowScaleActivated;
 	boolean routineRunning;
 	boolean atSwitch, atLowScale,atScale;
@@ -89,7 +89,6 @@ public class BoxGrabber {
 		liftUpActivated = false;
 		liftDownSensorFlag=false;
 		liftDownActivated = false;
-		liftDownSwitchSensorFlag = false;
 		liftDownSwitchActivated = false;
 		
 		liftUpSwitchSensorFlag = false;
@@ -461,14 +460,15 @@ public class BoxGrabber {
 		liftTimer.reset();
 		liftUpSwitchActivated = true;
 		liftTimer.start();
-		liftDownSwitchSensorFlag = false;
+		liftUpSwitchSensorFlag = false;
+		System.out.println("Switch Auto init was called");
 	}
 	
 	public void switchAutoUpPeriodic() {
 		if (liftUpSwitchActivated) {
 			if (liftTimer.get() > Consts.partysOverSwitchUp) {
 				System.out.println("Party's over");
-				
+				liftUpSwitchActivated = false;
 				liftUpSwitchSensorFlag= false;
 				stop();
 			}
@@ -476,11 +476,13 @@ public class BoxGrabber {
 				System.out.println("stop called for switch up");
 				stop();
 				liftUpSwitchActivated = false;
+				
 			}
 			else {
 				System.out.println("slide reverse and arms up called for switch up");
 				slideReverse();
 				armsUp();
+				
 				if (atDownLevel.getVoltage()>  2 ) {
 						 liftUpSwitchSensorFlag= true;
 						 System.out.println("liftUpSwitch sensor flag = ");
