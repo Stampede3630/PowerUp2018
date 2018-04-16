@@ -101,8 +101,7 @@ public class DriveTrain {
 
 	// might need higher ramp rate for testing purposes .... for future of pathfinder
 	public void teleopInit() {
-		leftThreeEncoder.configOpenloopRamp(.2, Consts.timeOutMs);
-		rightSixEncoder.configOpenloopRamp(.2, Consts.timeOutMs);
+
 		
 		rightFive.setInverted(false);
 		rightSixEncoder.setInverted(false);
@@ -112,10 +111,10 @@ public class DriveTrain {
 
 	}
 	public void teleopPeriodic() {
-		double speed = .6;
-	//	double speed = (_xBox.getY(GenericHID.Hand.kLeft))*-.6;
-		double heading = 0;
-		//double heading = (_xBox.getX(GenericHID.Hand.kRight))*.6;
+		//double speed = .6;
+		double speed = (_xBox.getY(GenericHID.Hand.kLeft)*-1);
+		//double heading = 0;
+		double heading = (_xBox.getX(GenericHID.Hand.kRight))*.6;
 		if(_xBox.getTriggerAxis(GenericHID.Hand.kLeft) > .85) {
 			speed = (_xBox.getY(GenericHID.Hand.kLeft))*-1;
 		}
@@ -127,6 +126,7 @@ public class DriveTrain {
 		// left voltage, velociyy, right velocity / voltage
 		System.out.print(testTime.get()); System.out.print(",");
 		System.out.print(leftThreeEncoder.getMotorOutputVoltage());System.out.print(",");
+		
 		
 		System.out.print(getVelocity(leftThreeEncoder));System.out.print(",");
 		System.out.print(rightSixEncoder.getMotorOutputVoltage());System.out.print(",");
@@ -147,12 +147,13 @@ public class DriveTrain {
 	private void configureTalon(TalonSRX _talon) {
 		_talon.configNominalOutputForward(0, Consts.timeOutMs);
 		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
-		_talon.configPeakOutputForward(1, Consts.timeOutMs);
-		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
+		_talon.configPeakOutputForward(.6, Consts.timeOutMs);
+		_talon.configPeakOutputReverse(-.6, Consts.timeOutMs);
 		_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
 
 		_talon.configNeutralDeadband(0.05, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband. might be worth looking at 
 		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
+		//_talon.getControlMode();
 
 		
 		// Peak current and duration must be exceeded before corrent limit is activated.
