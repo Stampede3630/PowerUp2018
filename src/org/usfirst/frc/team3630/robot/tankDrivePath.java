@@ -25,7 +25,7 @@ public class tankDrivePath {
 	public EncoderFollower lEncoderFollower, rEncoderFollower;
 	double setLeftMotors, setRightMotors;
 	boolean sanitaryMoters, unSainitaryMoters;
-	
+	boolean finished;
 	public tankDrivePath(WPI_TalonSRX leftSRXSide, WPI_TalonSRX rightSRXSide, AHRS myGyro) {
 	
 		ahrs = myGyro;
@@ -35,6 +35,7 @@ public class tankDrivePath {
 		//rTalon.setSensorPhase(true);
 		sanitaryMoters = false;
 		unSainitaryMoters = false;
+			 finished = lEncoderFollower.isFinished();
 	
 		/**
 		 *

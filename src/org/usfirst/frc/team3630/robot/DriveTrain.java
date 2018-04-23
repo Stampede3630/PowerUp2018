@@ -57,7 +57,7 @@ public class DriveTrain {
 		
 	
 		leftThreeEncoder.setSensorPhase(false);
-		rightSixEncoder.setSensorPhase(false);
+		rightSixEncoder.setSensorPhase(true);
 		
 		driveTrain = new DifferentialDrive(leftThreeEncoder, rightSixEncoder);
 		path = new tankDrivePath(leftThreeEncoder,rightSixEncoder,ahrs);
