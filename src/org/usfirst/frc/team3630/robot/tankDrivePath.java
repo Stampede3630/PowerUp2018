@@ -51,8 +51,8 @@ public class tankDrivePath {
 		// Max Jerk: 100 m/s/s
 		 */
 		
-		
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05,8.5 , 1.2, 0.3);// are theese sane		//Generates points for the path
+		//.03 used to be jerk bumped it up to ensure non limiting factor
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05,8.6 , 1.2, 100);// are theese sane		//Generates points for the path
 		/**
 		 * waypoints are rewuired to have
 		 * x and y for a angle 
