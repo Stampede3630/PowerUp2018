@@ -1273,7 +1273,7 @@ public class DriveTrain {
 		if (myCurrentCase == 8) {
 			//ENTER CONDITION
 			if(init) {
-				autoDriveFw(Consts.toCube);				
+				autoDriveFw(Consts.toCube-60);				
 				
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -1413,7 +1413,7 @@ public class DriveTrain {
 		leftThreeEncoder.configOpenloopRamp(1, Consts.timeOutMs);
 		rightSixEncoder.configOpenloopRamp(1, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
-		myCurrentCase = 1;	
+		myCurrentCase = 5;	
 
 	}
 

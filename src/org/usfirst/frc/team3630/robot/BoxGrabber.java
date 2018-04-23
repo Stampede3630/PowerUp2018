@@ -67,6 +67,7 @@ public class BoxGrabber {
 	boolean atSwitch, atLowScale,atScale;
 	public static boolean kickoutDone;
 	boolean isIntakeActivated;
+	boolean clampclosed;
 	AnalogInput pressureLevel;
 	DigitalInput slideReversecheck;
 	Timer liftTimer,slideTimer, kickTime, autoIntakeTimer;
@@ -104,6 +105,8 @@ public class BoxGrabber {
 		atScale = false;
 		atLowScale = false;
 		testOn = false;
+		
+		clampclosed = false;
 		
 		kickoutDone = false;
 
@@ -230,12 +233,15 @@ public class BoxGrabber {
 	public void boxAutoIntakeInit() {
 		isIntakeActivated = true;
 		autoIntakeTimer.reset();
+		autoIntakeTimer.start();
+		if(clampclosed) {
+			clampOpen();
+		}
 	}
 	public void boxAutoIntakePeriodic() {
 		if(isIntakeActivated) {
-			autoIntakeTimer.start();
-			if(autoIntakeTimer.get()< .3) {
-				leftMasterIntakeTalon.set(1);
+			if(autoIntakeTimer.get()< .5) {
+				leftMasterIntakeTalon.set(.5);
 			}
 			else {
 				leftMasterIntakeTalon.set(0);
@@ -275,6 +281,7 @@ public class BoxGrabber {
 
 	public void clampClose() {
 		clamp.set(DoubleSolenoid.Value.kReverse);
+		clampclosed = true;
 	}
 	
 	public void slideReverse() {
