@@ -132,9 +132,9 @@ public class tankDrivePath {
 
 		}
 		
-		// helpful note kv needs to be a decim no (
-		lEncoderFollower.configurePIDVA(1, 0 ,0  , 0.1176, 0);
-		rEncoderFollower.configurePIDVA(1, 0 ,0  , 0.1176, 0) ;
+		// helpful note kv needs to be a decim no.1176 (
+		lEncoderFollower.configurePIDVA(1, 0 ,0  , 0.4348, 0);
+		rEncoderFollower.configurePIDVA(1, 0 ,0  , 0.4348, 0) ;
 
 
 	}
