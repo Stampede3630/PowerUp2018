@@ -122,6 +122,7 @@ public class Robot extends IterativeRobot {
 		box.liftUpPeriodic();
 		box.boxAutoIntakePeriodic();
 		box.liftDownPeriodic();
+		//box.boxAutoIntakePeriodic();
 	}
 	@Override
 	public void disabledInit() {

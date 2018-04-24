@@ -65,7 +65,7 @@ public class Consts {
 	public static final double secondDistanceInSwitchFFMethod = 50;//78.5;
 	public static final double firstDistanceInScaleFFMethod = 350.8;
 	public static final double secondDistanceInScaleFFMethod = 30;
-	public static final double toCube = 157; //calculated estimates 4/13 
+	public static final double toCube = 74.5; //calculated estimates 4/13 
 	public static final double toSwitch = 20; // calculated estimates 4/13
 	public static final double autoPosError = 3;
 	public static final double autoTurnError = 2;

@@ -1236,7 +1236,7 @@ public class DriveTrain {
 				turnController.enable();
 				turnController.setSetpoint(0);
 				posController.enable();
-				autoDriveFw(Consts.secondDistanceInScaleFFMethod * -1);				
+				autoDriveFw(-49.5);				
 				
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -1273,7 +1273,7 @@ public class DriveTrain {
 		if (myCurrentCase == 8) {
 			//ENTER CONDITION
 			if(init) {
-				autoDriveFw(Consts.toCube-60);				
+				autoDriveFw(Consts.toCube);				
 				
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -1285,9 +1285,11 @@ public class DriveTrain {
 			//ENTER CONDITION
 			if(init){
 				driveBox.boxAutoIntakeInit();
+				
 				init = false;
 			}
 			if(!driveBox.isIntakeActivated) {
+				//driveBox.clampClose();
 				myCurrentCase = 10;
 				init = true;
 				}
@@ -1297,7 +1299,7 @@ public class DriveTrain {
 				autoDriveFw(Consts.toSwitch * -1);
 				driveBox.switchAutoUpInit();
 			}
-			if(!driveBox.liftUpSwitchActivated && (Math.abs(posController.getError()) < Consts.autoPosError) ) {
+			if((Math.abs(posController.getError()) < Consts.autoPosError) ) {
 				init = true;
 				myCurrentCase = 11;
 			}
@@ -1413,7 +1415,7 @@ public class DriveTrain {
 		leftThreeEncoder.configOpenloopRamp(1, Consts.timeOutMs);
 		rightSixEncoder.configOpenloopRamp(1, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
-		myCurrentCase = 5;	
+		myCurrentCase = 9;//5;	
 
 	}
 
