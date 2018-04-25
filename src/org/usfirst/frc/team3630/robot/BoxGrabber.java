@@ -261,9 +261,7 @@ public class BoxGrabber {
 
 	public void clampClose() {
 		clamp.set(DoubleSolenoid.Value.kReverse);
-
-	
-
+		System.out.print("Clamp has closed (allegedly)");
 	}
 	
 	public void slideReverse() {
@@ -317,6 +315,7 @@ public class BoxGrabber {
 			else if(autoIntakeTimer.get()<3 && autoIntakeTimer.get()>1.5){
 
 				clamp.set(DoubleSolenoid.Value.kReverse);
+				System.out.println("Clamp has been closed (allegedly)");
 				
 				leftMasterIntakeTalon.set(0);
 			}
@@ -349,48 +348,48 @@ public class BoxGrabber {
 		
 		if (isKickoutActivated){
 			switch(kickoutState){
-			case 2:
-				clampClose();
-				System.out.println("case two");
-				if (kickTime.hasPeriodPassed(.01)){
-					kickoutState=3;
-				}
-				break;
-			case 3:
-			//	System.out.println("case three");
-				leftMasterIntakeTalon.set(1);
-				if (kickTime.hasPeriodPassed(.05)){
-					kickoutState=4;
-				}
-				break; 
-			case 4:
-				clampOpen();
-				leftMasterIntakeTalon.set(1);
-			//	System.out.println("case four");
-				if (kickTime.hasPeriodPassed(1)){
-					kickoutState =5;
-				}
-				break; 
-			case 5:
-				//clampClose();
-				leftMasterIntakeTalon.set(0);
-			//	System.out.println("case five");
-
-				if (kickTime.hasPeriodPassed(5)){
-					kickoutState = -1;
+				case 2:
+					clampClose();
+					System.out.println("case two");
+					if (kickTime.hasPeriodPassed(.01)){
+						kickoutState=3;
+					}
+					break;
+				case 3:
+				//	System.out.println("case three");
+					leftMasterIntakeTalon.set(1);
+					if (kickTime.hasPeriodPassed(.05)){
+						kickoutState=4;
+					}
+					break; 
+				case 4:
+					clampOpen();
+					leftMasterIntakeTalon.set(1);
+				//	System.out.println("case four");
+					if (kickTime.hasPeriodPassed(1)){
+						kickoutState =5;
+					}
+					break; 
+				case 5:
+					//clampClose();
+					leftMasterIntakeTalon.set(0);
+				//	System.out.println("case five");
+	
+					if (kickTime.hasPeriodPassed(5)){
+						kickoutState = -1;
+						isKickoutActivated = false;
+						kickTime.stop();
+						System.out.print("isKickoutactivated boolean in case five");
+						System.out.print(isKickoutActivated);
+						kickoutDone = true;
+						
+					}
+					break; 
+				default:
+					System.out.print("WARNING kickout method caught exception");
 					isKickoutActivated = false;
-					kickTime.stop();
-					System.out.print("isKickoutactivated boolean in case five");
-					System.out.print(isKickoutActivated);
-					kickoutDone = true;
-					
-				}
-				break; 
-			default:
-				System.out.print("WARNING kickout method caught exception");
-				isKickoutActivated = false;
-				stop();
-				break;
+					stop();
+					break;
 			}
 		}
 			
@@ -661,7 +660,7 @@ public class BoxGrabber {
 				break;
 				case LIFTUPAUTOMATED:
 					if(!atSwitch) {
-					liftUpInit();
+						liftUpInit();
 					}
 				break;
 				
