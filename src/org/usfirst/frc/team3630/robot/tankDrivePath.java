@@ -52,8 +52,9 @@ public class tankDrivePath {
 		 */
 		
 		//.03 used to be jerk bumped it up to ensure non limiting factor
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05,8.6 , 1.2, .03);// are theese sane		//Generates points for the path
-		/**
+
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05,6.5 , 1.2, .03);// are theese sane		//Generates points for the path
+		/*
 		 * waypoints are rewuired to have
 		 * x and y for a angle 
 		 * + y leftHand , -Y rightHand, +x robot forward in respect of going down game feild, 
@@ -133,8 +134,10 @@ public class tankDrivePath {
 		}
 		
 		// helpful note kv needs to be a decim no.1176 (
-		lEncoderFollower.configurePIDVA(1, 0 ,0  ,.1176, 0);
-		rEncoderFollower.configurePIDVA(1, 0 ,0  , .1176, 0) ;
+
+		lEncoderFollower.configurePIDVA(0, 0 ,0  , 0.25998, 0);
+		rEncoderFollower.configurePIDVA(0, 0 ,0  , 0.25998, 0) ;
+
 
 
 	}
