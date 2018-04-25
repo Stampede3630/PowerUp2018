@@ -33,7 +33,8 @@ public class DriveTrain {
 	PIDController turnController;
 	PIDController posController;
 	double rotateToAngleRate;
-	Timer backwardsTimer;
+	Timer autotestingTimer;
+	
 	
 	
 	// target angle degrees for straight on should not be a constant !
@@ -69,7 +70,7 @@ public class DriveTrain {
 		rightSixEncoder = new WPI_TalonSRX(Consts.rightSix);
 		rightFive = new WPI_TalonSRX(Consts.rightFive);
 //		rightFour = new WPI_TalonSRX(Consts.rightFour);
-		backwardsTimer = new Timer();
+		autotestingTimer = new Timer();
 		configureTalon(leftThreeEncoder);
 		configureTalon(rightSixEncoder);
 		configureTalon(leftTwo);
@@ -161,6 +162,31 @@ public class DriveTrain {
 	 * @param _talon
 	 * set up  for tann initatioation
 	 */
+	public void autoTestinginit () {
+		autotestingTimer.reset();
+		autotestingTimer.start();
+		driveBox.boxAutoIntakeInit();
+		
+	}
+	public void autotesting () {
+		//if(autotestingTimer.get() < 1.5) {
+		//	driveBox.clampClose();
+			//System.out.println("Clamp close called");
+		//}
+		//else if(autotestingTimer.get() < 2.5) {
+			driveBox.clampOpen();
+			System.out.println("Clamp open called");
+		//}
+		/*if(autotestingTimer.get() < 5) {
+			driveBox.boxAutoIntakePeriodic();
+			System.out.println("Intake called");
+		}
+		//else {
+			//driveBox.stop();
+		//}
+		*/
+		
+	}
 	private void configureTalon(TalonSRX _talon) {
 		_talon.configNominalOutputForward(0, Consts.timeOutMs);
 		_talon.configNominalOutputReverse(0, Consts.timeOutMs);

@@ -82,11 +82,11 @@ public class Robot extends IterativeRobot {
 	 */
 	public void testInit() {
 		// should we empty out test if we aren't useing it anymore 
-		_driveTrain.testInit();
+		_driveTrain.autoTestinginit();
 	}
 	
 	public void testPeriodic() {
-		_driveTrain.testPeriodic();
+		_driveTrain.autotesting();
 	}
 	
 	@Override
