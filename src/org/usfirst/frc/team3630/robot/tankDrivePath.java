@@ -135,8 +135,8 @@ public class tankDrivePath {
 		
 		// helpful note kv needs to be a decim no.1176 (
 
-		lEncoderFollower.configurePIDVA(0, 0 ,0  , 0.25998, 0);
-		rEncoderFollower.configurePIDVA(0, 0 ,0  , 0.25998, 0) ;
+		lEncoderFollower.configurePIDVA(.8, 0 ,0  , 0.25998, 0);
+		rEncoderFollower.configurePIDVA(.8, 0 ,0  , 0.25998, 0) ;
 
 
 
@@ -271,10 +271,10 @@ public class tankDrivePath {
 		int lDistance = getDistance_ticks(lTalon);
 	
 		double australianHeading = ahrs.getYaw()*-1;
-		double desiredHeading = (180/Math.PI)*(lEncoderFollower.getHeading());
+		double desiredHeading = 57.2957*(lEncoderFollower.getHeading());
 		double angleDifference = Pathfinder.boundHalfDegrees(desiredHeading-australianHeading);
 		// kp for angle correction will need testing bypasting it now till pvida controllers are good
-		double angleCorrection =-1/10*angleDifference;
+		double angleCorrection =.2 *angleDifference;
 		
 		double outputLeft = lEncoderFollower.calculate(lDistance);
 		double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));

@@ -45,7 +45,11 @@ public class BoxGrabber {
 		//SLIDEFORWARD, CLAMPOPEN, KICKFORWARD, LIFTUP, LIFTDOWN, CLAMPCLOSE, SLIDEBACK, KICKRETRACT, STOP, INTAKE, DROPBOX, SWITCHDOWNAUTOMATED, SWITCHUPAUTOMATED, SCALEAUTOMATED, LIFTDOWNAUTOMATED, LIFTUPAUTOMATED, LOWSCALEUPAUTOMATED
 		//liftup, liftdown, kickforward, kickretract never used
 	}
-
+	private WPI_TalonSRX leftMasterIntakeTalon, rightSlaveIntakeTalon;
+		
+	
+	
+	
 	private XboxController _xBox;
 	// private TalonSRX leftIntake, rightIntake;
 	// name double solonoid
@@ -61,9 +65,12 @@ public class BoxGrabber {
 	boolean liftUpLowScaleSensorFlag, liftUpLowScaleActivated;
 	boolean routineRunning;
 	boolean atSwitch, atLowScale,atScale;
+	public static boolean kickoutDone;
+	boolean isIntakeActivated;
+	
 	AnalogInput pressureLevel;
 	DigitalInput slideReversecheck;
-	Timer liftTimer,slideTimer, kickTime;
+	Timer liftTimer,slideTimer, kickTime, autoIntakeTimer;
 	int kickoutState;
 	double partysOverDown;
 
@@ -76,11 +83,13 @@ public class BoxGrabber {
 		slideTimer = new Timer();
 		kickTime = new Timer();
 		liftTimer = new Timer();
+		autoIntakeTimer = new Timer();
 		
 		slideReversecheck = new DigitalInput(3);
 		
 		
 		isKickoutActivated= false;
+		isIntakeActivated = false;
 		
 		liftUpSensorFlag= false;
 		liftUpActivated = false;
@@ -96,6 +105,10 @@ public class BoxGrabber {
 		atScale = false;
 		atLowScale = false;
 		testOn = false;
+		
+		
+		
+		kickoutDone = false;
 
 		scaleUpTrigger = new AnalogInput(Consts.scaleUpAnalogPin);
 		atDownLevel = new AnalogInput(Consts.downLevelAnalogPin);
@@ -111,6 +124,18 @@ public class BoxGrabber {
 		pressureLevel.setAverageBits(13);
 
 		_xBox = new XboxController(Consts.xBoxComPort);
+		
+		leftMasterIntakeTalon = new WPI_TalonSRX(7); //change later
+		rightSlaveIntakeTalon = new WPI_TalonSRX(8);
+		configureTalon(leftMasterIntakeTalon);
+		configureTalon(rightSlaveIntakeTalon);
+		rightSlaveIntakeTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 7);
+		
+		//reverse the values below if you want opposite behavior
+		leftMasterIntakeTalon.setInverted(true);
+		rightSlaveIntakeTalon.setInverted(false);
+		
+		
 	}
 
 	
@@ -137,7 +162,9 @@ public class BoxGrabber {
 		else if (_xBox.getBumper(GenericHID.Hand.kLeft)) {
 			return State.CLAMPOPEN;
 		}
-
+		else if (_xBox.getStartButton()) {
+			return State.DROPBOX;
+		}
 		else if (_xBox.getBackButton()) {
 			return State.STOPOVERRIDE;
 		}
@@ -185,7 +212,25 @@ public class BoxGrabber {
 	 */
 
 	// each method for has a forward and reverse
-	// sets a bollean to true in order to know it has ben activated
+	// sets a boolean to true in order to know it has been activated
+
+	//add the below methods anywhere in the class
+	private void configureTalon(TalonSRX _talon) {
+		_talon.configNominalOutputForward(0, Consts.timeOutMs);
+		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
+		_talon.configPeakOutputForward(1, Consts.timeOutMs);
+		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
+		_talon.configNeutralDeadband(0.05, Consts.timeOutMs);
+		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
+	}
+
+
+	//add boxIntakePeriodic() to THIS METHOD: boxGrabberPeriodic () 
+	public void boxIntakePeriodic() {
+		double speed = (_xBox.getTriggerAxis(GenericHID.Hand.kRight))*-1;
+		leftMasterIntakeTalon.set(speed);
+	}
+		
 
 	
 	
@@ -212,10 +257,12 @@ public class BoxGrabber {
 
 	public void clampOpen() {
 		clamp.set(DoubleSolenoid.Value.kForward);
+		System.out.println("clamp has opened (allegedly)");
 		}
 
 	public void clampClose() {
 		clamp.set(DoubleSolenoid.Value.kReverse);
+		System.out.print("Clamp has closed (allegedly)");
 	}
 	
 	public void slideReverse() {
@@ -252,64 +299,102 @@ public class BoxGrabber {
 		}
 	}
 
-	
+	public void boxAutoIntakeInit() {
+		System.out.println("boxAutoIntake was called");
+		isIntakeActivated = true;
+		
+		autoIntakeTimer.reset();
+		autoIntakeTimer.start();
+
+	}
+	public void boxAutoIntakePeriodic() {
+		if(isIntakeActivated) {
+			if(autoIntakeTimer.get()<4 && autoIntakeTimer.get()>3) {
+				autoIntakeTimer.stop();
+				isIntakeActivated = false;
+			}
+			else if(autoIntakeTimer.get()<3 && autoIntakeTimer.get()>1.5){
+
+				clamp.set(DoubleSolenoid.Value.kReverse);
+				System.out.println("Clamp has been closed (allegedly)");
+				
+				leftMasterIntakeTalon.set(0);
+			}
+			else {
+				leftMasterIntakeTalon.set(-1);
+				System.out.println("intakein called");
+			
+			}
+		}
+	}
 	public void kickoutInit(){
 		kickTime.reset();
-		kickoutState = 1;
+		kickoutState = 2;
 		isKickoutActivated = true;
+		kickTime.start();
+		leftMasterIntakeTalon.set(1);
+		kickoutDone = false;
 }
 	
-/*	public void  kickoutPeriodic(){
+	public void  kickoutPeriodic(){
+	/*if(isKickoutActivated) {
+		if(kickTime.hasPeriodPassed(2)) {
+			leftMasterIntakeTalon.set(0);
+			kickTime.stop();
+			isKickoutActivated = false;
+		}
+		else leftMasterIntakeTalon.set(1);
+	}
+	}*/
+		
 		if (isKickoutActivated){
 			switch(kickoutState){
-			case 1:
-				System.out.println("case one");
-				kickTime.start();
-				kickoutState=2;
-				break;
-			case 2:
-				clampOpen();
-				System.out.println("case two");
-				if (kickTime.hasPeriodPassed(.01)){
-					kickoutState=3;
-				}
-				break;
-			case 3:
-				System.out.println("case three");
-				kickForward();
-
-				if (kickTime.hasPeriodPassed(.5)){
-					kickoutState=4;
-				}
-				break; 
-			case 4:
-				kickReverse();
-				System.out.println("case four");
-				if (kickTime.hasPeriodPassed(.6)){
-					kickoutState =5;
-				}
-				break; 
-			case 5:
-				//clampClose();
-				System.out.println("case five ");
-
-				if (kickTime.hasPeriodPassed(.004)){
-					kickoutState = -1;
-					isKickoutActivated = false;
-					kickTime.stop();
-					System.out.print("isKickoutactivated boolean in case five");
-					System.out.print(isKickoutActivated);
-				}
-				break; 
-			default:
-				System.out.print("WARNING kickout method caught exception");
-				isKickoutActivated = false;
-				stop();
-			}
+				case 2:
+					clampClose();
+					System.out.println("case two");
+					if (kickTime.hasPeriodPassed(.01)){
+						kickoutState=3;
+					}
+					break;
+				case 3:
+				//	System.out.println("case three");
+					leftMasterIntakeTalon.set(1);
+					if (kickTime.hasPeriodPassed(.05)){
+						kickoutState=4;
+					}
+					break; 
+				case 4:
+					clampOpen();
+					leftMasterIntakeTalon.set(1);
+				//	System.out.println("case four");
+					if (kickTime.hasPeriodPassed(1)){
+						kickoutState =5;
+					}
+					break; 
+				case 5:
+					//clampClose();
+					leftMasterIntakeTalon.set(0);
+				//	System.out.println("case five");
 	
+					if (kickTime.hasPeriodPassed(5)){
+						kickoutState = -1;
+						isKickoutActivated = false;
+						kickTime.stop();
+						System.out.print("isKickoutactivated boolean in case five");
+						System.out.print(isKickoutActivated);
+						kickoutDone = true;
+						
+					}
+					break; 
+				default:
+					System.out.print("WARNING kickout method caught exception");
+					isKickoutActivated = false;
+					stop();
+					break;
+			}
+		}
 			
 }
-	}*/
 
 	public void liftUpInit () {
 		liftTimer.reset();
@@ -427,17 +512,17 @@ public class BoxGrabber {
 	public void switchAutoUpPeriodic() {
 		if (liftUpSwitchActivated) {
 			if (liftTimer.get() > Consts.partysOverSwitchUp) {
-				System.out.println("Party's over");
+				//System.out.println("Party's over");
 				liftUpSwitchActivated = false;
 				liftUpSwitchSensorFlag= false;
 				stop();
 			}
 			else if (liftUpSwitchSensorFlag) {
-				System.out.println("stop called for switch up");
+				//System.out.println("stop called for switch up");
 				stop();
 			}
 			else {
-				System.out.println("slide reverse and arms up called for switch up");
+				//System.out.println("slide reverse and arms up called for switch up");
 				slideReverse();
 				armsUp();
 				if (atDownLevel.getVoltage()>  2 ) {
@@ -544,7 +629,8 @@ public class BoxGrabber {
 		// for testing
 		// mainC.stop();
 
-		
+		boxIntakePeriodic();
+		kickoutPeriodic();
 		manipulatorDianostics();
 		liftDownPeriodic();
 		liftUpPeriodic();
@@ -568,10 +654,14 @@ public class BoxGrabber {
 					manualControl();
 					break;
 
-			
+				case DROPBOX:
+					if(!isKickoutActivated) {
+						kickoutInit();
+					}
+				break;
 				case LIFTUPAUTOMATED:
-					if(!atSwitch && !atLowScale) {
-					liftUpInit();
+					if(!atSwitch) {
+						liftUpInit();
 					}
 				break;
 				
@@ -597,7 +687,7 @@ public class BoxGrabber {
 
 				
 				default:
-					// default to stop for saftey reasons
+					// default to stop for safety reasons
 					stop();	
 				break;
 			}
