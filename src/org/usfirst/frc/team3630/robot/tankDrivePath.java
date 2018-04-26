@@ -53,7 +53,7 @@ public class tankDrivePath {
 		
 		//.03 used to be jerk bumped it up to ensure non limiting factor
 
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05,6.5 , 1.2, .03);// are theese sane		//Generates points for the path
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,Trajectory.Config.SAMPLES_HIGH, 0.05,6.8 , 3.2, .03);// are theese sane		//Generates points for the path
 		/*
 		 * waypoints are rewuired to have
 		 * x and y for a angle 
@@ -135,8 +135,8 @@ public class tankDrivePath {
 		
 		// helpful note kv needs to be a decim no.1176 (
 
-		lEncoderFollower.configurePIDVA(.8, 0 ,0  , 0.25998, 0);
-		rEncoderFollower.configurePIDVA(.8, 0 ,0  , 0.25998, 0) ;
+		lEncoderFollower.configurePIDVA(.08, 0 ,0  , 0.25998, 0);
+		rEncoderFollower.configurePIDVA(.08, 0 ,0  , 0.25998, 0) ;
 
 
 
@@ -279,12 +279,12 @@ public class tankDrivePath {
 		double outputLeft = lEncoderFollower.calculate(lDistance);
 		double outputRight = rEncoderFollower.calculate(getDistance_ticks(rTalon));
 		//	for gyro functionality add 	//+turn
-		 setLeftMotors= outputLeft+angleCorrection  ;
+		 setLeftMotors= outputLeft ;
 		//	for gyro functionality 	//-turn
 		 
 		 
 		 // times by -1 to get robot wheels to move in same direction
-		 setRightMotors = outputRight-angleCorrection;
+		 setRightMotors = outputRight;
 		 
 
 	
