@@ -20,7 +20,7 @@ public class Consts {
 
 	
 	// Manipulators 
-	public static final double  kPRotAng = 0.04;
+	public static final double  kPRotAng = 0.03;
 	public static final double  kIRotAng = 0.0;
 	public static final double  kDRotAng = 0;
 	
@@ -95,7 +95,7 @@ public class Consts {
 	public static final double partysOverScaleUp = 6.5;///some other less awesome number 
 	public static final double partysOverLowScale = 7;
 	public static final double partysOverSwitchUp = 6;
-	public static final double partysOverScaleDown = 4;
+	public static final double partysOverScaleDown = 4;//Changed this to three from 4, 4/30
 	public static final double partysOverLowScaleDown = 3;
 	public static final double partysOverSwitchDown = 2.5;
 

@@ -314,14 +314,14 @@ public class BoxGrabber {
 			}
 			else if(autoIntakeTimer.get()<3 && autoIntakeTimer.get()>1.5){
 
-				clamp.set(DoubleSolenoid.Value.kReverse);
+				clampClose();
 				System.out.println("Clamp has been closed (allegedly)");
 				
 				leftMasterIntakeTalon.set(0);
 			}
 			else {
 				leftMasterIntakeTalon.set(-1);
-				System.out.println("intakein called");
+				System.out.println("intake in called");
 			
 			}
 		}

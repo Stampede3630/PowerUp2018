@@ -34,6 +34,7 @@ public class DriveTrain {
 	PIDController posController;
 	double rotateToAngleRate;
 	Timer autotestingTimer;
+	Timer liftDownTimerDrive;
 	
 	
 	
@@ -75,7 +76,7 @@ public class DriveTrain {
 		configureTalon(rightSixEncoder);
 		configureTalon(leftTwo);
 		configureTalon(rightFive);
-
+		liftDownTimerDrive = new Timer();
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		// why differ sensor phase diffrent would it be cosntant for both robots?
@@ -1276,10 +1277,11 @@ public class DriveTrain {
 		if (myCurrentCase == 6) {
 			//ENTER CONDITION
 			if(init) {
+				liftDownTimerDrive.start();
 				driveBox.liftDownInit();
 				init = false;
 			}
-			if(!driveBox.liftDownActivated) {
+			if(liftDownTimerDrive.get() > 3) {
 				myCurrentCase = 7;
 	     		init = true;
 			}
@@ -1299,7 +1301,7 @@ public class DriveTrain {
 		if (myCurrentCase == 8) {
 			//ENTER CONDITION
 			if(init) {
-				autoDriveFw(Consts.toCube);				
+				autoDriveFw(Consts.toCube - 5);				
 				
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -1441,7 +1443,8 @@ public class DriveTrain {
 		leftThreeEncoder.configOpenloopRamp(1, Consts.timeOutMs);
 		rightSixEncoder.configOpenloopRamp(1, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
-		myCurrentCase = 9;//5;	
+		liftDownTimerDrive.reset();
+		myCurrentCase = 5;	
 
 	}
 
