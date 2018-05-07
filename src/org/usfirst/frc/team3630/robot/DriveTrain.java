@@ -1266,8 +1266,12 @@ public class DriveTrain {
 				turnController.enable();
 				turnController.setSetpoint(0);
 				posController.enable();
+<<<<<<< HEAD
 				autoDriveFw(-82);
 				
+=======
+				autoDriveFw(-49.5);				
+>>>>>>> parent of f363319... Made new path for the two cube
 				
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -1294,7 +1298,11 @@ public class DriveTrain {
 		if (myCurrentCase == 7) {
 			//ENTER CONDITION
 			if(init) {
+<<<<<<< HEAD
 				autoTurnDegree(-80);
+=======
+				autoTurnDegree(-90);
+>>>>>>> parent of f363319... Made new path for the two cube
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
 				myCurrentCase = 8;
@@ -1305,7 +1313,7 @@ public class DriveTrain {
 		if (myCurrentCase == 8) {
 			//ENTER CONDITION
 			if(init) {
-				autoDriveFw(109);				
+				autoDriveFw(Consts.toCube - 5);				
 				
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -1336,6 +1344,7 @@ public class DriveTrain {
 			}
 		}
 		if(myCurrentCase == 11) {
+		if(myCurrentCase == 9) {
 			//ENTER CONDITION
 			if(init){
 				driveBox.boxAutoIntakeInit();
@@ -1345,30 +1354,37 @@ public class DriveTrain {
 			if(!driveBox.isIntakeActivated) {
 				//driveBox.clampClose();
 				myCurrentCase = 12;
+				myCurrentCase = 10;
 				init = true;
 				}
 			}
 		if(myCurrentCase == 12) {
+		if(myCurrentCase == 10) {
 			if(init) {
 				autoDriveFw(71);
+				autoDriveFw(Consts.toSwitch * -1);
 				driveBox.switchAutoUpInit();
 			}
 			if((Math.abs(posController.getError()) < Consts.autoPosError) ) {
 				init = true;
 				myCurrentCase = 13;
+				myCurrentCase = 11;
 			}
 				
 		}
 		if(myCurrentCase == 13) {
+		if(myCurrentCase == 11) {
 			if(init) {
 				autoDriveFw(Consts.toSwitch);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 				myCurrentCase = 14;
+				myCurrentCase = 12;
 	     		init = true;
 		}
 		}
 		if(myCurrentCase == 14) {
+		if(myCurrentCase == 12) {
 			//ENTER CONDITION
 			if(init){
 				init = false;
