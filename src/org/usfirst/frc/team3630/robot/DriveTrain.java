@@ -1266,7 +1266,7 @@ public class DriveTrain {
 				turnController.enable();
 				turnController.setSetpoint(0);
 				posController.enable();
-				autoDriveFw(-70);
+				autoDriveFw(-82);
 				
 				
 			}
@@ -1294,7 +1294,7 @@ public class DriveTrain {
 		if (myCurrentCase == 7) {
 			//ENTER CONDITION
 			if(init) {
-				autoTurnDegree(-45);
+				autoTurnDegree(-80);
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
 				myCurrentCase = 8;
@@ -1470,7 +1470,7 @@ public class DriveTrain {
 		rightSixEncoder.configOpenloopRamp(1, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
 		liftDownTimerDrive.reset();
-		myCurrentCase = 5;	
+		myCurrentCase = 1;	
 
 	}
 
