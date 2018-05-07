@@ -25,7 +25,6 @@ public class DriveTrain {
 	ErrorCode fault;
 	
 	double turnOutput;
-	BuiltInAccelerometer accelerometer;
 	double posOutput;
 	boolean errorGreatorThanFive = false;
 	boolean init = true;
@@ -78,7 +77,6 @@ public class DriveTrain {
 		configureTalon(leftTwo);
 		configureTalon(rightFive);
 		liftDownTimerDrive = new Timer();
-		accelerometer = new BuiltInAccelerometer();
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		// why differ sensor phase diffrent would it be cosntant for both robots?
@@ -243,7 +241,6 @@ public class DriveTrain {
 		SmartDashboard.putBoolean("TurnControl On", turnController.isEnabled());
 		SmartDashboard.putBoolean("Is init true?", init);
 		SmartDashboard.putNumber("posController input", posOutput);
-		SmartDashboard.putNumber("Accel", ahrs.getRawAccelX());
 		
 		SmartDashboard.putNumber("turnController kP", turnController.getP());
 		
@@ -1267,8 +1264,12 @@ public class DriveTrain {
 				turnController.setSetpoint(0);
 				posController.enable();
 <<<<<<< HEAD
+<<<<<<< HEAD
 				autoDriveFw(-82);
 				
+=======
+				autoDriveFw(-49.5);				
+>>>>>>> parent of f363319... Made new path for the two cube
 =======
 				autoDriveFw(-49.5);				
 >>>>>>> parent of f363319... Made new path for the two cube
@@ -1299,7 +1300,11 @@ public class DriveTrain {
 			//ENTER CONDITION
 			if(init) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 				autoTurnDegree(-80);
+=======
+				autoTurnDegree(-90);
+>>>>>>> parent of f363319... Made new path for the two cube
 =======
 				autoTurnDegree(-90);
 >>>>>>> parent of f363319... Made new path for the two cube
@@ -1321,6 +1326,7 @@ public class DriveTrain {
 	     		init = true;
 			}
 		}
+<<<<<<< HEAD
 		if (myCurrentCase == 9) {
 			//ENTER CONDITION
 			if(init) {
@@ -1344,6 +1350,8 @@ public class DriveTrain {
 			}
 		}
 		if(myCurrentCase == 11) {
+=======
+>>>>>>> parent of f363319... Made new path for the two cube
 		if(myCurrentCase == 9) {
 			//ENTER CONDITION
 			if(init){
@@ -1353,37 +1361,57 @@ public class DriveTrain {
 			}
 			if(!driveBox.isIntakeActivated) {
 				//driveBox.clampClose();
+<<<<<<< HEAD
 				myCurrentCase = 12;
+=======
+>>>>>>> parent of f363319... Made new path for the two cube
 				myCurrentCase = 10;
 				init = true;
 				}
 			}
+<<<<<<< HEAD
 		if(myCurrentCase == 12) {
 		if(myCurrentCase == 10) {
 			if(init) {
 				autoDriveFw(71);
+=======
+		if(myCurrentCase == 10) {
+			if(init) {
+>>>>>>> parent of f363319... Made new path for the two cube
 				autoDriveFw(Consts.toSwitch * -1);
 				driveBox.switchAutoUpInit();
 			}
 			if((Math.abs(posController.getError()) < Consts.autoPosError) ) {
 				init = true;
+<<<<<<< HEAD
 				myCurrentCase = 13;
+=======
+>>>>>>> parent of f363319... Made new path for the two cube
 				myCurrentCase = 11;
 			}
 				
 		}
+<<<<<<< HEAD
 		if(myCurrentCase == 13) {
+=======
+>>>>>>> parent of f363319... Made new path for the two cube
 		if(myCurrentCase == 11) {
 			if(init) {
 				autoDriveFw(Consts.toSwitch);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
+<<<<<<< HEAD
 				myCurrentCase = 14;
+=======
+>>>>>>> parent of f363319... Made new path for the two cube
 				myCurrentCase = 12;
 	     		init = true;
 		}
 		}
+<<<<<<< HEAD
 		if(myCurrentCase == 14) {
+=======
+>>>>>>> parent of f363319... Made new path for the two cube
 		if(myCurrentCase == 12) {
 			//ENTER CONDITION
 			if(init){
