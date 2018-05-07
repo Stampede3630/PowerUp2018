@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-
+//should we change to timed robot ? 
 public class Robot extends IterativeRobot {
 	String gameData;
 	BoxGrabber box ;
@@ -82,18 +82,16 @@ public class Robot extends IterativeRobot {
 	 */
 	public void testInit() {
 		// should we empty out test if we aren't useing it anymore 
-		_driveTrain.testInit();
+		_driveTrain.autoTestinginit();
 	}
 	
 	public void testPeriodic() {
-		_driveTrain.testPeriodic();
+		_driveTrain.autotesting();
 	}
 	
 	@Override
 	public void robotPeriodic() {
 		_driveTrain.getDiagnostics();
-		box.manipulatorDianostics();
-		_driveTrain.getWheelsAndCompass();
 	}
 	
 	@Override
@@ -114,10 +112,6 @@ public class Robot extends IterativeRobot {
 	 * @see edu.wpi.first.wpilibj.IterativeRobotBase#autonomousPeriodic()
 	 * irative method for auto. calls all methods during auto that are used 
 	 */
-	/* (non-Javadoc)
-	 * @see edu.wpi.first.wpilibj.IterativeRobotBase#autonomousPeriodic()u
-	 * calls periodic methods used during auto
-	 */
 	@Override
 	public void autonomousPeriodic() {
 		autoLogic();
@@ -126,6 +120,9 @@ public class Robot extends IterativeRobot {
 		box.switchAutoUpPeriodic();
 		box.kickoutPeriodic();
 		box.liftUpPeriodic();
+		box.boxAutoIntakePeriodic();
+		box.liftDownPeriodic();
+		//box.boxAutoIntakePeriodic();
 	}
 	@Override
 	public void disabledInit() {
@@ -138,11 +135,7 @@ public class Robot extends IterativeRobot {
 
 	/**
 	 * deals with game data from fms which gets sent to us and set auto rutube
-	 * 
-	 * 
 	 */
-	
-	// are we useing case logic or auto logic I am confudsed to why we have both here are they still working? it just seems somewhat redunant
 	public void autoLogic() {
 		if(gameData.length() > 0) {
 			
@@ -183,7 +176,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.rightSwitchRightFF();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoRRR.getSelected() == Destinations.SCR)) {
-					_driveTrain.rightScaleRight();
+					_driveTrain.twoCubeAutoRight();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoRRR.getSelected() == Destinations.SWR)) {
 					_driveTrain.middleSwitchRight();
@@ -209,7 +202,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.rightSwitchLeft();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoLRL.getSelected() == Destinations.SCR)) {
-					_driveTrain.rightScaleRight();
+					_driveTrain.twoCubeAutoRight();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoLRL.getSelected() == Destinations.SWL)) {
 					_driveTrain.middleSwitchLeftFF();
@@ -229,7 +222,8 @@ public class Robot extends IterativeRobot {
 					_driveTrain.leftSwitchRight();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.LEFT) && (autoRLR.getSelected() == Destinations.SCL)) {
-					_driveTrain.leftScaleLeft();
+					//_driveTrain.leftScaleLeft();
+					_driveTrain.twoCubeAutoRight();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoRLR.getSelected() == Destinations.SWR)) {
 					_driveTrain.rightSwitchRightFF();
@@ -255,7 +249,7 @@ public class Robot extends IterativeRobot {
 			}
 		}
 	}
-// not called beacuse dosn't work as far as i know. use auto logic instead.m 
+
 	public void caseAutoLogic() {
 		
 		switch(gameData.substring(0, 1)) {

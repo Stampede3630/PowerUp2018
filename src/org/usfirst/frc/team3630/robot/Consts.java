@@ -20,20 +20,20 @@ public class Consts {
 
 	
 	// Manipulators 
-	public static final double  kPRotAng = 0.025;
+	public static final double  kPRotAng = 0.03;
 	public static final double  kIRotAng = 0.0;
 	public static final double  kDRotAng = 0;
 	
-	public static final double kPDrAngle = .1;//.12 ;
+	public static final double kPDrAngle = .02 ;
 	public static final double kIDrAngle = 0.00;
-	public static final double kDDrAngle =0.09;
+	public static final double kDDrAngle =0;
 	
 
     public static final double ToleranceDegrees = 2;
     public static final double ToleranceDistance = 3;
 	
 	//Wheel Measurements
-	public static final int ticksPerRotation = 238 + 100;
+	public static final int ticksPerRotation = 238;
 
 
 	public static final int millisecondsPerSecond = 1000;
@@ -47,7 +47,7 @@ public class Consts {
 
 
 	
-	public static final double kPPos = 0.06;
+	public static final double kPPos = 0.04;
 	public static final double kIPos = 0;
 	public static final double kDPos = 0;
 	// Auto Distances
@@ -61,10 +61,12 @@ public class Consts {
 	public static final double autoH = 264.62;
 	public static final double autoI = 120.62;
 	public static final double autoLine = 150;
-	public static final double firstDistanceInSwitchFFMethod = 67;//75;//112.4;
-	public static final double secondDistanceInSwitchFFMethod = 33;//50;//78.5;60;
-	public static final double firstDistanceInScaleFFMethod = 235; // needs to be changed
-	public static final double secondDistanceInScaleFFMethod = 24;  // needs to be changed
+	public static final double firstDistanceInSwitchFFMethod = 112.4;
+	public static final double secondDistanceInSwitchFFMethod = 50;//78.5;
+	public static final double firstDistanceInScaleFFMethod = 350.8;
+	public static final double secondDistanceInScaleFFMethod = 30;
+	public static final double toCube = 74.5; //calculated estimates 4/13 
+	public static final double toSwitch = 20; // calculated estimates 4/13
 	public static final double autoPosError = 3;
 	public static final double autoTurnError = 2;
 	
@@ -93,7 +95,7 @@ public class Consts {
 	public static final double partysOverScaleUp = 6.5;///some other less awesome number 
 	public static final double partysOverLowScale = 7;
 	public static final double partysOverSwitchUp = 6;
-	public static final double partysOverScaleDown = 4;
+	public static final double partysOverScaleDown = 4;//Changed this to three from 4, 4/30
 	public static final double partysOverLowScaleDown = 3;
 	public static final double partysOverSwitchDown = 2.5;
 
