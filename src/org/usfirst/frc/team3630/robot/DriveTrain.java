@@ -1263,20 +1263,8 @@ public class DriveTrain {
 				turnController.enable();
 				turnController.setSetpoint(0);
 				posController.enable();
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 				autoDriveFw(-82);
-=======
->>>>>>> parent of 6336ede... distance changes
-				
-=======
-				autoDriveFw(-49.5);				
->>>>>>> parent of f363319... Made new path for the two cube
-=======
-				autoDriveFw(-49.5);				
->>>>>>> parent of f363319... Made new path for the two cube
-				
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 				myCurrentCase = 6;
@@ -1302,18 +1290,7 @@ public class DriveTrain {
 		if (myCurrentCase == 7) {
 			//ENTER CONDITION
 			if(init) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 				autoTurnDegree(-80);
-=======
-				autoTurnDegree(-90);
->>>>>>> parent of f363319... Made new path for the two cube
-=======
-				autoTurnDegree(-90);
->>>>>>> parent of f363319... Made new path for the two cube
-=======
->>>>>>> parent of 6336ede... distance changes
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
 				myCurrentCase = 8;
@@ -1324,7 +1301,7 @@ public class DriveTrain {
 		if (myCurrentCase == 8) {
 			//ENTER CONDITION
 			if(init) {
-				autoDriveFw(Consts.toCube - 5);				
+				autoDriveFw(61);				
 				
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -1332,7 +1309,7 @@ public class DriveTrain {
 	     		init = true;
 			}
 		}
-<<<<<<< HEAD
+
 		if (myCurrentCase == 9) {
 			//ENTER CONDITION
 			if(init) {
@@ -1356,69 +1333,40 @@ public class DriveTrain {
 			}
 		}
 		if(myCurrentCase == 11) {
-=======
->>>>>>> parent of f363319... Made new path for the two cube
-		if(myCurrentCase == 9) {
 			//ENTER CONDITION
 			if(init){
 				driveBox.boxAutoIntakeInit();
-				
 				init = false;
 			}
 			if(!driveBox.isIntakeActivated) {
 				//driveBox.clampClose();
-<<<<<<< HEAD
+
 				myCurrentCase = 12;
-=======
->>>>>>> parent of f363319... Made new path for the two cube
-				myCurrentCase = 10;
 				init = true;
 				}
 			}
-<<<<<<< HEAD
 		if(myCurrentCase == 12) {
-		if(myCurrentCase == 10) {
 			if(init) {
-				autoDriveFw(71);
-=======
-		if(myCurrentCase == 10) {
-			if(init) {
->>>>>>> parent of f363319... Made new path for the two cube
-				autoDriveFw(Consts.toSwitch * -1);
+				autoDriveFw(16);
 				driveBox.switchAutoUpInit();
 			}
 			if((Math.abs(posController.getError()) < Consts.autoPosError) ) {
 				init = true;
-<<<<<<< HEAD
 				myCurrentCase = 13;
-=======
->>>>>>> parent of f363319... Made new path for the two cube
-				myCurrentCase = 11;
 			}
 				
 		}
-<<<<<<< HEAD
 		if(myCurrentCase == 13) {
-=======
->>>>>>> parent of f363319... Made new path for the two cube
-		if(myCurrentCase == 11) {
 			if(init) {
-				autoDriveFw(Consts.toSwitch);
+				autoDriveFw(16);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
-<<<<<<< HEAD
 				myCurrentCase = 14;
-=======
->>>>>>> parent of f363319... Made new path for the two cube
-				myCurrentCase = 12;
 	     		init = true;
 		}
 		}
-<<<<<<< HEAD
+
 		if(myCurrentCase == 14) {
-=======
->>>>>>> parent of f363319... Made new path for the two cube
-		if(myCurrentCase == 12) {
 			//ENTER CONDITION
 			if(init){
 				init = false;
@@ -1521,7 +1469,6 @@ public class DriveTrain {
 		LiveWindow.disableAllTelemetry();
 		liftDownTimerDrive.reset();
 		myCurrentCase = 1;	
-		myCurrentCase = 5;	
 
 	}
 
