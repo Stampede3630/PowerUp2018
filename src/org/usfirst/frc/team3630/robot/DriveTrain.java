@@ -1265,7 +1265,10 @@ public class DriveTrain {
 				posController.enable();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 				autoDriveFw(-82);
+=======
+>>>>>>> parent of 6336ede... distance changes
 				
 =======
 				autoDriveFw(-49.5);				
@@ -1301,6 +1304,7 @@ public class DriveTrain {
 			if(init) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 				autoTurnDegree(-80);
 =======
 				autoTurnDegree(-90);
@@ -1308,6 +1312,8 @@ public class DriveTrain {
 =======
 				autoTurnDegree(-90);
 >>>>>>> parent of f363319... Made new path for the two cube
+=======
+>>>>>>> parent of 6336ede... distance changes
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
 				myCurrentCase = 8;
@@ -1515,6 +1521,7 @@ public class DriveTrain {
 		LiveWindow.disableAllTelemetry();
 		liftDownTimerDrive.reset();
 		myCurrentCase = 1;	
+		myCurrentCase = 5;	
 
 	}
 
