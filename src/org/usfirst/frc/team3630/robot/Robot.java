@@ -176,7 +176,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.rightSwitchRightFF();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoRRR.getSelected() == Destinations.SCR)) {
-					_driveTrain.twoCubeAutoRight();
+					_driveTrain.rightScaleRight();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoRRR.getSelected() == Destinations.SWR)) {
 					_driveTrain.middleSwitchRight();
@@ -202,7 +202,7 @@ public class Robot extends IterativeRobot {
 					_driveTrain.rightSwitchLeft();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.RIGHT) && (autoLRL.getSelected() == Destinations.SCR)) {
-					_driveTrain.twoCubeAutoRight();
+					_driveTrain.rightScaleRight();
 				}
 				else if((autoChooser.getSelected() == StartingPoints.MIDDLE) && (autoLRL.getSelected() == Destinations.SWL)) {
 					_driveTrain.middleSwitchLeftFF();
