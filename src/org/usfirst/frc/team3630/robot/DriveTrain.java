@@ -25,6 +25,7 @@ public class DriveTrain {
 	ErrorCode fault;
 	
 	double turnOutput;
+	BuiltInAccelerometer accelerometer;
 	double posOutput;
 	boolean errorGreatorThanFive = false;
 	boolean init = true;
@@ -77,6 +78,7 @@ public class DriveTrain {
 		configureTalon(leftTwo);
 		configureTalon(rightFive);
 		liftDownTimerDrive = new Timer();
+		accelerometer = new BuiltInAccelerometer();
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
 		// why differ sensor phase diffrent would it be cosntant for both robots?
@@ -241,6 +243,7 @@ public class DriveTrain {
 		SmartDashboard.putBoolean("TurnControl On", turnController.isEnabled());
 		SmartDashboard.putBoolean("Is init true?", init);
 		SmartDashboard.putNumber("posController input", posOutput);
+		SmartDashboard.putNumber("Accel", ahrs.getRawAccelX());
 		
 		SmartDashboard.putNumber("turnController kP", turnController.getP());
 		
@@ -1263,8 +1266,9 @@ public class DriveTrain {
 				turnController.enable();
 				turnController.setSetpoint(0);
 				posController.enable();
-
-				autoDriveFw(-82);
+				autoDriveFw(-70);
+				
+				
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 				myCurrentCase = 6;
@@ -1290,7 +1294,7 @@ public class DriveTrain {
 		if (myCurrentCase == 7) {
 			//ENTER CONDITION
 			if(init) {
-				autoTurnDegree(-80);
+				autoTurnDegree(-45);
 			}
 			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
 				myCurrentCase = 8;
@@ -1301,7 +1305,7 @@ public class DriveTrain {
 		if (myCurrentCase == 8) {
 			//ENTER CONDITION
 			if(init) {
-				autoDriveFw(61);				
+				autoDriveFw(109);				
 				
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -1309,7 +1313,6 @@ public class DriveTrain {
 	     		init = true;
 			}
 		}
-
 		if (myCurrentCase == 9) {
 			//ENTER CONDITION
 			if(init) {
@@ -1336,18 +1339,18 @@ public class DriveTrain {
 			//ENTER CONDITION
 			if(init){
 				driveBox.boxAutoIntakeInit();
+				
 				init = false;
 			}
 			if(!driveBox.isIntakeActivated) {
 				//driveBox.clampClose();
-
 				myCurrentCase = 12;
 				init = true;
 				}
 			}
 		if(myCurrentCase == 12) {
 			if(init) {
-				autoDriveFw(16);
+				autoDriveFw(71);
 				driveBox.switchAutoUpInit();
 			}
 			if((Math.abs(posController.getError()) < Consts.autoPosError) ) {
@@ -1358,14 +1361,13 @@ public class DriveTrain {
 		}
 		if(myCurrentCase == 13) {
 			if(init) {
-				autoDriveFw(16);
+				autoDriveFw(Consts.toSwitch);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 				myCurrentCase = 14;
 	     		init = true;
 		}
 		}
-
 		if(myCurrentCase == 14) {
 			//ENTER CONDITION
 			if(init){
@@ -1468,7 +1470,7 @@ public class DriveTrain {
 		rightSixEncoder.configOpenloopRamp(1, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
 		liftDownTimerDrive.reset();
-		myCurrentCase = 1;	
+		myCurrentCase = 5;	
 
 	}
 
