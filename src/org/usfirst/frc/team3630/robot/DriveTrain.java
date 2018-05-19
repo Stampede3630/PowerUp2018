@@ -723,7 +723,7 @@ public class DriveTrain {
 			//ENTER CONDITION
 			if(init) {
 				resetAutoDriveFw();
-				autoDriveFw(161);
+				autoDriveFw(174);
 				driveBox.liftUpInit();
 			}
 		     if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -746,9 +746,9 @@ public class DriveTrain {
 			//ENTER CONDITION
 			if(init) {
 				resetAutoDriveFw();
-				autoDriveFw(26);
+				autoDriveFw(21);
 			}
-		    if(Math.abs(posController.getError()) < Consts.autoPosError) {
+		    if(Math.abs(posController.getError()) < (Consts.autoPosError +1)) {
 		     	myCurrentCase = 6;
 		     	init = true;
 		    }
