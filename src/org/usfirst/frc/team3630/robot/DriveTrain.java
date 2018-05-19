@@ -835,7 +835,7 @@ public class DriveTrain {
 			//ENTER CONDITION
 			if(init) {
 				resetAutoDriveFw();
-				autoDriveFw(161);
+				autoDriveFw(174);
 				driveBox.liftUpInit();
 			}
 		     if(Math.abs(posController.getError()) < Consts.autoPosError ) {
@@ -848,7 +848,7 @@ public class DriveTrain {
 			if(init) {
 				autoTurnDegree(35);
 			}
-			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
+			if(Math.abs(turnController.getError())<( Consts.autoTurnError+1)) {
 				myCurrentCase = 5;
 	     		init = true;
 			}
@@ -858,7 +858,7 @@ public class DriveTrain {
 			//ENTER CONDITION
 			if(init) {
 				resetAutoDriveFw();
-				autoDriveFw(26);
+				autoDriveFw(21);
 			}
 		    if(Math.abs(posController.getError()) < Consts.autoPosError) {
 		     	myCurrentCase = 6;
