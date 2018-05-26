@@ -7,10 +7,14 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 
+/**
+ * manipulator class for box grabber. Based on pnumatics 
+ * 
+ *
+ */
 public class BoxGrabber {
 
 
-	// enum difftent state= state (F, forward) (R, piston reverse)
 
 	public enum State {
 		LIFTUP,
@@ -101,7 +105,7 @@ public class BoxGrabber {
 
 		scaleUpTrigger = new AnalogInput(Consts.scaleUpAnalogPin);
 		atDownLevel = new AnalogInput(Consts.downLevelAnalogPin);
-		// to do for later and to conts class
+		
 		// peramtors for double soelnoid pcm, in chanel, out chanel
 		slide = new DoubleSolenoid(1, 2, 3);
 		kick = new DoubleSolenoid(0, 0, 1);
@@ -165,6 +169,10 @@ public class BoxGrabber {
 		}  
 	}
 
+	/**
+	 * this is for full on manual control with the x-box d pad
+	 * based on the unit circul math
+	 */
 	public void manualControl() {
 			routineRunning = false;
 			liftUpActivated = false;
@@ -261,14 +269,20 @@ public class BoxGrabber {
 		slide.set(DoubleSolenoid.Value.kOff);
 	}
 	
-	// stop method for safety
 	
+	
+	/**
+	 * stop compand for saftey
+	 */
 	public void stop() {
 		clamp.set(DoubleSolenoid.Value.kOff);
 		lift.set(DoubleSolenoid.Value.kOff);
 		kick.set(DoubleSolenoid.Value.kOff);
 	}
 
+	/**
+	 * move manipulator forwords
+	 */
 	public void slideForward() {
 		slide.set(DoubleSolenoid.Value.kForward);
 	}
@@ -504,44 +518,13 @@ public class BoxGrabber {
 		liftUpLowScaleSensorFlag = false;
 	}
 	
-//	public void lowScaleAutoUpPeriodic() {
-//		SmartDashboard.putNumber("Party's Over", partysOverDown);
-//		if (liftUpLowScaleActivated) {
-//			if (liftTimer.get() > Consts.partysOverLowScale) {
-//				System.out.println("Party's over");
-//				liftUpLowScaleActivated = false;
-//				liftUpLowScaleSensorFlag= false;
-//			}
-//			else if (liftUpLowScaleSensorFlag) {
-//				System.out.println("stop called for low scale");
-//				stop();
-//	
-//			}
-//			else  {
-//				System.out.println("slide reverse and arms up called for low scale");
-//				slideReverse();
-//				armsUp();
-//				if (scaleUpTrigger.getVoltage()>  2 ) {
-//						 liftUpLowScaleSensorFlag= true;
-//						 System.out.println("liftUpLowScale sensor flag = ");
-//						 System.out.println(liftUpLowScaleSensorFlag);
-//
-//					}
-//				
-//			}
-//		}
-//		
-//	}
-	
-	
-
 	// manip diognostics output to smart doashboard for each pnumatic subsystem
 	public void manipulatorDianostics() {
 		testOn = true;
 		compresorPSI();
 		lowPSIWarning();
 		SmartDashboard.putBoolean("slide back ", slideReversecheck.get());
-	//	SmartDashboard.putBoolean("ARE ARMS DOWN", armsDownCheck.get());
+	
 		SmartDashboard.putNumber("Compresor PSI ", compresorPSI());
 	
 		SmartDashboard.putBoolean("testOn", testOn);
@@ -555,9 +538,7 @@ public class BoxGrabber {
 
 	public void boxGrabberPeriodic () {
 		routineRunning = liftUpActivated || liftDownActivated || isKickoutActivated || liftUpSwitchActivated || liftDownSwitchActivated || liftUpLowScaleActivated;
-		// for testing
-	
-
+		
 		boxIntakePeriodic();
 		kickoutPeriodic();
 		liftDownPeriodic();
@@ -565,7 +546,6 @@ public class BoxGrabber {
 		
 	
 		switchAutoUpPeriodic();
-//		lowScaleAutoUpPeriodic();
 		
 		if(!routineRunning || _xBox.getPOV()!=-1 || _xBox.getBumper(GenericHID.Hand.kLeft)|| _xBox.getBumper(GenericHID.Hand.kRight)|| _xBox.getBackButton()|| _xBox.getStartButton()) {
 			switch (xBox()) {
