@@ -33,11 +33,6 @@ public class DriveTrain {
 	PIDController posController;
 	double rotateToAngleRate;
 	Timer backwardsTimer, middleSwitchRightTimer;
-	
-	
-	
-	
-	// target angle degrees for straight on should not be a constant !
 	double targetAngleDegrees = 0f;
 	double kTargetDistanceInches = 1000;
 
@@ -46,7 +41,7 @@ public class DriveTrain {
 	
 	DifferentialDrive driveTrain;
 
-	// defining PIDSource
+	
 	EncoderPIDSource positionEncoderSource;
 
 	/**
@@ -68,7 +63,7 @@ public class DriveTrain {
 		panel = new PowerDistributionPanel(0);
 		
 		_xBox = new XboxController(Consts.xBoxComPort);
-		// srx definitions
+	
 		leftThreeEncoder = new WPI_TalonSRX(Consts.leftThree);
 		leftTwo = new WPI_TalonSRX(Consts.leftTwo);
 
@@ -85,7 +80,7 @@ public class DriveTrain {
 
 		rightFive.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, rightSixEncoder.getDeviceID());
 		leftTwo.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, leftThreeEncoder.getDeviceID());
-		// why differ sensor phase diffrent would it be cosntant for both robots?
+		
 		
 	
 		leftThreeEncoder.setSensorPhase(false);
@@ -96,7 +91,6 @@ public class DriveTrain {
 		driveTrain.setDeadband(0); // why set to zero and not at default ?.02
 		turnController = new PIDController(Consts.kPRotAng, Consts.kIRotAng, Consts.kDRotAng, ahrs,new MyRotationPidOutput());
 
-		// setting range and disable it
 		turnController.setInputRange(-180.0f, 180.0f);
 		ahrs.setPIDSourceType(edu.wpi.first.wpilibj.PIDSourceType.kDisplacement);
 		turnController.setOutputRange(-.9, .9); // maybe should lower to .5 if to see if overcompensation
@@ -108,7 +102,7 @@ public class DriveTrain {
 		positionEncoderSource = new EncoderPIDSource(leftThreeEncoder, rightSixEncoder);
 		posController = new PIDController(Consts.kPPos, Consts.kIPos, Consts.kDPos,
 		positionEncoderSource, new MyPosPidOutput());
-		posController.setOutputRange(-.6, .6); //current testing
+		posController.setOutputRange(-.6, .6); 
 
 		posController.setAbsoluteTolerance(Consts.ToleranceDistance);
 		posController.disable();
@@ -135,7 +129,7 @@ public class DriveTrain {
 		return yaw;
 	}
 	
-	// add ahrs  congif method to see if calibating. It could be a good saftey checlk 
+	
 	public void teleopInit() {
 		leftThreeEncoder.configOpenloopRamp(0, Consts.timeOutMs);
 		rightSixEncoder.configOpenloopRamp(0, Consts.timeOutMs);
@@ -158,8 +152,6 @@ public class DriveTrain {
 	SmartDashboard.putNumber("total voltage ", panel.getVoltage());
 	SmartDashboard.putNumber("total current", panel.getTotalCurrent());
 	
-		// moved over to driverStaton warnings 
-		// are we still getting curent issues 
 
 
 	}
@@ -1396,7 +1388,7 @@ public class DriveTrain {
 				}
 		}
 	public  class MyRotationPidOutput implements PIDOutput {
-		// implements pid output
+		
 				public void pidWrite(double output) {
 					turnOutput=output;
 				}
