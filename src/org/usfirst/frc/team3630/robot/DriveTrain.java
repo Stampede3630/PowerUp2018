@@ -189,10 +189,10 @@ public class DriveTrain {
 		SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
 		SmartDashboard.putNumber("Position Setpoint", posController.getSetpoint());
 		SmartDashboard.putNumber("Position Error", posController.getError());
-		//SmartDashboard.putString("Drive Mode", frontLeft.getControlMode().toString());
+	
 		SmartDashboard.putNumber("Stage", myCurrentCase);
 		SmartDashboard.putNumber("turn controller error", turnController.getError());
-		//posController.setP(SmartDashboard.getNumber("posController kP", 0.07));
+
 		SmartDashboard.putBoolean("Is right true?", right);
 		SmartDashboard.putBoolean("PosControl ON", 	posController.isEnabled());
 		SmartDashboard.putBoolean("TurnControl On", turnController.isEnabled());
@@ -757,45 +757,6 @@ public class DriveTrain {
 		}
 	}
 		
-		/*if(myCurrentCase == 9) {   //NO IDEA WHAT THIS IS DOING
-			//ENTER CONDITION
-			if(init){
-				turnController.disable();
-				posController.disable();
-				driveBox.liftUpInit();
-				init =false;
-				
-			}
-			else if(driveBox.liftUpActivated) {
-				driveBox.liftUpPeriodic();
-				
-			}
-			else {
-				myCurrentCase = 10;
-				init = true;
-			} 
-		
-			
-		}
-		///////////FIX FIX FIX FIX
-		if (myCurrentCase == 10) {
-			//ENTER CONDITION
-/*		if (init) {
-			driveBox.kickoutInit();
-			if(driveBox.isKickoutActivated) {
-				driveBox.kickoutPeriodic();
-				init = false;
-			}
-			else if(driveBox.isKickoutActivated) {
-				driveBox.kickoutPeriodic();
-				
-			}
-			
-			else {
-				init = false;
-			}
-			
-		}*/
 
 	public void rightScaleLeft() {
 		if (myCurrentCase  == 1) {
@@ -857,6 +818,8 @@ public class DriveTrain {
 		     	init = true;
 		    }
 		}
+		
+		// what's this code doeing here if doeing nothing it should be delted
 		/*if (myCurrentCase == 6) {
 			//ENTER CONDITION
 			if(init) {
@@ -1287,7 +1250,7 @@ public class DriveTrain {
 		init = false;
 	}
 
-	// init method for navx calibaration setting
+	
 	
 	public void turnDegree(double degrees) {
 		targetAngleDegrees = degrees;

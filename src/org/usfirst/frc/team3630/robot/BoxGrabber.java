@@ -303,7 +303,7 @@ public class BoxGrabber {
 	 */
 	public void lowPSIWarning() {
 		if (compresorPSI() < 60.0) {
-			//System.out.println("WARNING robots dont have low pressure but yours does");
+			System.out.println("WARNING robots dont have low pressure but yours does");
 		}
 	}
 
@@ -392,8 +392,7 @@ public class BoxGrabber {
 				armsUp();
 				if (scaleUpTrigger.getVoltage() > 2 ) {
 					liftUpSensorFlag= true;
-					//						 System.out.println("liftUp sensor flag = ");
-					//						 System.out.println(liftUpSensorFlag);
+	
 				}
 			}
 		}
@@ -408,7 +407,7 @@ public class BoxGrabber {
 		liftTimer.reset();
 		liftTimer.start();
 
-//		System.out.println("lift down init is being called");
+
 		
 		if (atSwitch) {
 			partysOverDown = Consts.partysOverSwitchDown;
@@ -419,8 +418,7 @@ public class BoxGrabber {
 		else {
 			partysOverDown = Consts.partysOverScaleDown;
 		}
-//		System.out.println("Party's over value ");
-//		System.out.print(partysOverDown);
+
 		atSwitch = false;
 		atScale = false;
 		atLowScale = false;
@@ -451,7 +449,7 @@ public class BoxGrabber {
 			}
 			else {
 				slideReverse();
-			//	armsDown();
+		
 				System.out.println("slide reverse called for lift down");
 				if (atDownLevel.getVoltage()>  2 ) {
 					liftDownSensorFlag= true;
