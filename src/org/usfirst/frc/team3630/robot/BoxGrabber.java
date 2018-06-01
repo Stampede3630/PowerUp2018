@@ -7,10 +7,11 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 
+
 /**
- * manipulator class for box grabber. Based on pnumatics 
- * 
- *
+ * @author walsli
+ * the class is made of several base methods which are added onto 
+ * methods for secific functions in a state mashion
  */
 public class BoxGrabber {
 
@@ -230,7 +231,7 @@ public class BoxGrabber {
 		
 	}
 	
-	// base class methods 
+
 	public void kickForward() {
 		kick.set(DoubleSolenoid.Value.kForward);
 	}
@@ -259,6 +260,9 @@ public class BoxGrabber {
 		clamp.set(DoubleSolenoid.Value.kReverse);
 	}
 	
+	/**
+	 * manipulator moves backwards
+	 */
 	public void slideReverse() {
 		slide.set(DoubleSolenoid.Value.kReverse);
 	}
@@ -366,7 +370,7 @@ public class BoxGrabber {
 		liftUpActivated = true;
 		liftUpSensorFlag = false;
 		liftTimer.start();
-//		System.out.println("lift up init is being called");
+
 		atScale = true;
 		atLowScale = false;
 		atSwitch = false;
@@ -514,7 +518,11 @@ public class BoxGrabber {
 		liftUpLowScaleSensorFlag = false;
 	}
 	
-	// manip diognostics output to smart doashboard for each pnumatic subsystem
+	
+	/**
+	 * @return status of hardware systems on the robot when called to 
+	 * shufle boarad.
+	 */
 	public void manipulatorDianostics() {
 		testOn = true;
 		compresorPSI();
@@ -532,6 +540,11 @@ public class BoxGrabber {
 	
 	}
 
+	/**
+	 * @return robot action iniatied from xbox controller at drivers station
+	 * the state will be called by the init function and overides any actionn running on the robot
+	 * their are no time interupts on the robot ever used.
+	 */
 	public void boxGrabberPeriodic () {
 		routineRunning = liftUpActivated || liftDownActivated || isKickoutActivated || liftUpSwitchActivated || liftDownSwitchActivated || liftUpLowScaleActivated;
 		
