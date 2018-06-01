@@ -64,7 +64,7 @@ public class BoxGrabber {
 	boolean liftUpSensorFlag,liftUpActivated;
 	boolean liftDownSensorFlag,liftDownActivated; 
 	boolean liftUpSwitchActivated, liftUpSwitchSensorFlag;
-	boolean liftDownSwitchActivated/*,liftDownSwitchSensorFlag*/;
+	boolean liftDownSwitchActivated;
 	boolean liftUpLowScaleSensorFlag, liftUpLowScaleActivated;
 	boolean routineRunning;
 	boolean atSwitch, atLowScale,atScale;
@@ -106,7 +106,7 @@ public class BoxGrabber {
 		scaleUpTrigger = new AnalogInput(Consts.scaleUpAnalogPin);
 		atDownLevel = new AnalogInput(Consts.downLevelAnalogPin);
 		
-		// peramtors for double soelnoid pcm, in chanel, out chanel
+		
 		slide = new DoubleSolenoid(1, 2, 3);
 		kick = new DoubleSolenoid(0, 0, 1);
 		clamp = new DoubleSolenoid(0, 2, 3);
@@ -124,8 +124,6 @@ public class BoxGrabber {
 		configureTalon(leftMasterIntakeTalon);
 		configureTalon(rightSlaveIntakeTalon);
 		rightSlaveIntakeTalon.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 7);
-		
-		//reverse the values below if you want opposite behavior
 		leftMasterIntakeTalon.setInverted(false);
 		rightSlaveIntakeTalon.setInverted(true);
 		
@@ -311,11 +309,11 @@ public class BoxGrabber {
 	public void kickoutInit(){
 		if (!isKickoutActivated){
 			kickTime.reset();
-			kickoutBoxState = 3;
+			kickoutBoxState = 1;
 			isKickoutActivated = true;
 			kickTime.start();
 			leftMasterIntakeTalon.set(1);
-			System.out.println("kickoutInit Activated");
+	
 		}
 }
 	
@@ -323,25 +321,25 @@ public class BoxGrabber {
 	public void  kickoutPeriodic(){
 		if (isKickoutActivated){
 			switch(kickoutBoxState){
-			case 3:
-				System.out.println("case three was called");
+			case 1:
+			
 				leftMasterIntakeTalon.set(1);
 				if (kickTime.hasPeriodPassed(.05)){
-					kickoutBoxState=4;
+					kickoutBoxState=2;
 				}
 				break; 
-			case 4:
+			case 2:
 				clampOpen();
 				leftMasterIntakeTalon.set(1);
-				//System.out.println("case four");
+			
 				if (kickTime.hasPeriodPassed(1)){
-					kickoutBoxState =5;
+					kickoutBoxState =3;
 				}
 				break; 
-			case 5:
-				//clampClose();
+			case 3:
+				
 				leftMasterIntakeTalon.set(0);
-				System.out.println("case five");
+			
 
 				if (kickTime.hasPeriodPassed(2)){
 					kickoutBoxState = -1;
