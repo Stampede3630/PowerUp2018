@@ -213,6 +213,10 @@ public class BoxGrabber {
 
 	
 
+	/**
+	 * @param _talon
+	 * configues the talon methods to default to norms 
+	 */
 	private void configureTalon(TalonSRX _talon) {
 		_talon.configNominalOutputForward(0, Consts.timeOutMs);
 		_talon.configNominalOutputReverse(0, Consts.timeOutMs);
@@ -301,7 +305,7 @@ public class BoxGrabber {
 	}
 
 	/**
-	 * low psi warning when sensor registers bellow 60 psi
+	 * @return low psi warning when sensor registers bellow 60 psi
 	 */
 	public void lowPSIWarning() {
 		if (compresorPSI() < 60.0) {
