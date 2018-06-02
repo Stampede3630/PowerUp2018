@@ -136,7 +136,7 @@ public class Robot extends IterativeRobot {
 	 * 
 	 */
 	
-t
+
 	public void autoLogic() {
 		if(gameData.length() > 0) {
 			
