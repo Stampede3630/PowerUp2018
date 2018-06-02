@@ -211,11 +211,7 @@ public class DriveTrain {
 		
 		fault=leftThreeEncoder.getLastError();
 		if(fault != ErrorCode.OK) System.out.println(fault);
-//		if (leftEncoder.getOutputCurrent()>35) { 
-//			System.out.print("[WARNING] Talon Current is at ");
-//			System.out.print(leftEncoder.getOutputCurrent());
-	//	System.out.print('\n');
-	//}
+
 	
 		if(panel.getTotalCurrent()>300) {
 			System.out.print("[WARNING] CURRENT DRAW IS AT ");
@@ -258,7 +254,7 @@ public class DriveTrain {
 		     	myCurrentCase = 2;
 		     	init = true;
 		    }
-		} //SAMV added this
+		} 
 		if (myCurrentCase == 2) {
 			if(init) {
 				autoTurnDegree(90);
@@ -296,7 +292,7 @@ public class DriveTrain {
 				autoDriveFw(Consts.firstDistanceInSwitchFFMethod);
 				driveBox.switchAutoUpInit();
 			}
-			//
+			
 		    if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 		     	myCurrentCase = 2;
 		     	init = true;
@@ -818,28 +814,6 @@ public class DriveTrain {
 		     	init = true;
 		    }
 		}
-		
-		// what's this code doeing here if doeing nothing it should be delted
-		/*if (myCurrentCase == 6) {
-			//ENTER CONDITION
-			if(init) {
-				autoTurnDegree(90);
-			}
-			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
-				myCurrentCase = 7;
-	     		init = true;
-			}
-			SmartDashboard.putBoolean("Hit Turn Target", posController.onTarget());
-			}
-		if (myCurrentCase  == 7) {
-			if(init) {
-				autoDriveFw(Consts.autoF);
-			}
-		    if(Math.abs(posController.getError()) < Consts.autoPosError) {
-		     	myCurrentCase = 8;
-		     	init = true;
-		    }*/
-		//}
 		if(myCurrentCase == 6) {
 			//ENTER CONDITION
 			if(init) {
@@ -935,17 +909,7 @@ public class DriveTrain {
 	}
 	public void middleSwitchLeftFF() { //started. No right angles. Need a lot of testing
 		
-		/*if(myCurrentCase == 1 || myCurrentCase == 2) {
-
-			if(init) {
-				System.out.println("Case 1/2 callled");
-				autoDriveFw(36);
-		}
-			if(Math.abs(turnController.getError())< Consts.autoTurnError) {
-				myCurrentCase = 3;
-	     		init = true;
-			}
-		}*/
+	
 		if(myCurrentCase == 1) {
 			if(init) {
 				turnController.setPID(.03, Consts.kIDrAngle, Consts.kDDrAngle);
@@ -962,7 +926,7 @@ public class DriveTrain {
 			if(init){
 				turnController.setPID(.02, Consts.kIRotAng, Consts.kDRotAng);
 				resetAutoDriveFw();
-				autoDriveFw(110);//162.3);
+				autoDriveFw(110);
 			}
 			if(Math.abs(posController.getError()) < Consts.autoPosError ) {
 				myCurrentCase = 5;
@@ -1131,7 +1095,7 @@ public class DriveTrain {
 		}
 	}
 	
-	public void middleScaleRight() { ////left unchanged. Probably woun't be using
+	public void middleScaleRight() { 
 		if(myCurrentCase == 1) {
 			//ENTER CONDITION
 			if(init) {
@@ -1268,7 +1232,7 @@ public class DriveTrain {
 			//ENTER CONDITION
 			if(init) {
 				turnController.enable();
-				//turnController.setSetpoint(0);
+			
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoLine);
 			}
@@ -1280,7 +1244,7 @@ public class DriveTrain {
 		if (myCurrentCase == 2) {
 			//ENTER CONDITION
 			turnController.disable();
-			//posController.disable();
+		
 		}
 	}
 	
@@ -1303,7 +1267,7 @@ public class DriveTrain {
 		posController.reset();
 		leftThreeEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
 		rightSixEncoder.setSelectedSensorPosition(0, 0, Consts.timeOutMs);
-		// why setting ramp rate here? we aren't doing this for telop we should do this once not twice
+	
 		leftThreeEncoder.configOpenloopRamp(1, Consts.timeOutMs);
 		rightSixEncoder.configOpenloopRamp(1, Consts.timeOutMs);
 		LiveWindow.disableAllTelemetry();
@@ -1345,7 +1309,7 @@ public class DriveTrain {
 	 *
 	 */
 	public  class MyPosPidOutput implements PIDOutput {
-		// implements pid output
+		
 				public void pidWrite(double output) {
 					posOutput=output;
 				}
@@ -1371,7 +1335,7 @@ public class DriveTrain {
 			double positionInches;
 
 			if(right) {
-				//(2 * Math.PI * Consts.wheelRadiusInch) make this a contant !!
+				
 				positionInches = fRGetSelected * (double) (2 * Math.PI * Consts.wheelRadiusInch) / (double) Consts.ticksPerRotation ;
 				SmartDashboard.putString("Right", "Right calling");
 			}
