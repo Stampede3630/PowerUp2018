@@ -543,7 +543,7 @@ public class BoxGrabber {
 				break;
 
 			default:
-				// default to stop for safety reasons
+				
 				stop();
 				break;
 			}

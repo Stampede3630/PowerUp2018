@@ -102,7 +102,7 @@ public class DriveTrain {
 				new MyPosPidOutput());
 		posController.setOutputRange(-.6, .6);
 
-		posController.setAbsoluteTolerance(Consts.ToleranceDistance);
+		posController.setAbsoluteTolerance(Consts.ToleranceDistanceIn);
 		posController.disable();
 
 	}
@@ -161,8 +161,7 @@ public class DriveTrain {
 		_talon.configPeakOutputForward(1, Consts.timeOutMs);
 		_talon.configPeakOutputReverse(-1, Consts.timeOutMs);
 		_talon.configAllowableClosedloopError(0, 0, Consts.timeOutMs);
-		_talon.configNeutralDeadband(0.05, Consts.timeOutMs); // Why do we have 0? 0.025 means a normal 2.5% deadband.
-																// might be worth looking at
+		_talon.configNeutralDeadband(0.05, Consts.timeOutMs); 
 		_talon.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
 		_talon.setInverted(false);
 
@@ -245,7 +244,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoA + Consts.autoB);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 2;
 				init = true;
 			}
@@ -266,7 +265,7 @@ public class DriveTrain {
 				autoDriveFw(Consts.autoE);
 
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 4;
 				init = true;
 			}
@@ -289,7 +288,7 @@ public class DriveTrain {
 				driveBox.switchAutoUpInit();
 			}
 
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 2;
 				init = true;
 			}
@@ -312,7 +311,7 @@ public class DriveTrain {
 				autoDriveFw(Consts.secondDistanceInSwitchFFMethod);
 
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 4;
 				init = true;
 				driveBox.liftUpSwitchActivated = false;
@@ -339,7 +338,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoA + Consts.autoB);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 2;
 				init = true;
 			}
@@ -388,7 +387,7 @@ public class DriveTrain {
 				driveBox.switchAutoUpInit();
 
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 2;
 				init = true;
 			}
@@ -439,7 +438,7 @@ public class DriveTrain {
 				driveBox.liftUpInit();
 
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 2;
 				init = true;
 			}
@@ -462,7 +461,7 @@ public class DriveTrain {
 				autoDriveFw(Consts.secondDistanceInScaleFFMethod);
 
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 4;
 				init = true;
 			}
@@ -492,7 +491,7 @@ public class DriveTrain {
 
 			}
 
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 2;
 				init = true;
 			}
@@ -514,7 +513,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.secondDistanceInScaleFFMethod);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 4;
 				init = true;
 			}
@@ -544,7 +543,7 @@ public class DriveTrain {
 				autoDriveFw(Consts.autoA);
 				driveBox.switchAutoUpInit();
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 2;
 				init = true;
 			}
@@ -566,7 +565,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoG);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 4;
 				init = true;
 			}
@@ -587,7 +586,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoD);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 6;
 				init = true;
 			}
@@ -612,7 +611,7 @@ public class DriveTrain {
 				autoDriveFw(Consts.autoA);
 				driveBox.switchAutoUpInit();
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 2;
 				init = true;
 			}
@@ -634,7 +633,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoG);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 4;
 				init = true;
 			}
@@ -655,7 +654,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoD);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 6;
 				init = true;
 			}
@@ -683,7 +682,7 @@ public class DriveTrain {
 				autoDriveFw(195);
 
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 2;
 				init = true;
 			}
@@ -706,7 +705,7 @@ public class DriveTrain {
 				autoDriveFw(174);
 				driveBox.liftUpInit();
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 4;
 				init = true;
 			}
@@ -728,7 +727,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(21);
 			}
-			if (Math.abs(posController.getError()) < (Consts.autoPosError + 1)) {
+			if (Math.abs(posController.getError()) < (Consts.autoPosErrorIn + 1)) {
 				myCurrentCase = 6;
 				init = true;
 			}
@@ -755,7 +754,7 @@ public class DriveTrain {
 				autoDriveFw(195);
 
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 2;
 				init = true;
 			}
@@ -778,7 +777,7 @@ public class DriveTrain {
 				autoDriveFw(174);
 				driveBox.liftUpInit();
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 4;
 				init = true;
 			}
@@ -800,7 +799,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(21);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 6;
 				init = true;
 			}
@@ -826,7 +825,7 @@ public class DriveTrain {
 				autoDriveFw(Consts.autoA);
 				driveBox.switchAutoUpInit();
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 2;
 				init = true;
 			}
@@ -839,7 +838,7 @@ public class DriveTrain {
 				autoDriveFw(12);
 			}
 
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 3;
 				init = true;
 			}
@@ -862,7 +861,7 @@ public class DriveTrain {
 				autoDriveFw(Consts.autoI);
 			}
 
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 5;
 				init = true;
 			}
@@ -884,7 +883,7 @@ public class DriveTrain {
 				autoDriveFw(Consts.autoD - 12);
 			}
 
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 7;
 				init = true;
 			}
@@ -919,7 +918,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(110);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 5;
 				init = true;
 			}
@@ -938,7 +937,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(20);// 63.6);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 7;
 				init = true;
 			}
@@ -982,7 +981,7 @@ public class DriveTrain {
 				autoDriveFw(Consts.autoA + Consts.autoD - 2);
 				init = false;
 			}
-			if ((Math.abs(posController.getError()) < Consts.autoPosError)) {
+			if ((Math.abs(posController.getError()) < Consts.autoPosErrorIn)) {
 				myCurrentCase = 3;
 				init = true;
 			}
@@ -1009,7 +1008,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoA);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 2;
 				init = true;
 			}
@@ -1030,7 +1029,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoG);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 4;
 				init = true;
 			}
@@ -1051,7 +1050,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoB + Consts.autoC);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 6;
 				init = true;
 			}
@@ -1072,7 +1071,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoF);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 8;
 				init = true;
 			}
@@ -1095,7 +1094,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoA);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 2;
 				init = true;
 			}
@@ -1116,7 +1115,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoG - Consts.autoI);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 4;
 				init = true;
 			}
@@ -1137,7 +1136,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoB + Consts.autoC);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 6;
 				init = true;
 			}
@@ -1158,7 +1157,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoF);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 8;
 				init = true;
 			}
@@ -1223,7 +1222,7 @@ public class DriveTrain {
 				resetAutoDriveFw();
 				autoDriveFw(Consts.autoLine);
 			}
-			if (Math.abs(posController.getError()) < Consts.autoPosError) {
+			if (Math.abs(posController.getError()) < Consts.autoPosErrorIn) {
 				myCurrentCase = 2;
 				init = true;
 			}
